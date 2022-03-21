@@ -1,0 +1,15 @@
+{
+    "applinks": {
+        "apps": [],
+        "details": [
+            {
+                "appID": "HLNR6S3H94.app.sahlan.sahlan",
+                "paths": [
+                    "/initiative/*",
+                    "/location/*",
+                    "/tree/*"
+                ]
+            }
+        ]
+    }
+}

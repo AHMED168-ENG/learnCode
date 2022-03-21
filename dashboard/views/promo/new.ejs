@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('../layout/heade.ejs') %>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+  </head>
+  <body class="sidebar-mini layout-fixed text-sm text-sm">
+    <div class="wrapper">
+      <%- include('../layout/nav.ejs') %>
+      <!-- Content Wrapper. Contains page content -->
+      <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <!-- Content Header (Page header) -->
+        <div class="content-header">
+          <div class="container-fluid">
+            <div class="row mb-2 align-items-center mt-1">
+              <div class="col-sm-6"></div>
+              <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                  <li class="breadcrumb-item"><a href="/">Home</a></li>
+                  <li class="breadcrumb-item"><a href="/dashboard/promo">Promo</a></li>
+                  <li class="breadcrumb-item active">new</li>
+                </ol>
+              </div>
+            </div>
+            <!-- /.row -->
+          </div>
+          <!-- /.container-fluid -->
+        </div>
+        <!-- /.content-header -->
+        <!-- Main content -->
+        <section class="content">
+          <div class="container-fluid">
+            <div class="row">
+              <!-- left column -->
+              <div class="col-md-12">
+                <!-- jquery validation -->
+                <div class="card card-primary">
+                  <div class="card-header">
+                    <h3 class="card-title">
+                      <i class="fas fa-users"></i>
+                      &nbsp;&nbsp; Add new Promo for all users
+                    </h3>
+                  </div>
+                  <form id="newForm" action="" onsubmit="">
+                    <div class="card-body">
+                      <div class="form-row mx-3 my-1">
+                        <div class="form-group col-md-6">
+                          <label for="promo_name">Text</label>
+                          <input type="text" id="promo_name" name="promo_name" class="form-control" placeholder="text" />
+                        </div>
+                        <div class="form-group col-md-6">
+                          <label for="num_of_uses">Num of usage</label>
+                          <input type="text" id="num_of_uses" name="num_of_uses" class="form-control" placeholder="num of uses" />
+                        </div>
+                      </div>
+                      <div class="form-row mx-3 my-1">
+                        <div class="form-group col-md-6">
+                          <label for="percent">Percent</label>
+                          <input type="text" id="percent" name="percent" class="form-control" placeholder="percent" />
+                        </div>
+                        <div class="form-group col-md-6">
+                          <label>From - To</label>
+                          <div class="input-group">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text">
+                                <i class="far fa-calendar-alt"></i>
+                              </span>
+                            </div>
+                            <input type="text" class="form-control float-right" id="fromTo" />
+                          </div>
+                          <!-- /.input group -->
+                        </div>
+                      </div>
+                    </div>
+                    <!-- /.card-body -->
+                    <div class="card-footer">
+                      <button id="submitAdd" type="submit" class="btn btn-primary has-spinner">Submit</button>
+                    </div>
+                  </form>
+                </div>
+                <!-- /.card -->
+              </div>
+              <!--/.col (left) -->
+            </div>
+            <!-- /.row -->
+          </div>
+          <!-- /.container-fluid -->
+        </section>
+
+        <!-- /.content -->
+      </div>
+      <footer class="main-footer"><%- include('../layout/footer.ejs') %></footer>
+    </div>
+    <%- include('../layout/script.ejs') %>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"
+      integrity="sha512-37T7leoNS06R80c8Ulq7cdCDU5MNQBwlYoy1TX/WUsLFC2eYNqtKlV0QjH7r8JpG/S0GUMZwebnVFLPd6SU5yg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/additional-methods.min.js"
+      integrity="sha512-XZEy8UQ9rngkxQVugAdOuBRDmJ5N4vCuNXCh8KlniZgDKTvf7zl75QBtaVG1lEhMFe2a2DuA22nZYY+qsI2/xA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    <script>
+      var from = moment().format()
+      var to = moment().format()
+      $(function () {
+        $("#fromTo").daterangepicker(
+          {
+            minDate: moment().format("L"),
+            dateFormat: "YYYY-MM-DD",
+            opens: "left",
+          },
+          function (start, end, label) {
+            from = start.format("YYYY-MM-DD")
+            to = end.format("YYYY-MM-DD")
+          }
+        )
+      })
+    </script>
+    <script src="/js/promo/new.js"></script>
+  </body>
+</html>

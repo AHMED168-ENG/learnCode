@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('../layout/heade.ejs') %>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.25.1/moment.min.js"></script>
+  </head>
+  <body class="sidebar-mini layout-fixed text-sm text-sm">
+    <style>
+      th,
+      td {
+        text-align: center;
+        vertical-align: middle !important;
+      }
+    </style>
+    <div class="wrapper">
+      <%- include('../layout/nav.ejs') %>
+      <!-- Content Wrapper. Contains page content -->
+      <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <div class="content-header">
+          <div class="container-fluid">
+            <div class="row mb-2 align-items-center mt-1">
+              <div class="col-sm-6">
+                <h4>View Order</h4>
+              </div>
+              <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                  <li class="breadcrumb-item"><a href="/">Home</a></li>
+                  <li class="breadcrumb-item active">Orders</li>
+                  <li class="breadcrumb-item active">View</li>
+                </ol>
+              </div>
+            </div>
+            <!-- /.row -->
+          </div>
+          <!-- /.container-fluid -->
+        </div>
+        <!-- /.content-header -->
+        <!-- Main content -->
+        <section class="content">
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-12">
+                <div class="callout callout-info">
+                  <h5 class="m-0">
+                    <i class="fas fa-hashtag"></i>
+                    &emsp; <%= data.order_id%>
+                    <small class="float-right">
+                      <script type="text/javascript">
+                        document.write(`From : ${moment("<%=data.createdAt%>").fromNow()}`)
+                      </script>
+                    </small>
+                  </h5>
+                </div>
+
+                <!-- Main content -->
+                <div class="invoice p-3 mb-3">
+                  <!-- title row -->
+                  <div class="row">
+                    <div class="col-12">
+                      <h4>
+                        <i class="fas fa-user text-success"></i>
+                        <a href="/dashboard/user/edit/<%= data.user_id%>" class="btn btn-link text-dark">
+                          <h4 class="text-success"><%= data.user_name || "user name" %></h4>
+                        </a>
+                        <small class="float-right text-info">
+                          <script type="text/javascript">
+                            document.write(
+                              `${moment("<%=data.createdAt%>").format("Do MMMM, YYYY")}&emsp;${moment("<%=data.createdAt%>").format("LT")}`
+                            )
+                          </script>
+                        </small>
+                      </h4>
+                    </div>
+                    <!-- /.col -->
+                  </div>
+                  <!-- info row -->
+                  <div class="row invoice-info">
+                    <div class="col-sm-4 invoice-col ml-2 mb-2">
+                      <h6>
+                        <span class="">Pay Type: <%=data.pay_type%></span>
+                      </h6>
+                      <h6>
+                        <span class="">Status: <%=data.status%></span>
+                      </h6>
+                    </div>
+                    <!-- /.col -->
+                    <div class="col-sm-4 invoice-col"></div>
+                    <!-- /.col -->
+                    <div class="col-sm-4 invoice-col"></div>
+                    <!-- /.col -->
+                  </div>
+                  <!-- /.row -->
+
+                  <!-- Table row -->
+                  <div class="row">
+                    <div class="col-12 table-responsive">
+                      <table class="table table-striped">
+                        <thead>
+                          <tr>
+                            <th>Name</th>
+                            <th>img</th>
+                            <th>Initiative</th>
+                            <th>Location</th>
+                            <th>Qty</th>
+                            <th>Price</th>
+                            <th>Total</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <% for(let [index,d] of data.tbl_orders_details.entries() || []){ %>
+                          <tr>
+                            <td><%=d.tbl_initiatives_tree.tbl_tree.en_name%> - <%=d.tbl_initiatives_tree.tbl_tree.ar_name%></td>
+                            <td>
+                              <img
+                                alt="img"
+                                class="rounded-circle p-0"
+                                width="45"
+                                height="45"
+                                src="/p/img/<%=d.tbl_initiatives_tree.tbl_tree.img_tree%>"
+                              />
+                            </td>
+                            <td><%=d.tbl_initiative.init_en_name%> - <%=d.tbl_initiative.init_ar_name%></td>
+                            <td><%=d.tbl_initiatives_location.location_nameEn%> - <%=d.tbl_initiatives_location.location_nameAr%></td>
+                            <td><%=d.quantity%></td>
+                            <td><%=d.price%> SAR</td>
+                            <td><%=d.price*d.quantity%> SAR</td>
+                          </tr>
+                          <%} %>
+                        </tbody>
+                      </table>
+                    </div>
+                    <!-- /.col -->
+                  </div>
+                  <!-- /.row -->
+
+                  <div class="row">
+                    <!-- accepted payments column -->
+                    <div class="col-6">
+                      <p class="text-muted well well-sm shadow-none" style="margin-top: 10px"></p>
+                    </div>
+                    <!-- /.col -->
+                    <div class="col-6">
+                      <div class="table-responsive">
+                        <table class="table">
+                          <tr>
+                            <th style="width: 50%">Subtotal:</th>
+                            <td><%=data.all_sum%> SAR</td>
+                          </tr>
+                          <tr class="text-danger">
+                            <th>Discount</th>
+                            <td><%=data.promo_code_percent||0%> %</td>
+                          </tr>
+                          <tr>
+                            <th>Total:</th>
+                            <td>
+                              <script type="text/javascript">
+                                document.write(
+                                  `${"<%=data.all_sum%>" * ("<%=data.promo_code_percent%>" ? "<%=data.promo_code_percent/100%>" : 1)} SAR`
+                                )
+                              </script>
+                            </td>
+                          </tr>
+                        </table>
+                      </div>
+                    </div>
+                    <!-- /.col -->
+                  </div>
+                  <!-- /.row -->
+
+                  <!-- this row will not appear when printing -->
+                  <div class="row no-print">
+                    <div class="col-12">
+                      <button type="button" class="btn btn-primary float-right" style="margin-right: 5px">
+                        <i class="fas fa-print"></i>
+                        Print
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <!-- /.invoice -->
+              </div>
+              <!-- /.col -->
+            </div>
+            <!-- /.row -->
+          </div>
+          <!-- /.container-fluid -->
+        </section>
+
+        <!-- /.content -->
+      </div>
+      <footer class="main-footer"><%- include('../layout/footer.ejs') %></footer>
+    </div>
+    <%- include('../layout/script.ejs') %>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.25.1/moment.min.js"></script>
+  </body>
+</html>

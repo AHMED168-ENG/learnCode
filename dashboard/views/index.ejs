@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('layout/heade.ejs') %>
+    <!-- JQVMap -->
+    <!-- <link rel="stylesheet" href="/css/plugins/jqvmap/jqvmap.min.css" /> -->
+    <!-- Daterange picker -->
+    <!-- <link rel="stylesheet" href="/css/plugins/daterangepicker/daterangepicker.css" /> -->
+    <!-- overlayScrollbars -->
+    <link rel="stylesheet" href="/css/plugins/overlayScrollbars/css/OverlayScrollbars.min.css" />
+    <!-- summernote -->
+    <!-- <link rel="stylesheet" href="/css/plugins/summernote/summernote-bs4.min.css" /> -->
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" />
+    <!-- Tempusdominus Bootstrap 4 -->
+    <!-- <link rel="stylesheet" href="/css/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css" /> -->
+  </head>
+
+  <body class="sidebar-mini layout-fixed text-sm text-sm">
+    <div class="wrapper">
+      <%- include('layout/nav.ejs') %>
+      <!-- Content Wrapper. Contains page content -->
+      <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <div class="content-header">
+          <div class="container-fluid">
+            <div class="row mb-2"></div>
+            <!-- /.row -->
+          </div>
+          <!-- /.container-fluid -->
+        </div>
+        <!-- /.content-header -->
+        <!-- Main content -->
+        <section class="content">
+          <div class="row">
+            <div class="col-12 col-sm-6 col-md-2">
+              <div class="info-box">
+                <span class="info-box-icon bg-info elevation-1">
+                  <i class="fas fa-user"></i>
+                </span>
+
+                <div class="info-box-content">
+                  <span class="info-box-text">Sahlan Users</span>
+                  <a href="#"><span class="info-box-number">25</span></a>
+                </div>
+                <!-- /.info-box-content -->
+              </div>
+              <!-- /.info-box -->
+            </div>
+            <div class="col-12 col-sm-6 col-md-2">
+              <div class="info-box">
+                <span class="info-box-icon bg-warning elevation-1">
+                  <i class="fas fa-user"></i>
+                </span>
+
+                <div class="info-box-content">
+                  <span class="info-box-text">Public Users</span>
+                  <a href="#"><span class="info-box-number"><%= data.totalUsers || 0 %></span></a>
+                </div>
+                <!-- /.info-box-content -->
+              </div>
+              <!-- /.info-box -->
+            </div>
+            <!-- /.col -->
+            <div class="col-12 col-sm-6 col-md-2">
+              <div class="info-box mb-3">
+                <span class="info-box-icon bg-danger elevation-1">
+                  <i class="nav-icon fas fa-users"></i>
+                </span>
+
+                <div class="info-box-content">
+                  <span class="info-box-text">Sponsors</span>
+                  <a href="#">
+                    <span class="info-box-number"><%= data.totalSponsors || 0 %></span>
+                  </a>
+                </div>
+                <!-- /.info-box-content -->
+              </div>
+              <!-- /.info-box -->
+            </div>
+            <!-- /.col -->
+            <!-- fix for small devices only -->
+            <div class="clearfix hidden-md-up"></div>
+            <div class="col-12 col-sm-6 col-md-2">
+              <div class="info-box mb-3">
+                <span class="info-box-icon bg-success elevation-1">
+                  <i class="nav-icon fas fa-tree"></i>
+                </span>
+                <div class="info-box-content">
+                  <span class="info-box-text">Initiatives</span>
+                  <a href="#"><span class="info-box-number"><%= data.totalInitiatives || 0 %></span></a>
+                </div>
+                <!-- /.info-box-content -->
+              </div>
+              <!-- /.info-box -->
+            </div>
+            <!-- /.col -->
+            <div class="col-12 col-sm-6 col-md-2">
+              <div class="info-box mb-3">
+                <span class="info-box-icon bg-primary elevation-1">
+                  <i class="fas fa-map-marked"></i>
+                </span>
+
+                <div class="info-box-content">
+                  <span class="info-box-text">Locations</span>
+                  <a href="#">
+                    <span class="info-box-number"><%= data.totalLocation || 0 %></span>
+                  </a>
+                </div>
+                <!-- /.info-box-content -->
+              </div>
+              <!-- /.info-box -->
+            </div>
+            <!-- /.col -->
+            <div class="col-12 col-sm-6 col-md-2">
+              <div class="info-box">
+                <span class="info-box-icon bg-maroon elevation-1">
+                  <i class="fas fa-gift"></i>
+                </span>
+                <div class="info-box-content">
+                  <span class="info-box-text">Gifts</span>
+                  <a href="#"><span class="info-box-number">176</span></a>
+                </div>
+                <!-- /.info-box-content -->
+              </div>
+              <!-- /.info-box -->
+            </div>
+            <div class="col-12 col-sm-6 col-md-2">
+              <div class="info-box">
+                <span class="info-box-icon bg-danger elevation-1">
+                  <i class="fas fa-tag"></i>
+                </span>
+
+                <div class="info-box-content">
+                  <span class="info-box-text">Promocodes</span>
+                  <a href="#"><span class="info-box-number">36</span></a>
+                </div>
+                <!-- /.info-box-content -->
+              </div>
+              <!-- /.info-box -->
+            </div>
+
+            <div class="col-12 col-sm-6 col-md-2">
+              <div class="info-box">
+                <span class="info-box-icon bg-success elevation-1">
+                  <i class="fas fa-envelope-open-text"></i>
+                </span>
+
+                <div class="info-box-content">
+                  <span class="info-box-text">Messages</span>
+                  <a href="#"><span class="info-box-number">160</span></a>
+                </div>
+                <!-- /.info-box-content -->
+              </div>
+              <!-- /.info-box -->
+            </div>
+
+            <div class="col-12 col-sm-6 col-md-2">
+              <div class="info-box">
+                <span class="info-box-icon bg-info elevation-1">
+                  <i class="far fa-newspaper"></i>
+                </span>
+
+                <div class="info-box-content">
+                  <span class="info-box-text">Blogs</span>
+                  <a href="#"><span class="info-box-number">160</span></a>
+                </div>
+                <!-- /.info-box-content -->
+              </div>
+              <!-- /.info-box -->
+            </div>
+            <div class="col-12 col-sm-6 col-md-6">
+              <div class="card">
+                <h3 class="card-title">
+                  <p></p>
+                  <a style="width: 120px" class="btn btn-app bg-info" href="#">
+                    <span style="font-size: 14px" class="badge bg-danger">23</span>
+                    <i class="fas fa-exclamation-circle"></i>
+                    New Orders
+                  </a>
+                  <a style="width: 120px" class="btn btn-app bg-warning" href="#">
+                    <span style="font-size: 14px" class="badge bg-danger">18</span>
+                    <i class="fas fa-circle-notch"></i>
+                    In Progress Orders
+                  </a>
+                  <a style="width: 120px" class="btn btn-app bg-green" href="#">
+                    <span style="font-size: 14px" class="badge bg-danger">5</span>
+                    <i class="far fa-check-circle"></i>
+                    Completed Orders
+                  </a>
+                  <a style="width: 120px" class="btn btn-app bg-danger" href="#">
+                    <span style="font-size: 14px" class="badge bg-info">4</span>
+                    <i class="far fa-times-circle"></i>
+                    Cancelled Orders
+                  </a>
+                </h3>
+
+                <!-- /.card-body -->
+              </div>
+            </div>
+          </div>
+
+          <div class="container-fluid">
+            <!-- Small boxes (Stat box) -->
+            <div class="row">
+              <div class="col-lg-3 col-6">
+                <!-- small box -->
+                <div class="small-box bg-info">
+                  <div class="inner">
+                    <h3>
+                      53
+                      <sup style="font-size: 20px">%</sup>
+                    </h3>
+
+                    <p>Orders Rate</p>
+                  </div>
+                  <div class="icon">
+                    <i class="ion ion-bag"></i>
+                  </div>
+                  <a href="#" class="small-box-footer">
+                    More info
+                    <i class="fas fa-arrow-circle-right"></i>
+                  </a>
+                </div>
+              </div>
+              <!-- ./col -->
+              <div class="col-lg-3 col-6">
+                <!-- small box -->
+                <div class="small-box bg-success">
+                  <div class="inner">
+                    <h3>
+                      53
+                      <sup style="font-size: 20px">%</sup>
+                    </h3>
+
+                    <p>Trees Orders Rate</p>
+                  </div>
+                  <div class="icon">
+                    <i class="ion ion-stats-bars"></i>
+                  </div>
+                  <a href="#" class="small-box-footer">
+                    More info
+                    <i class="fas fa-arrow-circle-right"></i>
+                  </a>
+                </div>
+              </div>
+              <!-- ./col -->
+              <div class="col-lg-3 col-6">
+                <!-- small box -->
+                <div class="small-box bg-warning">
+                  <div class="inner">
+                    <h3>44</h3>
+
+                    <p>User Registrations</p>
+                  </div>
+                  <div class="icon">
+                    <i class="ion ion-person-add"></i>
+                  </div>
+                  <a href="#" class="small-box-footer">
+                    More info
+                    <i class="fas fa-arrow-circle-right"></i>
+                  </a>
+                </div>
+              </div>
+              <!-- ./col -->
+              <div class="col-lg-3 col-6">
+                <!-- small box -->
+                <div class="small-box bg-danger">
+                  <div class="inner">
+                    <h3>65000 SAR</h3>
+
+                    <p>Total Income</p>
+                  </div>
+                  <div class="icon">
+                    <i class="ion ion-cash"></i>
+                  </div>
+                  <a href="#" class="small-box-footer">
+                    More info
+                    <i class="fas fa-arrow-circle-right"></i>
+                  </a>
+                </div>
+              </div>
+              <!-- ./col -->
+            </div>
+
+            <div class="row">
+              <div class="col-md-4">
+                <div class="page-content page-container" id="page-content">
+                  <div class="padding">
+                    <div class="row">
+                      <div class="container-fluid d-flex justify-content-center">
+                        <div class="col-sm-12 col-md-12">
+                          <div class="card">
+                            <div class="card-header">Orders chart</div>
+                            <div class="card-body" style="height: 333px">
+                              <div
+                                class="chartjs-size-monitor"
+                                style="
+                                  position: absolute;
+                                  left: 0px;
+                                  top: 0px;
+                                  right: 0px;
+                                  bottom: 0px;
+                                  overflow: hidden;
+                                  pointer-events: none;
+                                  visibility: hidden;
+                                  z-index: -1;
+                                "
+                              >
+                                <div
+                                  class="chartjs-size-monitor-expand"
+                                  style="
+                                    position: absolute;
+                                    left: 0;
+                                    top: 0;
+                                    right: 0;
+                                    bottom: 0;
+                                    overflow: hidden;
+                                    pointer-events: none;
+                                    visibility: hidden;
+                                    z-index: -1;
+                                  "
+                                >
+                                  <div style="position: absolute; width: 1000000px; height: 1000000px; left: 0; top: 0"></div>
+                                </div>
+                                <div
+                                  class="chartjs-size-monitor-shrink"
+                                  style="
+                                    position: absolute;
+                                    left: 0;
+                                    top: 0;
+                                    right: 0;
+                                    bottom: 0;
+                                    overflow: hidden;
+                                    pointer-events: none;
+                                    visibility: hidden;
+                                    z-index: -1;
+                                  "
+                                >
+                                  <div style="position: absolute; width: 200%; height: 200%; left: 0; top: 0"></div>
+                                </div>
+                              </div>
+                              <canvas
+                                id="chart-line"
+                                width="299"
+                                height="200"
+                                class="chartjs-render-monitor"
+                                style="display: block; width: 299px; height: 200px"
+                              ></canvas>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-4">
+                <div class="card" style="height: 380px">
+                  <div class="card-body">
+                    <div class="d-flex">
+                      <p class="d-flex flex-column">
+                        <span class="text-bold text-lg">SAR 18,230.00</span>
+                        <span>Trees Orders Over Time</span>
+                      </p>
+                      <p class="ml-auto d-flex flex-column text-right">
+                        <span class="text-success">
+                          <i class="fas fa-arrow-up"></i>
+                          33.1%
+                        </span>
+                        <span class="text-muted">Since last month</span>
+                      </p>
+                    </div>
+                    <!-- /.d-flex -->
+
+                    <div class="position-relative mb-4">
+                      <div class="chartjs-size-monitor">
+                        <div class="chartjs-size-monitor-expand">
+                          <div class=""></div>
+                        </div>
+                        <div class="chartjs-size-monitor-shrink">
+                          <div class=""></div>
+                        </div>
+                      </div>
+                      <canvas
+                        id="sales-chart"
+                        height="200"
+                        style="display: block; width: 524px; height: 200px"
+                        width="524"
+                        class="chartjs-render-monitor"
+                      ></canvas>
+                    </div>
+
+                    <div class="d-flex flex-row justify-content-end">
+                      <span class="mr-2">
+                        <i class="fas fa-square text-primary"></i>
+                        This year
+                      </span>
+
+                      <span>
+                        <i class="fas fa-square text-gray"></i>
+                        Last year
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <!-- /.card -->
+              </div>
+              <div class="col-md-4">
+                <div class="card" style="height: 380px">
+                  <div class="card-header border-0">
+                    <h3 class="card-title">Trees Orders Overview</h3>
+                    <div class="card-tools">
+                      <a href="#" class="btn btn-sm btn-tool">
+                        <i class="fas fa-bars"></i>
+                      </a>
+                    </div>
+                  </div>
+                  <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center border-bottom mb-3">
+                      <p class="text-success text-xl">
+                        <i class="ion ion-ios-refresh-empty"></i>
+                      </p>
+                      <p class="d-flex flex-column text-right">
+                        <span class="font-weight-bold">
+                          <i class="ion ion-android-arrow-up text-success"></i>
+                          12%
+                        </span>
+                        <span class="text-muted">Orders RATE</span>
+                      </p>
+                    </div>
+                    <!-- /.d-flex -->
+                    <div class="d-flex justify-content-between align-items-center border-bottom mb-3">
+                      <p class="text-warning text-xl">
+                        <i class="ion ion-ios-cart-outline"></i>
+                      </p>
+                      <p class="d-flex flex-column text-right">
+                        <span class="font-weight-bold">
+                          <i class="ion ion-android-arrow-up text-warning"></i>
+                          0.8%
+                        </span>
+                        <span class="text-muted">Trees Orders RATE</span>
+                      </p>
+                    </div>
+                    <!-- /.d-flex -->
+                    <div class="d-flex justify-content-between align-items-center mb-0">
+                      <p class="text-danger text-xl">
+                        <i class="ion ion-ios-people-outline"></i>
+                      </p>
+                      <p class="d-flex flex-column text-right">
+                        <span class="font-weight-bold">
+                          <i class="ion ion-android-arrow-down text-danger"></i>
+                          1%
+                        </span>
+                        <span class="text-muted">REGISTRATION RATE</span>
+                      </p>
+                    </div>
+                    <!-- /.d-flex -->
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-4">
+                <div class="card">
+                  <div class="card-header">
+                    <h3 class="card-title">Latest Sponsors</h3>
+                  </div>
+                  <!-- /.card-header -->
+                  <div class="card-body p-2">
+                    <ul>
+                      <% data.lastSponser.forEach(function(sponser) { %>
+                      <li class="text-center float-left list-unstyled p-1">
+                        <img src=/p/img/<%= sponser.img %> width="70" height="70" alt="sponser Image" />
+                        <a class="users-list-name" href="#"><%= sponser.sponser_name %></a>
+                        <span class="users-list-date"><%= sponser.createdAt %></span>
+                      </li>
+                      <% }); %>
+                    </ul>
+                    <!-- /.users-list -->
+                  </div>
+                  <!-- /.card-body -->
+                  <div class="card-footer text-center">
+                    <a href="/dashboard/sponser">View All Sponsors</a>
+                  </div>
+                  <!-- /.card-footer -->
+                </div>
+              </div>
+
+              <div class="col-md-8">
+                <div class="card">
+                  <div class="card-header">
+                    <h3 class="card-title">Last Initiatives</h3>
+
+                    <div class="card-tools">
+                      <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                        <i class="fas fa-minus"></i>
+                      </button>
+                      <button type="button" class="btn btn-tool" data-card-widget="remove" title="Remove">
+                        <i class="fas fa-times"></i>
+                      </button>
+                    </div>
+                  </div>
+                  <div class="card-body">
+                    <div class="row">
+                      <% data.lastInitiative.forEach(function(init) { %>
+                      <div class="col-lg-4 col-xl-4 mb-2">
+                        <div class="card mb-0 bg-gradient-dark">
+                          <img class="card-img-top" height="120px" src=/p/img/<%= init.img %> alt="Dist Photo 1">
+                          <div class="card-img-overlay d-flex flex-column justify-content-end">
+                            <h5 class="card-title text-primary text-white"><%= init.name %></h5>
+                          </div>
+                        </div>
+
+                        <div class="card-footer p-1">
+                          <ul class="nav flex-column">
+                            <li class="nav-item">
+                              <p class="p-2 m-0">
+                                Orders
+                                <span class="float-right badge bg-primary mt-1">31</span>
+                              </p>
+                            </li>
+                            <li class="nav-item">
+                              <p class="p-2 m-0">
+                                Income
+                                <span class="float-right badge bg-primary mt-1">500</span>
+                              </p>
+                            </li>
+                            <li class="nav-item">
+                              <p class="p-2 m-0">
+                                Locations
+                                <span class="float-right badge bg-primary mt-1"><%= init.totalLocation || 0 %></span>
+                              </p>
+                            </li>
+                            <li class="nav-item">
+                              <p class="p-2 m-0">
+                                Carbon Offset
+                                <span class="float-right badge bg-primary mt-1"><%= init.carbonPoint || 0 %></span>
+                              </p>
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                      <% }); %>
+                    </div>
+                  </div>
+                  <!-- /.card-body -->
+                  <div class="card-footer text-center">
+                    <a href="/dashboard/initiative">View All Initiatives</a>
+                  </div>
+                  <!-- /.card-footer -->
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- /.container-fluid -->
+        </section>
+        <!-- /.content -->
+      </div>
+      <footer class="main-footer"><%- include('layout/footer.ejs') %></footer>
+    </div>
+    <%- include('layout/script.ejs') %>
+    <script>
+      $.widget.bridge("uibutton", $.ui.button)
+    </script>
+    <!-- ChartJS -->
+    <script src="/js/plugins/chart.js/Chart.min.js"></script>
+    <!-- Sparkline -->
+    <script src="/js/plugins/sparklines/sparkline.js"></script>
+    <!-- JQVMap -->
+    <!-- <script src="/js/plugins/jqvmap/jquery.vmap.min.js"></script>
+    <script src="/js/plugins/jqvmap/maps/jquery.vmap.usa.js"></script> -->
+    <!-- jQuery Knob Chart -->
+    <script src="/js/plugins/jquery-knob/jquery.knob.min.js"></script>
+    <!-- daterangepicker -->
+    <!-- <script src="/js/plugins/moment/moment.min.js"></script> -->
+    <!-- <script src="/js/plugins/daterangepicker/daterangepicker.js"></script> -->
+    <!-- Tempusdominus Bootstrap 4 -->
+    <!-- <script src="/js/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script> -->
+    <!-- Summernote -->
+    <!-- <script src="/js/plugins/summernote/summernote-bs4.min.js"></script> -->
+    <!-- overlayScrollbars -->
+    <script src="/js/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+    <!-- AdminLTE for demo purposes -->
+    <!-- <script src="/js/dist/js/demo.js"></script> -->
+    <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+    <!-- <script src="/js/dist/js/pages/dashboard.js"></script> -->
+
+    <!-- <script src="/js/dist/js/pages/dashboard3.js"></script> -->
+  </body>
+</html>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.4/Chart.bundle.min.js"></script>
+<script>
+  $(document).ready(function () {
+    var ctx = $("#chart-line")
+    var myLineChart = new Chart(ctx, {
+      type: "doughnut",
+      data: {
+        labels: ["New Orders", "In Progress Orders", "Completed Orders", "Cancelled Orders"],
+        datasets: [
+          {
+            data: [
+              "<%= data.ordersChart.New %>",
+              "<%= data.ordersChart.inProgress %>",
+              "<%= data.ordersChart.completed %>",
+              "<%= data.ordersChart.cancelled %>",
+            ],
+            backgroundColor: ["#17a2b8", "#ffc107", "#28a745", "#dc3545"],
+          },
+        ],
+      },
+      options: {
+        title: {
+          display: false,
+          // text: 'Orders'
+        },
+      },
+    })
+  })
+</script>

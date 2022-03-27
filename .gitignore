@@ -68,7 +68,11 @@ typings/
 # Yarn Integrity file
 .yarn-integrity
 
+# Logger File
+assets/logger/access.log
+
 # dotenv environment variables file
+dev.env
 # .env
 # .env.test
 

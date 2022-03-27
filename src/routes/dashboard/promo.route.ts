@@ -16,5 +16,6 @@ export class PromoRoutes {
     this.router.post("/new", this.promoController.addNew)
     this.router.get("/edit/:id", this.promoController.editPage)
     this.router.post("/edit/:id", this.promoController.edit)
+    this.router.delete("/:action/:id", this.promoController.active)
   }
 }

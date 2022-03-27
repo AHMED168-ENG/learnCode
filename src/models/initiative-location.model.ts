@@ -40,10 +40,6 @@ const initiativeLocations = sequelize.define(
       allowNull: true,
       defaultValue: null,
       validate: {
-        is: {
-          args: /^[0-9]?[\u0000-~\u2000-\u206e](\s)?\p{Pd}\s?/,
-          msg: "The provided location name should only contain english letters, numbers or punctuation",
-        },
         len: {
           args: [0, 255],
           msg: "The location name length cannot exceed 255 characters",
@@ -139,8 +135,6 @@ const initiativeLocations = sequelize.define(
     collate: "utf8_general_ci",
   }
 )
-initiativeLocations.hasMany(initiativeTrees, {foreignKey: "location_id"})
-initiativeTrees.belongsTo(initiativeLocations, {foreignKey: "location_id"})
 initiativeLocations.belongsTo(city, {foreignKey: "city_id"})
 
 initiativeLocations.sync()

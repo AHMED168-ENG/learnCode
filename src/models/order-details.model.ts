@@ -80,6 +80,7 @@ const orderDetails = sequelize.define(
 orderDetails.belongsTo(order, {foreignKey: "order_id"})
 order.hasMany(orderDetails, {foreignKey: "order_id"})
 orderDetails.belongsTo(initiatives, {foreignKey: "initiative_id"})
+initiatives.hasMany(orderDetails, {foreignKey: "initiative_id"})
 orderDetails.belongsTo(initiativeLocations, {foreignKey: "location_id"})
 orderDetails.belongsTo(initiativeTrees, {foreignKey: "tree_id"})
 

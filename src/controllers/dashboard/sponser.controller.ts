@@ -118,4 +118,17 @@ export class SponserController {
       .catch((e) => (data = null))
     return data
   }
+  async listSponser() {
+    let data
+    await sponser
+      .findAll({
+        limit: 8,
+        offset: 0,
+        attributes: ["sponser_id", "sponser_name", "img"],
+        raw: true,
+      })
+      .then((d) => (data = d))
+      .catch((e) => (data = null))
+    return data
+  }
 }

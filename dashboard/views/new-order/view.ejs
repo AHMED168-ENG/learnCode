@@ -175,6 +175,46 @@
                         <i class="fas fa-print"></i>
                         Print
                       </button>
+
+                      <% if(data.status == "new"){ %>
+                      <button
+                        type="button"
+                        data-tooltip="Inprogress"
+                        onclick="status('<%= data.order_id%>','inprogress')"
+                        class="btn btn-warning float-right mx-1"
+                      >
+                        <i class="fas fa-circle-notch"></i>
+                        Inprogress
+                      </button>
+                      <button
+                        type="button"
+                        data-tooltip="Cancel order"
+                        onclick="status('<%= data.order_id%>','cancelled')"
+                        class="btn btn-danger float-right mx-1"
+                      >
+                        <i class="fas fa-times-circle"></i>
+                        Cancel
+                      </button>
+                      <% }%> <% if(data.status == "inprogress"){ %>
+                      <button
+                        type="button"
+                        data-tooltip="Complete"
+                        onclick="status('<%= data.order_id%>','completed')"
+                        class="btn btn-success float-right mx-1"
+                      >
+                        <i class="fas fa-check-circle"></i>
+                        Complete
+                      </button>
+                      <button
+                        type="button"
+                        data-tooltip="Cancel order"
+                        onclick="status('<%= data.order_id%>','cancelled')"
+                        class="btn btn-danger float-right mx-1"
+                      >
+                        <i class="fas fa-times-circle"></i>
+                        Cancel
+                      </button>
+                      <% }%>
                     </div>
                   </div>
                 </div>
@@ -190,8 +230,45 @@
         <!-- /.content -->
       </div>
       <footer class="main-footer"><%- include('../layout/footer.ejs') %></footer>
+      <div class="modal" id="chandeStatusModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Confirmation</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <p id="modal-body-status">Are you shure to make this ?!</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary" onclick="" id="ModalYesBtn">Yes</button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
     <%- include('../layout/script.ejs') %>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.25.1/moment.min.js"></script>
+    <script>
+      function status(id, status) {
+        $("#ModalYesBtn").attr("onclick", `changeStatus(${id},'${status}')`)
+        $("#modal-body-status").html(`Are you shure to change status ?`)
+        $("#chandeStatusModal").modal("show")
+      }
+      function changeStatus(id, status) {
+        const settings = {
+          async: true,
+          crossDomain: true,
+          url: `/dashboard/order/status/${id}?status=${status}`,
+          method: "PUT",
+        }
+        $.ajax(settings).always(function () {
+          window.location.reload()
+        })
+      }
+    </script>
   </body>
 </html>

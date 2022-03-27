@@ -40,8 +40,8 @@
                 </span>
 
                 <div class="info-box-content">
-                  <span class="info-box-text">Sahlan Users</span>
-                  <a href="#"><span class="info-box-number">25</span></a>
+                  <span class="info-box-text">Sahlan Super Admin</span>
+                  <a href="#"><span class="info-box-number">1</span></a>
                 </div>
                 <!-- /.info-box-content -->
               </div>
@@ -54,8 +54,8 @@
                 </span>
 
                 <div class="info-box-content">
-                  <span class="info-box-text">Public Users</span>
-                  <a href="#"><span class="info-box-number"><%= data.totalUsers || 0 %></span></a>
+                  <span class="info-box-text">Sahlan Admin</span>
+                  <a href="#"><span class="info-box-number">0</span></a>
                 </div>
                 <!-- /.info-box-content -->
               </div>
@@ -70,8 +70,8 @@
 
                 <div class="info-box-content">
                   <span class="info-box-text">Sponsors</span>
-                  <a href="#">
-                    <span class="info-box-number"><%= data.totalSponsors || 0 %></span>
+                  <a href="/dashboard/sponser">
+                    <span class="info-box-number"><%= data.totalSponsors%></span>
                   </a>
                 </div>
                 <!-- /.info-box-content -->
@@ -88,7 +88,7 @@
                 </span>
                 <div class="info-box-content">
                   <span class="info-box-text">Initiatives</span>
-                  <a href="#"><span class="info-box-number"><%= data.totalInitiatives || 0 %></span></a>
+                  <a href="/dashboard/initiative"><span class="info-box-number"><%= data.totalInitiatives%></span></a>
                 </div>
                 <!-- /.info-box-content -->
               </div>
@@ -103,8 +103,8 @@
 
                 <div class="info-box-content">
                   <span class="info-box-text">Locations</span>
-                  <a href="#">
-                    <span class="info-box-number"><%= data.totalLocation || 0 %></span>
+                  <a href="/dashboard/location">
+                    <span class="info-box-number"><%= data.totalLocation%></span>
                   </a>
                 </div>
                 <!-- /.info-box-content -->
@@ -119,7 +119,7 @@
                 </span>
                 <div class="info-box-content">
                   <span class="info-box-text">Gifts</span>
-                  <a href="#"><span class="info-box-number">176</span></a>
+                  <a href="/dashboard/gift"><span class="info-box-number"><%= data.totalGift%></span></a>
                 </div>
                 <!-- /.info-box-content -->
               </div>
@@ -133,7 +133,7 @@
 
                 <div class="info-box-content">
                   <span class="info-box-text">Promocodes</span>
-                  <a href="#"><span class="info-box-number">36</span></a>
+                  <a href="/dashboard/promo"><span class="info-box-number"><%= data.totalPromo%></span></a>
                 </div>
                 <!-- /.info-box-content -->
               </div>
@@ -148,7 +148,7 @@
 
                 <div class="info-box-content">
                   <span class="info-box-text">Messages</span>
-                  <a href="#"><span class="info-box-number">160</span></a>
+                  <a href="#"><span class="info-box-number"><%= data.totalMessage%></span></a>
                 </div>
                 <!-- /.info-box-content -->
               </div>
@@ -163,7 +163,7 @@
 
                 <div class="info-box-content">
                   <span class="info-box-text">Blogs</span>
-                  <a href="#"><span class="info-box-number">160</span></a>
+                  <a href="#"><span class="info-box-number">0</span></a>
                 </div>
                 <!-- /.info-box-content -->
               </div>
@@ -173,23 +173,23 @@
               <div class="card">
                 <h3 class="card-title">
                   <p></p>
-                  <a style="width: 120px" class="btn btn-app bg-info" href="#">
-                    <span style="font-size: 14px" class="badge bg-danger">23</span>
+                  <a style="width: 120px" class="btn btn-app bg-info" href="/dashboard/order/new">
+                    <span style="font-size: 14px" class="badge bg-danger"><%= data.ordersChart.New %></span>
                     <i class="fas fa-exclamation-circle"></i>
                     New Orders
                   </a>
-                  <a style="width: 120px" class="btn btn-app bg-warning" href="#">
-                    <span style="font-size: 14px" class="badge bg-danger">18</span>
+                  <a style="width: 120px" class="btn btn-app bg-warning" href="/dashboard/order/inprogress">
+                    <span style="font-size: 14px" class="badge bg-danger"><%= data.ordersChart.inProgress %></span>
                     <i class="fas fa-circle-notch"></i>
                     In Progress Orders
                   </a>
-                  <a style="width: 120px" class="btn btn-app bg-green" href="#">
-                    <span style="font-size: 14px" class="badge bg-danger">5</span>
+                  <a style="width: 120px" class="btn btn-app bg-green" href="/dashboard/order/completed">
+                    <span style="font-size: 14px" class="badge bg-danger"><%= data.ordersChart.completed %></span>
                     <i class="far fa-check-circle"></i>
                     Completed Orders
                   </a>
-                  <a style="width: 120px" class="btn btn-app bg-danger" href="#">
-                    <span style="font-size: 14px" class="badge bg-info">4</span>
+                  <a style="width: 120px" class="btn btn-app bg-danger" href="/dashboard/order/cancelled">
+                    <span style="font-size: 14px" class="badge bg-info"><%= data.ordersChart.cancelled %></span>
                     <i class="far fa-times-circle"></i>
                     Cancelled Orders
                   </a>
@@ -208,7 +208,7 @@
                 <div class="small-box bg-info">
                   <div class="inner">
                     <h3>
-                      53
+                      0
                       <sup style="font-size: 20px">%</sup>
                     </h3>
 
@@ -229,7 +229,7 @@
                 <div class="small-box bg-success">
                   <div class="inner">
                     <h3>
-                      53
+                      0
                       <sup style="font-size: 20px">%</sup>
                     </h3>
 
@@ -249,14 +249,14 @@
                 <!-- small box -->
                 <div class="small-box bg-warning">
                   <div class="inner">
-                    <h3>44</h3>
+                    <h3><%= data.totalUsers%></h3>
 
                     <p>User Registrations</p>
                   </div>
                   <div class="icon">
                     <i class="ion ion-person-add"></i>
                   </div>
-                  <a href="#" class="small-box-footer">
+                  <a href="/dashboard/user" class="small-box-footer">
                     More info
                     <i class="fas fa-arrow-circle-right"></i>
                   </a>
@@ -267,7 +267,7 @@
                 <!-- small box -->
                 <div class="small-box bg-danger">
                   <div class="inner">
-                    <h3>65000 SAR</h3>
+                    <h3><%= data.totalIncome%> SAR</h3>
 
                     <p>Total Income</p>
                   </div>
@@ -284,7 +284,7 @@
             </div>
 
             <div class="row">
-              <div class="col-md-4">
+              <!-- <div class="col-md-4">
                 <div class="page-content page-container" id="page-content">
                   <div class="padding">
                     <div class="row">
@@ -354,17 +354,17 @@
                     </div>
                   </div>
                 </div>
-              </div>
+              </div> -->
 
-              <div class="col-md-4">
+              <div class="col-md-8">
                 <div class="card" style="height: 380px">
                   <div class="card-body">
                     <div class="d-flex">
                       <p class="d-flex flex-column">
-                        <span class="text-bold text-lg">SAR 18,230.00</span>
+                        <span id="totalIncomeThisYear" class="text-bold text-lg">SAR 18,230.00</span>
                         <span>Trees Orders Over Time</span>
                       </p>
-                      <p class="ml-auto d-flex flex-column text-right">
+                      <p id="percentOrderThisMonth" class="ml-auto d-flex flex-column text-right">
                         <span class="text-success">
                           <i class="fas fa-arrow-up"></i>
                           33.1%
@@ -390,18 +390,6 @@
                         width="524"
                         class="chartjs-render-monitor"
                       ></canvas>
-                    </div>
-
-                    <div class="d-flex flex-row justify-content-end">
-                      <span class="mr-2">
-                        <i class="fas fa-square text-primary"></i>
-                        This year
-                      </span>
-
-                      <span>
-                        <i class="fas fa-square text-gray"></i>
-                        Last year
-                      </span>
                     </div>
                   </div>
                 </div>
@@ -593,6 +581,7 @@
 </html>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.4/Chart.bundle.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
 <script>
   $(document).ready(function () {
     var ctx = $("#chart-line")
@@ -618,6 +607,92 @@
           // text: 'Orders'
         },
       },
+    })
+  })
+</script>
+<script>
+  var currMonthName = moment().format("MMMM")
+  var prevMonthName = moment().subtract(1, "month").format("MMMM")
+  var monthsArr = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+  var ordersInYear = JSON.parse(`<%-JSON.stringify(data.ordersInYear)%>`)
+  var monthsCountArr = monthsArr.map((m, i) => {
+    for (let element of ordersInYear) {
+      if (element.MONTH == m) {
+        return element.count
+      }
+    }
+    return 0
+  })
+  let CountOrderThisMonth = (ordersInYear.find((o) => o.MONTH == currMonthName) || {}).count || 0
+  let CountOrderLastMonth = (ordersInYear.find((o) => o.MONTH === prevMonthName) || {}).count || 0
+
+  if (CountOrderThisMonth > CountOrderLastMonth) {
+    let mmm = (CountOrderLastMonth / CountOrderThisMonth) * 100
+    $("#percentOrderThisMonth").html(
+      `<span class="text-success">
+        <i class="fas fa-arrow-up"></i>
+        ${mmm} %
+      </span>
+      <span class="text-muted">Since last month</span>`
+    )
+  } else if (CountOrderThisMonth < CountOrderLastMonth) {
+    let llll = (CountOrderThisMonth / CountOrderLastMonth) * 100
+    $("#percentOrderThisMonth").html(
+      `<span class="text-danger">
+        <i class="fas fa-arrow-down"></i>
+          -${llll} %
+        </span>
+        <span class="text-muted">Since last month</span>`
+    )
+  } else {
+    $("#percentOrderThisMonth").html(
+      `<span class="text-success">
+        <i class="fas fa-arrow-up"></i>
+        0 %
+      </span>
+      <span class="text-muted">Since last month</span>`
+    )
+  }
+  $("#totalIncomeThisYear").text(
+    `SAR ${ordersInYear.reduce((total, currentValue) => {
+      return total + currentValue.allSum
+    }, 0)}`
+  )
+  $(function () {
+    var areaChartData = {
+      labels: monthsArr,
+      datasets: [
+        {
+          label: "Order per month",
+          backgroundColor: "rgba(60,141,188,0.9)",
+          borderColor: "rgba(60,141,188,0.8)",
+          pointRadius: false,
+          pointColor: "#3b8bba",
+          pointStrokeColor: "rgba(60,141,188,1)",
+          pointHighlightFill: "#fff",
+          pointHighlightStroke: "rgba(60,141,188,1)",
+          data: monthsCountArr,
+        },
+      ],
+    }
+    //-------------
+    //- BAR CHART -
+    //-------------
+    var barChartCanvas = $("#sales-chart").get(0).getContext("2d")
+    var barChartData = $.extend(true, {}, areaChartData)
+    var temp0 = areaChartData.datasets[0]
+    barChartData.datasets[0] = temp0
+
+    var barChartOptions = {
+      responsive: true,
+      maintainAspectRatio: false,
+      datasetFill: false,
+    }
+
+    new Chart(barChartCanvas, {
+      type: "bar",
+      data: barChartData,
+      options: barChartOptions,
     })
   })
 </script>

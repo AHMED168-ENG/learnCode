@@ -89,4 +89,23 @@ export class CityController {
         res.status(httpStatus.BAD_REQUEST).json({msg: "Error in Edit city", err: err.errors[0].message || "unexpected error"})
       })
   }
+  async listCity() {
+    let data
+    await city
+      .findAll({
+        attributes: {exclude: ["updatedAt"]},
+        raw: true,
+      })
+      .then((d) => {
+        if (!d || d.length == 0) {
+          data = null
+        } else {
+          data = d
+        }
+      })
+      .catch((err) => {
+        data = []
+      })
+    return data
+  }
 }

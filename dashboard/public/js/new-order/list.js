@@ -37,13 +37,13 @@ function getList(page) {
             if (screenType == "new") {
                 $(`#${elem.order_id} td:last`).html(`
                 <a href="/dashboard/order/view/${elem.order_id}" data-tooltip="View order" class="btn btn-info"><i class="fas fa-eye"></i></a>
-                <button type="button" data-tooltip="Inprogress" class="btn btn-warning"><i class="fas fa-circle-notch"></i></button>
-                <button type="button" data-tooltip="Cancelle order" class="btn btn-danger"><i class="fas fa-times-circle"></i></button>`)
+                <button type="button" data-tooltip="Inprogress" onclick='status(${elem.order_id},"inprogress")' class="btn btn-warning"><i class="fas fa-circle-notch"></i></button>
+                <button type="button" data-tooltip="Cancelle order" onclick='status(${elem.order_id},"cancelled")' class="btn btn-danger"><i class="fas fa-times-circle"></i></button>`)
             } else if (screenType == "inprogress") {
                 $(`#${elem.order_id} td:last`).html(`
                 <a href="/dashboard/order/view/${elem.order_id}" data-tooltip="View order" class="btn btn-info"><i class="fas fa-eye"></i></a>
-                <button type="button" data-tooltip="Complete" class="btn btn-success"><i class="fas fa-check-circle"></i></button>
-                <button type="button" data-tooltip="Cancelle order" class="btn btn-danger"><i class="fas fa-times-circle"></i></button>`)
+                <button type="button" data-tooltip="Complete" onclick='status(${elem.order_id},"completed")' class="btn btn-success"><i class="fas fa-check-circle"></i></button>
+                <button type="button" data-tooltip="Cancelle order" onclick='status(${elem.order_id},"cancelled")' class="btn btn-danger"><i class="fas fa-times-circle"></i></button>`)
             } else if (screenType == "completed") {
                 $(`#${elem.order_id} td:last`).html(`
                 <a href="/dashboard/order/view/${elem.order_id}" data-tooltip="View order" class="btn btn-info"><i class="fas fa-eye"></i></a>`)
@@ -66,6 +66,23 @@ function pagination(total, startPage) {
             }
         },
     })
+}
+
+function status(id, status) {
+    $("#ModalYesBtn").attr("onclick", `changeStatus(${id},'${status}')`);
+    $("#modal-body-status").html(`Are you shure to change status ?`)
+    $("#chandeStatusModal").modal("show")
+}
+function changeStatus(id, status) {
+    const settings = {
+        async: true,
+        crossDomain: true,
+        url: `/dashboard/order/status/${id}?status=${status}`,
+        method: "PUT",
+    }
+    $.ajax(settings).always(function () {
+        window.location.reload();
+    });
 }
 
 

@@ -1,4 +1,7 @@
+// var is all || specific
+var userType = userId ? "specific" : "all"
 $(function () {
+    userType == "all" ? $("#UserField").hide():""
     $.validator.setDefaults({
         submitHandler: function (form, event) {
             event.preventDefault();
@@ -7,29 +10,33 @@ $(function () {
     });
     $('#newForm').validate({
         rules: {
-            ar_name: {
+            promo_name: {
                 required: true,
             },
-            en_name: {
+            num_of_uses: {
                 required: true,
+                min: 1,
+                number: true
             },
-            latitude: {
-                required: true
+            percent: {
+                required: true,
+                min: 1,
+                max: 99,
+                number: true
             },
-            longitude: {
-                required: true
-            },
-            city_id: {
+            fromTo: {
                 required: true
             },
 
         },
         messages: {
-            ar_name: "Please enter a arabic name",
-            en_name: "Please enter a english name",
-            latitude: "Please enter a latitude",
-            longitude: "Please enter a longitude",
-            city_id: "Please select a city",
+            promo_name: "Please enter a text",
+            num_of_uses: {
+                required: "Please enter num of uses",
+                number: "Please enter number only",
+            },
+            percent: { required: "Please enter a percent" },
+            fromTo: "Please enter a data",
         },
         errorElement: 'span',
         errorPlacement: function (error, element) {
@@ -45,70 +52,36 @@ $(function () {
     });
 });
 const edit = () => {
-    //Collecting data from changed class
-    var data = {};
-    $(".changed").each(function () {
-        data[$(this).attr("name")] = $(this).val();
-    });
-    //******************************************/
-    console.log(data)
-    if (Object.keys(data).length !== 0) {
-        $("#submitForm").buttonLoader("start")
-        $.ajax({
-            url: `${window.location.pathname}`,
-            data: JSON.stringify(data),
-            contentType: "application/json",
-            type: 'POST'
-        }).done(function (data) {
-            window.history.back();
-            // location.reload();
-        }).fail(function (xhr) {
-            const error = JSON.parse(xhr.responseText)
-            $("#modal-body-val").html(`<span style="font-size: large">${error.msg}<br/>&emsp;&nbsp;${error.err}</span>`)
-            $("#exampleModal").modal("show")
-        }).always(function () {
-            $("#submitForm").buttonLoader("stop")
-        });
-    }
-
-}
-$(document).ready(function () {
-    $("input,select,textarea").on("change", function () {
-        $(this).addClass("changed");
-    })
-});
-
-// change cities by country id
-$(document).ready(function () {
-    // get first list of cities on page init
-    cityListBycountry($("#country_id option:selected").val())
-
-    // get list of cities on country change 
-    $("#country_id").on("change", function () {
-        $('#city_id').children().remove().end()
-        cityListBycountry($("#country_id option:selected").val())
-    })
-});
-
-function cityListBycountry(id) {
+    $("#submitAdd").buttonLoader("start")
+    const formData = new FormData();
+    formData.append("promo_name", $("#promo_name").val());
+    formData.append("num_of_uses", $("#num_of_uses").val());
+    formData.append("percent", $("#percent").val());
+    formData.append("from_date", from);
+    formData.append("to_date", to);
+    formData.append("promo_type", userType == "specific" ? "specific_users" : "all_users");
+    userType == "specific" ? formData.append("user_id", $("#user_id").val()) : "";
     $.ajax({
-        url: `/dashboard/city/listBycountry/${id}`,
-        type: 'GET',
+        url: `${window.location.pathname}`,
+        data: formData,
+        processData: false,
+        contentType: false,
+        mimeType: "multipart/form-data",
+        type: 'POST'
     }).done(function (data) {
-        $.each(data, function (i, item) {
-            $('#city_id').append($('<option>', {
-                value: item.city_id,
-                text: `${item.en_name}  -  ${item.ar_name}`,
-                // cityId from script in edit.ejs
-                selected: cityId == item.city_id ? true : false
-            }));
-        });
+        // $('#newForm').trigger("reset");
+        // $('.toast-body').text("Successful")
+        // $('.toast').toast("show")
+        window.history.back();
     }).fail(function (xhr) {
         const error = JSON.parse(xhr.responseText)
         $("#modal-body-val").html(`<span style="font-size: large">${error.msg}<br/>&emsp;&nbsp;${error.err}</span>`)
         $("#exampleModal").modal("show")
-    })
+    }).always(function () {
+        $("#submitAdd").buttonLoader("stop")
+    });
 }
+
 
 $(function () {
     //Initialize Select2 Elements

@@ -44,7 +44,7 @@ export = (app: express.Application) => {
   app.use("/v1/order", new OrderRoutes().router)
   // OrderDetails Route
   app.use("/v1/orderDetails", new OrderDetailsRoutes().router)
-  // OrderDetails Route
+  // Management Route
   app.use("/v1/management", new TermsPolicyRoutes().router)
 
   // Not found route

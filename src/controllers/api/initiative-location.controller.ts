@@ -77,7 +77,6 @@ export class InitiativesLocationController extends Controller {
       .then((d) => (data = d))
       .catch((e) => {
         data = null
-        console.log(e)
       })
     return data
   }

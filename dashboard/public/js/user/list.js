@@ -12,7 +12,7 @@ function getList(page = 1) {
     const settings = {
         async: true,
         crossDomain: true,
-        url: `${window.location.pathname}/list?limit=6&page=${page}&type=${userType}`,
+        url: `${window.location.pathname}/list?limit=8&page=${page}&type=${userType}`,
         method: "Get",
     }
     $.ajax(settings).done(function (res, textStatus) {

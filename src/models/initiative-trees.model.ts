@@ -3,6 +3,7 @@ import {Sequelize, DataTypes} from "sequelize"
 import initiativeLocations from "./initiative-location.model"
 import trees from "./trees.model"
 import cart from "./cart.model"
+import initiatives from "./initiative.model"
 
 const sequelize = new Sequelize(...config.database)
 
@@ -114,6 +115,8 @@ const initiativeTrees = sequelize.define(
   }
 )
 // initiativeTrees.belongsTo(initiativeLocations, {foreignKey: "location_id"})
+initiativeTrees.belongsTo(initiativeLocations, {foreignKey: "location_id"})
+initiativeTrees.belongsTo(initiatives, {foreignKey: "init_id_pk"})
 
 initiativeTrees.belongsTo(trees, {foreignKey: "tree_id"})
 initiativeTrees.sync()

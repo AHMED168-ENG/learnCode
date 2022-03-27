@@ -1,3 +1,5 @@
+// var is all || specific
+var userType = "specific"
 $(function () {
     $.validator.setDefaults({
         submitHandler: function (form, event) {
@@ -57,7 +59,8 @@ const addNew = () => {
     formData.append("percent", $("#percent").val());
     formData.append("from_date", from);
     formData.append("to_date", to);
-    formData.append("promo_type", "all_users");
+    formData.append("promo_type", userType == "specific" ? "specific_users" : "all_users");
+    userType == "specific" ? formData.append("user_id", $("#user_id").val()) : "";
     $.ajax({
         url: `${window.location.pathname}`,
         data: formData,
@@ -78,3 +81,27 @@ const addNew = () => {
         $("#submitAdd").buttonLoader("stop")
     });
 }
+
+$(function () {
+    //Initialize Select2 Elements
+    $('.select2').select2()
+
+    //Initialize Select2 Elements
+    $('.select2bs4').select2({
+        theme: 'bootstrap4'
+    })
+});
+
+
+$('#all').click(function () {
+    if (userType != "all") {
+        userType = "all"
+        $("#UserField").hide();
+    }
+});
+$('#specific').click(function () {
+    if (userType != "specific") {
+        userType = "specific"
+        $("#UserField").show();
+    }
+});

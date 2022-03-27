@@ -12,6 +12,11 @@ export class InitiativeRoutes {
   routes() {
     this.router.get("/", this.initiativeController.listPage)
     this.router.get("/list", this.initiativeController.list)
+    this.router.get("/new", this.initiativeController.newPage)
+    this.router.post("/new", this.initiativeController.addNew)
+    this.router.get("/edit/:id", this.initiativeController.editPage)
+    this.router.post("/edit/:id", this.initiativeController.edit)
     this.router.get("/view/:id", this.initiativeController.viewPage)
+    this.router.delete("/:action/:id", this.initiativeController.active)
   }
 }

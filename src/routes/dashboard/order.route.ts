@@ -15,7 +15,9 @@ export class OrderRoutes {
     this.router.get("/cancelled", this.orderController.listPageCancelled)
     this.router.get("/completed", this.orderController.listPageCompleted)
     this.router.get("/:type/list", this.orderController.list)
-    this.router.put("/:id", this.orderController.changeStatus)
+    this.router.get("/:type/listreport", this.orderController.listreport)
+    this.router.put("/status/:id", this.orderController.changeStatus)
     this.router.get("/view/:id", this.orderController.view)
+    this.router.get("/ttt", this.orderController.test)
   }
 }

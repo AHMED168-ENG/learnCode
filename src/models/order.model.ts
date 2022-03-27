@@ -148,6 +148,24 @@ const order = sequelize.define(
         },
       },
     },
+    sahlan_gained_points: {
+      type: DataTypes.DECIMAL(18, 2),
+      defaultValue: 0,
+      validate: {
+        isNumeric: {
+          msg: "The sahlan gained points can only be a number",
+        },
+      },
+    },
+    carbon_gained_points: {
+      type: DataTypes.DECIMAL(18, 2),
+      defaultValue: 0,
+      validate: {
+        isNumeric: {
+          msg: "The carbon gained points can only be a number",
+        },
+      },
+    },
   },
   {
     charset: "utf8",

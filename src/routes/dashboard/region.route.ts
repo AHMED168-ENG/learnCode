@@ -16,5 +16,7 @@ export class RegionRoutes {
     this.router.post("/new", this.regionController.addNew)
     this.router.get("/edit/:id", this.regionController.editPage)
     this.router.post("/edit/:id", this.regionController.edit)
+    this.router.get("/listRegionByCity/:id", this.regionController.listRegionByCity)
+
   }
 }

@@ -2,6 +2,7 @@
 <html lang="en">
   <head>
     <%- include('../layout/heade.ejs') %>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
   </head>
   <body class="sidebar-mini layout-fixed text-sm text-sm">
     <div class="wrapper">
@@ -117,7 +118,7 @@
                   </div>
                   <div class="card-body">
                     <div class="chart">
-                      <canvas id="barChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%"></canvas>
+                      <canvas id="incomeDetails" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%"></canvas>
                     </div>
                   </div>
                   <!-- /.card-body -->
@@ -154,15 +155,20 @@
                       </tr>
                     </thead>
                     <tbody>
+                      <% for(let [index,initiative] of initiatives.entries() || []){ %>
                       <tr>
                         <td>#</td>
                         <td>
-                          <a>Initiatives Name</a>
+                          <a><%= initiative.init_en_name %> - <%= initiative.init_ar_name %></a>
                           <br />
-                          <small>Created 01-01-2022</small>
+                          <small>
+                            <script type="text/javascript">
+                              document.write(`Created ${moment(new Date("<%=initiative.createdAt%>")).format("YYYY-MM-DD")}`)
+                            </script>
+                          </small>
                         </td>
                         <td>
-                          <img alt="Avatar" class="table-avatar" src="https://adminlte.io/themes/v3//dist/img/avatar.png" />
+                          <img class="rounded-circle p-0" width="45" height="45" src="/p/img/<%= initiative.sponsorImg %>" alt="sponser Image" />
                         </td>
                         <td class="project_progress">
                           <div class="progress progress-sm">
@@ -194,326 +200,7 @@
                           <span class="badge badge-danger">10</span>
                         </td>
                       </tr>
-                      <tr>
-                        <td>#</td>
-                        <td>
-                          <a>Initiatives Name</a>
-                          <br />
-                          <small>Created 01-01-2022</small>
-                        </td>
-                        <td>
-                          <img alt="Avatar" class="table-avatar" src="https://adminlte.io/themes/v3//dist/img/avatar.png" />
-                        </td>
-                        <td class="project_progress">
-                          <div class="progress progress-sm">
-                            <div
-                              class="progress-bar bg-green"
-                              role="progressbar"
-                              aria-valuenow="57"
-                              aria-valuemin="0"
-                              aria-valuemax="100"
-                              style="width: 57%"
-                            ></div>
-                          </div>
-                          <small>57% Complete</small>
-                        </td>
-                        <td class="project-state">
-                          <span class="badge badge-success">Active</span>
-                        </td>
-
-                        <td class="project-state">
-                          <span class="badge badge-info">10</span>
-                        </td>
-                        <td class="project-state">
-                          <span class="badge badge-warning">10</span>
-                        </td>
-                        <td class="project-state">
-                          <span class="badge badge-success">10</span>
-                        </td>
-                        <td class="project-state">
-                          <span class="badge badge-danger">10</span>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>#</td>
-                        <td>
-                          <a>Initiatives Name</a>
-                          <br />
-                          <small>Created 01-01-2022</small>
-                        </td>
-                        <td>
-                          <img alt="Avatar" class="table-avatar" src="https://adminlte.io/themes/v3//dist/img/avatar.png" />
-                        </td>
-                        <td class="project_progress">
-                          <div class="progress progress-sm">
-                            <div
-                              class="progress-bar bg-green"
-                              role="progressbar"
-                              aria-valuenow="57"
-                              aria-valuemin="0"
-                              aria-valuemax="100"
-                              style="width: 57%"
-                            ></div>
-                          </div>
-                          <small>57% Complete</small>
-                        </td>
-                        <td class="project-state">
-                          <span class="badge badge-success">Active</span>
-                        </td>
-
-                        <td class="project-state">
-                          <span class="badge badge-info">10</span>
-                        </td>
-                        <td class="project-state">
-                          <span class="badge badge-warning">10</span>
-                        </td>
-                        <td class="project-state">
-                          <span class="badge badge-success">10</span>
-                        </td>
-                        <td class="project-state">
-                          <span class="badge badge-danger">10</span>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>#</td>
-                        <td>
-                          <a>Initiatives Name</a>
-                          <br />
-                          <small>Created 01-01-2022</small>
-                        </td>
-                        <td>
-                          <img alt="Avatar" class="table-avatar" src="https://adminlte.io/themes/v3//dist/img/avatar.png" />
-                        </td>
-                        <td class="project_progress">
-                          <div class="progress progress-sm">
-                            <div
-                              class="progress-bar bg-green"
-                              role="progressbar"
-                              aria-valuenow="57"
-                              aria-valuemin="0"
-                              aria-valuemax="100"
-                              style="width: 57%"
-                            ></div>
-                          </div>
-                          <small>57% Complete</small>
-                        </td>
-                        <td class="project-state">
-                          <span class="badge badge-success">Active</span>
-                        </td>
-
-                        <td class="project-state">
-                          <span class="badge badge-info">10</span>
-                        </td>
-                        <td class="project-state">
-                          <span class="badge badge-warning">10</span>
-                        </td>
-                        <td class="project-state">
-                          <span class="badge badge-success">10</span>
-                        </td>
-                        <td class="project-state">
-                          <span class="badge badge-danger">10</span>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>#</td>
-                        <td>
-                          <a>Initiatives Name</a>
-                          <br />
-                          <small>Created 01-01-2022</small>
-                        </td>
-                        <td>
-                          <img alt="Avatar" class="table-avatar" src="https://adminlte.io/themes/v3//dist/img/avatar.png" />
-                        </td>
-                        <td class="project_progress">
-                          <div class="progress progress-sm">
-                            <div
-                              class="progress-bar bg-green"
-                              role="progressbar"
-                              aria-valuenow="57"
-                              aria-valuemin="0"
-                              aria-valuemax="100"
-                              style="width: 57%"
-                            ></div>
-                          </div>
-                          <small>57% Complete</small>
-                        </td>
-                        <td class="project-state">
-                          <span class="badge badge-success">Active</span>
-                        </td>
-
-                        <td class="project-state">
-                          <span class="badge badge-info">10</span>
-                        </td>
-                        <td class="project-state">
-                          <span class="badge badge-warning">10</span>
-                        </td>
-                        <td class="project-state">
-                          <span class="badge badge-success">10</span>
-                        </td>
-                        <td class="project-state">
-                          <span class="badge badge-danger">10</span>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>#</td>
-                        <td>
-                          <a>Initiatives Name</a>
-                          <br />
-                          <small>Created 01-01-2022</small>
-                        </td>
-                        <td>
-                          <img alt="Avatar" class="table-avatar" src="https://adminlte.io/themes/v3//dist/img/avatar.png" />
-                        </td>
-                        <td class="project_progress">
-                          <div class="progress progress-sm">
-                            <div
-                              class="progress-bar bg-green"
-                              role="progressbar"
-                              aria-valuenow="57"
-                              aria-valuemin="0"
-                              aria-valuemax="100"
-                              style="width: 57%"
-                            ></div>
-                          </div>
-                          <small>57% Complete</small>
-                        </td>
-                        <td class="project-state">
-                          <span class="badge badge-success">Active</span>
-                        </td>
-
-                        <td class="project-state">
-                          <span class="badge badge-info">10</span>
-                        </td>
-                        <td class="project-state">
-                          <span class="badge badge-warning">10</span>
-                        </td>
-                        <td class="project-state">
-                          <span class="badge badge-success">10</span>
-                        </td>
-                        <td class="project-state">
-                          <span class="badge badge-danger">10</span>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>#</td>
-                        <td>
-                          <a>Initiatives Name</a>
-                          <br />
-                          <small>Created 01-01-2022</small>
-                        </td>
-                        <td>
-                          <img alt="Avatar" class="table-avatar" src="https://adminlte.io/themes/v3//dist/img/avatar.png" />
-                        </td>
-                        <td class="project_progress">
-                          <div class="progress progress-sm">
-                            <div
-                              class="progress-bar bg-green"
-                              role="progressbar"
-                              aria-valuenow="57"
-                              aria-valuemin="0"
-                              aria-valuemax="100"
-                              style="width: 57%"
-                            ></div>
-                          </div>
-                          <small>57% Complete</small>
-                        </td>
-                        <td class="project-state">
-                          <span class="badge badge-success">Active</span>
-                        </td>
-
-                        <td class="project-state">
-                          <span class="badge badge-info">10</span>
-                        </td>
-                        <td class="project-state">
-                          <span class="badge badge-warning">10</span>
-                        </td>
-                        <td class="project-state">
-                          <span class="badge badge-success">10</span>
-                        </td>
-                        <td class="project-state">
-                          <span class="badge badge-danger">10</span>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>#</td>
-                        <td>
-                          <a>Initiatives Name</a>
-                          <br />
-                          <small>Created 01-01-2022</small>
-                        </td>
-                        <td>
-                          <img alt="Avatar" class="table-avatar" src="https://adminlte.io/themes/v3//dist/img/avatar.png" />
-                        </td>
-                        <td class="project_progress">
-                          <div class="progress progress-sm">
-                            <div
-                              class="progress-bar bg-green"
-                              role="progressbar"
-                              aria-valuenow="57"
-                              aria-valuemin="0"
-                              aria-valuemax="100"
-                              style="width: 57%"
-                            ></div>
-                          </div>
-                          <small>57% Complete</small>
-                        </td>
-                        <td class="project-state">
-                          <span class="badge badge-success">Active</span>
-                        </td>
-
-                        <td class="project-state">
-                          <span class="badge badge-info">10</span>
-                        </td>
-                        <td class="project-state">
-                          <span class="badge badge-warning">10</span>
-                        </td>
-                        <td class="project-state">
-                          <span class="badge badge-success">10</span>
-                        </td>
-                        <td class="project-state">
-                          <span class="badge badge-danger">10</span>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>#</td>
-                        <td>
-                          <a>Initiatives Name</a>
-                          <br />
-                          <small>Created 01-01-2022</small>
-                        </td>
-                        <td>
-                          <img alt="Avatar" class="table-avatar" src="https://adminlte.io/themes/v3//dist/img/avatar.png" />
-                        </td>
-                        <td class="project_progress">
-                          <div class="progress progress-sm">
-                            <div
-                              class="progress-bar bg-green"
-                              role="progressbar"
-                              aria-valuenow="57"
-                              aria-valuemin="0"
-                              aria-valuemax="100"
-                              style="width: 57%"
-                            ></div>
-                          </div>
-                          <small>57% Complete</small>
-                        </td>
-                        <td class="project-state">
-                          <span class="badge badge-success">Active</span>
-                        </td>
-
-                        <td class="project-state">
-                          <span class="badge badge-info">10</span>
-                        </td>
-                        <td class="project-state">
-                          <span class="badge badge-warning">10</span>
-                        </td>
-                        <td class="project-state">
-                          <span class="badge badge-success">10</span>
-                        </td>
-                        <td class="project-state">
-                          <span class="badge badge-danger">10</span>
-                        </td>
-                      </tr>
+                      <%} %>
                     </tbody>
                   </table>
                 </div>
@@ -530,8 +217,30 @@
       <footer class="main-footer"><%- include('../layout/footer.ejs') %></footer>
     </div>
     <%- include('../layout/script.ejs') %>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
     <script src="/js/plugins/chart.js/Chart.min.js"></script>
     <script>
+      var currMonthName = moment().format("MMMM")
+      var prevMonthName = moment().subtract(1, "month").format("MMMM")
+      var monthsArr = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+      var ordersInYear = JSON.parse(`<%-JSON.stringify(data.ordersInYear)%>`)
+      var monthsIncomeArr = monthsArr.map((m, i) => { 
+        for (let element of ordersInYear) {
+          if (element.MONTH == m) {
+            return element.allSum
+          }
+        }
+        return 0
+      })
+      var monthsCountArr = monthsArr.map((m, i) => {
+        for (let element of ordersInYear) {
+          if (element.MONTH == m) {
+            return element.count
+          }
+        }
+        return 0
+      })
+
       $(function () {
         /* ChartJS
          * -------
@@ -546,7 +255,7 @@
         var areaChartCanvas = $("#areaChart").get(0).getContext("2d")
 
         var areaChartData = {
-          labels: ["January", "February", "March", "April", "May", "June", "July"],
+          labels: monthsArr,
           datasets: [
             {
               label: "Digital Goods",
@@ -629,7 +338,12 @@
           labels: ["New Orders", "In Progress Orders", "Completed Orders", "Cancelled Orders"],
           datasets: [
             {
-              data: ["50", "14", "52", "12"],
+              data: [
+                "<%= data.ordersChart.New %>",
+                "<%= data.ordersChart.inProgress %>",
+                "<%= data.ordersChart.completed %>",
+                "<%= data.ordersChart.cancelled %>",
+              ],
               backgroundColor: ["#17a2b8", "#ffc107", "#28a745", "#dc3545"],
             },
           ],
@@ -663,29 +377,6 @@
           data: pieData,
           options: pieOptions,
         })
-
-        //-------------
-        //- BAR CHART -
-        //-------------
-        var barChartCanvas = $("#barChart").get(0).getContext("2d")
-        var barChartData = $.extend(true, {}, areaChartData)
-        var temp0 = areaChartData.datasets[0]
-        var temp1 = areaChartData.datasets[1]
-        barChartData.datasets[0] = temp1
-        barChartData.datasets[1] = temp0
-
-        var barChartOptions = {
-          responsive: true,
-          maintainAspectRatio: false,
-          datasetFill: false,
-        }
-
-        new Chart(barChartCanvas, {
-          type: "bar",
-          data: barChartData,
-          options: barChartOptions,
-        })
-
         //---------------------
         //- STACKED BAR CHART -
         //---------------------
@@ -716,7 +407,45 @@
         })
       })
     </script>
+    <script>
+      $(function () {
+        var incomeDetailsChart = {
+          labels: monthsArr,
+          datasets: [
+            {
+              label: "Income per month (SAR)",
+              backgroundColor: "rgba(60,141,188,0.9)",
+              borderColor: "rgba(60,141,188,0.8)",
+              pointRadius: false,
+              pointColor: "#3b8bba",
+              pointStrokeColor: "rgba(60,141,188,1)",
+              pointHighlightFill: "#fff",
+              pointHighlightStroke: "rgba(60,141,188,1)",
+              data: monthsCountArr,
+            },
+          ],
+        }
+        //-------------
+        //- BAR CHART -
+        //-------------
+        var barChartCanvas = $("#incomeDetails").get(0).getContext("2d")
+        var barChartData = $.extend(true, {}, incomeDetailsChart)
+        var temp0 = incomeDetailsChart.datasets[0]
+        barChartData.datasets[0] = temp0
 
+        var barChartOptions = {
+          responsive: true,
+          maintainAspectRatio: false,
+          datasetFill: false,
+        }
+
+        new Chart(barChartCanvas, {
+          type: "bar",
+          data: barChartData,
+          options: barChartOptions,
+        })
+      })
+    </script>
     <!-- <script src="/js/reports/order.js"></script> -->
   </body>
 </html>

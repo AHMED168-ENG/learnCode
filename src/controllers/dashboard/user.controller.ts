@@ -1,6 +1,7 @@
 import {Request, Response, NextFunction} from "express"
 import httpStatus from "http-status"
-import {Model, where} from "sequelize/types"
+import {Model, Op, where} from "sequelize/types"
+import sequelize from "sequelize"
 import city from "../../models/city.model"
 import country from "../../models/country.model"
 import region from "../../models/region.model"
@@ -52,17 +53,57 @@ export class UserController {
     webAppsUsers
       .findOne({
         where: where,
-        attributes: ["fullName","user_type", "email", "phone", "user_img", "account_status", "deleted", "createdAt"],
+        attributes: ["fullName", "user_type", "email", "phone", "user_img", "account_status", "deleted", "createdAt"],
         raw: true,
       })
       .then((data) => {
         res.render("user/edit.ejs", {
           title: "User",
-          data:data
+          data: data,
         })
       })
       .catch((err) => {
         res.status(httpStatus.NOT_FOUND).json({err, msg: "not found user"})
       })
+  }
+  async userData(userId) {
+    let data
+    await webAppsUsers
+      .findOne({where: {user_id: userId}, attributes: ["fullName"], raw: true})
+      .then((d) => {
+        if (!d) {
+          data = null
+        } else {
+          data = d
+        }
+      })
+      .catch((err) => {
+        data = null
+      })
+    return data
+  }
+  async listUser() {
+    let data
+    await webAppsUsers
+      .findAll({
+        attributes: ["user_id", "fullName", "phone", "email"],
+        where: {
+          fullName: {
+            [sequelize.Op.ne]: null,
+          },
+        },
+        raw: true,
+      })
+      .then((d) => {
+        if (!d) {
+          data = null
+        } else {
+          data = d
+        }
+      })
+      .catch((err) => {
+        data = null
+      })
+    return data
   }
 }

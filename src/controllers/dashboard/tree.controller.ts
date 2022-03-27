@@ -44,7 +44,6 @@ export class TreeController {
     })
   }
   addNew(req, res: Response, next: NextFunction) {
-    console.log(req.body)
     const imgFile = req.files.img_tree
     if (!helpers.mimetypeImge.includes(imgFile.mimetype)) {
       res.status(400).json({msg: "Image should be png"})
@@ -61,7 +60,6 @@ export class TreeController {
           })
         })
         .catch((err) => {
-          console.log(err)
           res.status(400).json({msg: "Error in create new tree", err: err.errors[0].message || "unexpected error"})
         })
     }
@@ -98,5 +96,24 @@ export class TreeController {
       .catch((err) => {
         res.status(httpStatus.BAD_REQUEST).json({msg: "Error in Edit tree", err: err.errors[0].message || "unexpected error"})
       })
+  }
+  async listTrees() {
+    let data
+    await trees
+      .findAll({
+        attributes: {exclude: ["updatedAt"]},
+        raw: true,
+      })
+      .then((d) => {
+        if (!d || d.length == 0) {
+          data = null
+        } else {
+          data = d
+        }
+      })
+      .catch((err) => {
+        data = []
+      })
+    return data
   }
 }

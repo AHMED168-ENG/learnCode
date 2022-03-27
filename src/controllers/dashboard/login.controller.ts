@@ -7,7 +7,6 @@ export class LoginController {
   }
   login(req: Request, res: Response, next: NextFunction) {
     const {email, password} = req.body
-    console.log(req.body)
     const token = Buffer.from("aaaaaaaaaaaaaaaaaa").toString("base64")
     // console.log(Buffer.from(req.cookies.token, "base64").toString())
     // res.cookie("token", `${token}`).status(200).json({status: 200})

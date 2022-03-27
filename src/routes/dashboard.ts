@@ -13,20 +13,26 @@ import {TreeRoutes} from "./dashboard/tree.route"
 import { OrderRoutes } from "./dashboard/order.route"
 import { PromoRoutes } from "./dashboard/promo.route"
 import { TermsPolicyRoutes } from "./dashboard/terms&policy.route"
+import { LocationRoutes } from "./dashboard/location.route"
+import { LocationTreesRoutes } from "./dashboard/location-trees.route"
 export = (app: express.Application) => {
-  // index
+  // Index
   app.get("/", (req, res) => res.redirect("/dashboard/home"))
-  // home route
+  // Home route
   app.use("/dashboard/home", new HomeRoutes().router)
   // User route
   app.use("/dashboard/user", new LoginRoutes().router)
-  // initiative route
+  // Initiative route
   app.use("/dashboard/initiative", new InitiativeRoutes().router)
+  // location route
+  app.use("/dashboard/location", new LocationRoutes().router)
+  // location trees route
+  app.use("/dashboard/initrees", new LocationTreesRoutes().router)
   // Sponser route
   app.use("/dashboard/sponser", new SponserRoutes().router)
-  // country route
+  // Country route
   app.use("/dashboard/country", new CountryRoutes().router)
-  // city route
+  // City route
   app.use("/dashboard/city", new CityRoutes().router)
   // Region route
   app.use("/dashboard/region", new RegionRoutes().router)
@@ -34,14 +40,14 @@ export = (app: express.Application) => {
   app.use("/dashboard/sector", new SectorRoutes().router)
   // User route
   app.use("/dashboard/user", new UserRoutes().router)
-  // report route
+  // Report route
   app.use("/dashboard/report", new ReportRoutes().router)
-  // tree route
+  // Tree route
   app.use("/dashboard/tree", new TreeRoutes().router)
-  // order route
+  // Order route
   app.use("/dashboard/order", new OrderRoutes().router)
-  // promo route
+  // Promo route
   app.use("/dashboard/promo", new PromoRoutes().router)
-  // promo route
+  // Management route
   app.use("/dashboard/management", new TermsPolicyRoutes().router)
 }

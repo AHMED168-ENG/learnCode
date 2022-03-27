@@ -15,6 +15,31 @@
   <!-- Right navbar links -->
   <ul class="navbar-nav ml-auto">
     <!-- Navbar Search -->
+    <!-- Messages Dropdown Menu -->
+    <li class="nav-item dropdown">
+      <a class="nav-link" data-toggle="dropdown" href="#">
+        <i class="far fa-comments"></i>
+        <span class="badge badge-danger navbar-badge" id="messageUnreadNumber">0</span>
+      </a>
+      <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+        <div id="message-content"></div>
+        <div class="dropdown-divider"></div>
+        <a href="#" class="dropdown-item dropdown-footer">See All Messages</a>
+      </div>
+    </li>
+    <!-- End Messages Menu -->
+    <!-- Notifications Dropdown Menu -->
+    <li class="nav-item dropdown">
+      <a class="nav-link" data-toggle="dropdown" href="#">
+        <i class="far fa-bell"></i>
+        <span class="badge badge-danger navbar-badge" id="NewOrderNumber">0</span>
+      </a>
+      <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+        <div id="notifiy-content"></div>
+        <a href="/dashboard/order/new" class="dropdown-item dropdown-footer">See All New Orders</a>
+      </div>
+    </li>
+    <!-- End Notifications Menu -->
 
     <li class="nav-item">
       <a class="nav-link" data-widget="fullscreen" href="#" role="button">
@@ -56,39 +81,59 @@
             <p>Dashboard</p>
           </a>
         </li>
-
         <li class="nav-item">
           <a href="/dashboard/sponser" class="nav-link" id="sponser">
             <i class="nav-icon fas fa-users text-success_"></i>
-            <p>Sponsors</p>
+            <p>
+              Sponsors
+              <span class="badge badge-success right" id="totalSponsors">0</span>
+            </p>
           </a>
         </li>
 
         <li class="nav-item">
           <a href="/dashboard/initiative" class="nav-link" id="initiative">
             <i class="nav-icon fas fa-tree text-success_"></i>
-            <p>Initiatives Management</p>
+            <p>
+              Initiatives Management
+              <span class="badge badge-success right" id="totalInitiatives">0</span>
+            </p>
           </a>
         </li>
 
         <li class="nav-item">
-          <a href="#" class="nav-link">
+          <a href="/dashboard/location" class="nav-link" id="location">
             <i class="nav-icon fas fa-map-marked text-success_"></i>
-            <p>Locations Management</p>
+            <p>
+              Locations Management
+              <span class="badge badge-success right" id="totalLocation">0</span>
+            </p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="/dashboard/initrees" class="nav-link" id="initrees">
+            <i class="nav-icon fas fa-map-marked text-success_"></i>
+            <p>Trees Location</p>
           </a>
         </li>
 
         <li class="nav-item">
           <a href="/dashboard/tree" id="tree" class="nav-link">
             <i class="nav-icon fab fa-pagelines text-success_"></i>
-            <p>Trees Management</p>
+            <p>
+              Trees Management
+              <span class="badge badge-warning right" id="totalTrees">0</span>
+            </p>
           </a>
         </li>
 
         <li class="nav-item">
           <a href="#" class="nav-link">
             <i class="nav-icon fas fa-gift text-success_"></i>
-            <p>Gifts & cards Management</p>
+            <p>
+              Gifts & cards Management
+              <span class="badge badge-warning right" id="totalGift">0</span>
+            </p>
           </a>
         </li>
 
@@ -135,7 +180,10 @@
         <li class="nav-item">
           <a href="/dashboard/promo" id="promo" class="nav-link">
             <i class="nav-icon fas fa-tag textss-maroon"></i>
-            <p>Promo Codes</p>
+            <p>
+              Promo Codes
+              <span class="badge badge-warning right" id="totalPromo">0</span>
+            </p>
           </a>
         </li>
 
@@ -149,7 +197,7 @@
           </a>
           <ul class="nav nav-treeview">
             <li class="nav-item">
-              <a href="#" class="nav-link">
+              <a href="/dashboard/management/about" class="nav-link">
                 <i class="fas fa-circle-notch nav-icon textss-success"></i>
                 <p>About</p>
               </a>
@@ -231,6 +279,25 @@
                 <p>Orders report</p>
               </a>
             </li>
+            <li class="nav-item">
+              <a href="/dashboard/report/user" class="nav-link">
+                <i class="fas fa-users nav-icon"></i>
+                <p>Users report</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="/dashboard/report/sponsor" class="nav-link">
+                <i class="fas fa-user-friends nav-icon"></i>
+                <p>Sponsors report</p>
+              </a>
+            </li>
+
+            <li class="nav-item">
+              <a href="/dashboard/report/initiative" class="nav-link">
+                <i class="fas fa-tree nav-icon"></i>
+                <p>Initiative Report</p>
+              </a>
+            </li>
 
             <li class="nav-item">
               <a href="/dashboard/report/calendar-initiative" class="nav-link">
@@ -240,9 +307,9 @@
             </li>
 
             <li class="nav-item">
-              <a href="#" class="nav-link">
-                <i class="far fa-circle nav-icon"></i>
-                <p>Report 3</p>
+              <a href="/dashboard/report/charts" class="nav-link">
+                <i class="fas fa-user-tag nav-icon"></i>
+                <p>User charts</p>
               </a>
             </li>
           </ul>
@@ -251,7 +318,10 @@
         <li class="nav-item">
           <a href="/dashboard/user" class="nav-link" id="user">
             <i class="nav-icon fas fa-users"></i>
-            <p>Users - Clients -</p>
+            <p>
+              Users - Clients -
+              <span class="badge badge-warning right" id="totalUsers">0</span>
+            </p>
           </a>
         </li>
 
@@ -321,7 +391,7 @@
                 <li class="nav-item">
                   <a href="#" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
-                    <p>Sahlan Users</p>
+                    <p>Sahlan Admins</p>
                   </a>
                 </li>
                 <li class="nav-item">
@@ -340,3 +410,65 @@
   </div>
   <!-- /.sidebar -->
 </aside>
+<script>
+  fetch("/dashboard/home/num", {
+    method: "GET",
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      data.lastNewOrders.forEach((elem) => {
+        $("#notifiy-content").append(`
+          <a href="/dashboard/order/view/${elem.order_id}" class="dropdown-item">
+            <!-- Notifiy Start -->
+            <div class="media">
+              <img src="/p/img/avatar.png" alt="User Avatar" class="img-size-50 mr-3 img-circle" />
+              <div class="media-body">
+                <h3 class="dropdown-item-title"># ${elem.order_id}</h3>
+                <h3 class="dropdown-item-title">New order</h3>
+                <p class="text-sm">Customer : ${elem.web_apps_user.fullName}</p>
+                <p class="text-sm text-muted">
+                  <i class="far fa-clock mr-1"></i>
+                  ${moment(elem.createdAt).fromNow()}
+                </p>
+              </div>
+            </div>
+            <!-- Notifiy End -->
+          </a>
+          <div class="dropdown-divider"></div>
+        `)
+      })
+      data.lastNewMessage.forEach((elem) => {
+        $("#message-content").append(`
+          <a href="/dashboard/message/view/${elem.message_id}" class="dropdown-item">
+            <!-- Notifiy Start -->
+            <div class="media">
+              <img src="/p/img/avatar.png" alt="User Avatar" class="img-size-50 mr-3 img-circle" />
+              <div class="media-body">
+                <h3 class="dropdown-item-title">${elem.web_apps_user.fullName}</h3>
+                <p class="text-sm">Subject : ${elem.subject}</p>
+                <p class="text-sm text-muted">
+                  <i class="far fa-clock mr-1"></i>
+                  ${moment(elem.createdAt).fromNow()}
+                </p>
+              </div>
+            </div>
+            <!-- Notifiy End -->
+          </a>
+          <div class="dropdown-divider"></div>
+        `)
+      })
+      $("#NewOrderNumber").text(data.ordersNum.New)
+      $("#messageUnreadNumber").text(data.messageNum)
+      // Set side bar numbers
+      $("#totalLocation").text(data.totalLocation)
+      $("#totalTrees").text(data.totalTrees)
+      $("#totalInitiatives").text(data.totalInitiatives)
+      $("#totalSponsors").text(data.totalSponsors)
+      $("#totalPromo").text(data.totalPromo)
+      $("#totalUsers").text(data.totalUsers)
+      $("#totalGift").text(data.totalGift)
+    })
+    .catch((err) => {
+      console.error(err)
+    })
+</script>

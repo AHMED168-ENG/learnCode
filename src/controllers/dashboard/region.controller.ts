@@ -82,4 +82,18 @@ export class RegionController {
         res.status(httpStatus.BAD_REQUEST).json({msg: "Error in Edit region", err: err.errors[0].message || "unexpected error"})
       })
   }
+  async listRegionByCity(req, res: Response, next: NextFunction) {
+    const id = req.params.id
+    region
+      .findAll({
+        attributes: ["region_id", "en_name", "ar_name"],
+        where: {city_id: id},
+      })
+      .then((data) => {
+        res.status(httpStatus.OK).json(data)
+      })
+      .catch((err) => {
+        res.status(httpStatus.BAD_REQUEST).json({msg: "Error in Edit region", err: err.errors[0].message || "unexpected error"})
+      })
+  }
 }

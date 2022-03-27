@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('../layout/heade.ejs') %>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+  </head>
+  <body class="sidebar-mini layout-fixed text-sm text-sm">
+    <div class="wrapper">
+      <%- include('../layout/nav.ejs') %>
+      <!-- Content Wrapper. Contains page content -->
+      <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <!-- Content Header (Page header) -->
+        <div class="content-header">
+          <div class="container-fluid">
+            <div class="row mb-2 align-items-center mt-1">
+              <div class="col-sm-6"><h1>Users report</h1></div>
+              <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                  <li class="breadcrumb-item"><a href="/">Home</a></li>
+                  <li class="breadcrumb-item active">Users report</li>
+                </ol>
+              </div>
+            </div>
+            <!-- /.row -->
+          </div>
+          <!-- /.container-fluid -->
+        </div>
+        <!-- /.row -->
+        <!-- /.content-header -->
+        <!-- Main content -->
+        <section class="content">
+          <div class="row col-12 mb-2 align-items-center mt-1">
+            <div class="col-6 d-flex">
+              <button type="button" data-tooltip="All" onclick="changeType('all')" class="btn btn-secondary float-right mx-1">All</button>
+              <button type="button" data-tooltip="Female" onclick="changeType('Female')" class="btn btn-info float-right mx-1">
+                <i class="fas fa-folder-plus"></i>
+                Female
+              </button>
+              <button type="button" data-tooltip="male" onclick="changeType('male')" class="btn btn-warning float-right mx-1">
+                <i class="fas fa-circle-notch"></i>
+                Male
+              </button>
+            </div>
+            <div class="col-6 d-flex align-items-center">
+              <div class="form-group col-md-6">
+                <label>From - To</label>
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">
+                      <i class="far fa-calendar-alt"></i>
+                    </span>
+                  </div>
+                  <input type="text" class="form-control float-right" id="fromTo" />
+                </div>
+                <!-- /.input group -->
+              </div>
+            </div>
+          </div>
+          <div class="container-fluid">
+            <div class="row mt-2">
+              <div class="col-md-12">
+                <!-- BAR CHART -->
+                <div class="card card-danger">
+                  <div class="card-header">
+                    <h3 class="card-title">User chart</h3>
+                    <div class="card-tools">
+                      <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                        <i class="fas fa-minus"></i>
+                      </button>
+                      <button type="button" class="btn btn-tool" data-card-widget="remove">
+                        <i class="fas fa-times"></i>
+                      </button>
+                    </div>
+                  </div>
+                  <div class="card-body">
+                    <div class="chart">
+                      <canvas id="userDetails" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%"></canvas>
+                    </div>
+                  </div>
+                  <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+              </div>
+
+              <div class="card card-primary card-outline col-md-12">
+                <div class="card-header">
+                  <h3 class="card-title">
+                    <i class="fas fa-users"></i>
+                    &nbsp;&nbsp; Users
+                  </h3>
+                </div>
+                <div id="spinner-notfound">
+                  <div class="w-100 d-flex justify-content-center align-items-center" style="min-height: 24em"></div>
+                </div>
+                <div id="tabe-items" class="card-body pad table-responsive">
+                  <table class="table table-bordered" style="border: 1px solid #dee2e6">
+                    <thead>
+                      <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Gender</th>
+                        <th scope="col">Birth date</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Phone</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Deleted</th>
+                        <th scope="col">Sahlan points</th>
+                        <th scope="col">Carbon points</th>
+                        <th scope="col">Created at</th>
+                      </tr>
+                    </thead>
+                    <tbody id="tr-th-row"></tbody>
+                  </table>
+                </div>
+                <!-- /.card -->
+              </div>
+            </div>
+            <!-- /.row -->
+          </div>
+          <!-- /.container-fluid -->
+        </section>
+
+        <!-- /.content -->
+      </div>
+      <footer class="main-footer"><%- include('../layout/footer.ejs') %></footer>
+    </div>
+    <%- include('../layout/script.ejs') %>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script src="/js/plugins/chart.js/Chart.min.js"></script>
+    <script>
+      var currMonthName = moment().format("MMMM")
+      var prevMonthName = moment().subtract(1, "month").format("MMMM")
+      var monthsArr = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+      var usersInYear = JSON.parse(`<%-JSON.stringify(data.usersInYear)%>`)
+      var monthsCountArr = monthsArr.map((m, i) => {
+        for (let element of usersInYear) {
+          if (element.MONTH == m) {
+            return element.count
+          }
+        }
+        return 0
+      })
+      $(function () {
+        var chartDetails = {
+          labels: monthsArr,
+          datasets: [
+            {
+              label: "New User per month",
+              backgroundColor: "rgba(60,141,188,0.9)",
+              borderColor: "rgba(60,141,188,0.8)",
+              pointRadius: false,
+              pointColor: "#3b8bba",
+              pointStrokeColor: "rgba(60,141,188,1)",
+              pointHighlightFill: "#fff",
+              pointHighlightStroke: "rgba(60,141,188,1)",
+              data: monthsCountArr,
+            },
+          ],
+        }
+        //-------------
+        //- Details CHART -
+        //-------------
+        var chartDetailsChartCanvas = $("#userDetails").get(0).getContext("2d")
+        var chartDetailsData = $.extend(true, {}, chartDetails)
+        var temp0 = chartDetails.datasets[0]
+        chartDetailsData.datasets[0] = temp0
+
+        var chartDetailsChartOptions = {
+          responsive: true,
+          maintainAspectRatio: false,
+          datasetFill: false,
+        }
+
+        new Chart(chartDetailsChartCanvas, {
+          type: "bar",
+          data: chartDetailsData,
+          options: chartDetailsChartOptions,
+        })
+      })
+    </script>
+    <script>
+      var fromOrder = null
+      var toOrder = null
+      $(function () {
+        $("#fromTo").daterangepicker(
+          {
+            locale: {
+              format: "YYYY-MM-DD",
+            },
+            startDate: new Date(),
+            endDate: new Date(),
+            minDate: moment().format("L"),
+            dateFormat: "YYYY-MM-DD",
+            opens: "left",
+          },
+          function (start, end, label) {
+            fromOrder = start.format("YYYY-MM-DD")
+            toOrder = end.format("YYYY-MM-DD")
+            getList(userType, fromOrder, toOrder)
+          }
+        )
+      })
+    </script>
+    <script src="/js/reports/user.js"></script>
+  </body>
+</html>

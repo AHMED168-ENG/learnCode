@@ -109,7 +109,7 @@ export class CartController extends Controller {
         const cartItems = {amountTotal, data: data}
         res.status(httpStatus.OK).json(cartItems)
       })
-      .catch((err) => res.status(httpStatus.NOT_FOUND).json({msg: "error in get list cart",err}))
+      .catch((err) => res.status(httpStatus.NOT_FOUND).json({msg: "error in get list cart", err}))
   }
   async check(user) {
     const userId = user
@@ -121,6 +121,8 @@ export class CartController extends Controller {
           "id",
           ["qty", "quantity"],
           [sequelize.col("tbl_initiatives_tree.id"), "tree_id"],
+          [sequelize.col("tbl_initiatives_tree.carbon_points"), "carbon"],
+          [sequelize.col("tbl_initiatives_tree.price_points"), "sahlanPoint"],
           [sequelize.col("tbl_initiatives_tree.location_id"), "location_id"],
           [sequelize.col("tbl_initiatives_tree.init_id_pk"), "initiative_id"],
           [sequelize.col("tbl_initiatives_tree.price"), "price"],
@@ -154,7 +156,13 @@ export class CartController extends Controller {
         const amountTotal: number = data.reduce((total, currentValue) => {
           return total + currentValue.itemTotal
         }, 0)
-        const cartItems = {amountTotal, data: data}
+        const totalSahlanPoint: number = data.reduce((total, currentValue) => {
+          return total + currentValue.sahlanPoint * currentValue.quantity
+        }, 0)
+        const totalCarbonPoint: number = data.reduce((total, currentValue) => {
+          return total + currentValue.carbon * currentValue.quantity
+        }, 0)
+        const cartItems = {totalSahlanPoint, totalCarbonPoint, amountTotal, data: data}
         result = cartItems
       })
       .catch((err) => (result = null))
@@ -173,7 +181,6 @@ export class CartController extends Controller {
     return data
   }
 }
-
 
 // [
 //   sequelize.literal(`(

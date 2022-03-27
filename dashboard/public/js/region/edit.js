@@ -22,7 +22,6 @@ $(function () {
             city_id: {
                 required: true
             },
-
         },
         messages: {
             ar_name: "Please enter a arabic name",

@@ -26,12 +26,6 @@ const initiativesImg = sequelize.define(
       type: DataTypes.STRING(500),
       allowNull: true,
       defaultValue: null,
-      validate: {
-        is: {
-          args: /^([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{2}==)?$/,
-          msg: "Invalid base64 image",
-        },
-      },
     },
   },
   {

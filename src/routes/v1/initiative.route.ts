@@ -14,7 +14,6 @@ export class InitiativeRoutes {
     this.router.get("/related/:initId", this.initiativeController.relatedInitiatives)
     this.router.get("/", this.initiativeController.list)
     this.router.get("/favourite", this.initiativeController.favourite)
-
     this.router.get("/:id", this.initiativeController.initiativeDetails)
   }
 }

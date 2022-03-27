@@ -3,6 +3,10 @@ import httpStatus from "http-status"
 import initiatives from "../../models/initiative.model"
 import sequelize from "sequelize"
 import initiativesImg from "../../models/initiativeImg.model"
+import {CityController} from "./city.controller"
+import {SponserController} from "./sponser.controller"
+import helpers from "../../helper/helpers"
+import path from "path"
 
 export class InitiativeController {
   listPage(req: Request, res: Response, next: NextFunction) {
@@ -122,6 +126,135 @@ export class InitiativeController {
       })
       .then((d: any) => (data = d))
       .catch((e) => (data = null))
+    return data
+  }
+
+  async addNew(req: Request, res: Response, next: NextFunction) {
+    const logoFile = req.files.logo
+    const mainImgFile = req.files.main_img
+    if (!helpers.mimetypeImge.includes(logoFile["mimetype"]) || !helpers.mimetypeImge.includes(mainImgFile["mimetype"])) {
+      res.status(400).json({msg: "Image should be png or jpg"})
+    } else {
+      const logoName: string = `${helpers.randomNumber(100, 999)}_${Number(new Date())}${path.extname(logoFile["name"])}`
+      const mainImgName: string = `${helpers.randomNumber(100, 999)}_${Number(new Date())}${path.extname(mainImgFile["name"])}`
+      initiatives
+        .create({...req.body})
+        .then((data) => {
+          const initId = data["init_id"]
+          const fileDir: string = `initiative/logo/${initId}/`
+          const fileDirMain: string = `initiative/album/${initId}/`
+          initiatives.update({logo: `${fileDir}${logoName}`}, {where: {init_id: initId}}).then((d) => {
+            helpers.imageProcessing(fileDir, logoName, logoFile["data"])
+            initiativesImg.create({init_id: initId, img: `${fileDirMain}${mainImgName}`})
+            helpers.imageProcessing(fileDirMain, mainImgName, mainImgFile["data"])
+            res.status(201).json({msg: "Error in create new initiatives"})
+          })
+        })
+        .catch((err) => {
+          console.log(err)
+          res.status(400).json({msg: "Error in create new initiatives", err: err.errors[0].message || "unexpected error"})
+        })
+    }
+  }
+
+  async newPage(req: Request, res: Response, next: NextFunction) {
+    const cities = await new CityController().listCity()
+    const sponsors = await new SponserController().listSponser()
+    res.render("initiatives/new.ejs", {
+      title: "Initiatives new",
+      cities,
+      sponsors,
+    })
+  }
+
+  async editPage(req: Request, res: Response, next: NextFunction) {
+    const id = req.params.id
+    const cities = await new CityController().listCity()
+    const sponsors = await new SponserController().listSponser()
+    initiatives.findOne({where: {init_id: id}, raw: true}).then((data) => {
+      res.render("initiatives/edit.ejs", {
+        title: "Initiative edit",
+        data: data,
+        cities,
+        sponsors,
+      })
+    })
+  }
+  edit(req, res: Response, next: NextFunction) {
+    const id = req.params.id
+    initiatives
+      .update(req.body, {where: {init_id: id}})
+      .then((data) => {
+        res.status(httpStatus.OK).json({msg: "Initiative edited"})
+      })
+      .catch((err) => {
+        res.status(httpStatus.BAD_REQUEST).json({msg: "Error in Edit Initiative", err: err.errors[0].message || "unexpected error"})
+      })
+  }
+  active(req, res: Response, next: NextFunction) {
+    const id = req.params.id
+    const del = req.query.v == "yes" ? true : false
+    const action = req.params.action == "delete" ? {deleted: del ? "yes" : "no"} : {status: del ? "inactive" : "active"}
+    initiatives
+      .update(action, {where: {init_id: id}})
+      .then((data) => {
+        res.status(httpStatus.OK).json({msg: "edited"})
+      })
+      .catch((err) => {
+        res.status(httpStatus.BAD_REQUEST).json({msg: "Error in Edit", err: err.errors[0].message || "unexpected error"})
+      })
+  }
+  async initiativeReport() {
+    let data
+    await initiatives
+      .findAll({
+        attributes: [
+          "init_ar_name",
+          "init_en_name",
+          [
+            sequelize.literal(`(
+            SELECT img
+            FROM tbl_sponsers
+            WHERE
+            tbl_sponsers.sponser_id= tbl_initiatives.sponsor_id
+            )`),
+            "sponsorImg",
+          ],
+          // [
+          //   sequelize.literal(`(
+          //   SELECT COALESCE(COUNT(order_id),0)
+          //   FROM tbl_orders
+          //   WHERE
+          //   tbl_orders.sponser_id= tbl_initiatives.sponsor_id
+          //   AND tbl_orders.status = "new"
+          //   )`),
+          //   "new",
+          // ],
+          "createdAt",
+        ],
+        raw: true,
+      })
+      .then((d: any) => (data = d))
+      .catch((e) => (data = null))
+    return data
+  }
+  async listAllInit() {
+    let data
+    await initiatives
+      .findAll({
+        attributes: ["init_id", "init_ar_name", "init_en_name"],
+        raw: true,
+      })
+      .then((d) => {
+        if (!d || d.length == 0) {
+          data = null
+        } else {
+          data = d
+        }
+      })
+      .catch((err) => {
+        data = []
+      })
     return data
   }
 }

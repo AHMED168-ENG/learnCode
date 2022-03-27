@@ -43,7 +43,6 @@ const edit = () => {
         data[$(this).attr("name")] = $(this).val();
     });
     //******************************************/
-    console.log(data)
     if (Object.keys(data).length !== 0) {
         $("#submitForm").buttonLoader("start")
         $.ajax({

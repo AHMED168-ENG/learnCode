@@ -22,17 +22,7 @@ function getList(page) {
         res.data.forEach((elem) => {
             $("#tr-th-row").append(`<tr>
             <th scope="row">${elem.id}</th>
-            <td>${elem.tbl_tree.en_name}<br />${elem.tbl_tree.ar_name}</td>
-            <td><img class="rounded p-0" width=45 height=45 src="/p/img/${elem.tbl_tree.img_tree}" alt="sponser Image"></td>
-            <td>${elem.tbl_initiative.init_en_name}<br />${elem.tbl_initiative.init_ar_name}</td>
-            <td>${elem.tbl_initiatives_location.location_nameEn}<br />${elem.tbl_initiatives_location.location_nameAr}</td>
-            <td>${elem.price}</td>
-            <td>${elem.price_points}</td>
-            <td>${elem.carbon_points}</td>
-            <td>${elem.target_num}</td>
-            <td>${elem.status == "active" ? `<span class="badge badge-success">${elem.status}</span>` : `<span class="badge badge-danger">${elem.status}</span>`}</td>
-            <td>${elem.deleted == "no" ? `<span class="badge badge-success">${elem.deleted}</span>` : `<span class="badge badge-danger">${elem.deleted}</span>`}</td>
-            <td>${new Date(elem.createdAt).toLocaleDateString("en-US")}</td>
+ 
             <td>
                 <a data-tooltip="View tree" class="btn btn-info" href="/dashboard/initrees/view/${elem.id}"><i class="fas fa-eye"></i></a>
                 <a data-tooltip="Edit tree" class="btn btn-primary" href="/dashboard/initrees/edit/${elem.id}"><i class="fas fa-edit"></i></a>

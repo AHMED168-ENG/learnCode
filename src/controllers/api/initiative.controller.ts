@@ -194,7 +194,7 @@ export class IinitiativeController extends Controller {
         res.status(httpStatus.NOT_FOUND).json({err, msg: "not found initiatives"})
       })
   }
-  private selectionFields(nameField, userId) {
+  selectionFields(nameField, userId) {
     return [
       "init_id",
       [nameField, "name"],

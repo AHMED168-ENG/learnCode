@@ -11,7 +11,14 @@ import cart from "../../models/cart.model"
 import fs from "fs"
 import path from "path"
 import webAppsUsers from "../../models/user.model"
-import sequelize from "sequelize"
+import sequelize, {Op, Sequelize} from "sequelize"
+import initiatives from "../../models/initiative.model"
+import {IinitiativeController} from "./initiative.controller"
+import city from "../../models/city.model"
+import initiativeTrees from "../../models/initiative-trees.model"
+import initiativeLocations from "../../models/initiative-location.model"
+import trees from "../../models/trees.model"
+import moment from "moment"
 
 export class OrderController extends Controller {
   constructor() {
@@ -30,6 +37,81 @@ export class OrderController extends Controller {
     // We replaced all the event handlers with a simple call to readStream.pipe()
     readStream.pipe(res)
   }
+
+  async myContribution(req: Request, res: Response, next: NextFunction) {
+    const userId = req.user.user_id
+    const ar_en = req["lang"] == "en" ? "init_en_name" : "init_ar_name"
+    const ar_enCity = req["lang"] == "en" ? "en_name" : "ar_name"
+    const userInitiative = [...(await order.findAll({where: {user_id: userId}, include: [{model: orderDetails}], raw: true}))].map((item: any) => {
+      return item["tbl_orders_details.initiative_id"]
+    })
+    const cities = req.query.cities ? String(req.query.cities).split(",").map(Number) : []
+    const where = cities.length > 0 ? {city_id: cities} : {}
+    const attributes: any = new IinitiativeController().selectionFields(ar_en, req.user.user_id)
+
+    initiatives
+      .findAll({
+        where: {...where, init_id: {[sequelize.Op.in]: userInitiative}},
+        include: [{model: city, attributes: {include: [[ar_enCity, "name"]], exclude: ["en_name", "ar_name", "createdAt", "updatedAt"]}}],
+        attributes: [...attributes],
+      })
+      .then((data) => {
+        res.status(httpStatus.OK).json({data})
+      })
+      .catch((err) => {
+        res.status(httpStatus.NOT_FOUND).json({msg: "not found"})
+      })
+  }
+  async myContributionTree(req: Request, res: Response, next: NextFunction) {
+    const lang = req["lang"] == "en"
+    const userId = req.user.user_id
+
+    const treeName = lang ? "en_name" : "ar_name"
+    const locationName = lang ? "location_nameEn" : "location_nameAr"
+    const cityName = lang ? "en_name" : "ar_name"
+
+    const cities = req.query.cities ? String(req.query.cities).split(",").map(Number) : []
+    const where = cities.length > 0 ? {city_id: cities} : {}
+
+    order
+      .findAll({
+        where: {user_id: userId},
+        attributes: [
+          [sequelize.col(`tbl_orders_details.quantity`), "qty"],
+          [sequelize.col(`tbl_orders_details.tbl_initiatives_tree.id`), "treeId"],
+          [sequelize.col(`tbl_orders_details.tbl_initiatives_tree.tbl_tree.img_tree`), "img"],
+          [sequelize.col(`tbl_orders_details.tbl_initiatives_tree.tbl_tree.${treeName}`), "name"],
+          [sequelize.col(`tbl_orders_details.tbl_initiatives_tree.tbl_initiatives_location.${locationName}`), "locationName"],
+          [sequelize.col(`tbl_orders_details.tbl_initiatives_tree.tbl_initiatives_location.tbl_city.${cityName}`), "cityName"],
+          [sequelize.col(`tbl_orders_details.tbl_initiatives_tree.carbon_points`), "carbon"],
+          [sequelize.col(`tbl_orders_details.tbl_initiatives_tree.price_points`), "sahlanPoint"],
+        ],
+        include: [
+          {
+            model: orderDetails,
+            attributes: [],
+            include: [
+              {
+                model: initiativeTrees,
+                attributes: [],
+                include: [
+                  {model: trees, attributes: []},
+                  {model: initiativeLocations, where: {...where}, attributes: [], include: [{model: city, attributes: []}], required: true},
+                ],
+              },
+            ],
+          },
+        ],
+        raw: true,
+      })
+      .then((data) => {
+        res.status(httpStatus.OK).json({data})
+      })
+      .catch((err) => {
+        res.status(httpStatus.NOT_FOUND).json({msg: "not found"})
+      })
+  }
+
   async makeOrder(req: Request, res: Response, next: NextFunction) {
     const userId = req.user.user_id
     const userData = await new UserController().homeData("en", userId)
@@ -84,6 +166,48 @@ export class OrderController extends Controller {
     } else {
       res.status(httpStatus.BAD_REQUEST).json({msg: "error in check out", code: 7003})
     }
+  }
+
+  Leaderboard(req: Request, res: Response, next: NextFunction) {
+    const p = req.query.p
+    const today = moment()
+    const fromDateWeek = today.startOf("week").format()
+    const toDateWeek = today.endOf("week").format()
+    const fromDateMonth = moment(new Date()).startOf("month").format()
+    const toDateMonth = moment(new Date()).endOf("month").format()
+    let where = {}
+    if (p == "week") {
+      where = {
+        createdAt: {
+          [Op.between]: [fromDateWeek, toDateWeek],
+        },
+      }
+    } else if (p == "month") {
+      where = {
+        createdAt: {
+          [Op.between]: [fromDateMonth, toDateMonth],
+        },
+      }
+    }
+    order
+      .findAll({
+        limit: 10,
+        where: where,
+        attributes: ["user_id", [sequelize.fn("sum", sequelize.col("tbl_orders.carbon_gained_points")), "totalPoints"]],
+        include: [{model: webAppsUsers, attributes: ["user_id", "fullName", "user_img"]}],
+        group: ["user_id"],
+        order: sequelize.literal("totalPoints DESC"),
+      })
+      .then((data) => {
+        res.status(httpStatus.OK).json({
+          dataFrom: p == "week" ? today.startOf("week").format("YYYY-MM-DD") : moment(new Date()).startOf("month").format("MMMM"),
+          dataTo: today.endOf("week").format("YYYY-MM-DD"),
+          data,
+        })
+      })
+      .catch((err) => {
+        res.status(httpStatus.NOT_FOUND).json({msg: "not found"})
+      })
   }
   checkCartItems(cartItems) {
     for (let [i, item] of cartItems.entries()) {

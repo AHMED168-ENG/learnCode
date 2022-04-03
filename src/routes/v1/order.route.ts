@@ -12,5 +12,8 @@ export class OrderRoutes {
   routes() {
     this.router.post("/make", this.orderController.makeOrder)
     this.router.get("/certificate/:orderId", this.orderController.certificate)
+    this.router.get("/myContribution", this.orderController.myContribution)
+    this.router.get("/myContributionTree", this.orderController.myContributionTree)
+    this.router.get("/leaderboard", this.orderController.Leaderboard)
   }
 }

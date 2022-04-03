@@ -250,7 +250,7 @@ export class UserController extends Controller {
     const ar_en = lang == "en" ? "en_name" : "ar_name"
     let data
     await webAppsUsers
-      .findOne({where: {user_id: userId}, attributes: ["fullName", "carbon_gained_points", "sahlan_gained_points"], raw: true})
+      .findOne({where: {user_id: userId}, attributes: ["fullName", "carbon_gained_points", "sahlan_gained_points", "user_img"], raw: true})
       .then((d) => {
         if (!d) {
           data = null

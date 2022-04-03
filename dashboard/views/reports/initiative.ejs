@@ -80,12 +80,24 @@
                     <i class="fas fa-tree"></i>
                     &nbsp;&nbsp; Initiatives
                   </h3>
+                  <div class="card-tools">
+                    <button
+                      type="button"
+                      data-tooltip="Export Excel"
+                      onclick="fnExcelReport()"
+                      id="export-excel-btn"
+                      class="btn btn-info float-right mx-1"
+                    >
+                      <i class="fas fa-file-excel"></i>
+                      Export Excel
+                    </button>
+                  </div>
                 </div>
                 <div id="spinner-notfound">
                   <div class="w-100 d-flex justify-content-center align-items-center" style="min-height: 24em"></div>
                 </div>
                 <div id="tabe-items" class="card-body pad table-responsive">
-                  <table class="table table-bordered" style="border: 1px solid #dee2e6">
+                  <table class="table table-bordered" id="table2excel" style="border: 1px solid #dee2e6">
                     <thead>
                       <tr>
                         <th scope="col">#</th>
@@ -194,5 +206,6 @@
       })
     </script>
     <script src="/js/reports/initiative.js"></script>
+    <%- include('./export-excel.ejs') %>
   </body>
 </html>

@@ -13,5 +13,6 @@ export class CartRoutes {
     this.router.post("/addOrupdate", this.cartController.addOrUpdate)
     this.router.delete("/remove/:treeId", this.cartController.remove)
     this.router.get("/list", this.cartController.list)
+    this.router.get("/count", this.cartController.count)
   }
 }

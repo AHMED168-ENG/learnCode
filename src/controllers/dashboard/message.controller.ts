@@ -5,19 +5,22 @@ import webAppsUsers from "../../models/user.model"
 
 export class MessageController {
   listPage(req: Request, res: Response, next: NextFunction) {
+    const screenType = req.params.type
     res.render("message/list.ejs", {
       title: "message",
+      type: screenType,
     })
   }
   list(req: Request, res: Response, next: NextFunction) {
     const limit = Number(req.query.limit) > 50 ? 50 : Number(req.query.limit)
     const page = (Number(req.query.page) - 1) * limit
+    const screenType = req.params.type
     message
       .findAll({
+        where: {status: screenType},
         limit: limit,
         offset: page,
-        attributes: {exclude: ["updatedAt"]},
-        include: [{model: webAppsUsers, attributes: ["fullName", "user_img"]}],
+        attributes: {exclude: ["body", "updatedAt"]},
       })
       .then((data) => {
         message
@@ -38,6 +41,32 @@ export class MessageController {
         res.status(httpStatus.NOT_FOUND).json({err, msg: "not found message"})
       })
   }
+  view(req: Request, res: Response, next: NextFunction) {
+    const messageId = req.params.id
+    message
+      .findOne({
+        where: {message_id: messageId},
+      })
+      .then((data) => {
+        res.render("message/view.ejs", {
+          title: "View message",
+          data: data,
+        })
+      })
+      .catch((err) => {})
+  }
+  changeStatus(req: Request, res: Response, next: NextFunction) {
+    const messageId = req.params.id
+    const status = "read"
+    message
+      .update({status: status}, {where: {message_id: messageId}})
+      .then((d) => {
+        res.status(httpStatus.OK).json({msg: "message edited"})
+      })
+      .catch((err) => {
+        res.status(httpStatus.BAD_REQUEST).json({msg: "Error in Edit message", err: err.errors[0].message || "unexpected error"})
+      })
+  }
   async lastNewMessage() {
     let data
     await message
@@ -46,7 +75,7 @@ export class MessageController {
         offset: 0,
         where: {status: "unread"},
         attributes: {exclude: ["body", "updatedAt"]},
-        include: [{model: webAppsUsers, attributes: ["fullName", "user_img"]}],
+        order: [["createdAt", "DESC"]],
       })
       .then((d: any) => (data = d))
       .catch((e) => (data = null))

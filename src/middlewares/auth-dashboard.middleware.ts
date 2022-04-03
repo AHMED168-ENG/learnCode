@@ -6,11 +6,10 @@ export = (req, res, next) => {
     if (excluded.indexOf(req.url.split("/")[3]) > -1) {
       return next()
     } else {
-      return next()
       if (req.cookies.token) {
         return next()
       } else {
-        res.redirect("/dashboard/user/login")
+        res.redirect("/dashboard/admin/login")
       }
     }
   } else {

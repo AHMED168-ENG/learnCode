@@ -24,7 +24,7 @@
       <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
         <div id="message-content"></div>
         <div class="dropdown-divider"></div>
-        <a href="#" class="dropdown-item dropdown-footer">See All Messages</a>
+        <a href="/dashboard/message/unread" class="dropdown-item dropdown-footer">See All Messages</a>
       </div>
     </li>
     <!-- End Messages Menu -->
@@ -149,27 +149,27 @@
           </a>
           <ul class="nav nav-treeview" style="display: none">
             <li class="nav-item">
-              <a href="/dashboard/order/new" class="nav-link">
+              <a href="/dashboard/order/new" class="nav-link" id="new">
                 <i class="fas fa-exclamation-circle nav-icon textss-maroon"></i>
                 <p>New Orders</p>
               </a>
             </li>
             <li class="nav-item">
-              <a href="/dashboard/order/inprogress" class="nav-link">
+              <a href="/dashboard/order/inprogress" class="nav-link" id="inprogress">
                 <i class="fas fa-circle-notch nav-icon textss-info"></i>
                 <p>In Progress Orders</p>
               </a>
             </li>
 
             <li class="nav-item">
-              <a href="/dashboard/order/completed" class="nav-link">
+              <a href="/dashboard/order/completed" class="nav-link" id="completed">
                 <i class="far fa-check-circle nav-icon textss-success"></i>
                 <p>Completed Orders</p>
               </a>
             </li>
 
             <li class="nav-item">
-              <a href="/dashboard/order/cancelled" class="nav-link">
+              <a href="/dashboard/order/cancelled" class="nav-link" id="cancelled">
                 <i class="far fa-times-circle nav-icon textss-danger"></i>
                 <p>Cancelled Orders</p>
               </a>
@@ -197,23 +197,29 @@
           </a>
           <ul class="nav nav-treeview">
             <li class="nav-item">
-              <a href="/dashboard/management/about" class="nav-link">
+              <a href="/dashboard/management/about" class="nav-link" id="about">
                 <i class="fas fa-circle-notch nav-icon textss-success"></i>
                 <p>About</p>
               </a>
             </li>
 
             <li class="nav-item">
-              <a href="/dashboard/management/terms" id="termspolicy" class="nav-link">
+              <a href="/dashboard/management/terms" id="terms" class="nav-link">
                 <i class="fas fa-circle-notch nav-icon textss-warning"></i>
                 <p>Terms and Conditions</p>
               </a>
             </li>
 
             <li class="nav-item">
-              <a href="/dashboard/management/policy" class="nav-link">
+              <a href="/dashboard/management/policy" class="nav-link" id="policy">
                 <i class="fas fa-circle-notch nav-icon textss-warning"></i>
                 <p>Privacy Policy</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="/dashboard/faq" class="nav-link" id="faq">
+                <i class="fas fa-circle-notch nav-icon textss-warning"></i>
+                <p>FAQ</p>
               </a>
             </li>
 
@@ -226,8 +232,33 @@
           </ul>
         </li>
 
-        <li class="nav-item">
-          <a href="#" class="nav-link">
+        <li class="nav-item has-treeview">
+          <a href="#" class="nav-link" id="partner">
+            <i class="nav-icon fas fa-handshake textss-warning"></i>
+
+            <p>
+              Partner
+              <i class="fas fa-angle-left right"></i>
+              <span class="badge badge-warning right"></span>
+            </p>
+          </a>
+          <ul class="nav nav-treeview" style="display: none">
+            <li class="nav-item">
+              <a href="/dashboard/partner/partner-page" class="nav-link" id="partner-page">
+                <i class="fas fa-list nav-icon textss-maroon"></i>
+                <p>List Partners</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="/dashboard/partner/type" class="nav-link" id="type">
+                <i class="fas fa-quote-left nav-icon textss-info"></i>
+                <p>Types</p>
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li class="nav-item has-treeview">
+          <a href="#" class="nav-link" id="message">
             <i class="nav-icon fas fa-envelope-open-text"></i>
             <p>
               Messages
@@ -236,13 +267,13 @@
           </a>
           <ul class="nav nav-treeview">
             <li class="nav-item">
-              <a href="#" class="nav-link">
+              <a href="/dashboard/message/unread" class="nav-link" id="unread">
                 <i class="far fa-envelope nav-icon textss-warning"></i>
                 <p>Unread Messages</p>
               </a>
             </li>
             <li class="nav-item">
-              <a href="#" class="nav-link">
+              <a href="/dashboard/message/read" class="nav-link" id="read">
                 <i class="far fa-envelope nav-icon textss-success"></i>
                 <p>Read Messages</p>
               </a>
@@ -274,40 +305,58 @@
           </a>
           <ul class="nav nav-treeview">
             <li class="nav-item">
-              <a href="/dashboard/report/order" class="nav-link">
+              <a href="/dashboard/report/order-repo" class="nav-link" id="order-repo">
                 <i class="fas fa-chart-line nav-icon"></i>
                 <p>Orders report</p>
               </a>
             </li>
             <li class="nav-item">
-              <a href="/dashboard/report/user" class="nav-link">
+              <a href="/dashboard/report/user-repo" class="nav-link" id="user-repo">
                 <i class="fas fa-users nav-icon"></i>
                 <p>Users report</p>
               </a>
             </li>
             <li class="nav-item">
-              <a href="/dashboard/report/sponsor" class="nav-link">
+              <a href="/dashboard/report/sponsor-repo" class="nav-link" id="sponsor-repo">
                 <i class="fas fa-user-friends nav-icon"></i>
                 <p>Sponsors report</p>
               </a>
             </li>
 
             <li class="nav-item">
-              <a href="/dashboard/report/initiative" class="nav-link">
+              <a href="/dashboard/report/initiative-repo" class="nav-link" id="initiative-repo">
                 <i class="fas fa-tree nav-icon"></i>
                 <p>Initiative Report</p>
               </a>
             </li>
+            <li class="nav-item">
+              <a href="/dashboard/report/location-trees" class="nav-link" id="location-trees">
+                <i class="fas fa-tree nav-icon"></i>
+                <p>Location Trees Report</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="/dashboard/report/location-repo" class="nav-link" id="location-repo">
+                <i class="fas fa-map nav-icon"></i>
+                <p>Location Report</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="/dashboard/report/sales" class="nav-link" id="sales">
+                <i class="fas fa-money-bill-wave nav-icon"></i>
+                <p>Sales Report</p>
+              </a>
+            </li>
 
             <li class="nav-item">
-              <a href="/dashboard/report/calendar-initiative" class="nav-link">
+              <a href="/dashboard/report/calendar-initiative" class="nav-link" id="calendar-initiative">
                 <i class="fas fa-calendar-alt nav-icon"></i>
                 <p>Calendar Initiative</p>
               </a>
             </li>
 
             <li class="nav-item">
-              <a href="/dashboard/report/charts" class="nav-link">
+              <a href="/dashboard/report/charts" class="nav-link" id="charts">
                 <i class="fas fa-user-tag nav-icon"></i>
                 <p>User charts</p>
               </a>
@@ -389,7 +438,7 @@
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a href="#" class="nav-link">
+                  <a href="/dashboard/admin" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Sahlan Admins</p>
                   </a>
@@ -444,8 +493,8 @@
             <div class="media">
               <img src="/p/img/avatar.png" alt="User Avatar" class="img-size-50 mr-3 img-circle" />
               <div class="media-body">
-                <h3 class="dropdown-item-title">${elem.web_apps_user.fullName}</h3>
-                <p class="text-sm">Subject : ${elem.subject}</p>
+                <h3 class="dropdown-item-title">${elem.email}</h3>
+                <p class="text-sm">Name : ${elem.name}</p>
                 <p class="text-sm text-muted">
                   <i class="far fa-clock mr-1"></i>
                   ${moment(elem.createdAt).fromNow()}

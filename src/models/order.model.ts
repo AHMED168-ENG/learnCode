@@ -174,6 +174,7 @@ const order = sequelize.define(
 )
 
 order.belongsTo(webAppsUsers, {foreignKey: "user_id"})
+webAppsUsers.hasMany(order, {foreignKey: "user_id"})
 order.belongsTo(promo, {foreignKey: "promo_code_fk"})
 
 order.sync()

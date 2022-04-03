@@ -43,6 +43,10 @@
   } else {
     $(`#home`).addClass("active")
   }
+  var urlSplitSub = window.location.pathname.split("/")[3]
+  if ((urlSplitSub, $(`#${urlSplitSub}`).length)) {
+    $(`#${urlSplitSub}`).addClass("active")
+  }
 </script>
 <!-- Loading Button $(btn).buttonLoader('start'); $(btn).buttonLoader('stop'); -->
 <script>

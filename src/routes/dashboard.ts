@@ -1,6 +1,6 @@
 import express, {Request, Response, NextFunction} from "express"
 import {HomeRoutes} from "./dashboard/home.route"
-import {LoginRoutes} from "./dashboard/login.route"
+import {AdminRoutes} from "./dashboard/admin.route"
 import {InitiativeRoutes} from "./dashboard/initiative.route"
 import {SponserRoutes} from "./dashboard/sponser.route"
 import {CountryRoutes} from "./dashboard/country.route"
@@ -10,18 +10,22 @@ import {SectorRoutes} from "./dashboard/sector.route"
 import {UserRoutes} from "./dashboard/user.route"
 import {ReportRoutes} from "./dashboard/report.route"
 import {TreeRoutes} from "./dashboard/tree.route"
-import { OrderRoutes } from "./dashboard/order.route"
-import { PromoRoutes } from "./dashboard/promo.route"
-import { TermsPolicyRoutes } from "./dashboard/terms&policy.route"
-import { LocationRoutes } from "./dashboard/location.route"
-import { LocationTreesRoutes } from "./dashboard/location-trees.route"
+import {OrderRoutes} from "./dashboard/order.route"
+import {PromoRoutes} from "./dashboard/promo.route"
+import {TermsPolicyRoutes} from "./dashboard/terms&policy.route"
+import {LocationRoutes} from "./dashboard/location.route"
+import {LocationTreesRoutes} from "./dashboard/location-trees.route"
+import {FaqRoutes} from "./dashboard/faq.route"
+import {PartnerRoutes} from "./dashboard/partner.route"
+import {PartnerTypeRoutes} from "./dashboard/partner-type.route"
+import {MessageRoutes} from "./dashboard/message.route"
 export = (app: express.Application) => {
   // Index
   app.get("/", (req, res) => res.redirect("/dashboard/home"))
   // Home route
   app.use("/dashboard/home", new HomeRoutes().router)
-  // User route
-  app.use("/dashboard/user", new LoginRoutes().router)
+  // Admin route
+  app.use("/dashboard/admin", new AdminRoutes().router)
   // Initiative route
   app.use("/dashboard/initiative", new InitiativeRoutes().router)
   // location route
@@ -50,4 +54,12 @@ export = (app: express.Application) => {
   app.use("/dashboard/promo", new PromoRoutes().router)
   // Management route
   app.use("/dashboard/management", new TermsPolicyRoutes().router)
+  // FAQ
+  app.use("/dashboard/faq", new FaqRoutes().router)
+  // FAQ
+  app.use("/dashboard/partner/type", new PartnerTypeRoutes().router)
+  // FAQ
+  app.use("/dashboard/partner", new PartnerRoutes().router)
+  // MessageRoutes
+  app.use("/dashboard/message", new MessageRoutes().router)
 }

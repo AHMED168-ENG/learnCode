@@ -100,7 +100,6 @@ export class OrderController {
     const fromTo = req.query.from != "null" ? {createdAt: {[Op.and]: [{[Op.gte]: req.query.from}, {[Op.lte]: req.query.to}]}} : {}
     const screenType = req.params.type == "all" ? {} : {status: req.params.type}
     const ordersChart = (await new OrderController().ordersInYear({from: req.query.from, to: req.query.to, type: req.params.type})) || []
-    console.log(ordersChart)
     order
       .findAll({
         where: {...screenType, ...fromTo},
@@ -220,7 +219,7 @@ export class OrderController {
     let data
     await seq
       .query(
-        `SELECT MONTHNAME(createdAt) AS MONTH, COUNT(*) AS "count", ROUND( COALESCE( SUM( all_sum * COALESCE((promo_code_percent / 100), 1) ), 0 ) ) AS "allSum"
+        `SELECT MONTHNAME(createdAt) AS MONTH, COUNT(*) AS "count", ROUND( COALESCE( SUM(all_sum-( all_sum * COALESCE((promo_code_percent / 100), 0)) ), 0 ) ) AS "allSum"
                FROM tbl_orders WHERE ${whereCon} GROUP BY MONTH`,
         {type: sequelize.QueryTypes.SELECT}
       )

@@ -15,6 +15,9 @@ import useragent from "express-useragent"
 import morgan from "morgan"
 import fs from "fs"
 import {fbTokenInfo} from "./middlewares/auth-fb.middleware"
+import page from "./models/page.model"
+import modules from "./models/module.model"
+import userRole from "./models/userRole.model"
 export class IndexApp {
   private app: express.Application = express()
   private server: http.Server = http.createServer(this.app)
@@ -46,6 +49,9 @@ export class IndexApp {
       origin: "http://localhost:8081",
     }
     this.app.use(cors())
+    page.findAll().catch((e)=>console.log(e))
+    modules.findAll().catch((e)=>console.log(e))
+    userRole.findAll().catch((e)=>console.log(e))
   }
   private templateEngine(): void {
     this.app.use("/css", express.static(path.join(__dirname, "../dashboard/public/css")))

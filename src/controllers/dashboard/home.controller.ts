@@ -28,6 +28,7 @@ export class HomeController {
     const ordersNum = await new OrderController().numberOfOrders()
     const messageNum = await message.count({where: {status: "unread"}})
     const homeNumbers = (await new HomeController().homeNumbers()) || {}
+    console.log(messageNum)
     res.status(200).json({...homeNumbers, lastNewOrders, lastNewMessage, ordersNum, messageNum})
   }
   async homeNumbers() {

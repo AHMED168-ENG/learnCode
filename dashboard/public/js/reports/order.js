@@ -11,6 +11,7 @@ function getList(type = "all", from = null, to = null) {  // show spinner
         method: "Get",
     }
     $.ajax(settings).done(function (res) {
+        changeChart(res.ordersChart)
         // hidden spinner
         spinnerNotfound(2)
         $("#tr-th-row").empty()
@@ -18,27 +19,19 @@ function getList(type = "all", from = null, to = null) {  // show spinner
             $("#tr-th-row").append(`<tr id="${elem.order_id}">
             <th scope="row">${elem.order_id}</th>
             <td>
-                <span class="text-info"><i class="fas fa-calendar-alt"></i>&emsp;${moment(elem.createdAt).format('DD-MM-YYYY')}</span><br />
-                <span class="text-danger"><i class="fas fa-clock"></i>&emsp;${moment(elem.createdAt).format('LT')}</span>
+                <span class="text-info"><i class="fas fa-calendar-alt pr-2"></i>${moment(elem.createdAt).format('DD-MM-YYYY')}</span><br />
+                <span class="text-danger"><i class="fas fa-clock pr-2"></i>${moment(elem.createdAt).format('LT')}</span>
             </td>
             <td><a href="/dashboard/user/edit/${elem.user_id}" class="btn btn-link text-dark">${elem.user_name}</a></td>
-            <td><span class="text-primary"><i class="fas fa-credit-card"></i>&emsp;${elem.pay_type}</span></td>
+            <td><span class="text-primary"><i class="fas fa-credit-card pr-2"></i>${elem.pay_type}</span></td>
             <td>${elem.all_sum} SAR</td>
             <td>${elem.promo_code_percent || 0} %</td>
-            <td><span class="text-success">${elem.all_sum * (elem.promo_code_percent ? elem.promo_code_percent / 100 : 1)} SAR</span></td>
+            <td><span class="text-success">${elem.all_sum - (elem.all_sum * (elem.promo_code_percent ? elem.promo_code_percent / 100 : 0))} SAR</span></td>
             </tr>`)
         })
+
     }).fail(() => spinnerNotfound(3))
 }
-
-
-function changeType(type) {
-    getList(type, fromOrder, toOrder)
-    orderType = type
-}
-// function fromToFunc() {
-//     getList(orderType, toOrder, fromOrder)
-// }
 
 function spinnerNotfound(action) {
     // 1 => Show Spinner
@@ -56,4 +49,52 @@ function spinnerNotfound(action) {
         $("#spinner-notfound>div").html(`<p>Not found items</p>`);
         $("#spinner-notfound").show();
     }
+}
+
+function changeType(type) {
+    getList(type, fromOrder, toOrder)
+    orderType = type
+}
+
+function changeChart(inYear) {
+    var monthsChart = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+    var monthsCountArr = monthsChart.map((m, i) => {
+        for (let element of inYear) {
+            if (element.MONTH == m) {
+                return element.count
+            }
+        }
+        return 0
+    })
+    console.log(monthsCountArr)
+    var chartSet = {
+        labels: monthsChart,
+        datasets: [
+            {
+                label: "Order per month",
+                backgroundColor: "rgba(60,141,188,0.9)",
+                borderColor: "rgba(60,141,188,0.8)",
+                pointRadius: false,
+                pointColor: "#3b8bba",
+                pointStrokeColor: "rgba(60,141,188,1)",
+                pointHighlightFill: "#fff",
+                pointHighlightStroke: "rgba(60,141,188,1)",
+                data: monthsCountArr,
+            },
+        ],
+    }
+    var extendChartSet = $.extend(true, {}, chartSet)
+    var temp1 = chartSet.datasets[0]
+    extendChartSet.datasets[0] = temp1
+    var chartOptions = {
+        responsive: true,
+        maintainAspectRatio: false,
+        datasetFill: false,
+    }
+    new Chart($("#orderDetails")).clear()
+    new Chart($("#orderDetails").get(0).getContext("2d"), {
+        type: "bar",
+        data: chartSet,
+        options: chartOptions,
+    })
 }

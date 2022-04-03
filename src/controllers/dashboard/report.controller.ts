@@ -13,6 +13,10 @@ import city from "../../models/city.model"
 import region from "../../models/region.model"
 import {UserController} from "./user.controller"
 import sponser from "../../models/sponser.model"
+import initiativeLocations from "../../models/initiative-location.model"
+import initiativeTrees from "../../models/initiative-trees.model"
+import trees from "../../models/trees.model"
+import {CityController} from "./city.controller"
 const seq = new Sequelize(...config.database)
 
 export class ReportController {
@@ -57,6 +61,32 @@ export class ReportController {
     res.render("reports/initiative.ejs", {
       title: "initiative report",
       data: {initiativesChart},
+    })
+  }
+  async locationReportPage(req: Request, res: Response, next: NextFunction) {
+    const initiativesChart = (await new ReportController().initiativesChart()) || []
+
+    res.render("reports/initiative-location.ejs", {
+      title: "Location report",
+      data: {initiativesChart},
+    })
+  }
+  async treeReportPage(req: Request, res: Response, next: NextFunction) {
+    const treeChart = (await new ReportController().treeChart()) || []
+    const cities = (await new CityController().listCity()) || []
+
+    res.render("reports/location-trees.ejs", {
+      title: "Tree report",
+      data: {initiativesChart: treeChart},
+      cities,
+    })
+  }
+  async salesReportPage(req: Request, res: Response, next: NextFunction) {
+    const initiativesChart = (await new OrderController().numberOfOrders()) || []
+    const ordersChart = (await new OrderController().ordersInYear({type: "completed"})) || []
+    res.render("reports/sales.ejs", {
+      title: "Sales report",
+      data: {initiativesChart: ordersChart},
     })
   }
   async chartsPage(req: Request, res: Response, next: NextFunction) {
@@ -210,6 +240,66 @@ export class ReportController {
         res.status(httpStatus.NOT_FOUND).json({err, msg: "not found"})
       })
   }
+  async locationlistreport(req: Request, res: Response, next: NextFunction) {
+    const fromTo = req.query.from != "null" ? {createdAt: {[Op.and]: [{[Op.gte]: req.query.from}, {[Op.lte]: req.query.to}]}} : {}
+    const locationChart = (await new ReportController().locationChart({from: req.query.from, to: req.query.to})) || []
+    initiativeLocations
+      .findAll({
+        where: {...fromTo},
+        include: [
+          {model: initiatives, attributes: ["init_ar_name", "init_en_name"]},
+          {model: city, attributes: ["en_name", "ar_name"]},
+        ],
+        // raw: true,
+      })
+      .then((data) => {
+        initiativeLocations
+          .count({where: {...fromTo}})
+          .then((count) => {
+            const dataInti = {
+              total: count,
+              usersChart: locationChart,
+              data: data,
+            }
+            res.status(httpStatus.OK).json(dataInti)
+          })
+          .catch((err) => res.status(httpStatus.NOT_FOUND).json({err, msg: "not found"}))
+      })
+      .catch((err) => {
+        res.status(httpStatus.NOT_FOUND).json({err, msg: "not found"})
+      })
+  }
+  async treelistreport(req: Request, res: Response, next: NextFunction) {
+    const fromTo = req.query.from != "null" ? {createdAt: {[Op.and]: [{[Op.gte]: req.query.from}, {[Op.lte]: req.query.to}]}} : {}
+    const city = req.query.city != "null" ? {city_id: req.query.city} : {}
+    const treeChart = (await new ReportController().treeChart({from: req.query.from, to: req.query.to})) || []
+    console.log(city)
+    initiativeTrees
+      .findAll({
+        where: {...fromTo},
+        include: [
+          {model: initiatives, attributes: ["init_id", "init_ar_name", "init_en_name", "createdAt"]},
+          {model: initiativeLocations, attributes: ["location_id", "location_nameEn", "location_nameAr"], where: {...city}},
+          {model: trees, attributes: ["tree_id", "ar_name", "en_name", "img_tree"]},
+        ],
+      })
+      .then((data) => {
+        initiativeTrees
+          .count({where: {...fromTo}})
+          .then((count) => {
+            const dataInti = {
+              total: count,
+              usersChart: treeChart,
+              data: data,
+            }
+            res.status(httpStatus.OK).json(dataInti)
+          })
+          .catch((err) => res.status(httpStatus.NOT_FOUND).json({err, msg: "not found"}))
+      })
+      .catch((err) => {
+        res.status(httpStatus.NOT_FOUND).json({err, msg: "not found"})
+      })
+  }
   async usersInYear(where = {}) {
     const whereCon =
       where["type"] != "all" && where != undefined && Object.keys(where).length != 0
@@ -246,6 +336,32 @@ export class ReportController {
       .query(
         `SELECT MONTHNAME(createdAt) AS MONTH, COUNT(*) AS "count"
                FROM tbl_initiatives WHERE ${whereCon} GROUP BY MONTH`,
+        {type: sequelize.QueryTypes.SELECT}
+      )
+      .then((d: any) => (data = d))
+      .catch((e) => (data = null))
+    return data
+  }
+  async locationChart(where = {}) {
+    const whereCon = "YEAR(createdAt) = YEAR(CURDATE())"
+    let data
+    await seq
+      .query(
+        `SELECT MONTHNAME(createdAt) AS MONTH, COUNT(*) AS "count"
+               FROM tbl_initiatives_locations WHERE ${whereCon} GROUP BY MONTH`,
+        {type: sequelize.QueryTypes.SELECT}
+      )
+      .then((d: any) => (data = d))
+      .catch((e) => (data = null))
+    return data
+  }
+  async treeChart(where = {}) {
+    const whereCon = "YEAR(createdAt) = YEAR(CURDATE())"
+    let data
+    await seq
+      .query(
+        `SELECT MONTHNAME(createdAt) AS MONTH, COUNT(*) AS "count"
+               FROM tbl_initiatives_trees WHERE ${whereCon} GROUP BY MONTH`,
         {type: sequelize.QueryTypes.SELECT}
       )
       .then((d: any) => (data = d))

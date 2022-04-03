@@ -180,6 +180,11 @@ export class CartController extends Controller {
       })
     return data
   }
+  async count(req: Request, res: Response, next: NextFunction) {
+    const userId = req.user.user_id
+    const cartCount = await new CartController().cardCount(userId)
+    res.status(httpStatus.OK).json({cartCount})
+  }
 }
 
 // [

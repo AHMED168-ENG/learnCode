@@ -102,8 +102,15 @@
                     &nbsp;&nbsp; Orders
                   </h3>
                   <div class="card-tools">
-                    <button type="button" class="btn btn-tool">
+                    <button
+                      type="button"
+                      data-tooltip="Export Excel"
+                      onclick="fnExcelReport()"
+                      id="export-excel-btn"
+                      class="btn btn-info float-right mx-1"
+                    >
                       <i class="fas fa-file-excel"></i>
+                      Export Excel
                     </button>
                   </div>
                 </div>
@@ -111,7 +118,7 @@
                   <div class="w-100 d-flex justify-content-center align-items-center" style="min-height: 24em"></div>
                 </div>
                 <div id="tabe-items" class="card-body pad table-responsive">
-                  <table class="table table-bordered" style="border: 1px solid #dee2e6">
+                  <table class="table table-bordered" id="table2excel" style="border: 1px solid #dee2e6">
                     <thead>
                       <tr>
                         <th scope="col">#</th>
@@ -138,6 +145,7 @@
       </div>
       <footer class="main-footer"><%- include('../layout/footer.ejs') %></footer>
     </div>
+    <iframe id="txtArea1" style="display: none"></iframe>
     <%- include('../layout/script.ejs') %>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
@@ -147,7 +155,6 @@
       var prevMonthName = moment().subtract(1, "month").format("MMMM")
       var monthsArr = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
       var ordersInYear = JSON.parse(`<%-JSON.stringify(data.ordersInYear)%>`)
-      console.log(ordersInYear)
       var monthsCountArr = monthsArr.map((m, i) => {
         for (let element of ordersInYear) {
           if (element.MONTH == m) {
@@ -218,5 +225,6 @@
       })
     </script>
     <script src="/js/reports/order.js"></script>
+    <%- include('./export-excel.ejs') %>
   </body>
 </html>

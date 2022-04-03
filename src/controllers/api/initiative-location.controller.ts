@@ -85,6 +85,8 @@ export class InitiativesLocationController extends Controller {
     return [
       "img",
       "caverArea",
+      "location_lat",
+      "location_long",
       [
         sequelize.literal(`(
         SELECT MIN(price) as fromPrice

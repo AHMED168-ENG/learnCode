@@ -18,7 +18,7 @@ export class InitiativesLocationController extends Controller {
     const page = (Number(req.query.page) - 1) * limit || 0
     const cities = req.query.cities ? String(req.query.cities).split(",").map(Number) : []
     const where = cities.length > 0 ? {city_id: cities, ...initId} : {...initId}
-    const attributes: any = new InitiativesLocationController().selectionFields()
+    const attributes: any = new InitiativesLocationController().selectionFields(false)
 
     initiativeLocations
       .findAndCountAll({
@@ -42,13 +42,30 @@ export class InitiativesLocationController extends Controller {
         res.status(httpStatus.NOT_FOUND).json({err, msg: "not found Locations"})
       })
   }
+  getMapLocations(req: Request, res: Response, next: NextFunction) {
+    const initId = req.query.init ? {init_id: req.query.init} : {};
+    const lang = req["lang"] == "en";
+    const cityName = lang ? "en_name" : "ar_name";
+    const locationName = lang ? "location_nameEn" : "location_nameAr";
+    const cities = req.query.cities ? String(req.query.cities).split(",").map(Number) : [];
+    const where = cities.length > 0 ? { city_id: cities, ...initId } : { ...initId };
+    const attributes: any = new InitiativesLocationController().selectionFields(true);
+    initiativeLocations.findAndCountAll({
+      where,
+      attributes: ["location_id", [locationName, "location_name"], ...attributes],
+      include: [{model: city, attributes: {include: [[cityName, "name"]], exclude: ["en_name", "ar_name", "createdAt", "updatedAt"]}}],
+    }).then((data) => {
+      const response = { data: data["rows"] };
+      return res.status(httpStatus.OK).json(response);
+    }).catch((err) => { return res.status(httpStatus.NOT_FOUND).json({err, msg: "not found Locations"}); });
+  }
   details(req: Request, res: Response, next: NextFunction) {
     const locationId = req.params.id
     const lang = req["lang"] == "en"
     const cityName = lang ? "en_name" : "ar_name"
     const locationName = lang ? "location_nameEn" : "location_nameAr"
     const about = lang ? "aboutEn" : "aboutAr"
-    const attributes: any = new InitiativesLocationController().selectionFields()
+    const attributes: any = new InitiativesLocationController().selectionFields(false)
     initiativeLocations
       .findOne({
         where: {location_id: locationId},
@@ -66,7 +83,7 @@ export class InitiativesLocationController extends Controller {
   async WhereLikeToPlant(lang: string) {
     const ar_en_city = lang == "en" ? "en_name" : "ar_name"
     const locationName = lang ? "location_nameEn" : "location_nameAr"
-    const attributes: any = new InitiativesLocationController().selectionFields()
+    const attributes: any = new InitiativesLocationController().selectionFields(false)
     let data
     await initiativeLocations
       .findAll({
@@ -81,12 +98,10 @@ export class InitiativesLocationController extends Controller {
     return data
   }
 
-  private selectionFields() {
-    return [
+  private selectionFields(forMap: boolean) {
+    let response = [
       "img",
       "caverArea",
-      "location_lat",
-      "location_long",
       [
         sequelize.literal(`(
         SELECT MIN(price) as fromPrice
@@ -130,7 +145,9 @@ export class InitiativesLocationController extends Controller {
           )`),
         "used",
       ],
-    ]
+    ];
+    if (forMap) response = response.concat(["location_lat", "location_long"])
+    return response;
   }
 }
 

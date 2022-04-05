@@ -13,6 +13,5 @@ export class InitiativesLocationRoutes {
     this.router.get("/", this.initiativeLocationController.list)
     this.router.get("/map", this.initiativeLocationController.getMapLocations)
     this.router.get("/:id", this.initiativeLocationController.details)
-    this.router.post("/", this.initiativeLocationController.addNew)
   }
 }

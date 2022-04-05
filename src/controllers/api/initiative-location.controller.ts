@@ -8,35 +8,6 @@ export class InitiativesLocationController extends Controller {
   constructor() {
     super()
   }
-  async addNew(req: Request, res: Response, next: NextFunction) {
-    try {
-      let i = 0;
-      const object = {
-        location_id: 32,
-        location_name: "Water Front",
-        img: "locations/32/101_1649155580639.png",
-        caverArea: 15322,
-        fromPriceTree: null,
-        treesCount: null,
-        carbonPoints: null,
-        used: 0,
-        tbl_city: {
-          city_id: 1,
-          code: "lol",
-          country_id: 1,
-          name: "Al Madinah"
-        }
-      };
-      const addedInitaiativeLocations = [];
-      do {
-        addedInitaiativeLocations.push(object);
-      } while (i < 100);
-      await initiativeLocations.bulkCreate(addedInitaiativeLocations);
-      return res.status(httpStatus.OK).json({ message: "initiative locations are created successfully" });
-    } catch (error) {
-      return res.status(httpStatus.NOT_FOUND).json({ error, msg: "not found Locations" });
-    }
-  }
   list(req: Request, res: Response, next: NextFunction) {
     const initId = req.query.init ? {init_id: req.query.init} : {}
     const lang = req["lang"] == "en"
@@ -47,7 +18,7 @@ export class InitiativesLocationController extends Controller {
     const page = (Number(req.query.page) - 1) * limit || 0
     const cities = req.query.cities ? String(req.query.cities).split(",").map(Number) : []
     const where = cities.length > 0 ? {city_id: cities, ...initId} : {...initId}
-    const attributes: any = new InitiativesLocationController().selectionFields(false)
+    const attributes: any = new InitiativesLocationController().selectionFields()
 
     initiativeLocations
       .findAndCountAll({
@@ -76,7 +47,7 @@ export class InitiativesLocationController extends Controller {
       const lang = req["lang"] == "en";
       const cityName = lang ? "en_name" : "ar_name";
       const locationName = lang ? "location_nameEn" : "location_nameAr";
-      const attributes: any = new InitiativesLocationController().selectionFields(true);
+      const attributes: any = new InitiativesLocationController().filterMapFields();
       const data = await initiativeLocations.findAndCountAll({
         attributes: ["location_id", [locationName, "location_name"], ...attributes],
         include: [{model: city, attributes: { include: [[cityName, "name"]], exclude: ["en_name", "ar_name", "createdAt", "updatedAt"] } }],
@@ -93,7 +64,7 @@ export class InitiativesLocationController extends Controller {
     const cityName = lang ? "en_name" : "ar_name"
     const locationName = lang ? "location_nameEn" : "location_nameAr"
     const about = lang ? "aboutEn" : "aboutAr"
-    const attributes: any = new InitiativesLocationController().selectionFields(false)
+    const attributes: any = new InitiativesLocationController().selectionFields()
     initiativeLocations
       .findOne({
         where: {location_id: locationId},
@@ -111,7 +82,7 @@ export class InitiativesLocationController extends Controller {
   async WhereLikeToPlant(lang: string) {
     const ar_en_city = lang == "en" ? "en_name" : "ar_name"
     const locationName = lang ? "location_nameEn" : "location_nameAr"
-    const attributes: any = new InitiativesLocationController().selectionFields(false)
+    const attributes: any = new InitiativesLocationController().selectionFields()
     let data
     await initiativeLocations
       .findAll({
@@ -125,9 +96,36 @@ export class InitiativesLocationController extends Controller {
       })
     return data
   }
-
-  private selectionFields(forMap: boolean) {
-    let response = [
+  private filterMapFields() {
+    return [
+      "img",
+      "location_lat",
+      "location_long",
+      [
+        sequelize.literal(`(
+        SELECT SUM(target_num) as target_num
+        FROM tbl_initiatives_trees AS initiativeTrees
+        WHERE
+        initiativeTrees.location_id = tbl_initiatives_locations.location_id
+        AND initiativeTrees.status='active'
+        AND initiativeTrees.deleted='no'
+    )`),
+        "treesCount",
+      ],
+      [
+        sequelize.literal(`(
+          COALESCE((SELECT SUM(tbl_orders_details.quantity)
+          FROM tbl_orders_details ,tbl_orders
+          WHERE
+          tbl_orders_details.location_id = tbl_initiatives_locations.location_id AND
+          tbl_orders.status = "inprogress"),0)
+          )`),
+        "used",
+      ],
+    ];
+  }
+  private selectionFields() {
+    return [
       "img",
       "caverArea",
       [
@@ -174,8 +172,6 @@ export class InitiativesLocationController extends Controller {
         "used",
       ],
     ];
-    if (forMap) response = response.concat(["location_lat", "location_long"])
-    return response;
   }
 }
 

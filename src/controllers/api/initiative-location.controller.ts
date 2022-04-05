@@ -8,6 +8,35 @@ export class InitiativesLocationController extends Controller {
   constructor() {
     super()
   }
+  async addNew(req: Request, res: Response, next: NextFunction) {
+    try {
+      let i = 0;
+      const object = {
+        location_id: 32,
+        location_name: "Water Front",
+        img: "locations/32/101_1649155580639.png",
+        caverArea: 15322,
+        fromPriceTree: null,
+        treesCount: null,
+        carbonPoints: null,
+        used: 0,
+        tbl_city: {
+          city_id: 1,
+          code: "lol",
+          country_id: 1,
+          name: "Al Madinah"
+        }
+      };
+      const addedInitaiativeLocations = [];
+      do {
+        addedInitaiativeLocations.push(object);
+      } while (i < 100);
+      await initiativeLocations.bulkCreate(addedInitaiativeLocations);
+      return res.status(httpStatus.OK).json({ message: "initiative locations are created successfully" });
+    } catch (error) {
+      return res.status(httpStatus.NOT_FOUND).json({ error, msg: "not found Locations" });
+    }
+  }
   list(req: Request, res: Response, next: NextFunction) {
     const initId = req.query.init ? {init_id: req.query.init} : {}
     const lang = req["lang"] == "en"
@@ -42,22 +71,21 @@ export class InitiativesLocationController extends Controller {
         res.status(httpStatus.NOT_FOUND).json({err, msg: "not found Locations"})
       })
   }
-  getMapLocations(req: Request, res: Response, next: NextFunction) {
-    const initId = req.query.init ? {init_id: req.query.init} : {};
-    const lang = req["lang"] == "en";
-    const cityName = lang ? "en_name" : "ar_name";
-    const locationName = lang ? "location_nameEn" : "location_nameAr";
-    const cities = req.query.cities ? String(req.query.cities).split(",").map(Number) : [];
-    const where = cities.length > 0 ? { city_id: cities, ...initId } : { ...initId };
-    const attributes: any = new InitiativesLocationController().selectionFields(true);
-    initiativeLocations.findAndCountAll({
-      where,
-      attributes: ["location_id", [locationName, "location_name"], ...attributes],
-      include: [{model: city, attributes: {include: [[cityName, "name"]], exclude: ["en_name", "ar_name", "createdAt", "updatedAt"]}}],
-    }).then((data) => {
+  async getMapLocations(req: Request, res: Response, next: NextFunction) {
+    try {
+      const lang = req["lang"] == "en";
+      const cityName = lang ? "en_name" : "ar_name";
+      const locationName = lang ? "location_nameEn" : "location_nameAr";
+      const attributes: any = new InitiativesLocationController().selectionFields(true);
+      const data = await initiativeLocations.findAndCountAll({
+        attributes: ["location_id", [locationName, "location_name"], ...attributes],
+        include: [{model: city, attributes: { include: [[cityName, "name"]], exclude: ["en_name", "ar_name", "createdAt", "updatedAt"] } }],
+      });
       const response = { data: data["rows"] };
       return res.status(httpStatus.OK).json(response);
-    }).catch((err) => { return res.status(httpStatus.NOT_FOUND).json({err, msg: "not found Locations"}); });
+    } catch (error) {
+      return res.status(httpStatus.NOT_FOUND).json({ error, msg: "not found Locations" });
+    }
   }
   details(req: Request, res: Response, next: NextFunction) {
     const locationId = req.params.id

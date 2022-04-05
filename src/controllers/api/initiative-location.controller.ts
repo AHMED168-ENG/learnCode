@@ -52,8 +52,7 @@ export class InitiativesLocationController extends Controller {
         attributes: ["location_id", [locationName, "location_name"], ...attributes],
         include: [{model: city, attributes: { include: [[cityName, "name"]], exclude: ["en_name", "ar_name", "createdAt", "updatedAt"] } }],
       });
-      const response = { data: data["rows"] };
-      return res.status(httpStatus.OK).json(response);
+      return res.status(httpStatus.OK).json(data["rows"]);
     } catch (error) {
       return res.status(httpStatus.NOT_FOUND).json({ error, msg: "not found Locations" });
     }

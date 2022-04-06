@@ -17,6 +17,7 @@ import {PromoRoutes} from "./v1/promo.route"
 import {RegionRoutes} from "./v1/region.route"
 import {SectorRoutes} from "./v1/sector.route"
 import {TermsPolicyRoutes} from "./v1/terms&policy.route"
+import { TreesInfoRoutes } from "./v1/trees-info.route"
 
 export = (app: express.Application) => {
   // user Route
@@ -51,6 +52,8 @@ export = (app: express.Application) => {
   app.use("/v1/management", new TermsPolicyRoutes().router)
   // FAQ Route
   app.use("/v1/faq", new FaqRoutes().router)
+  // Tree Info Route
+  app.use("/v1/tree-info", new TreesInfoRoutes().router)
   // Message Route
   app.use("/v1/message", new MessageRoutes().router)
   // Partner Route

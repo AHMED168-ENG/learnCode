@@ -19,6 +19,7 @@ import {FaqRoutes} from "./dashboard/faq.route"
 import {PartnerRoutes} from "./dashboard/partner.route"
 import {PartnerTypeRoutes} from "./dashboard/partner-type.route"
 import {MessageRoutes} from "./dashboard/message.route"
+import { TreeHeaderRoutes } from "./dashboard/tree-header.route"
 export = (app: express.Application) => {
   // Index
   app.get("/", (req, res) => res.redirect("/dashboard/home"))
@@ -48,6 +49,8 @@ export = (app: express.Application) => {
   app.use("/dashboard/report", new ReportRoutes().router)
   // Tree route
   app.use("/dashboard/tree", new TreeRoutes().router)
+  // Tree Header route
+  // app.use("/dashboard/tree/headers", new TreeHeaderRoutes().router)
   // Order route
   app.use("/dashboard/order", new OrderRoutes().router)
   // Promo route

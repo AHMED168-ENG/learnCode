@@ -13,7 +13,7 @@ const treesBody = sequelize.define(
     en_title: { type: DataTypes.STRING, allowNull: true, defaultValue: null },
     ar_value: { type: DataTypes.STRING, allowNull: true, defaultValue: null },
     en_value: { type: DataTypes.STRING, allowNull: true, defaultValue: null },
-    icon: { type: DataTypes.STRING(500), allowNull: true, defaultValue: null, validate: { len: [0, 500] } },
+    icon: { type: DataTypes.STRING, allowNull: true, defaultValue: null },
   },
   { charset: "utf8", collate: "utf8_general_ci" }
 );

@@ -3,6 +3,7 @@ import httpStatus from "http-status"
 import path from "path"
 import helpers from "../../helper/helpers"
 import trees from "../../models/trees.model"
+import { TreesInfoController } from "../api/trees-info.controller"
 
 export class TreeController {
   listPage(req: Request, res: Response, next: NextFunction) {
@@ -37,6 +38,28 @@ export class TreeController {
       .catch((err) => {
         res.status(httpStatus.NOT_FOUND).json({err, msg: "not found trees"})
       })
+  }
+  public async detailsPage(req: Request, res: Response, next: NextFunction) {
+    try {
+      const id = Number(req.params.id);
+      const tree = await trees.findOne({ where: { tree_id: id }, attributes: { exclude: ["createdAt", "updatedAt"] } });
+      const info = new TreesInfoController().getInfoData(id, req["lang"]);
+      const data = {
+        tree_id: tree["tree_id"],
+        ar_name: tree["ar_name"],
+        en_name: tree["en_name"],
+        slug_ar: tree["slug_ar"],
+        slug_en: tree["slug_en"],
+        img_tree: tree["img_tree"],
+        ar_description: tree["ar_description"],
+        en_description: tree["en_description"],
+        deleted: tree["deleted"],
+        header_info: info,
+      };
+      return res.render("tree/view.ejs", { title: "Tree Details", data });
+    } catch (error) {
+      return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ error, message: "Can't open tree details page" });
+    }
   }
   newPage(req: Request, res: Response, next: NextFunction) {
     res.render("tree/new.ejs", {

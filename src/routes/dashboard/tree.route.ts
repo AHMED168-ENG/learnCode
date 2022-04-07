@@ -12,6 +12,7 @@ export class TreeRoutes {
   routes() {
     this.router.get("/", this.treeController.listPage)
     this.router.get("/list", this.treeController.list)
+    this.router.get("/details/:id", this.treeController.detailsPage)
     this.router.get("/new", this.treeController.newPage)
     this.router.post("/new", this.treeController.addNew)
     this.router.get("/edit/:id", this.treeController.editPage)

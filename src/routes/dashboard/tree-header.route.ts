@@ -13,7 +13,6 @@ export class TreeHeaderRoutes {
     this.router.get("/new", this.treesHeaderController.newPage);
     this.router.post("/new", this.treesHeaderController.addTreesHeader);
     this.router.get("/edit/:id", this.treesHeaderController.editPage);
-    this.router.put("/edit", this.treesHeaderController.editTreesHeader);
-    this.router.delete("/:id/delete", this.treesHeaderController.deleteTreesHeader);
+    this.router.put("/edit/:id", this.treesHeaderController.editTreesHeader);
   }
 }

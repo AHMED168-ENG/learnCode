@@ -20,6 +20,7 @@ import {PartnerRoutes} from "./dashboard/partner.route"
 import {PartnerTypeRoutes} from "./dashboard/partner-type.route"
 import {MessageRoutes} from "./dashboard/message.route"
 import { TreeHeaderRoutes } from "./dashboard/tree-header.route"
+import { TreeBodyRoutes } from "./dashboard/tree-body.route"
 export = (app: express.Application) => {
   // Index
   app.get("/", (req, res) => res.redirect("/dashboard/home"))
@@ -50,7 +51,9 @@ export = (app: express.Application) => {
   // Tree route
   app.use("/dashboard/tree", new TreeRoutes().router)
   // Tree Header route
-  // app.use("/dashboard/tree/headers", new TreeHeaderRoutes().router)
+  app.use("/dashboard/tree/header", new TreeHeaderRoutes().router)
+  // Tree Body route
+  app.use("/dashboard/tree/body", new TreeBodyRoutes().router)
   // Order route
   app.use("/dashboard/order", new OrderRoutes().router)
   // Promo route

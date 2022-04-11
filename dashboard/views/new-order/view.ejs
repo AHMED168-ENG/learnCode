@@ -266,7 +266,38 @@
           method: "PUT",
         }
         $.ajax(settings).always(function () {
-          window.location.reload()
+          fetch("/dashboard/home/num", {
+            method: "GET",
+          })
+          .then((response) => response.json())
+          .then((data) => {
+              $("#notifiy-content").empty();
+              data.lastNewOrders.forEach((elem) => {
+                $("#notifiy-content").append(`
+                  <a href="/dashboard/order/view/${elem.order_id}" class="dropdown-item">
+                    <!-- Notifiy Start -->
+                    <div class="media">
+                      <img src="/p/img/avatar.png" alt="User Avatar" class="img-size-50 mr-3 img-circle" />
+                      <div class="media-body">
+                        <h3 class="dropdown-item-title"># ${elem.order_id}</h3>
+                        <h3 class="dropdown-item-title">New order</h3>
+                        <p class="text-sm">Customer : ${elem.web_apps_user.fullName}</p>
+                        <p class="text-sm text-muted">
+                          <i class="far fa-clock mr-1"></i>
+                          ${moment(elem.createdAt).fromNow()}
+                        </p>
+                      </div>
+                    </div>
+                    <!-- Notifiy End -->
+                  </a>
+                  <div class="dropdown-divider"></div>
+                `)
+              })
+              $("#NewOrderNumber").text(data.ordersNum.New)
+            })
+            .catch((err) => {
+              console.error(err)
+            })
         })
       }
     </script>

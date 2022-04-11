@@ -107,9 +107,31 @@
           url: `/dashboard/message/status/${id}`,
           method: "PUT",
         }
-        $.ajax(settings).always(function () {
-          // window.location.reload()
-        })
+        $.ajax(settings).always(function (res) {
+          fetch("/dashboard/home/num", { method: "GET" }).then((response) => response.json()).then((data) => {
+            data.lastNewMessage.forEach((elem) => {
+              $("#message-content").append(`
+                <a href="/dashboard/message/view/${elem.message_id}" class="dropdown-item">
+                  <!-- Notifiy Start -->
+                  <div class="media">
+                    <img src="/p/img/avatar.png" alt="User Avatar" class="img-size-50 mr-3 img-circle" />
+                    <div class="media-body">
+                      <h3 class="dropdown-item-title">${elem.email}</h3>
+                      <p class="text-sm">Name : ${elem.name}</p>
+                      <p class="text-sm text-muted">
+                        <i class="far fa-clock mr-1"></i>
+                        ${moment(elem.createdAt).fromNow()}
+                      </p>
+                    </div>
+                  </div>
+                  <!-- Notifiy End -->
+                </a>
+                <div class="dropdown-divider"></div>
+              `)
+            });
+            $("#messageUnreadNumber").text(data.messageNum);
+          }).catch(err => console.log(error));
+        });
       }
     </script>
   </body>

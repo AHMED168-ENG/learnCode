@@ -55,17 +55,14 @@ export class MessageController {
       })
       .catch((err) => {})
   }
-  changeStatus(req: Request, res: Response, next: NextFunction) {
-    const messageId = req.params.id
-    const status = "read"
-    message
-      .update({status: status}, {where: {message_id: messageId}})
-      .then((d) => {
-        res.status(httpStatus.OK).json({msg: "message edited"})
-      })
-      .catch((err) => {
-        res.status(httpStatus.BAD_REQUEST).json({msg: "Error in Edit message", err: err.errors[0].message || "unexpected error"})
-      })
+  async changeStatus(req: Request, res: Response, next: NextFunction) {
+    try {
+      const messageId = req.params.id;
+      await message.update({ status: "read" }, { where: { message_id: messageId } });
+      return res.status(httpStatus.OK).json({ msg: "message edited" });
+    } catch (err) {
+      return res.status(httpStatus.BAD_REQUEST).json({ msg: "Error in Edit message", err: err.errors[0].message || "unexpected error" });
+    }
   }
   async lastNewMessage() {
     let data

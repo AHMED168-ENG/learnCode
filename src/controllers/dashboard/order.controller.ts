@@ -74,6 +74,7 @@ export class OrderController {
         where: {status: screenType},
         limit: limit,
         offset: page,
+        order: [['createdAt', 'DESC']],
         attributes: {exclude: ["updatedAt"]},
         raw: true,
       })

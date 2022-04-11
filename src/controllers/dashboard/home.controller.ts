@@ -23,13 +23,16 @@ export class HomeController {
   }
 
   async getSideBarNum(req: Request, res: Response, next: NextFunction) {
-    const lastNewOrders = (await new OrderController().lastNewOrders()) || []
-    const lastNewMessage = (await new MessageController().lastNewMessage()) || {}
-    const ordersNum = await new OrderController().numberOfOrders()
-    const messageNum = await message.count({where: {status: "unread"}})
-    const homeNumbers = (await new HomeController().homeNumbers()) || {}
-    console.log(messageNum)
-    res.status(200).json({...homeNumbers, lastNewOrders, lastNewMessage, ordersNum, messageNum})
+    try {
+      const lastNewOrders = (await new OrderController().lastNewOrders()) || [];
+      const lastNewMessage = (await new MessageController().lastNewMessage()) || {};
+      const ordersNum = await new OrderController().numberOfOrders();
+      const messageNum = await message.count({ where: { status: "unread" } });
+      const homeNumbers = (await new HomeController().homeNumbers()) || {};
+      return res.status(200).json({ ...homeNumbers, lastNewOrders, lastNewMessage, ordersNum, messageNum });
+    } catch (error) {
+      return res.status(500).json({ msg: "Error in getting sidebar nums", err: error.errors[0].message || "unexpected error" });
+    }
   }
   async homeNumbers() {
     let data

@@ -96,6 +96,11 @@ const initiativeLocations = sequelize.define(
       allowNull: true,
       defaultValue: null,
     },
+    imgvr: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      defaultValue: null,
+    },
     region_id: {
       type: DataTypes.INTEGER,
       allowNull: true,

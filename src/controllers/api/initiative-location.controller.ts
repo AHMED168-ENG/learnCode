@@ -98,6 +98,7 @@ export class InitiativesLocationController extends Controller {
   private filterMapFields() {
     return [
       "img",
+      "imgvr",
       "location_lat",
       "location_long",
       [

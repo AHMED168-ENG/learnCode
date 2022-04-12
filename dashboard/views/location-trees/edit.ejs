@@ -52,7 +52,7 @@
                   <div class="card-header">
                     <h3 class="card-title">
                       <i class="fas fa-users"></i>
-                      &nbsp;&nbsp; Add new Location
+                      &nbsp;&nbsp; <%= title %>
                     </h3>
                   </div>
                   <form id="newForm" action="" onsubmit="">
@@ -78,7 +78,7 @@
                               style="width: 100%"
                             >
                               <% for(let [index,init] of initiatives.entries() || []){ %>
-                              <option value="<%=init.init_id%>"   <%= init.init_id == data.init_id ? 'selected' : ''%>   ><%=init.init_en_name%> - <%=init.init_ar_name%></option>
+                              <option value="<%=init.init_id%>">  <%= init.init_id == data.init_id ? 'selected' : ''%>   <%=init.init_en_name%> - <%=init.init_ar_name%></option>
                               <%} %>
                             </select>
                           </div>

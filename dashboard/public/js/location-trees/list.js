@@ -22,19 +22,18 @@ function getList(page) {
         res.data.forEach((elem) => {
             $("#tr-th-row").append(`<tr>
             <th scope="row">${elem.id}</th>
-            <th scope="col">${elem.id}</th>
-            <th scope="col">${elem.id}</th>
-            <th scope="col">${elem.id}</th>
-            <th scope="col">${elem.id}</th>
-            <th scope="col">${elem.id}</th>
-            <th scope="col">${elem.id}</th>
-            <th scope="col">${elem.id}</th>
-            <th scope="col">${elem.id}</th>
-            <th scope="col">${elem.id}</th>
-            <th scope="col">${elem.id}</th>
-            <th scope="col">${elem.id}</th>
+            <th scope="col">${elem.tbl_tree.en_name}</th>
+            <td><img class="rounded-circle p-0" width=45 height=45 src="/p/img/${elem.tbl_tree.img_tree}" alt="Image"></td>
+            <th scope="col">${elem.tbl_initiative.init_en_name}</th>
+            <th scope="col">${elem.tbl_initiatives_location.location_nameEn}</th>
+            <th scope="col">${elem.price}</th>
+            <th scope="col">${elem.price_points}</th>
+            <th scope="col">${elem.carbon_points}</th>
+            <th scope="col">${elem.target_num}</th>
+            <th scope="col">${elem.status}</th>
+            <td>${elem.deleted == "no" ? `<span class="badge badge-success">${elem.deleted}</span>` : `<span class="badge badge-danger">${elem.deleted}</span>`}</td>
+            <th scope="col">${new Date(elem.createdAt).toLocaleString('default', { month: 'short' })} ${new Date(elem.createdAt).getDay()} ${new Date(elem.createdAt).getFullYear()}</th>
             <td>
-                <a data-tooltip="View tree" class="btn btn-info" href="/dashboard/initrees/view/${elem.id}"><i class="fas fa-eye"></i></a>
                 <a data-tooltip="Edit tree" class="btn btn-primary" href="/dashboard/initrees/edit/${elem.id}"><i class="fas fa-edit"></i></a>
                 ${elem.status == "active" ? `<button data-tooltip="Unactive tree" class="btn btn-warning" onclick='active(${elem.id},"active","yes")'><i class="fas fa-exclamation-triangle"></i></button>` : `<button data-tooltip="Active tree" class="btn btn-info" onclick='active(${elem.id},"active","no")'><i class="fas fa-exclamation-triangle"></i></button>`}
                 ${elem.deleted == "no" ? `<button data-tooltip="Delete tree" class="btn btn-danger" onclick='active(${elem.id},"delete","yes")'><i class="fas fa-trash-alt"></i></button>` : `<button data-tooltip="Restore tree" class="btn btn-success" onclick='active(${elem.id},"delete","no")'><i class="fas fa-sync-alt"></i></button>`}

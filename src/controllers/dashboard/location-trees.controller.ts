@@ -10,6 +10,7 @@ import path from "path"
 import initiativeTrees from "../../models/initiative-trees.model"
 import trees from "../../models/trees.model"
 import {TreeController} from "./tree.controller"
+import country from "../../models/country.model"
 
 export class LocationTreesController {
   listPage(req: Request, res: Response, next: NextFunction) {
@@ -24,7 +25,7 @@ export class LocationTreesController {
       .findAll({
         limit: limit,
         offset: page,
-        attributes: {exclude: ["updatedAt"]},
+        attributes: { exclude: ["updatedAt"] },
         include: [
           {model: initiatives, attributes: ["init_id", "init_ar_name", "init_en_name", "createdAt"]},
           {model: initiativeLocations, attributes: ["location_id", "location_nameEn", "location_nameAr"]},
@@ -70,17 +71,16 @@ export class LocationTreesController {
       })
   }
   async editPage(req: Request, res: Response, next: NextFunction) {
-    const id = req.params.id
-    const initiatives = await new InitiativeController().listAllInit()
-    const trees = await new TreeController().listTrees()
-    initiativeTrees.findOne({where: {id: id}, raw: true}).then((data) => {
-      res.render("location-trees/edit.ejs", {
-        title: "Edit location-trees",
-        data: data,
-        initiatives,
-        trees,
-      })
-    })
+    try {
+      const id = req.params.id;
+      const initiatives = await new InitiativeController().listAllInit();
+      const trees = await new TreeController().listTrees();
+      const countries = await country.findAll({ attributes: { include: ["country_id", "en_name"] } });
+      const data = await initiativeTrees.findOne({ where: { id }, raw: true });
+      return res.render("location-trees/edit.ejs", { title: "Edit location Trees", data, initiatives, countries, trees });
+    } catch (error) {
+      return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ msg: "Error in Edit tree", err: error.errors[0].message || "unexpected error" });
+    }
   }
   edit(req, res: Response, next: NextFunction) {
     const id = req.params.id

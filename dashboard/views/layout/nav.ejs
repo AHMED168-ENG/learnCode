@@ -10,9 +10,6 @@
     <li class="nav-item">
       <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
     </li>
-    <li class="nav-item">
-      <a class="btn btn-outline-warning" id="logout" href="/dashboard/user/logout" role="button">Logout</a>
-    </li>
   </ul>
 
   <!-- Right navbar links -->
@@ -43,11 +40,13 @@
       </div>
     </li>
     <!-- End Notifications Menu -->
-
     <li class="nav-item">
       <a class="nav-link" data-widget="fullscreen" href="#" role="button">
         <i class="fas fa-expand-arrows-alt"></i>
       </a>
+    </li>
+    <li class="nav-item">
+      <a class="btn btn-outline-warning" id="logout" href="/dashboard/user/logout" role="button">Logout</a>
     </li>
   </ul>
 </nav>
@@ -490,12 +489,14 @@
             <div class="media">
               <img src="/p/img/avatar.png" alt="User Avatar" class="img-size-50 mr-3 img-circle" />
               <div class="media-body">
-                <h3 class="dropdown-item-title"># ${elem.order_id}</h3>
-                <h3 class="dropdown-item-title">New order</h3>
-                <p class="text-sm">Customer : ${elem.web_apps_user.fullName}</p>
+                <button type="button" class="close" aria-label="Close">
+                  <span aria-hidden="true">×</span>
+                </button>
+                <p class="text-sm">${elem.web_apps_user.fullName} placed <br><span class="text-bold">${elem.all_sum} SAR </span> order!</p>
+                <span class="badge" style="background: rgb(205, 255, 205);"><h3 class="dropdown-item-title text-success">New order</h3></span>
                 <p class="text-sm text-muted">
                   <i class="far fa-clock mr-1"></i>
-                  ${moment(elem.createdAt).fromNow()}
+                  ${new Date(elem.createdAt).toLocaleString('default', { month: 'short' })} ${new Date(elem.createdAt).getDay()} ${new Date(elem.createdAt).getFullYear()} - ${new Date(elem.createdAt).getHours()}:${new Date(elem.createdAt).getMinutes()} ${new Date(elem.createdAt).getHours() >= 12 ? 'PM' : 'AM'}
                 </p>
               </div>
             </div>

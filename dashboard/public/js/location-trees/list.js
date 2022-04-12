@@ -22,7 +22,17 @@ function getList(page) {
         res.data.forEach((elem) => {
             $("#tr-th-row").append(`<tr>
             <th scope="row">${elem.id}</th>
- 
+            <th scope="col">${elem.id}</th>
+            <th scope="col">${elem.id}</th>
+            <th scope="col">${elem.id}</th>
+            <th scope="col">${elem.id}</th>
+            <th scope="col">${elem.id}</th>
+            <th scope="col">${elem.id}</th>
+            <th scope="col">${elem.id}</th>
+            <th scope="col">${elem.id}</th>
+            <th scope="col">${elem.id}</th>
+            <th scope="col">${elem.id}</th>
+            <th scope="col">${elem.id}</th>
             <td>
                 <a data-tooltip="View tree" class="btn btn-info" href="/dashboard/initrees/view/${elem.id}"><i class="fas fa-eye"></i></a>
                 <a data-tooltip="Edit tree" class="btn btn-primary" href="/dashboard/initrees/edit/${elem.id}"><i class="fas fa-edit"></i></a>

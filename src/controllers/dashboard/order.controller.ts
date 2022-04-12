@@ -222,7 +222,7 @@ export class OrderController {
         where: { [Op.and]: [{ status: "new" }, { seen: 0 }] },
         limit: 4,
         offset: 0,
-        attributes: ["order_id", "createdAt"],
+        attributes: ["order_id", "all_sum", "createdAt"],
         include: [{model: webAppsUsers, attributes: ["fullName", "user_img"]}],
         order: [["createdAt", "DESC"]],
       })

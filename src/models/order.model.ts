@@ -137,6 +137,11 @@ const order = sequelize.define(
         },
       },
     },
+    seen: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      defaultValue: 0,
+    },
     status: {
       type: DataTypes.ENUM("new", "inprogress", "cancelled", "completed"),
       allowNull: true,

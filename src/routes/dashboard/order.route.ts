@@ -18,6 +18,5 @@ export class OrderRoutes {
     this.router.get("/:type/listreport", this.orderController.listreport)
     this.router.put("/status/:id", this.orderController.changeStatus)
     this.router.get("/view/:id", this.orderController.view)
-    this.router.get("/ttt", this.orderController.test)
   }
 }

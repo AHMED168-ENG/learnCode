@@ -10,6 +10,14 @@ import webAppsUsers from "../../models/user.model"
 
 export class UserController {
   secretFields: string[] = ["user_pass", "userSalt", "updatedAt"]
+  logout(req: Request, res: Response, next: NextFunction) {
+    try {
+      res.cookie("token", '', { expires: new Date(0) });
+      return res.redirect('/');
+    } catch (error) {
+      return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ error, msg: "Can't logout user" });
+    }
+  }
   listPage(req: Request, res: Response, next: NextFunction) {
     res.render("user/list.ejs", {
       title: "User",

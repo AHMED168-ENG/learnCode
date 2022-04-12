@@ -124,38 +124,25 @@ export class OrderController {
         res.status(httpStatus.NOT_FOUND).json({err, msg: "not found order"})
       })
   }
-  changeStatus(req: Request, res: Response, next: NextFunction) {
-    const orderId = req.params.id
-    const status = req.query.status
-    order
-      .update({status: status}, {where: {order_id: orderId}})
-      .then((d) => {
+  async changeStatus(req: Request, res: Response, next: NextFunction) {
+    try {
+      const order_id = req.params.id;
+      const status = req.query.status;
+      const seen = Number(req.query.seen);
+      const updatedData = seen && seen === 1 ? { status, seen } : { status };
+      order.update(updatedData, { where: { order_id } }).then((d) => {
         if (status == "completed") {
-          order.findByPk(orderId, {attributes: ["user_id", "carbon_gained_points", "sahlan_gained_points"], raw: true}).then((orderData: any) => {
-            webAppsUsers.increment(
-              {carbon_gained_points: +orderData.carbon_gained_points, sahlan_gained_points: +orderData.sahlan_gained_points},
-              {where: {user_id: orderData.user_id}}
-            )
-          })
+          const orderData = order.findByPk(order_id, { attributes: ["user_id", "carbon_gained_points", "sahlan_gained_points"], raw: true });
+          webAppsUsers.increment(
+            { carbon_gained_points: +orderData["carbon_gained_points"], sahlan_gained_points: +orderData["sahlan_gained_points"] },
+            { where: { user_id: orderData["user_id"] } },
+          );
         }
-        res.status(httpStatus.OK).json({msg: "order edited"})
-      })
-      .catch((err) => {
-        res.status(httpStatus.BAD_REQUEST).json({msg: "Error in Edit order", err: err.errors[0].message || "unexpected error"})
-      })
-  }
-  test(req: Request, res: Response, next: NextFunction) {
-    console.log("object")
-    // initiatives
-    //   .findAll({
-    //     include: [{model: orderDetails}],
-    //   })
-    //   .then((d) => {
-    //     res.status(httpStatus.OK).json(d)
-    //   })
-    //   .catch((err) => {
-    //     res.status(httpStatus.BAD_REQUEST).json({msg: "Error in Edit order", err: err.errors[0].message || "unexpected error"})
-    //   })
+        return res.status(httpStatus.OK).json({ msg: "order edited" });
+      }).catch((error) => {});
+    } catch (error) {
+      return res.status(httpStatus.BAD_REQUEST).json({ msg: "Error in Edit order", err: error.errors[0].message || "unexpected error" });
+    }
   }
   async numberOfOrders() {
     let data
@@ -166,7 +153,7 @@ export class OrderController {
             sequelize.literal(`(
               SELECT COALESCE(COUNT(order_id),0)
               FROM tbl_orders
-              WHERE tbl_orders.status = "inprogress"
+              WHERE tbl_orders.status = "inprogress" and tbl_orders.seen = 0
           )`),
             "inProgress",
           ],
@@ -174,7 +161,7 @@ export class OrderController {
             sequelize.literal(`(
               SELECT COALESCE(COUNT(order_id),0)
               FROM tbl_orders
-              WHERE tbl_orders.status = "new"
+              WHERE tbl_orders.status = "new" and tbl_orders.seen = 0
           )`),
             "New",
           ],
@@ -182,7 +169,7 @@ export class OrderController {
             sequelize.literal(`(
               SELECT COALESCE(COUNT(order_id),0)
               FROM tbl_orders
-              WHERE tbl_orders.status = "completed"
+              WHERE tbl_orders.status = "completed" and tbl_orders.seen = 0
           )`),
             "completed",
           ],
@@ -190,7 +177,7 @@ export class OrderController {
             sequelize.literal(`(
               SELECT COALESCE(COUNT(order_id),0)
               FROM tbl_orders
-              WHERE tbl_orders.status = "cancelled"
+              WHERE tbl_orders.status = "cancelled" and tbl_orders.seen = 0
           )`),
             "cancelled",
           ],
@@ -232,7 +219,7 @@ export class OrderController {
     let data
     await order
       .findAll({
-        where: {status: "new"},
+        where: { [Op.and]: [{ status: "new" }, { seen: 0 }] },
         limit: 4,
         offset: 0,
         attributes: ["order_id", "createdAt"],

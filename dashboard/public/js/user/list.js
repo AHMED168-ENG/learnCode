@@ -2,17 +2,26 @@
 var userType = "individual"
 $(document).ready(function () {
     getList(1)
+    searchFilteration();
 })
 $(document).ready(function () {
     $('[data-toggle="tooltip"]').tooltip();
 });
-function getList(page = 1) {
+function searchFilteration() {
+    $("#myInput").on("keyup", function() {
+        var value = $(this).val().toLowerCase();
+        $("#usersTable tr").filter(function() {
+          $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+    });
+}
+function getList(page = 1, from = null, to = null) {
     // show spinner
     spinnerNotfound(1)
     const settings = {
         async: true,
         crossDomain: true,
-        url: `${window.location.pathname}/list?limit=8&page=${page}&type=${userType}`,
+        url: `${window.location.pathname}/list?limit=8&page=${page}&type=${userType}&from=${from}&to=${to}`,
         method: "Get",
     }
     $.ajax(settings).done(function (res, textStatus) {

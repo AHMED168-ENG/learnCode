@@ -1,6 +1,8 @@
 import {Request, Response, NextFunction} from "express"
 import httpStatus from "http-status"
 import admin from "../../models/admin.model"
+import bcrypt from "bcrypt";
+import helpers from "../../helper/helpers";
 
 export class AdminController {
   loginPage(req: Request, res: Response, next: NextFunction) {
@@ -55,7 +57,12 @@ export class AdminController {
       title: "admin new",
     })
   }
-  addNew(req, res: Response, next: NextFunction) {
+  async addNew(req, res: Response, next: NextFunction) {
+    if (!req.body || !req.body.fullName || !req.body.password || !req.body.phone || !req.body.email) return res.status(httpStatus.BAD_REQUEST).json({ message: "Bad Request" });
+    if (!helpers.regularExprEmail(req.body.email)) return res.status(httpStatus.BAD_REQUEST).json({ message: "invalid email" });
+    const existedAdmin = await admin.findOne({ where: { email: req.body.email } });
+    if (existedAdmin) res.status(httpStatus.NOT_ACCEPTABLE).json({ message: "This email is already exists" });
+    if (bcrypt.compareSync(req.body.password, existedAdmin["password"] ? existedAdmin["password"] : ""))
     admin
       .create(req.body)
       .then((data) => {

@@ -13,11 +13,6 @@ const page = sequelize.define(
       },
       type: { type: DataTypes.STRING, allowNull: true, defaultValue: null },
       link: { type: DataTypes.STRING, allowNull: true, defaultValue: null },
-      // permission: {
-      //   type: DataTypes.ENUM(Permission.ADD, Permission.EDIT, Permission.VIEW, Permission.DELETE),
-      //   allowNull: true,
-      //   defaultValue: null,
-      // },
     },
     { charset: "utf8", collate: "utf8_general_ci" },
 );

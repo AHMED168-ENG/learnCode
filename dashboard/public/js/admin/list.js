@@ -19,6 +19,7 @@ function getList(page) {
             $("#tr-th-row").append(`<tr>
             <th scope="row">${elem.id}</th>
             <td>${elem.fullName}</td>
+            <td>${Number(elem.role_id) === 1 ? "Super Admin" : "Admin"}</td>
             <td>${elem.email}</td>
             <td>${elem.phone}</td>
             <td>${new Date(elem.createdAt).toLocaleDateString("en-US")}</td>

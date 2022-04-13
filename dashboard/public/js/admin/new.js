@@ -10,6 +10,9 @@ $(function () {
             fullName: {
                 required: true,
             },
+            role_id: {
+                required: true,
+            },
             email: {
                 required: true,
             },
@@ -22,6 +25,7 @@ $(function () {
         },
         messages: {
             fullName: "Please enter a name",
+            role_id: "Please enter a name",
             email: "Please enter a email",
             phone: "Please enter a phone",
             password: "Please enter a password",
@@ -43,6 +47,7 @@ const addNew = () => {
     $("#submitAdd").buttonLoader("start")
     const formData = new FormData();
     formData.append("fullName", $("#fullName").val());
+    formData.append("role_id", $("#role_id").val());
     formData.append("email", $("#email").val());
     formData.append("phone", $("#phone").val());
     formData.append("password", $("#password").val());

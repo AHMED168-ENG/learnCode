@@ -10,6 +10,9 @@ $(function () {
             fullName: {
                 required: true,
             },
+            role_id: {
+                required: true,
+            },
             email: {
                 required: true,
             },
@@ -22,6 +25,7 @@ $(function () {
         },
         messages: {
             fullName: "Please enter a name",
+            role_id: "Please enter a role",
             email: "Please enter a email",
             phone: "Please enter a phone",
             password: "Please enter a password",
@@ -49,11 +53,17 @@ const edit = () => {
     console.log(data)
     if (Object.keys(data).length !== 0) {
         $("#submitForm").buttonLoader("start")
+        const formData = new FormData();
+        formData.append("fullName", $("#fullName").val());
+        formData.append("email", $("#email").val());
+        formData.append("password", $("#password").val());
+        formData.append("phone", $("#phone").val());
+        formData.append("role_id", $("#role_id option:selected").val());
         $.ajax({
             url: `${window.location.pathname}`,
-            data: JSON.stringify(data),
+            data: formData,
             contentType: "application/json",
-            type: 'POST'
+            type: 'PUT'
         }).done(function (data) {
             window.history.back();
         }).fail(function (xhr) {

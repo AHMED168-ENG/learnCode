@@ -17,6 +17,6 @@ export class AdminRoutes {
     this.router.get("/new", this.adminController.newPage)
     this.router.post("/new", this.adminController.addNew)
     this.router.get("/edit/:id", this.adminController.editPage)
-    this.router.post("/edit/:id", this.adminController.edit)
+    this.router.put("/edit/:id", this.adminController.edit)
   }
 }

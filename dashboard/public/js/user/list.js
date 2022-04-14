@@ -3,6 +3,7 @@ var userType = "individual"
 $(document).ready(function () {
     getList(1)
     searchFilteration();
+    dateFilteration(1)
 })
 $(document).ready(function () {
     $('[data-toggle="tooltip"]').tooltip();
@@ -10,10 +11,31 @@ $(document).ready(function () {
 function searchFilteration() {
     $("#myInput").on("keyup", function() {
         var value = $(this).val().toLowerCase();
-        $("#usersTable tr").filter(function() {
-          $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        $("#table2excel tr").filter(function() {
+          $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
         });
     });
+}
+function dateFilteration(page) {
+    $(function () {
+        $("#fromTo").daterangepicker(
+          {
+            locale: {
+              format: "YYYY-MM-DD",
+            },
+            startDate: new Date(),
+            endDate: new Date(),
+            minDate: moment().format("L"),
+            dateFormat: "YYYY-MM-DD",
+            opens: "left",
+          },
+          function (start, end, label) {
+            fromOrder = start.format("YYYY-MM-DD")
+            toOrder = end.format("YYYY-MM-DD")
+            getList(userType, fromOrder, toOrder)
+          }
+        )
+    })
 }
 function getList(page = 1, from = null, to = null) {
     // show spinner

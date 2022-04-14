@@ -1,7 +1,6 @@
 import {Request, Response, NextFunction} from "express"
 import httpStatus from "http-status"
-import {Model, Op, where} from "sequelize/types"
-import sequelize from "sequelize"
+import sequelize, { Op } from "sequelize"
 import city from "../../models/city.model"
 import country from "../../models/country.model"
 import region from "../../models/region.model"
@@ -26,7 +25,7 @@ export class UserController {
   list(req: Request, res: Response, next: NextFunction) {
     const limit = Number(req.query.limit) > 50 ? 50 : Number(req.query.limit)
     const page = (Number(req.query.page) - 1) * limit
-    const where = {user_type: req.query.type}
+    const where = req.query.from != "null" && req.query.to != "null" ? { [Op.or]: { user_type: req.query.type }, [Op.or]: { createdAt: { [Op.and]: [{ [Op.gte]: req.query.from }, { [Op.lte]: req.query.to }] } } } : { user_type: req.query.type };
     webAppsUsers
       .findAndCountAll({
         limit: limit,
@@ -52,7 +51,7 @@ export class UserController {
         res.status(httpStatus.OK).json(dataPagination)
       })
       .catch((err) => {
-        res.status(httpStatus.NOT_FOUND).json({err, msg: "not found user"})
+        res.status(httpStatus.NOT_FOUND).json({err, msg: "not found users"})
       })
   }
   editPage(req: Request, res: Response, next: NextFunction) {

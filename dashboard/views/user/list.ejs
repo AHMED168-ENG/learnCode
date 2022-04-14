@@ -2,6 +2,8 @@
 <html lang="en">
   <head>
     <%- include('../layout/heade.ejs') %>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/icheck-bootstrap/3.0.1/icheck-bootstrap.min.css"
@@ -90,7 +92,7 @@
               <div class="w-100 d-flex justify-content-center align-items-center" style="min-height: 24em"></div>
             </div>
             <div id="tabe-items" class="card-body pad table-responsive">
-              <table class="table table-bordered" style="border: 1px solid #dee2e6" id="usersTable">
+              <table class="table table-bordered" id="table2excel" style="border: 1px solid #dee2e6">
                 <thead>
                   <tr>
                     <th scope="col">#</th>
@@ -161,29 +163,6 @@
     ></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-    <script>
-      var fromOrder = null
-      var toOrder = null
-      $(function () {
-        $("#fromTo").daterangepicker(
-          {
-            locale: {
-              format: "YYYY-MM-DD",
-            },
-            startDate: new Date(),
-            endDate: new Date(),
-            minDate: moment().format("L"),
-            dateFormat: "YYYY-MM-DD",
-            opens: "left",
-          },
-          function (start, end, label) {
-            fromOrder = start.format("YYYY-MM-DD")
-            toOrder = end.format("YYYY-MM-DD")
-            getList(1, fromOrder, toOrder)
-          }
-        )
-      })
-    </script>
     <script src="/js/user/list.js"></script>
     <%- include('../reports/export-excel.ejs') %>
   </body>

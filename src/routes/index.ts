@@ -18,6 +18,7 @@ import {RegionRoutes} from "./v1/region.route"
 import {SectorRoutes} from "./v1/sector.route"
 import {TermsPolicyRoutes} from "./v1/terms&policy.route"
 import { TreesInfoRoutes } from "./v1/trees-info.route"
+import { RewardsPointsRoutes } from "./v1/rewards.route"
 
 export = (app: express.Application) => {
   // user Route
@@ -32,6 +33,8 @@ export = (app: express.Application) => {
   app.use("/v1/sector", new SectorRoutes().router)
   // home Route
   app.use("/v1/home", new HomeRoutes().router)
+  // rewards Route
+  app.use("/v1/rewards", new RewardsPointsRoutes().router)
   // initiative Route
   app.use("/v1/initiative", new InitiativeRoutes().router)
   // Initiatives Location Route

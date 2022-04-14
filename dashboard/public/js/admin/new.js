@@ -60,7 +60,7 @@ const addNew = () => {
         type: 'POST'
     }).done(function (data) {
         $('#newForm').trigger("reset");
-        $('.toast-body').text("New Country add Successful")
+        $('.toast-body').text("New Admin add Successful")
         $('.toast').toast("show")
     }).fail(function (xhr) {
         const error = JSON.parse(xhr.responseText)

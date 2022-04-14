@@ -60,7 +60,7 @@ export class AdminController {
   async addNew(req: Request, res: Response, next: NextFunction) {
     try {
       const createdAdminData: IAdminUser = req.body;
-      if (!createdAdminData || ![1, 2].includes(createdAdminData.role_id)) return res.status(httpStatus.BAD_REQUEST).json({ message: "Bad Request" });
+      if (!createdAdminData || ![1, 2].includes(Number(createdAdminData.role_id))) return res.status(httpStatus.BAD_REQUEST).json({ message: "Bad Request" });
       if (!helpers.regularExprEmail(createdAdminData.email)) return res.status(httpStatus.BAD_REQUEST).json({ message: "invalid email" });
       const existedAdmin = await admin.findOne({ where: { email: createdAdminData.email } });
       if (existedAdmin) return res.status(httpStatus.NOT_ACCEPTABLE).json({ message: "This email is already exists" });
@@ -72,7 +72,7 @@ export class AdminController {
   }
   async editPage(req: Request, res: Response, next: NextFunction) {
     try {
-      const data = await admin.findOne({ where: { admin_id: req.params.id }, attributes: ["ar_name", "en_name"], raw: true });
+      const data = await admin.findOne({ where: { id: req.params.id }, attributes: { exclude: ["id"] }, raw: true });
       return res.render("admin/edit.ejs", { title: "Edit admin", data });
     } catch (error) {
       return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ error, message: "Can't get admin data for edit page" });
@@ -81,11 +81,12 @@ export class AdminController {
   async edit(req: Request, res: Response, next: NextFunction) {
     try {
       const createdAdminData: IAdminUser = req.body;
-      if (!createdAdminData || ![1, 2].includes(createdAdminData.role_id)) return res.status(httpStatus.BAD_REQUEST).json({ message: "Bad Request" });
+      if (!createdAdminData || ![1, 2].includes(Number(createdAdminData.role_id))) return res.status(httpStatus.BAD_REQUEST).json({ message: "Bad Request" });
       if (!helpers.regularExprEmail(createdAdminData.email)) return res.status(httpStatus.BAD_REQUEST).json({ message: "invalid email" });
-      await admin.update(req.body, { where: { admin_id: req.params.id } });
+      await admin.update(req.body, { where: { id: req.params.id } });
       return res.status(httpStatus.OK).json({ msg: "admin edited" });
     } catch (error) {
+      console.log(`error: ${error}`)
       return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ error, message: "Can't update admin data" });
     }
   }

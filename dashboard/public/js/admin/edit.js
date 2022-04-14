@@ -53,22 +53,16 @@ const edit = () => {
     console.log(data)
     if (Object.keys(data).length !== 0) {
         $("#submitForm").buttonLoader("start")
-        const formData = new FormData();
-        formData.append("fullName", $("#fullName").val());
-        formData.append("email", $("#email").val());
-        formData.append("password", $("#password").val());
-        formData.append("phone", $("#phone").val());
-        formData.append("role_id", $("#role_id option:selected").val());
         $.ajax({
             url: `${window.location.pathname}`,
-            data: formData,
+            data: JSON.stringify(data),
             contentType: "application/json",
             type: 'PUT'
         }).done(function (data) {
             window.history.back();
         }).fail(function (xhr) {
             const error = JSON.parse(xhr.responseText)
-            $("#modal-body-val").html(`<span style="font-size: large">${error.msg}<br/>&emsp;&nbsp;${error.err}</span>`)
+            $("#modal-body-val").html(`<span style="font-size: large">${error.message}<br/>&emsp;&nbsp;${error.error}</span>`)
             $("#exampleModal").modal("show")
         }).always(function () {
             $("#submitForm").buttonLoader("stop")

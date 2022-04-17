@@ -29,9 +29,9 @@ function getList(page) {
             </td>
             <td><a href="/dashboard/user/edit/${elem.user_id}" class="btn btn-link text-dark">${elem.user_name}</a></td>
             <td><span class="text-primary"><i class="fas fa-credit-card"></i>&emsp;${elem.pay_type}</span></td>
-            <td>${elem.all_sum} SAR</td>
+            <td>${elem.all_sum.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} SAR</td>
             <td>${elem.promo_code_percent || 0} %</td>
-            <td><span class="text-success">${elem.all_sum * (elem.promo_code_percent ? elem.promo_code_percent / 100 : 1)} SAR</span></td>
+            <td><span class="text-success">${elem.all_sum.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") * (elem.promo_code_percent ? elem.promo_code_percent / 100 : 1)} SAR</span></td>
             <td></td>
             </tr>`)
             if (screenType == "new") {

@@ -26,10 +26,10 @@ function getList(page) {
             <td><img class="rounded-circle p-0" width=45 height=45 src="/p/img/${elem.tbl_tree.img_tree}" alt="Image"></td>
             <th scope="col">${elem.tbl_initiative.init_en_name}</th>
             <th scope="col">${elem.tbl_initiatives_location.location_nameEn}</th>
-            <th scope="col">${elem.price}</th>
-            <th scope="col">${elem.price_points}</th>
+            <th scope="col">${elem.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</th>
+            <th scope="col">${elem.price_points.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</th>
             <th scope="col">${elem.carbon_points}</th>
-            <th scope="col">${elem.target_num}</th>
+            <th scope="col">${elem.target_num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</th>
             <th scope="col">${elem.status}</th>
             <td>${elem.deleted == "no" ? `<span class="badge badge-success">${elem.deleted}</span>` : `<span class="badge badge-danger">${elem.deleted}</span>`}</td>
             <th scope="col">${new Date(elem.createdAt).toLocaleString('default', { month: 'short' })} ${new Date(elem.createdAt).getDay()} ${new Date(elem.createdAt).getFullYear()}</th>

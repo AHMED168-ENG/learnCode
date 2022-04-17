@@ -19,7 +19,7 @@ function getList(page) {
             <th scope="row">${elem.promo_id}</th>
             <td>${elem.promo_name}</td>
             <td>${elem.promo_type == "all_users" ? "All users" : `<a  class="text-dark" href='/dashboard/user/edit/${elem.user_id}'>${elem.web_apps_user.fullName}</a>`}</td>
-            <td>${elem.num_of_uses}</td>
+            <td>${elem.num_of_uses.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</td>
             <td class="text-info"><h6><snap class="pr-2 font-weight-bold">${elem.percent}</snap><i class="fas fa-percent"></i></h6></td>
             <td><i class="fas fa-calendar-alt text-primary"></i>&emsp;${moment(elem.from_date).format('DD-MM-YYYY')}</td>
             <td><i class="fas fa-calendar-alt text-primary"></i>&emsp;${moment(elem.to_date).format('DD-MM-YYYY')}</td>

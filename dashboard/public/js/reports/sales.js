@@ -19,8 +19,8 @@ function getList(type = "all", from = null, to = null) {  // show spinner
             <th scope="row">${i + 1}</th>
             <td><a href="/dashboard/user/edit/${elem.user_id}" class="btn btn-link text-dark">${elem.user_name}</a></td>
             <td class="text-center"><a href="/dashboard/order/view/${elem.order_id}" data-tooltip="View order">${elem.order_id}</a></td>
-            <td class="text-danger">${elem.all_sum * (elem.promo_code_percent ? elem.promo_code_percent / 100 : 0)} SAR</td>
-            <td><span class="text-success">${elem.all_sum - (elem.all_sum * (elem.promo_code_percent ? elem.promo_code_percent / 100 : 0))} SAR</span></td>
+            <td class="text-danger">${(elem.all_sum * (elem.promo_code_percent ? elem.promo_code_percent / 100 : 0)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} SAR</td>
+            <td><span class="text-success">${(elem.all_sum - (elem.all_sum * (elem.promo_code_percent ? elem.promo_code_percent / 100 : 0))).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} SAR</span></td>
             <td>
                 <span class="text-info"><i class="fas fa-calendar-alt"></i>&emsp;${moment(elem.createdAt).format('DD-MM-YYYY')}</span><br />
                 <span class="text-danger"><i class="fas fa-clock"></i>&emsp;${moment(elem.createdAt).format('LT')}</span>

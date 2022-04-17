@@ -24,7 +24,7 @@ function getList(type = "all", from = null, to = null) {  // show spinner
             <td>${elem.phone ? `<a class="text-dark" href='tel:${elem.phone}'>${elem.phone}</a>` : "—"}</td>
             <td>${elem.account_status == "active" ? `<span class="badge badge-success">${elem.account_status}</span>` : `<span class="badge badge-danger">${elem.account_status}</span>`}</td>
             <td>${elem.deleted == "no" ? `<span class="badge badge-success">${elem.deleted}</span>` : `<span class="badge badge-danger">${elem.deleted}</span>`}</td>
-            <td>${elem.sahlan_gained_points || "—"}</td>
+            <td>${elem.sahlan_gained_points.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") || "—"}</td>
             <td>${elem.carbon_gained_points || "—"}</td>
             <td>
                 <span class="text-info"><i class="fas fa-calendar-alt"></i>&emsp;${moment(elem.createdAt).format('DD-MM-YYYY')}</span><br />

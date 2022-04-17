@@ -28,8 +28,8 @@
               <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                   <li class="breadcrumb-item"><a href="/">Home</a></li>
-                  <li class="breadcrumb-item"><a href="#">Tree Body</a></li>
-                  <li class="breadcrumb-item active">Edit</li>
+                  <li class="breadcrumb-item"><a href="/dashboard/user/roles">User Roles</a></li>
+                  <li class="breadcrumb-item active">New</li>
                 </ol>
               </div>
             </div>
@@ -43,78 +43,26 @@
                   <div class="card-header">
                     <h3 class="card-title">
                       <i class="fas fa-users"></i>
-                      &nbsp;&nbsp; Edit Tree Body
+                      &nbsp;&nbsp; Add User Roles
                     </h3>
                   </div>
                   <form id="newForm" action="" onsubmit="">
                     <div class="card-body">
                       <div class="form-row mx-3 my-1">
                         <div class="form-group col-md-6">
-                          <label for="ar_title">Title Arabic</label>
+                          <label for="name">Role Name</label>
                           <input
                             type="text"
-                            id="ar_title"
-                            name="ar_title"
+                            id="name"
+                            name="name"
                             class="form-control"
-                            placeholder="Title Arabic"
-                            value="<%= data.ar_title || null %>"
+                            placeholder="Role Name"
                           />
-                        </div>
-                        <div class="form-group col-md-6">
-                          <label for="en_title">Title English</label>
-                          <input
-                            type="text"
-                            id="en_title"
-                            name="en_title"
-                            class="form-control"
-                            placeholder="Title English"
-                            value="<%= data.en_title || null %>"
-                          />
-                        </div>
-                      </div>
-                      <div class="form-row mx-3 my-1">
-                        <div class="form-group col-md-6">
-                          <label for="ar_value">Value Arabic</label>
-                          <input
-                            type="text"
-                            id="ar_value"
-                            name="ar_value"
-                            class="form-control"
-                            placeholder="Value Arabic"
-                            value="<%= data.ar_value || null %>"
-                          />
-                        </div>
-                        <div class="form-group col-md-6">
-                          <label for="en_value">Value English</label>
-                          <input
-                            type="text"
-                            id="en_value"
-                            name="en_value"
-                            class="form-control"
-                            placeholder="Value English"
-                            value="<%= data.en_value || null %>"
-                          />
-                        </div>
-                      </div>
-                      <div class="form-row mx-3 my-1">
-                        <div class="form-group col-md-6">
-                          <label for="icon">Icon</label>
-                          <div class="custom-file">
-                            <input
-                              type="file"
-                              class="custom-file-input"
-                              id="icon"
-                              name="icon"
-                              accept="image/x-png"
-                              onchange="loadFile(event)"
-                            />
-                            <label class="custom-file-label" for="icon"><%= data.icon || "Choose file" %></label>
-                          </div>
                         </div>
                       </div>
                     </div>
                     <div class="card-footer">
-                      <button id="submitForm" type="submit" class="btn btn-primary has-spinner">Update</button>
+                      <button id="submitForm" type="submit" class="btn btn-primary has-spinner">Create</button>
                     </div>
                   </form>
                 </div>
@@ -144,6 +92,6 @@
     crossorigin="anonymous"
     referrerpolicy="no-referrer"
   ></script>
-    <script src="/js/trees-bodies/edit.js"></script>
+    <script src="/js/user-roles/new.js"></script>
   </body>
 </html>

@@ -4,6 +4,7 @@ import admin from "../../models/admin.model"
 import helpers from "../../helper/helpers";
 import { IAdminUser } from "../../interfaces/IAdminUser";
 import bcrypt from "bcrypt";
+import role from "../../models/user-roles.model";
 export class AdminController {
   loginPage(req: Request, res: Response, next: NextFunction) {
     return res.render("login.ejs", { title: "Login" });
@@ -52,10 +53,13 @@ export class AdminController {
         res.status(httpStatus.NOT_FOUND).json({err, msg: "not found admin"})
       })
   }
-  newPage(req: Request, res: Response, next: NextFunction) {
-    res.render("admin/new.ejs", {
-      title: "admin new",
-    })
+  async newPage(req: Request, res: Response, next: NextFunction) {
+    try {
+      const data = await role.findAll({ attributes: { exclude: ["createdAt", "updatedAt"] } });
+      return res.render("admin/new.ejs", { title: "admin new", data });
+    } catch (error) {
+      return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ error, messgae: "Can't get new admin page" });
+    }
   }
   async addNew(req: Request, res: Response, next: NextFunction) {
     try {
@@ -71,14 +75,14 @@ export class AdminController {
       await admin.create(request);
       return res.status(httpStatus.OK).json({ msg: "new admin created" });
     } catch (error) {
-      console.log(error)
       return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ error, messgae: "Can't add admin" });
     }
   }
   async editPage(req: Request, res: Response, next: NextFunction) {
     try {
+      const roles = await role.findAll({ attributes: { exclude: ["createdAt", "updatedAt"] } });
       const data = await admin.findOne({ where: { id: req.params.id }, attributes: { exclude: ["id", "createdAt", "updatedAt"] }, raw: true });
-      return res.render("admin/edit.ejs", { title: "Edit admin", data });
+      return res.render("admin/edit.ejs", { title: "Edit admin", data, roles });
     } catch (error) {
       return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ error, message: "Can't get admin data for edit page" });
     }

@@ -21,6 +21,7 @@ import {PartnerTypeRoutes} from "./dashboard/partner-type.route"
 import {MessageRoutes} from "./dashboard/message.route"
 import { TreeHeaderRoutes } from "./dashboard/tree-header.route"
 import { TreeBodyRoutes } from "./dashboard/tree-body.route"
+import { UserRolesRoutes } from "./dashboard/user-roles.route"
 export = (app: express.Application) => {
   // Index
   app.get("/", (req, res) => res.redirect("/dashboard/home"))
@@ -28,6 +29,8 @@ export = (app: express.Application) => {
   app.use("/dashboard/home", new HomeRoutes().router)
   // Admin route
   app.use("/dashboard/admin", new AdminRoutes().router)
+  // User Roles route
+  app.use("/dashboard/user/roles", new UserRolesRoutes().router)
   // Initiative route
   app.use("/dashboard/initiative", new InitiativeRoutes().router)
   // location route

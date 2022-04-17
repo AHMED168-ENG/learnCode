@@ -14,34 +14,31 @@ export class TreesBodyController {
         }
     }
     public newPage(req: Request, res: Response, next: NextFunction) {
-        return res.render("tree-body/new.ejs", { title: "Add Trees Body" });
+        return res.render("trees-bodies/new.ejs", { title: "Add Trees Body" });
     }
     public async addTreesBody(req: Request, res: Response, next: NextFunction) {
         try {
             const { ar_title, en_title, ar_value, en_value }: ICreateTreeBodyRequest = req.body;
-            const { id, header_id } = req.params;
-            if (!Number(req.params.id) || !req.body || !ar_title || !en_title || !ar_value || !en_value || !id || !header_id) {
-                return res.status(400).json({ message: "Bad Request" });
-            }
+            const { tree_id, header_id } = req.params;
+            if (!Number(tree_id) || !Number(header_id) || !ar_title || !en_title || !ar_value || !en_value) return res.status(400).json({ message: "Bad Request" });
             const imgFile = req.files.icon;
-            if (imgFile && !helpers.mimetypeImge.includes(imgFile["mimetype"])) return res.status(400).json({ msg: "Image should be png" });
+            if (imgFile && !helpers.mimetypeImge.includes(imgFile["mimetype"])) return res.status(400).json({ msg: "Image should be png, jpg or jpeg" });
             const imgName: string = `${helpers.randomNumber(100, 999)}_${Number(new Date())}${path.extname(imgFile["name"])}`;
-            const createdTreeBody = await treesBody.create(req.body);
-            if (createdTreeBody) {
-                const fileDir: string = `trees/${createdTreeBody["tree_id"]}/${createdTreeBody["header_id"]}/${createdTreeBody["id"]}/`;
-                await treesBody.update({ icon: `${fileDir}${imgName}` }, { where: { id: createdTreeBody["tree_id"] } });
-                helpers.imageProcessing(fileDir, imgName, imgFile["data"]);
-            }
+            const fileDir: string = `trees/`;
+            const request = { tree_id, header_id, ar_title, en_title, ar_value, en_value, icon: `${fileDir}${imgName}` };
+            await treesBody.create(request);
+            helpers.imageProcessing(fileDir, imgName, imgFile["data"]);
             return res.status(httpStatus.CREATED).json({ message: "A new Trees Body is created successfully" });
         } catch (error) {
+            console.log(error)
             return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ error, msg: "Can't add new trees body" });
         }
     }
-    public editPage(req: Request, res: Response, next: NextFunction) {
+    public async editPage(req: Request, res: Response, next: NextFunction) {
         try {
-            const id = Number(req.params.id);
-            if (!id) return res.status(httpStatus.BAD_REQUEST).json({ msg: "Bad Request" });
-            const data = new TreesBodyController().getTreesBody(id);
+            const treesBodyController = new TreesBodyController();
+            if (!req.params.id) return res.status(httpStatus.BAD_REQUEST).json({ msg: "Bad Request" });
+            const data = await treesBodyController.getTreesBody(Number(req.params.id));
             return res.render("trees-bodies/edit.ejs", { title: "Edit Trees Body", data });
         } catch (error) {
             return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ error, msg: "Can't open edit trees body page" });
@@ -56,7 +53,7 @@ export class TreesBodyController {
                 const icon = await treesBody.findOne({ where: { id: req.params.id }, attributes: ["icon"], raw: true });
                 helpers.removeFile(icon["icon"]);
                 const imgName: string = `${helpers.randomNumber(100, 999)}_${Number(new Date())}${path.extname(imgFile["name"])}`;
-                const fileDir: string = `trees/info/${req.params.id}`;
+                const fileDir: string = `trees/`;
                 await treesBody.update({ icon: `${fileDir}${imgName}` }, { where: { id: req.params.id }});
                 helpers.imageProcessing(fileDir, imgName, imgFile["data"]);
             }

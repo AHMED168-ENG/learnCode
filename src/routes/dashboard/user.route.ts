@@ -14,5 +14,6 @@ export class UserRoutes {
     this.router.get("/list", this.userController.list)
     this.router.get("/edit/:id", this.userController.editPage)
     this.router.get("/logout", this.userController.logout)
+    this.router.get("/permissions/:role_id", this.userController.listPermissionsPage)
   }
 }

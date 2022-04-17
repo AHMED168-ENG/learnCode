@@ -50,7 +50,7 @@ const addNew = () => {
         type: 'POST'
     }).done(function (data) {
         $('#newForm').trigger("reset");
-        $('.toast-body').text("New Partener add Successful")
+        $('.toast-body').text("New tree body added Successfull")
         $('.toast').toast("show")
     }).fail(function (xhr) {
         const error = JSON.parse(xhr.responseText)

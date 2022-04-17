@@ -3,7 +3,7 @@ var userType = "individual"
 $(document).ready(function () {
     getList(1)
     searchFilteration();
-    dateFilteration(1)
+    dateFilteration()
 })
 $(document).ready(function () {
     $('[data-toggle="tooltip"]').tooltip();
@@ -16,7 +16,7 @@ function searchFilteration() {
         });
     });
 }
-function dateFilteration(page) {
+function dateFilteration() {
     $(function () {
         $("#fromTo").daterangepicker(
           {
@@ -25,7 +25,6 @@ function dateFilteration(page) {
             },
             startDate: new Date(),
             endDate: new Date(),
-            minDate: moment().format("L"),
             dateFormat: "YYYY-MM-DD",
             opens: "left",
           },

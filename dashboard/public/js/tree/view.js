@@ -51,27 +51,6 @@ $(function () {
             $(element).removeClass('is-invalid');
         }
     });
-    // const settings = {
-    //     async: true,
-    //     crossDomain: true,
-    //     url: `${window.location.pathname}`,
-    //     method: "Get",
-    // }
-    // $.ajax(settings).done(function (res, textStatus) {
-    //     spinnerNotfound(2)
-    //     pagination(res.pages)
-    //     $("#tr-th-row").empty()
-    //     res.data.forEach((elem) => {
-    //         $("#tr-th-row").append(`<tr>
-    //         <th scope="row">${elem.tree_id}</th>
-    //         <td>${elem.en_name}</td>
-    //         <td>${elem.ar_name}</td>
-    //         <td><img class="rounded-circle p-0" width=45 height=45 src="/p/img/${elem.img_tree}" alt="Image"></td>
-    //         <td>${elem.deleted == "no" ? `<span class="badge badge-success">${elem.deleted}</span>` : `<span class="badge badge-danger">${elem.deleted}</span>`}</td>
-    //         <td><a class="pr-2" href="/dashboard/tree/details/${elem.tree_id}"><i class="fas fa-eye text-success"></i></a><a class="pr-2" href="/dashboard/tree/edit/${elem.tree_id}"><i class="fas fa-edit text-primary"></i></a></td>
-    //         </tr>`)
-    //     })
-    // }).fail(() => spinnerNotfound(3))
 });
 $(document).ready(function () {
     $("input,select,textarea").on("change", function () {

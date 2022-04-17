@@ -41,9 +41,10 @@ export class TreeController {
   }
   public async detailsPage(req: Request, res: Response, next: NextFunction) {
     try {
+      const treeInfoController = new TreesInfoController();
       const id = Number(req.params.id);
       const tree = await trees.findOne({ where: { tree_id: id }, attributes: { exclude: ["createdAt", "updatedAt"] } });
-      const info = new TreesInfoController().getInfoData(id, req["lang"]);
+      const info = await treeInfoController.getInfoData(id, req["lang"]);
       const data = {
         tree_id: tree["tree_id"],
         ar_name: tree["ar_name"],
@@ -54,10 +55,11 @@ export class TreeController {
         ar_description: tree["ar_description"],
         en_description: tree["en_description"],
         deleted: tree["deleted"],
-        header_info: info,
+        header: info,
       };
       return res.render("tree/view.ejs", { title: "Tree Details", data });
     } catch (error) {
+      console.log(error)
       return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ error, message: "Can't open tree details page" });
     }
   }

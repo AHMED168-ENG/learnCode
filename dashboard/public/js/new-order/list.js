@@ -31,7 +31,7 @@ function getList(page) {
             <td><span class="text-primary"><i class="fas fa-credit-card"></i>&emsp;${elem.pay_type}</span></td>
             <td>${elem.all_sum.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} SAR</td>
             <td>${elem.promo_code_percent || 0} %</td>
-            <td><span class="text-success">${elem.all_sum.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") * (elem.promo_code_percent ? elem.promo_code_percent / 100 : 1)} SAR</span></td>
+            <td><span class="text-success">${(elem.all_sum * (elem.promo_code_percent ? elem.promo_code_percent / 100 : 1)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} SAR</span></td>
             <td></td>
             </tr>`)
             if (screenType == "new") {

@@ -1,6 +1,7 @@
 import config from "../config/config";
 import { Sequelize, DataTypes } from "sequelize";
 import page from "./page.model";
+import role from "./user-roles.model";
 const sequelize = new Sequelize(...config.database);
 const permissions = sequelize.define(
     "tbl_permissions",
@@ -20,5 +21,6 @@ const permissions = sequelize.define(
     { charset: "utf8", collate: "utf8_general_ci" },
 );
 permissions.belongsTo(page, { foreignKey: "page_id" });
+permissions.belongsTo(role, { foreignKey: "role_id" });
 permissions.sync();
 export default permissions;

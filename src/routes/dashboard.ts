@@ -22,6 +22,7 @@ import {MessageRoutes} from "./dashboard/message.route"
 import { TreeHeaderRoutes } from "./dashboard/tree-header.route"
 import { TreeBodyRoutes } from "./dashboard/tree-body.route"
 import { UserRolesRoutes } from "./dashboard/user-roles.route"
+import { UserPermissionsRoutes } from "./dashboard/user-permissions.route"
 export = (app: express.Application) => {
   // Index
   app.get("/", (req, res) => res.redirect("/dashboard/home"))
@@ -31,6 +32,8 @@ export = (app: express.Application) => {
   app.use("/dashboard/admin", new AdminRoutes().router)
   // User Roles route
   app.use("/dashboard/user/roles", new UserRolesRoutes().router)
+  // User Permissions route
+  app.use("/dashboard/user/permissions", new UserPermissionsRoutes().router)
   // Initiative route
   app.use("/dashboard/initiative", new InitiativeRoutes().router)
   // location route
@@ -63,12 +66,12 @@ export = (app: express.Application) => {
   app.use("/dashboard/promo", new PromoRoutes().router)
   // Management route
   app.use("/dashboard/management", new TermsPolicyRoutes().router)
-  // FAQ
+  // FAQ route
   app.use("/dashboard/faq", new FaqRoutes().router)
-  // FAQ
+  // Partner Type route
   app.use("/dashboard/partner/type", new PartnerTypeRoutes().router)
-  // FAQ
+  // Partner route
   app.use("/dashboard/partner", new PartnerRoutes().router)
-  // MessageRoutes
+  // Message route
   app.use("/dashboard/message", new MessageRoutes().router)
 }

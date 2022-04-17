@@ -54,10 +54,12 @@ export class LocationTreesController {
   async newPage(req: Request, res: Response, next: NextFunction) {
     const initiatives = await new InitiativeController().listAllInit()
     const trees = await new TreeController().listTrees()
+    const countries = await new CountryController().listCountry()
     res.render("location-trees/new.ejs", {
       title: "location-trees new",
       initiatives,
       trees,
+      countries,
     })
   }
   addNew(req, res: Response, next: NextFunction) {

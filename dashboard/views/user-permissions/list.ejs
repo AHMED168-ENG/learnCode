@@ -27,8 +27,8 @@
               <div class="form-group">
                 <label>Role</label>
                 <select id="role_id" name="role_id" class="form-control select2 select2-danger" data-dropdown-css-class="select2-danger" style="width: 100%">
-                  <% data.forEach((role) => { %>
-                    <option value="<%= role.id %>" href="/dashboard/user/permissions/<%= role.id %>"><%= role.name %></option>
+                  <% data.roles.forEach((role) => { %>
+                    <option onclick="window.location.href='/dashboard/user/permissions/<%= role.id %>'" value="<%= role.id %>" <%= data.role_id == role.id ? 'selected' : ''%>><%= role.name %></option>
                   <% }); %>
                 </select>
               </div>
@@ -61,7 +61,27 @@
                     <th scope="col">Pages</th>
                   </tr>
                 </thead>
-                <tbody id="tr-th-row"></tbody>
+                <tbody>
+                  <% data.modules.forEach((module) => { %>
+                    <tr>
+                        <th scope="row"><%= module.id %></th>
+                        <td><%= module.name %></td>
+                        <td>
+                          <% module.pages.forEach((page) => { %>
+                            <div class="row ml-3">
+                              <input class="form-check-input" type="checkbox"
+                                     value="<%= page.checked %>" id="defaultCheck<%= page.id %>"
+                                     name="checked"
+                                     <%= page.checked == "true" ? 'selected' : ''%>
+                              >
+                              <label class="form-check-label" for="defaultCheck<%= page.id %>"><%= page.type %></label>
+                              <p class="text-center text-secondary ml-5"><%= page.link %></p>
+                            </div>
+                          <% }); %>
+                        </td>
+                    </tr>
+                  <% }); %>
+                </tbody>
               </table>
               <ul id="pagination-demo" class="pagination-sm pt-2"></ul>
             </div>

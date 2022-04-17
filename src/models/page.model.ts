@@ -17,6 +17,5 @@ const page = sequelize.define(
     { charset: "utf8", collate: "utf8_general_ci" },
 );
 page.belongsTo(module, { foreignKey: "module_id" });
-module.hasMany(page, { foreignKey: "module_id" });
 page.sync();
 export default page;

@@ -16,9 +16,9 @@ export class UserPermissionsController {
       const modulesArr = [];
       for (const moduleData of modulesData) {
         const filteredPages = pagesData.filter((pageData) => moduleData["id"] === pageData["module_id"]);
-        let checked: boolean = false;
         const pages = [];
         for (const page of filteredPages) {
+          let checked = false;
           const permission = permissionsData.find((permission) => permission["page_id"] === page["id"]);
           if (permission) checked = true;
           const perPage = { checked, id: page["id"], type: page["type"], link: page["link"] };
@@ -35,13 +35,12 @@ export class UserPermissionsController {
   }
   public async editPermissions(req: Request, res: Response, next: NextFunction): Promise<any> {
     try {
-      if (typeof req.body.checked !== "boolean" && req.body.checked !== "true" && req.body.checked !== "false") {
-        return res.status(httpStatus.BAD_REQUEST).json({ messgae: "Bad Request" });
-      } else {
-        if (req.body.checked === "true") await permissions.create({ role_id: req.params.role_id, page_id: req.params.page_id });
-        else await permissions.destroy({ where: { [Op.and]: [{ role_id: req.params.role_id },  { page_id: req.params.page_id }] }});
-      }
+      if (!req.body.checked || !req.body.page_id) return res.status(httpStatus.BAD_REQUEST).json({ messgae: "Bad Request" });
+      if (req.body.checked === "true") await permissions.create({ role_id: req.params.role_id, page_id: req.body.page_id });
+      else await permissions.destroy({ where: { [Op.and]: [{ role_id: req.params.role_id },  { page_id: req.body.page_id }] }});
+      return res.status(200).json({ msg: "Permissions are updated successfully" });
     } catch (error) {
+      console.log(error)
       return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ error, messgae: "Can't edit permissions" });
     }
   }

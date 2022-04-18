@@ -9,6 +9,6 @@ export class UserPermissionsRoutes {
   }
   private routes() {
     this.router.get("/:role_id", this.userPermissionsController.listPermissions);
-    this.router.put("/edit/:role_id/:page_id", this.userPermissionsController.editPermissions);
+    this.router.put("/:role_id/edit", this.userPermissionsController.editPermissions);
   }
 }

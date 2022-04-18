@@ -1,16 +1,14 @@
 $(document).ready(function () {});
-function addOrRemovePages(pageId) {
+function addOrRemovePages(page_id, checked) {
     spinnerNotfound(1);
     const settings = {
         async: true,
         crossDomain: true,
-        url: `${window.location.pathname}/${pageId}/edit`,
+        data: { checked, page_id },
+        url: `${window.location.pathname}/edit`,
         method: "Put",
     }
-    $.ajax(settings).done(function (res, textStatus) {
-        spinnerNotfound(2);
-        pagination(res.pages);
-    }).fail(() => spinnerNotfound(3));
+    $.ajax(settings).done(function (res, textStatus) { spinnerNotfound(2); }).fail(() => spinnerNotfound(3));
 }
 function pagination(total) {
     $("#pagination-demo").twbsPagination({

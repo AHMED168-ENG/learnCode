@@ -7,6 +7,7 @@ import {OrderController} from "./order.controller"
 import {SponserController} from "./sponser.controller"
 import {MessageController} from "./message.controller"
 import message from "../../models/message.model"
+import { UserController } from "./user.controller"
 
 export class HomeController {
   async home(req: Request, res: Response, next: NextFunction) {
@@ -16,9 +17,11 @@ export class HomeController {
     const lastSponser = (await new SponserController().lastSponser(lang)) || []
     const lastInitiative = (await new InitiativeController().lastInitiative(lang)) || []
     const ordersInYear = (await new OrderController().ordersInYear()) || []
+    const currentMonthOrders = await new OrderController().numberOfCurrentOrders();
+    const newRegisteredUsers = await new UserController()
     res.render("index.ejs", {
       title: "Home",
-      data: {...totalNumbers, ordersChart: ordersNum, lastSponser, lastInitiative, ordersInYear},
+      data: {...totalNumbers, ordersChart: ordersNum, lastSponser, lastInitiative, ordersInYear, currentMonthOrders},
     })
   }
 
@@ -29,7 +32,8 @@ export class HomeController {
       const ordersNum = await new OrderController().numberOfOrders();
       const messageNum = await message.count({ where: { status: "unread" } });
       const homeNumbers = (await new HomeController().homeNumbers()) || {};
-      return res.status(200).json({ ...homeNumbers, lastNewOrders, lastNewMessage, ordersNum, messageNum });
+      const notifiedOrders = await new OrderController().numberOfNotifiedOrders();
+      return res.status(200).json({ ...homeNumbers, lastNewOrders, lastNewMessage, ordersNum, messageNum, notifiedOrders });
     } catch (error) {
       return res.status(500).json({ msg: "Error in getting sidebar nums", err: error.errors[0].message || "unexpected error" });
     }
@@ -99,6 +103,17 @@ export class HomeController {
           ],
           [
             sequelize.literal(`(
+            SELECT COALESCE(COUNT(user_id),0) as newUsers
+            FROM web_apps_users
+            WHERE
+            status='active'
+            AND deleted='no'
+            AND YEAR(createdAt) = YEAR(CURRENT_DATE()) AND MONTH(createdAt) = MONTH(CURRENT_DATE())
+            )`),
+            "newUsers",
+          ],
+          [
+            sequelize.literal(`(
             SELECT COALESCE(COUNT(promo_id),0) as totalPromo
             FROM tbl_promo_codes
             WHERE
@@ -109,7 +124,7 @@ export class HomeController {
           ],
           [
             sequelize.literal(`(
-              SELECT COALESCE(SUM(all_sum*COALESCE((promo_code_percent/100),1)),0) FROM tbl_orders WHERE status="completed"
+              SELECT COALESCE(SUM(all_sum*COALESCE((promo_code_percent/100),1)),0) FROM tbl_orders WHERE status="completed" AND MONTH(createdAt) = MONTH(CURRENT_DATE())
             )`),
             "totalIncome",
           ],
@@ -124,6 +139,7 @@ export class HomeController {
       })
       .then((d) => (data = d))
       .catch((e) => (data = null))
+      console.log(data)
     return data
   }
 }

@@ -20,22 +20,6 @@ export class UserController {
       return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ error, msg: "Can't logout user" });
     }
   }
-  async listPermissionsPage(req: Request, res: Response, next: NextFunction) {
-    try {
-      // const modulesData = await modules.findAll({ attributes: { exclude: ["createdAt", "updatedAt"] } });
-      // const pages = await page.findAll({ attributes: { exclude: ["createdAt", "updatedAt"] } });
-      // const permissionsData = await permissions.findAll({ attributes: { exclude: ["createdAt", "updatedAt"] } });
-      // for (const module of modulesData) {
-      //   const pagesData = [];
-      //   for (const page of pages) {
-      //     const filteredPermissions = permissionsData.filter((permission) => );
-      //   }
-      // }
-      return res.render("user-permissions/list.ejs", { role_id: req.params.role_id, data: "" });
-    } catch (error) {
-      return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ error, messgae: "Can't get permissions page" });
-    }
-  }
   listPage(req: Request, res: Response, next: NextFunction) {
     res.render("user/list.ejs", {
       title: "User",

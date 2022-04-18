@@ -208,16 +208,15 @@
                 <div class="small-box bg-info">
                   <div class="inner">
                     <h3>
-                      0
-                      <sup style="font-size: 20px">%</sup>
+                      <%= data.totalTrees %>
                     </h3>
 
-                    <p>Orders Rate</p>
+                    <p>Trees</p>
                   </div>
                   <div class="icon">
-                    <i class="ion ion-bag"></i>
+                    <i class="ion ion-leaf"></i>
                   </div>
-                  <a href="#" class="small-box-footer">
+                  <a href="/dashboard/tree" class="small-box-footer">
                     More info
                     <i class="fas fa-arrow-circle-right"></i>
                   </a>
@@ -229,16 +228,15 @@
                 <div class="small-box bg-success">
                   <div class="inner">
                     <h3>
-                      0
-                      <sup style="font-size: 20px">%</sup>
+                      <%= data.currentMonthOrders.completed | 0 %>
                     </h3>
 
-                    <p>Trees Orders Rate</p>
+                    <p>Orders (Current Month)</p>
                   </div>
                   <div class="icon">
                     <i class="ion ion-stats-bars"></i>
                   </div>
-                  <a href="#" class="small-box-footer">
+                  <a href="/dashboard/order/completed" class="small-box-footer">
                     More info
                     <i class="fas fa-arrow-circle-right"></i>
                   </a>
@@ -269,12 +267,12 @@
                   <div class="inner">
                     <h3><%= data.totalIncome.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")%> SAR</h3>
 
-                    <p>Total Income</p>
+                    <p>Total Income (Current Month)</p>
                   </div>
                   <div class="icon">
                     <i class="ion ion-cash"></i>
                   </div>
-                  <a href="#" class="small-box-footer">
+                  <a href="/dashboard/report/sales" class="small-box-footer">
                     More info
                     <i class="fas fa-arrow-circle-right"></i>
                   </a>
@@ -398,7 +396,7 @@
               <div class="col-md-4">
                 <div class="card" style="height: 380px">
                   <div class="card-header border-0">
-                    <h3 class="card-title">Trees Orders Overview</h3>
+                    <h3 class="card-title">Quick Information</h3>
                     <div class="card-tools">
                       <a href="#" class="btn btn-sm btn-tool">
                         <i class="fas fa-bars"></i>
@@ -407,28 +405,28 @@
                   </div>
                   <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center border-bottom mb-3">
-                      <p class="text-success text-xl">
-                        <i class="ion ion-ios-refresh-empty"></i>
+                      <p class="text-primary text-xl">
+                        <span class="iconify" data-icon="icon-park-outline:transaction-order"></span>
                       </p>
                       <p class="d-flex flex-column text-right">
                         <span class="font-weight-bold">
                           <i class="ion ion-android-arrow-up text-success"></i>
-                          12%
+                          <%= data.currentMonthOrders.completed %>
                         </span>
-                        <span class="text-muted">Orders RATE</span>
+                        <span class="text-muted">Total Orders (Current Month)</span>
                       </p>
                     </div>
                     <!-- /.d-flex -->
                     <div class="d-flex justify-content-between align-items-center border-bottom mb-3">
-                      <p class="text-warning text-xl">
-                        <i class="ion ion-ios-cart-outline"></i>
+                      <p class="text-success text-xl">
+                        <span class="iconify" data-icon="emojione:deciduous-tree"></span>
                       </p>
                       <p class="d-flex flex-column text-right">
                         <span class="font-weight-bold">
                           <i class="ion ion-android-arrow-up text-warning"></i>
-                          0.8%
+                          <%= data.totalTrees %>
                         </span>
-                        <span class="text-muted">Trees Orders RATE</span>
+                        <span class="text-muted">Total Trees (Current Month)</span>
                       </p>
                     </div>
                     <!-- /.d-flex -->
@@ -439,9 +437,9 @@
                       <p class="d-flex flex-column text-right">
                         <span class="font-weight-bold">
                           <i class="ion ion-android-arrow-down text-danger"></i>
-                          1%
+                          <%= data.newUsers %>
                         </span>
-                        <span class="text-muted">REGISTRATION RATE</span>
+                        <span class="text-muted">New Registered Users</span>
                       </p>
                     </div>
                     <!-- /.d-flex -->
@@ -575,7 +573,7 @@
     <!-- <script src="/js/dist/js/demo.js"></script> -->
     <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
     <!-- <script src="/js/dist/js/pages/dashboard.js"></script> -->
-
+    <script src="https://code.iconify.design/2/2.2.1/iconify.min.js"></script>
     <!-- <script src="/js/dist/js/pages/dashboard3.js"></script> -->
   </body>
 </html>

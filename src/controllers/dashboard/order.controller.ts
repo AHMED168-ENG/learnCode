@@ -153,7 +153,7 @@ export class OrderController {
             sequelize.literal(`(
               SELECT COALESCE(COUNT(order_id),0)
               FROM tbl_orders
-              WHERE tbl_orders.status = "inprogress" and tbl_orders.seen = 0
+              WHERE tbl_orders.status = "inprogress"
           )`),
             "inProgress",
           ],
@@ -161,7 +161,7 @@ export class OrderController {
             sequelize.literal(`(
               SELECT COALESCE(COUNT(order_id),0)
               FROM tbl_orders
-              WHERE tbl_orders.status = "new" and tbl_orders.seen = 0
+              WHERE tbl_orders.status = "new"
           )`),
             "New",
           ],
@@ -169,7 +169,7 @@ export class OrderController {
             sequelize.literal(`(
               SELECT COALESCE(COUNT(order_id),0)
               FROM tbl_orders
-              WHERE tbl_orders.status = "completed" and tbl_orders.seen = 0
+              WHERE tbl_orders.status = "completed"
           )`),
             "completed",
           ],
@@ -177,9 +177,103 @@ export class OrderController {
             sequelize.literal(`(
               SELECT COALESCE(COUNT(order_id),0)
               FROM tbl_orders
-              WHERE tbl_orders.status = "cancelled" and tbl_orders.seen = 0
+              WHERE tbl_orders.status = "cancelled"
           )`),
             "cancelled",
+          ],
+          [
+            sequelize.literal(`(
+              SELECT COALESCE(COUNT(order_id),0)
+              FROM tbl_orders
+          )`),
+            "totalOrder",
+          ],
+        ],
+        raw: true,
+      })
+      .then((d: any) => (data = d))
+      .catch((e) => (data = null))
+    return data
+  }
+  async numberOfNotifiedOrders() {
+    let data
+    await order
+      .findOne({
+        attributes: [
+          [
+            sequelize.literal(`(
+              SELECT COALESCE(COUNT(order_id),0)
+              FROM tbl_orders
+              WHERE tbl_orders.status = "inprogress" AND tbl_orders.seen = 0
+          )`),
+            "inProgress",
+          ],
+          [
+            sequelize.literal(`(
+              SELECT COALESCE(COUNT(order_id),0)
+              FROM tbl_orders
+              WHERE tbl_orders.status = "new" AND tbl_orders.seen = 0
+          )`),
+            "New",
+          ],
+          [
+            sequelize.literal(`(
+              SELECT COALESCE(COUNT(order_id),0)
+              FROM tbl_orders
+              WHERE tbl_orders.status = "completed" AND tbl_orders.seen = 0
+          )`),
+            "completed",
+          ],
+          [
+            sequelize.literal(`(
+              SELECT COALESCE(COUNT(order_id),0)
+              FROM tbl_orders
+              WHERE tbl_orders.status = "cancelled" AND tbl_orders.seen = 0
+          )`),
+            "cancelled",
+          ],
+          [
+            sequelize.literal(`(
+              SELECT COALESCE(COUNT(order_id),0)
+              FROM tbl_orders
+          )`),
+            "totalOrder",
+          ],
+        ],
+        raw: true,
+      })
+      .then((d: any) => (data = d))
+      .catch((e) => (data = null))
+    return data
+  }
+  async numberOfCurrentOrders() {
+    let data
+    await order
+      .findOne({
+        attributes: [
+          [
+            sequelize.literal(`(
+              SELECT COALESCE(COUNT(order_id),0)
+              FROM tbl_orders
+              WHERE tbl_orders.status = "inprogress" AND MONTH(tbl_orders.createdAt) = MONTH(CURRENT_DATE())
+          )`),
+            "inProgress",
+          ],
+          [
+            sequelize.literal(`(
+              SELECT COALESCE(COUNT(order_id),0)
+              FROM tbl_orders
+              WHERE tbl_orders.status = "new" AND MONTH(tbl_orders.createdAt) = MONTH(CURRENT_DATE())
+          )`),
+            "New",
+          ],
+          [
+            sequelize.literal(`(
+              SELECT COALESCE(COUNT(order_id),0)
+              FROM tbl_orders
+              WHERE tbl_orders.status = "completed" AND MONTH(tbl_orders.createdAt) = MONTH(CURRENT_DATE())
+          )`),
+            "completed",
           ],
           [
             sequelize.literal(`(

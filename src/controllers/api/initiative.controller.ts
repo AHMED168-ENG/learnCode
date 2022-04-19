@@ -43,6 +43,29 @@ export class IinitiativeController extends Controller {
         res.status(httpStatus.NOT_FOUND).json({msg: "not found initiatives"})
       })
   }
+  async contributionsList(req: Request, res: Response, next: NextFunction) {
+    try {
+      const ar_en = req["lang"] == "en" ? "init_en_name" : "init_ar_name";
+      const ar_enCity = req["lang"] == "en" ? "en_name" : "ar_name";
+      const limit = (Number(req.query.limit) > 50 ? 50 : Number(req.query.limit)) || 50;
+      const page = (Number(req.query.page) - 1) * limit || 0;
+      const cities = req.query.cities ? String(req.query.cities).split(",").map(Number) : [];
+      const where = cities.length > 0 ? { city_id: cities } : {};
+      const attributes: any = new IinitiativeController().selectionFieldsToGetContributions(ar_en, req.user.user_id);
+      const data = await initiatives.findAndCountAll({
+        limit,
+        offset: page,
+        where,
+        include: [{ model: city, attributes: { include: [[ar_enCity, "name"]], exclude: ["en_name", "ar_name", "createdAt", "updatedAt"] } }],
+        attributes: [...attributes],
+      });
+      const dataPagination = { total: data.count, limit: limit, page: Number(req.query.page), pages: Math.ceil(data.count / limit), data: data.rows };
+      return res.status(httpStatus.OK).json(dataPagination);
+    } catch (error) {
+      console.log(error)
+      return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ msg: "Can't get contributions" });
+    }
+  }
   initiativeDetails(req: Request, res: Response, next: NextFunction) {
     const initId = req.params.id
     const lang = req["lang"] == "en"
@@ -256,6 +279,73 @@ export class IinitiativeController extends Controller {
           WHERE
           tbl_orders_details.initiative_id = tbl_initiatives.init_id AND
           tbl_orders.status = "inprogress"),0)
+          )`),
+        "used",
+      ],
+    ]
+  }
+  selectionFieldsToGetContributions(nameField, userId) {
+    return [
+      "init_id",
+      [nameField, "name"],
+      "logo",
+      [
+        sequelize.literal(`(
+        SELECT SUM(target_num) as target_num
+        FROM tbl_initiatives_trees AS initiativeTrees
+        WHERE
+        initiativeTrees.init_id_pk = tbl_initiatives.init_id
+        AND initiativeTrees.status='active'
+        AND initiativeTrees.deleted='no'
+      )`),
+        "treesCount",
+      ],
+      [
+        sequelize.literal(`(
+      SELECT img
+      FROM tbl_initiatives_imgs AS initiativesImg
+      WHERE
+      initiativesImg.init_id = tbl_initiatives.init_id limit 1
+      )`),
+        "img",
+      ],
+      [
+        sequelize.literal(`(
+        SELECT SUM(carbon_points) as carbonPoint
+        FROM tbl_initiatives_trees AS initiativeTrees
+        WHERE
+        initiativeTrees.init_id_pk = tbl_initiatives.init_id
+        AND initiativeTrees.status='active'
+        AND initiativeTrees.deleted='no'
+      )`),
+        "carbonPoint",
+      ],
+      [
+        sequelize.literal(`(
+      SELECT img
+      FROM tbl_sponsers
+      WHERE
+      tbl_sponsers.sponser_id= tbl_initiatives.sponsor_id
+      )`),
+        "sponsorImg",
+      ],
+      [
+        sequelize.literal(`(
+      SELECT COUNT(*)
+      FROM tbl_initiatives_favourites
+      WHERE
+      user_id=${userId}
+      AND init_id = tbl_initiatives.init_id
+      )`),
+        "favorite",
+      ],
+      [
+        sequelize.literal(`(
+          COALESCE((SELECT SUM(tbl_orders_details.quantity)
+          FROM tbl_orders_details ,tbl_orders
+          WHERE
+          tbl_orders_details.initiative_id = tbl_initiatives.init_id AND
+          tbl_orders.user_id = ${userId}),0)
           )`),
         "used",
       ],

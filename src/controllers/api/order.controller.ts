@@ -48,7 +48,6 @@ export class OrderController extends Controller {
     const cities = req.query.cities ? String(req.query.cities).split(",").map(Number) : []
     const where = cities.length > 0 ? {city_id: cities} : {}
     const attributes: any = new IinitiativeController().selectionFields(ar_en, req.user.user_id, req.query.status)
-
     initiatives
       .findAll({
         where: {...where, init_id: {[sequelize.Op.in]: userInitiative}},

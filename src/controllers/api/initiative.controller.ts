@@ -194,8 +194,27 @@ export class IinitiativeController extends Controller {
         res.status(httpStatus.NOT_FOUND).json({err, msg: "not found initiatives"})
       })
   }
-  selectionFields(nameField, userId, orderStatus?) {
-    return [
+  selectionFields(nameField: string, userId: number, status?) {
+    const orderStatus = !status ? "'inprogress'" :  status;
+    const filteredInitiativesWithOrderStatus = status !== "all" ? [
+      sequelize.literal(`(
+        COALESCE((SELECT SUM(tbl_orders_details.quantity)
+        FROM tbl_orders_details ,tbl_orders
+        WHERE
+        tbl_orders_details.initiative_id = tbl_initiatives.init_id AND
+        tbl_orders.status = ${orderStatus}),0)
+        )`),
+      "used",
+    ] : [
+      sequelize.literal(`(
+        COALESCE((SELECT SUM(tbl_orders_details.quantity)
+        FROM tbl_orders_details ,tbl_orders
+        WHERE
+        tbl_orders_details.initiative_id = tbl_initiatives.init_id),0)
+        )`),
+      "used",
+    ];
+    const selectedFieldsWithMerging = [
       "init_id",
       [nameField, "name"],
       "logo",
@@ -249,16 +268,8 @@ export class IinitiativeController extends Controller {
       )`),
         "favorite",
       ],
-      [
-        sequelize.literal(`(
-          COALESCE((SELECT SUM(tbl_orders_details.quantity)
-          FROM tbl_orders_details ,tbl_orders
-          WHERE
-          tbl_orders_details.initiative_id = tbl_initiatives.init_id AND
-          (tbl_orders.status = "inprogress" OR tbl_orders.status = ${orderStatus})),0)
-          )`),
-        "used",
-      ],
-    ]
+    ];
+    selectedFieldsWithMerging.push(filteredInitiativesWithOrderStatus);
+    return selectedFieldsWithMerging;
   }
 }

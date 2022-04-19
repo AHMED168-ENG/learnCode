@@ -13,7 +13,6 @@ export class InitiativeRoutes {
     this.router.get("/featured/:cityId", this.initiativeController.featuredInitiatives)
     this.router.get("/related/:initId", this.initiativeController.relatedInitiatives)
     this.router.get("/", this.initiativeController.list)
-    this.router.get("/mycontributions", this.initiativeController.contributionsList)
     this.router.get("/favourite", this.initiativeController.favourite)
     this.router.get("/:id", this.initiativeController.initiativeDetails)
   }

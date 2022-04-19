@@ -18,7 +18,6 @@ export class HomeController {
     const lastInitiative = (await new InitiativeController().lastInitiative(lang)) || []
     const ordersInYear = (await new OrderController().ordersInYear()) || []
     const currentMonthOrders = await new OrderController().numberOfCurrentOrders();
-    const newRegisteredUsers = await new UserController()
     res.render("index.ejs", {
       title: "Home",
       data: {...totalNumbers, ordersChart: ordersNum, lastSponser, lastInitiative, ordersInYear, currentMonthOrders},
@@ -139,7 +138,6 @@ export class HomeController {
       })
       .then((d) => (data = d))
       .catch((e) => (data = null))
-      console.log(data)
     return data
   }
 }

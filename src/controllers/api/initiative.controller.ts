@@ -194,7 +194,7 @@ export class IinitiativeController extends Controller {
         res.status(httpStatus.NOT_FOUND).json({err, msg: "not found initiatives"})
       })
   }
-  selectionFields(nameField, userId) {
+  selectionFields(nameField, userId, orderStatus?) {
     return [
       "init_id",
       [nameField, "name"],
@@ -255,7 +255,7 @@ export class IinitiativeController extends Controller {
           FROM tbl_orders_details ,tbl_orders
           WHERE
           tbl_orders_details.initiative_id = tbl_initiatives.init_id AND
-          tbl_orders.status = "inprogress"),0)
+          (tbl_orders.status = "inprogress" OR tbl_orders.status = ${orderStatus})),0)
           )`),
         "used",
       ],

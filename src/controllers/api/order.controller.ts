@@ -47,7 +47,7 @@ export class OrderController extends Controller {
     })
     const cities = req.query.cities ? String(req.query.cities).split(",").map(Number) : []
     const where = cities.length > 0 ? {city_id: cities} : {}
-    const attributes: any = new IinitiativeController().selectionFields(ar_en, req.user.user_id)
+    const attributes: any = new IinitiativeController().selectionFields(ar_en, req.user.user_id, req.query.status)
 
     initiatives
       .findAll({
@@ -59,6 +59,7 @@ export class OrderController extends Controller {
         res.status(httpStatus.OK).json({data})
       })
       .catch((err) => {
+        console.log(err)
         res.status(httpStatus.NOT_FOUND).json({msg: "not found"})
       })
   }

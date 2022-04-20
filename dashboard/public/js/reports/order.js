@@ -11,11 +11,14 @@ function getList(type = "all", from = null, to = null) {  // show spinner
         method: "Get",
     }
     $.ajax(settings).done(function (res) {
+        var sum = 0;
         changeChart(res.ordersChart)
         // hidden spinner
         spinnerNotfound(2)
         $("#tr-th-row").empty()
+        $("#total").empty()
         res.data.forEach((elem) => {
+            sum += (elem.all_sum - (elem.all_sum * (elem.promo_code_percent ? elem.promo_code_percent / 100 : 0)));
             $("#tr-th-row").append(`<tr id="${elem.order_id}">
             <th scope="row">${elem.order_id}</th>
             <td>
@@ -28,8 +31,8 @@ function getList(type = "all", from = null, to = null) {  // show spinner
             <td>${elem.promo_code_percent || 0} %</td>
             <td><span class="text-success">${(elem.all_sum - (elem.all_sum * (elem.promo_code_percent ? elem.promo_code_percent / 100 : 0))).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} SAR</span></td>
             </tr>`)
-        })
-
+        });
+        $('#total').append(`<span class="border border-dark text-success text-bold">${sum.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} SAR</span>`);
     }).fail(() => spinnerNotfound(3))
 }
 

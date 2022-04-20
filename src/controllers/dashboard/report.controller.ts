@@ -90,12 +90,12 @@ export class ReportController {
     })
   }
   async chartsPage(req: Request, res: Response, next: NextFunction) {
-    const userNumbers = (await new ReportController().userNumbers()) || {}
-    res.render("reports/charts-report.ejs", {
-      title: "charts report",
-      data: {},
-      userNumbers,
-    })
+    try {
+      const userNumbers = (await new ReportController().userNumbers(req.query.from, req.query.to)) || {};
+      return res.render("reports/charts-report.ejs", { title: "charts report", data: {}, userNumbers });
+    } catch (err) {
+      return res.status(500).json({ err, msg: "Can't get chart data" });
+    }
   }
   async calendarInitiative(req: Request, res: Response, next: NextFunction) {
     const initiativeDate = await new InitiativeController().listDateFromTo()
@@ -104,22 +104,23 @@ export class ReportController {
       data: initiativeDate,
     })
   }
-  async userNumbers() {
+  async userNumbers(from?: any, to?: any) {
     let data
+    const filterQuery = !from || !to ? `` : `AND createdAt >= "${from}" AND createdAt <= "${to}"`;
     await initiatives
       .findOne({
         limit: 1,
         offset: 0,
         attributes: [
-          [sequelize.literal(`(SELECT COALESCE(COUNT(*),0) FROM web_apps_users WHERE gender="female")`), "totalFemale"],
-          [sequelize.literal(`(SELECT COALESCE(COUNT(*),0) FROM web_apps_users WHERE gender="male")`), "totalMale"],
-          [sequelize.literal(`(SELECT COALESCE(COUNT(*),0) FROM web_apps_users WHERE user_type="entity")`), "totalEntity"],
-          [sequelize.literal(`(SELECT COALESCE(COUNT(*),0) FROM web_apps_users WHERE user_type="individual")`), "totalIndividual"],
-          [sequelize.literal(`(SELECT COALESCE(COUNT(*),0) FROM web_apps_users WHERE facebook IS NOT NULL)`), "facebook"],
-          [sequelize.literal(`(SELECT COALESCE(COUNT(*),0) FROM web_apps_users WHERE google IS NOT NULL)`), "google"],
-          [sequelize.literal(`(SELECT COALESCE(COUNT(*),0) FROM web_apps_users WHERE phone IS NOT NULL)`), "phone"],
-          [sequelize.literal(`(SELECT COALESCE(COUNT(*),0) FROM web_apps_users WHERE email IS NOT NULL)`), "email"],
-          [sequelize.literal(`(SELECT COALESCE(COUNT(*),0) FROM web_apps_users WHERE apple IS NOT NULL)`), "apple"],
+          [sequelize.literal(`(SELECT COALESCE(COUNT(*),0) FROM web_apps_users WHERE gender="female" ${filterQuery})`), "totalFemale"],
+          [sequelize.literal(`(SELECT COALESCE(COUNT(*),0) FROM web_apps_users WHERE gender="male" ${filterQuery})`), "totalMale"],
+          [sequelize.literal(`(SELECT COALESCE(COUNT(*),0) FROM web_apps_users WHERE user_type="entity" ${filterQuery})`), "totalEntity"],
+          [sequelize.literal(`(SELECT COALESCE(COUNT(*),0) FROM web_apps_users WHERE user_type="individual" ${filterQuery})`), "totalIndividual"],
+          [sequelize.literal(`(SELECT COALESCE(COUNT(*),0) FROM web_apps_users WHERE facebook IS NOT NULL ${filterQuery})`), "facebook"],
+          [sequelize.literal(`(SELECT COALESCE(COUNT(*),0) FROM web_apps_users WHERE google IS NOT NULL ${filterQuery})`), "google"],
+          [sequelize.literal(`(SELECT COALESCE(COUNT(*),0) FROM web_apps_users WHERE phone IS NOT NULL ${filterQuery})`), "phone"],
+          [sequelize.literal(`(SELECT COALESCE(COUNT(*),0) FROM web_apps_users WHERE email IS NOT NULL ${filterQuery})`), "email"],
+          [sequelize.literal(`(SELECT COALESCE(COUNT(*),0) FROM web_apps_users WHERE apple IS NOT NULL ${filterQuery})`), "apple"],
           [sequelize.literal(`(SELECT COALESCE(COUNT(*),0) FROM web_apps_users WHERE MONTH(createdAt)=MONTH(CURRENT_DATE()))`), "newUserThisMonth"],
           [
             sequelize.literal(`(SELECT COALESCE(COUNT(*),0) FROM web_apps_users WHERE MONTH(createdAt)=MONTH(CURRENT_DATE - INTERVAL 1 MONTH))`),

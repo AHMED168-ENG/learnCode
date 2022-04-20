@@ -42,21 +42,6 @@ export class InitiativesLocationController extends Controller {
         res.status(httpStatus.NOT_FOUND).json({err, msg: "not found Locations"})
       })
   }
-  async getMapLocations(req: Request, res: Response, next: NextFunction) {
-    try {
-      const lang = req["lang"] == "en";
-      const cityName = lang ? "en_name" : "ar_name";
-      const locationName = lang ? "location_nameEn" : "location_nameAr";
-      const attributes: any = new InitiativesLocationController().filterMapFields();
-      const data = await initiativeLocations.findAndCountAll({
-        attributes: ["location_id", [locationName, "location_name"], ...attributes],
-        include: [{model: city, attributes: { include: [[cityName, "name"]], exclude: ["en_name", "ar_name", "createdAt", "updatedAt"] } }],
-      });
-      return res.status(httpStatus.OK).json(data["rows"]);
-    } catch (error) {
-      return res.status(httpStatus.NOT_FOUND).json({ error, msg: "not found Locations" });
-    }
-  }
   details(req: Request, res: Response, next: NextFunction) {
     const locationId = req.params.id
     const lang = req["lang"] == "en"
@@ -95,38 +80,12 @@ export class InitiativesLocationController extends Controller {
       })
     return data
   }
-  private filterMapFields() {
+  private selectionFields() {
     return [
       "img",
       "imgvr",
       "location_lat",
       "location_long",
-      [
-        sequelize.literal(`(
-        SELECT SUM(target_num) as target_num
-        FROM tbl_initiatives_trees AS initiativeTrees
-        WHERE
-        initiativeTrees.location_id = tbl_initiatives_locations.location_id
-        AND initiativeTrees.status='active'
-        AND initiativeTrees.deleted='no'
-    )`),
-        "treesCount",
-      ],
-      [
-        sequelize.literal(`(
-          COALESCE((SELECT SUM(tbl_orders_details.quantity)
-          FROM tbl_orders_details ,tbl_orders
-          WHERE
-          tbl_orders_details.location_id = tbl_initiatives_locations.location_id AND
-          tbl_orders.status = "inprogress"),0)
-          )`),
-        "used",
-      ],
-    ];
-  }
-  private selectionFields() {
-    return [
-      "img",
       "caverArea",
       [
         sequelize.literal(`(

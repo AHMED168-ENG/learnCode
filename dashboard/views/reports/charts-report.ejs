@@ -2,6 +2,7 @@
 <html lang="en">
   <head>
     <%- include('../layout/heade.ejs') %>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
     <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
   </head>
   <body class="sidebar-mini layout-fixed text-sm text-sm">
@@ -14,8 +15,21 @@
         <div class="content-header">
           <div class="container-fluid">
             <div class="row mb-2 align-items-center mt-1">
-              <div class="col-sm-6"><h1>Charts report</h1></div>
-              <div class="col-sm-6">
+              <div class="col-sm-4"><h1>Charts report</h1></div>
+              <div class="col-sm-4 d-flex align-items-center">
+                <div class="form-group">
+                  <label>From - To</label>
+                  <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">
+                        <i class="far fa-calendar-alt"></i>
+                      </span>
+                    </div>
+                    <input type="text" class="form-control float-right" id="fromTo" />
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-4">
                 <ol class="breadcrumb float-sm-right">
                   <li class="breadcrumb-item"><a href="/">Home</a></li>
                   <li class="breadcrumb-item active">Charts report</li>
@@ -126,6 +140,7 @@
       <footer class="main-footer"><%- include('../layout/footer.ejs') %></footer>
     </div>
     <%- include('../layout/script.ejs') %>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
     <script src="/js/plugins/chart.js/Chart.min.js"></script>
     <script>
@@ -276,6 +291,20 @@
         })
       })
     </script>
-    <!-- <script src="/js/reports/order.js"></script> -->
+    <script>
+      var from = null;
+      var to = null;
+      $(function () {
+        $("#fromTo").daterangepicker(
+          { locale: { format: "YYYY-MM-DD" }, startDate: new Date(), endDate: new Date(), dateFormat: "YYYY-MM-DD", opens: "left" },
+          function (start, end, label) {
+            from = start.format("YYYY-MM-DD");
+            to = end.format("YYYY-MM-DD");
+            window.location.href = `${window.location.pathname}?from=${from}&to=${to}`;
+          }
+        );
+      });
+    </script>
+    <!-- <script src="/js/reports/chart-report.js"></script> -->
   </body>
 </html>

@@ -3,7 +3,7 @@ var userType = "individual"
 $(document).ready(function () {
     getList(1)
     searchFilteration();
-    dateFilteration()
+    dateFilteration(1)
 })
 $(document).ready(function () {
     $('[data-toggle="tooltip"]').tooltip();
@@ -11,12 +11,12 @@ $(document).ready(function () {
 function searchFilteration() {
     $("#myInput").on("keyup", function() {
         var value = $(this).val().toLowerCase();
-        $("#table2excel tr").filter(function() {
+        $("#table2excel tbody tr").filter(function() {
           $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
         });
     });
 }
-function dateFilteration() {
+function dateFilteration(page) {
     $(function () {
         $("#fromTo").daterangepicker(
           {
@@ -31,7 +31,7 @@ function dateFilteration() {
           function (start, end, label) {
             fromOrder = start.format("YYYY-MM-DD")
             toOrder = end.format("YYYY-MM-DD")
-            getList(userType, fromOrder, toOrder)
+            getList(page, fromOrder, toOrder)
           }
         )
     })

@@ -653,7 +653,7 @@
   }
   $("#totalIncomeThisYear").text(
     `SAR ${ordersInYear.reduce((total, currentValue) => {
-      return (total + currentValue.allSum).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+      return (total + currentValue.allSum).toLocaleString('en-US')
     }, 0)}`
   )
   $(function () {

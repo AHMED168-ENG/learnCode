@@ -1,4 +1,5 @@
 var orderType = "all"
+var monthsChart = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 $(document).ready(function () {
     getList()
 })
@@ -12,11 +13,13 @@ function getList(type = "all", from = null, to = null) {  // show spinner
     }
     $.ajax(settings).done(function (res) {
         var sum = 0;
-        changeChart(res.ordersChart)
+        const fromMonth = !from ? undefined : monthsChart[new Date(from).getMonth()];
+        const toMonth = !to ? undefined : monthsChart[new Date(to).getMonth()];
+        const selectedMonths = fromMonth && toMonth ? [...new Set([fromMonth, toMonth])] : undefined;
+        changeChart(res.ordersChart, selectedMonths);
         // hidden spinner
         spinnerNotfound(2)
         $("#tr-th-row").empty()
-        $("#total").empty()
         res.data.forEach((elem) => {
             sum += (elem.all_sum - (elem.all_sum * (elem.promo_code_percent ? elem.promo_code_percent / 100 : 0)));
             $("#tr-th-row").append(`<tr id="${elem.order_id}">
@@ -32,7 +35,17 @@ function getList(type = "all", from = null, to = null) {  // show spinner
             <td><span class="text-success">${(elem.all_sum - (elem.all_sum * (elem.promo_code_percent ? elem.promo_code_percent / 100 : 0))).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} SAR</span></td>
             </tr>`)
         });
-        $('#total').append(`<span class="border border-dark text-success text-bold">${sum.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} SAR</span>`);
+        $('#tr-th-row').append(`
+            <tr>
+                <th scope="row" class="border-0"></th>
+                <td class="border-0"></td>
+                <td class="border-0"></td>
+                <td class="border-0"></td>
+                <td class="border-0"></td>
+                <td class="border-0 text-bold">Total</td>
+                <td><span class="text-success text-bold">${sum.toLocaleString('en-US')} SAR</span></td>
+            </tr>
+        `);
     }).fail(() => spinnerNotfound(3))
 }
 
@@ -59,9 +72,9 @@ function changeType(type) {
     orderType = type
 }
 
-function changeChart(inYear) {
-    var monthsChart = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
-    var monthsCountArr = monthsChart.map((m, i) => {
+function changeChart(inYear, selectedMonths) {
+    var months = !selectedMonths ? monthsChart : selectedMonths;
+    var monthsCountArr = months.map((m, i) => {
         for (let element of inYear) {
             if (element.MONTH == m) {
                 return element.count
@@ -69,9 +82,8 @@ function changeChart(inYear) {
         }
         return 0
     })
-    console.log(monthsCountArr)
     var chartSet = {
-        labels: monthsChart,
+        labels: months,
         datasets: [
             {
                 label: "Order per month",
@@ -94,8 +106,8 @@ function changeChart(inYear) {
         maintainAspectRatio: false,
         datasetFill: false,
     }
-    new Chart($("#orderDetails")).clear()
-    new Chart($("#orderDetails").get(0).getContext("2d"), {
+    if (!!window.bar) window.bar.destroy();
+    window.bar = new Chart($("#orderDetails").get(0).getContext("2d"), {
         type: "bar",
         data: chartSet,
         options: chartOptions,

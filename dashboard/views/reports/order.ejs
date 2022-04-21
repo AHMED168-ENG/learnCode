@@ -33,20 +33,20 @@
         <section class="content">
           <div class="row col-12 mb-2 align-items-center mt-1">
             <div class="col-6 d-flex">
-              <button type="button" data-tooltip="Inprogress" onclick="changeType('all')" class="btn btn-secondary float-right mx-1">All</button>
-              <button type="button" data-tooltip="Inprogress" onclick="changeType('new')" class="btn btn-info float-right mx-1">
+              <button type="button" data-tooltip="All Orders" onclick="changeType('all')" class="btn btn-secondary float-right mx-1">All</button>
+              <button type="button" data-tooltip="New Orders" onclick="changeType('new')" class="btn btn-info float-right mx-1">
                 <i class="fas fa-folder-plus"></i>
                 New
               </button>
-              <button type="button" data-tooltip="Inprogress" onclick="changeType('inprogress')" class="btn btn-warning float-right mx-1">
+              <button type="button" data-tooltip="In Progress Orders" onclick="changeType('inprogress')" class="btn btn-warning float-right mx-1">
                 <i class="fas fa-circle-notch"></i>
-                Inprogress
+                In Progress
               </button>
-              <button type="button" data-tooltip="Inprogress" onclick="changeType('completed')" class="btn btn-success float-right mx-1">
+              <button type="button" data-tooltip="Completed Orders" onclick="changeType('completed')" class="btn btn-success float-right mx-1">
                 <i class="fas fa-check-circle"></i>
                 Completed
               </button>
-              <button type="button" data-tooltip="Cancel order" onclick="changeType('cancelled')" class="btn btn-danger float-right mx-1">
+              <button type="button" data-tooltip="Cancel Orders" onclick="changeType('cancelled')" class="btn btn-danger float-right mx-1">
                 <i class="fas fa-times-circle"></i>
                 Cancelled
               </button>
@@ -151,57 +151,6 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
     <script src="/js/plugins/chart.js/Chart.min.js"></script>
-    <script>
-      var currMonthName = moment().format("MMMM")
-      var prevMonthName = moment().subtract(1, "month").format("MMMM")
-      var monthsArr = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
-      var ordersInYear = JSON.parse(`<%-JSON.stringify(data.ordersInYear)%>`)
-      var monthsCountArr = monthsArr.map((m, i) => {
-        for (let element of ordersInYear) {
-          if (element.MONTH == m) {
-            return element.count
-          }
-        }
-        return 0
-      })
-      $(function () {
-        var orderDetails = {
-          labels: monthsArr,
-          datasets: [
-            {
-              label: "Order per month",
-              backgroundColor: "rgba(60,141,188,0.9)",
-              borderColor: "rgba(60,141,188,0.8)",
-              pointRadius: false,
-              pointColor: "#3b8bba",
-              pointStrokeColor: "rgba(60,141,188,1)",
-              pointHighlightFill: "#fff",
-              pointHighlightStroke: "rgba(60,141,188,1)",
-              data: monthsCountArr,
-            },
-          ],
-        }
-        //-------------
-        //- Order Details CHART -
-        //-------------
-        var orderDetailsChartCanvas = $("#orderDetails").get(0).getContext("2d")
-        var orderDetailsData = $.extend(true, {}, orderDetails)
-        var temp0 = orderDetails.datasets[0]
-        orderDetailsData.datasets[0] = temp0
-
-        var orderDetailsChartOptions = {
-          responsive: true,
-          maintainAspectRatio: false,
-          datasetFill: false,
-        }
-
-        new Chart(orderDetailsChartCanvas, {
-          type: "bar",
-          data: orderDetailsData,
-          options: orderDetailsChartOptions,
-        })
-      })
-    </script>
     <script>
       var fromOrder = null
       var toOrder = null

@@ -1,14 +1,13 @@
-var monthsChart = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 $(document).ready(function () {
     getList(1)
 })
-function getList(page, from = null, to = null) {
+function getList(page) {
     // show spinner
     spinnerNotfound(1)
     const settings = {
         async: true,
         crossDomain: true,
-        url: `${window.location.pathname}/list?limit=6&page=${page}&from=${from}&to=${to}`,
+        url: `${window.location.pathname}/list?limit=6&page=${page}`,
         method: "Get",
     }
     $.ajax(settings).done(function (res, textStatus) {
@@ -16,11 +15,6 @@ function getList(page, from = null, to = null) {
         spinnerNotfound(2)
         pagination(res.pages)
         $("#tr-th-row").empty()
-        const fromMonth = !from ? undefined : monthsChart[new Date(from).getMonth()];
-        const toMonth = !to ? undefined : monthsChart[new Date(to).getMonth()];
-        const selectedMonths = fromMonth && toMonth ? [...new Set([fromMonth, toMonth])] : undefined;
-        var sponsorsChart = res.sponsorsChart ? res.sponsorsChart : JSON.parse(`<%-JSON.stringify(res.data.sponsorsChart)%>`);
-        changeChart(sponsorsChart, selectedMonths);
         res.data.forEach((elem) => {
             $("#tr-th-row").append(`<tr>
             <th scope="row">${elem.sponser_id}</th>
@@ -43,47 +37,6 @@ function pagination(total) {
         onPageClick: function (event, page) {
             if (total != 1) getList(page)
         },
-    })
-}
-function changeChart(inYear, selectedMonths) {
-    var months = !selectedMonths ? monthsChart : selectedMonths;
-    var monthsCountArr = months.map((m, i) => {
-        for (let element of inYear) {
-            if (element.MONTH == m) {
-                return element.count
-            }
-        }
-        return 0
-    })
-    var chartSet = {
-        labels: months,
-        datasets: [
-            {
-                label: "New Sponsor per month",
-                backgroundColor: "rgba(60,141,188,0.9)",
-                borderColor: "rgba(60,141,188,0.8)",
-                pointRadius: false,
-                pointColor: "#3b8bba",
-                pointStrokeColor: "rgba(60,141,188,1)",
-                pointHighlightFill: "#fff",
-                pointHighlightStroke: "rgba(60,141,188,1)",
-                data: monthsCountArr,
-            },
-        ],
-    }
-    var extendChartSet = $.extend(true, {}, chartSet)
-    var temp1 = chartSet.datasets[0]
-    extendChartSet.datasets[0] = temp1
-    var chartOptions = {
-        responsive: true,
-        maintainAspectRatio: false,
-        datasetFill: false,
-    }
-    if (!!window.bar) window.bar.destroy();
-    window.bar = new Chart($("#sponsorDetails").get(0).getContext("2d"), {
-        type: "bar",
-        data: chartSet,
-        options: chartOptions,
     })
 }
 function spinnerNotfound(action) {

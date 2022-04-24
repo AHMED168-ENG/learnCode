@@ -1,4 +1,5 @@
 var userType = "all"
+var monthsChart = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 $(document).ready(function () {
     getList()
 })
@@ -14,6 +15,11 @@ function getList(type = "all", from = null, to = null) {  // show spinner
         // hidden spinner
         spinnerNotfound(2)
         $("#tr-th-row").empty()
+        const usersInYear = res.usersChart ? res.usersChart : JSON.parse(`<%-JSON.stringify(res.data.usersInYear)%>`);
+        const fromMonth = !from ? undefined : monthsChart[new Date(from).getMonth()];
+        const toMonth = !to ? undefined : monthsChart[new Date(to).getMonth()];
+        const selectedMonths = fromMonth && toMonth ? [...new Set([fromMonth, toMonth])] : undefined;
+        changeChart(usersInYear, selectedMonths);
         res.data.forEach((elem) => {
             $("#tr-th-row").append(`<tr id="${elem.user_id}">
             <th scope="row">${elem.user_id}</th>
@@ -34,13 +40,51 @@ function getList(type = "all", from = null, to = null) {  // show spinner
         })
     }).fail(() => spinnerNotfound(3))
 }
-
-
 function changeType(type) {
     getList(type, fromOrder, toOrder)
     userType = type
 }
-
+function changeChart(inYear, selectedMonths) {
+    var months = !selectedMonths ? monthsChart : selectedMonths;
+    var monthsCountArr = months.map((m, i) => {
+        for (let element of inYear) {
+            if (element.MONTH == m) {
+                return element.count
+            }
+        }
+        return 0
+    })
+    var chartSet = {
+        labels: months,
+        datasets: [
+            {
+                label: "New Users per month",
+                backgroundColor: "rgba(60,141,188,0.9)",
+                borderColor: "rgba(60,141,188,0.8)",
+                pointRadius: false,
+                pointColor: "#3b8bba",
+                pointStrokeColor: "rgba(60,141,188,1)",
+                pointHighlightFill: "#fff",
+                pointHighlightStroke: "rgba(60,141,188,1)",
+                data: monthsCountArr,
+            },
+        ],
+    }
+    var extendChartSet = $.extend(true, {}, chartSet)
+    var temp1 = chartSet.datasets[0]
+    extendChartSet.datasets[0] = temp1
+    var chartOptions = {
+        responsive: true,
+        maintainAspectRatio: false,
+        datasetFill: false,
+    }
+    if (!!window.bar) window.bar.destroy();
+    window.bar = new Chart($("#userDetails").get(0).getContext("2d"), {
+        type: "bar",
+        data: chartSet,
+        options: chartOptions,
+    })
+}
 function spinnerNotfound(action) {
     // 1 => Show Spinner
     // 2 => Hidden Spinner

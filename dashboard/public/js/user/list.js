@@ -1,20 +1,16 @@
 // var is Entity || Individual
 var userType = "individual"
 $(document).ready(function () {
-    getList(1)
-    searchFilteration();
-    dateFilteration(1)
+    getList(1);
+    searchFilteration(1, null, null);
+    dateFilteration(1);
 })
 $(document).ready(function () {
     $('[data-toggle="tooltip"]').tooltip();
 });
-function searchFilteration() {
-    $("#myInput").on("keyup", function() {
-        var value = $(this).val().toLowerCase();
-        $("#table2excel tbody tr").filter(function() {
-          $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
-        });
-    });
+function searchFilteration(page, fromOrder, toOrder) {
+    var value = $("#myInput").val().toLowerCase();
+    getList(page, fromOrder, toOrder, value);
 }
 function dateFilteration(page) {
     $(function () {
@@ -36,13 +32,13 @@ function dateFilteration(page) {
         )
     })
 }
-function getList(page = 1, from = null, to = null) {
+function getList(page = 1, from = null, to = null, search = null) {
     // show spinner
     spinnerNotfound(1)
     const settings = {
         async: true,
         crossDomain: true,
-        url: `${window.location.pathname}/list?limit=8&page=${page}&type=${userType}&from=${from}&to=${to}`,
+        url: `${window.location.pathname}/list?limit=8&page=${page}&type=${userType}&from=${from}&to=${to}&search=${search}`,
         method: "Get",
     }
     $.ajax(settings).done(function (res, textStatus) {

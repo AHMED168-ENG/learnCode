@@ -20,19 +20,21 @@ export class TreesBodyController {
         try {
             const { ar_title, en_title, ar_value, en_value }: ICreateTreeBodyRequest = req.body;
             const { tree_id, header_id } = req.params;
-            if (!Number(tree_id) || !Number(header_id) || !ar_title || !en_title || !ar_value || !en_value) return res.status(400).json({ message: "Bad Request" });
-            const imgFile = req.files.icon;
-            if (imgFile && !helpers.mimetypeImge.includes(imgFile["mimetype"])) return res.status(400).json({ msg: "Image should be png, jpg or jpeg" });
-            const imgName: string = `${helpers.randomNumber(100, 999)}_${Number(new Date())}${path.extname(imgFile["name"])}`;
+            if (!Number(tree_id) || !Number(header_id) || !ar_title || !en_title) return res.status(400).json({ message: "Bad Request" });
+            const imgFile = req.files ? req.files.icon : null;
             const request = { tree_id, header_id, ar_title, en_title, ar_value, en_value, icon: `` };
             const createdTreeBody = await treesBody.create({ ...request });
-            const fileDir: string = `trees/body/${createdTreeBody["id"]}/`;
-            await treesBody.update({ icon: `${fileDir}${imgName}` }, { where: { id: createdTreeBody["id"] } });
-            helpers.imageProcessing(fileDir, imgName, imgFile["data"]);
+            if (imgFile) {
+                if (!helpers.mimetypeImge.includes(imgFile["mimetype"])) return res.status(400).json({ msg: "Image should be png, jpg or jpeg" });
+                const imgName: string = `${helpers.randomNumber(100, 999)}_${Number(new Date())}${path.extname(imgFile["name"])}`;
+                const fileDir: string = `trees/body/${createdTreeBody["id"]}/`;
+                await treesBody.update({ icon: `${fileDir}${imgName}` }, { where: { id: createdTreeBody["id"] } });
+                helpers.imageProcessing(fileDir, imgName, imgFile["data"]);
+            }
             return res.status(httpStatus.CREATED).json({ message: "A new Trees Body is created successfully" });
         } catch (error) {
             console.log(error)
-            return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ error, msg: "Can't add new trees body" });
+            return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ err: error, msg: "Can't add new trees body" });
         }
     }
     public async editPage(req: Request, res: Response, next: NextFunction) {

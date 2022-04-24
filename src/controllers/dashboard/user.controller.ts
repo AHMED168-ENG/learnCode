@@ -30,11 +30,18 @@ export class UserController {
       const limit = Number(req.query.limit) > 50 ? 50 : Number(req.query.limit);
       const page = (Number(req.query.page) - 1) * limit;
       const userType = { user_type: req.query.type };
+      const search = req.query.search != "null" && req.query.search != "" ? {
+        [Op.or]: [
+          { fullName: { [Op.like]: `%${req.query.search}%` } },
+          { gender: { [Op.like]: `%${req.query.search}%` } },
+          { email: { [Op.like]: `%${req.query.search}%` } },
+        ],
+      } : {};
       const fromTo = req.query.from != "null" && req.query.to != "null" ? { createdAt: { [Op.and]: [{ [Op.gte]: req.query.from }, { [Op.lte]: req.query.to }] } } : {};
       const data = await webAppsUsers.findAndCountAll({
         limit,
         offset: page,
-        where: { ...userType, ...fromTo },
+        where: { ...userType, ...fromTo, ...search },
         attributes: { exclude: [...new UserController().secretFields] },
         include: [
           { model: country, attributes: ["en_name", "ar_name"] },

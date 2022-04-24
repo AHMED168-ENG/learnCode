@@ -10,15 +10,13 @@ $(function () {
         rules: {
             ar_title: { required: true },
             en_title: { required: true },
-            en_value: { required: true },
-            ar_value: { required: true },
-            icon: { required: false, accept: "image/png" },
+            en_value: { required: false },
+            ar_value: { required: false },
+            icon: { required: false },
         },
         messages: {
             ar_title: "Please enter a arabic title",
             en_title: "Please enter a english title",
-            ar_value: "Please enter a arabic value",
-            ar_value: "Please enter a english value",
         },
         errorElement: 'span',
         errorPlacement: function (error, element) {
@@ -52,6 +50,8 @@ const addNew = () => {
         $('#newForm').trigger("reset");
         $('.toast-body').text("New tree body added Successfull")
         $('.toast').toast("show")
+        const prevLink = window.location.pathname.split('/');
+        window.location = `/dashboard/tree/details/${prevLink[prevLink.length - 2]}`;
     }).fail(function (xhr) {
         const error = JSON.parse(xhr.responseText)
         $("#modal-body-val").html(`<span style="font-size: large">${error.msg}<br/>&emsp;&nbsp;${error.err}</span>`)

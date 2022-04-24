@@ -62,8 +62,11 @@
                 <i class="fas fa-globe-americas"></i>
                 &nbsp;&nbsp; Users
               </h3>
-              <div class="card-tools col-sm-3">
-                <input class="form-control form-control-sm my-2 my-lg-0" id="myInput" type="text" placeholder="Search..">
+              <div class="card-tools col-sm-4">
+                <div class="form-inline">
+                  <input class="form-control form-control-sm my-2 my-lg-0 mr-1" id="myInput" type="text" placeholder="Search..">
+                  <button type="submit" class="btn btn-outline-success btn-sm ml-1" onclick="searchFilteration(1, null, null)">Search</button>
+                </div>
               </div>
               <div class="card-tools col-sm-3 mt-1">
                 <div class="input-group">
@@ -75,7 +78,7 @@
                   <input type="text" class="form-control form-control-sm float-right" id="fromTo" />
                 </div>
               </div>
-              <div class="card-tools col-sm-3">
+              <div class="card-tools col-sm-2">
                 <button
                   type="button"
                   data-tooltip="Export Excel"

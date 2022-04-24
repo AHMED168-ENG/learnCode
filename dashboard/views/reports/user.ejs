@@ -143,57 +143,6 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
     <script src="/js/plugins/chart.js/Chart.min.js"></script>
     <script>
-      var currMonthName = moment().format("MMMM")
-      var prevMonthName = moment().subtract(1, "month").format("MMMM")
-      var monthsArr = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
-      var usersInYear = JSON.parse(`<%-JSON.stringify(data.usersInYear)%>`)
-      var monthsCountArr = monthsArr.map((m, i) => {
-        for (let element of usersInYear) {
-          if (element.MONTH == m) {
-            return element.count
-          }
-        }
-        return 0
-      })
-      $(function () {
-        var chartDetails = {
-          labels: monthsArr,
-          datasets: [
-            {
-              label: "New User per month",
-              backgroundColor: "rgba(60,141,188,0.9)",
-              borderColor: "rgba(60,141,188,0.8)",
-              pointRadius: false,
-              pointColor: "#3b8bba",
-              pointStrokeColor: "rgba(60,141,188,1)",
-              pointHighlightFill: "#fff",
-              pointHighlightStroke: "rgba(60,141,188,1)",
-              data: monthsCountArr,
-            },
-          ],
-        }
-        //-------------
-        //- Details CHART -
-        //-------------
-        var chartDetailsChartCanvas = $("#userDetails").get(0).getContext("2d")
-        var chartDetailsData = $.extend(true, {}, chartDetails)
-        var temp0 = chartDetails.datasets[0]
-        chartDetailsData.datasets[0] = temp0
-
-        var chartDetailsChartOptions = {
-          responsive: true,
-          maintainAspectRatio: false,
-          datasetFill: false,
-        }
-
-        new Chart(chartDetailsChartCanvas, {
-          type: "bar",
-          data: chartDetailsData,
-          options: chartDetailsChartOptions,
-        })
-      })
-    </script>
-    <script>
       var fromOrder = null
       var toOrder = null
       $(function () {

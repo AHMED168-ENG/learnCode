@@ -33,10 +33,10 @@ export class CityController {
             }
             res.status(httpStatus.OK).json(dataInti)
           })
-          .catch((err) => res.status(httpStatus.NOT_FOUND).json({err, msg: "not found country"}))
+          .catch((err) => res.status(httpStatus.NOT_FOUND).json({err: "There is something wrong while getting cities", msg: "not found city"}))
       })
       .catch((err) => {
-        res.status(httpStatus.NOT_FOUND).json({err, msg: "not found country"})
+        res.status(httpStatus.NOT_FOUND).json({err: "There is something wrong while getting cities", msg: "not found city"})
       })
   }
   async newPage(req: Request, res: Response, next: NextFunction) {

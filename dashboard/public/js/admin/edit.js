@@ -62,7 +62,7 @@ const edit = () => {
             window.history.back();
         }).fail(function (xhr) {
             const error = JSON.parse(xhr.responseText)
-            $("#modal-body-val").html(`<span style="font-size: large">${error.message}<br/>&emsp;&nbsp;${error.error}</span>`)
+            $("#modal-body-val").html(`<span style="font-size: large">${error.msg}<br/>&emsp;&nbsp;${error.err ? error.err: ""}</span>`)
             $("#exampleModal").modal("show")
         }).always(function () {
             $("#submitForm").buttonLoader("stop")

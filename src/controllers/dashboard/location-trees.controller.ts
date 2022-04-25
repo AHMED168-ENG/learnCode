@@ -45,10 +45,10 @@ export class LocationTreesController {
             }
             res.status(httpStatus.OK).json(dataInti)
           })
-          .catch((err) => res.status(httpStatus.NOT_FOUND).json({err, msg: "not found tree"}))
+          .catch((err) => res.status(httpStatus.NOT_FOUND).json({err: "There is something wrong while getting initiative trees", msg: "not found trees"}))
       })
       .catch((err) => {
-        res.status(httpStatus.NOT_FOUND).json({err, msg: "not found tree"})
+        res.status(httpStatus.NOT_FOUND).json({err: "There is something wrong while getting initiative trees", msg: "not found trees"})
       })
   }
   async newPage(req: Request, res: Response, next: NextFunction) {

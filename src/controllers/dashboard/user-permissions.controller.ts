@@ -44,4 +44,19 @@ export class UserPermissionsController {
       return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ error, messgae: "Can't edit permissions" });
     }
   }
+  // public async editPermissions(req: Request, res: Response, next: NextFunction): Promise<any> {
+  //   try {
+  //     const { addedPages, removedPages } = req.body;
+  //     const areInValidAddedPages = addedPages.filter((addedPage) => !Number(addedPage));
+  //     const areInValidRemovedPages = removedPages.filter((removedPage) => !Number(removedPage));
+  //     if (areInValidAddedPages.length || areInValidRemovedPages.length) return res.status(httpStatus.BAD_REQUEST).json({ messgae: "Bad Request" });
+  //     if (addedPages.length) {
+  //       const mappedPages = addedPages.map((addedPage) => { return { role_id: req.params.role_id, page_id: addedPage } });
+  //       await permissions.bulkCreate(mappedPages);
+  //     }
+  //     if (removedPages.length) await permissions.destroy({ where: { [Op.and]: [{ role_id: req.params.role_id },  { page_id: removedPages }] }});
+  //     return res.status(200).json({ msg: "Permissions are updated successfully" });
+  //   } catch (error) {
+  //     return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ error, messgae: "Can't edit permissions" });
+  //   }
 }

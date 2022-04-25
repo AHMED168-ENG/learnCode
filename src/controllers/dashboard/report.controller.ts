@@ -163,10 +163,10 @@ export class ReportController {
             }
             res.status(httpStatus.OK).json(dataInti)
           })
-          .catch((err) => res.status(httpStatus.NOT_FOUND).json({err, msg: "not found"}))
+          .catch((err) => res.status(httpStatus.NOT_FOUND).json({err: "There is something wrong while getting users", msg: "not found"}))
       })
       .catch((err) => {
-        res.status(httpStatus.NOT_FOUND).json({err, msg: "not found"})
+        res.status(httpStatus.NOT_FOUND).json({err: "There is something wrong while getting users", msg: "not found"})
       })
   }
   async sponsorlistReport(req: Request, res: Response, next: NextFunction) {
@@ -189,10 +189,10 @@ export class ReportController {
             }
             res.status(httpStatus.OK).json(dataInti)
           })
-          .catch((err) => res.status(httpStatus.NOT_FOUND).json({err, msg: "not found"}))
+          .catch((err) => res.status(httpStatus.NOT_FOUND).json({err: "There is something wrong while getting sponsors", msg: "not found"}))
       })
       .catch((err) => {
-        res.status(httpStatus.NOT_FOUND).json({err, msg: "not found"})
+        res.status(httpStatus.NOT_FOUND).json({err: "There is something wrong while getting sponsors", msg: "not found"})
       })
   }
   async initiativelistReport(req: Request, res: Response, next: NextFunction) {
@@ -235,10 +235,10 @@ export class ReportController {
             }
             res.status(httpStatus.OK).json(dataInti)
           })
-          .catch((err) => res.status(httpStatus.NOT_FOUND).json({err, msg: "not found"}))
+          .catch((err) => res.status(httpStatus.NOT_FOUND).json({err: "There is something wrong while getting initiatives", msg: "not found"}))
       })
       .catch((err) => {
-        res.status(httpStatus.NOT_FOUND).json({err, msg: "not found"})
+        res.status(httpStatus.NOT_FOUND).json({err: "There is something wrong while getting initiatives", msg: "not found"})
       })
   }
   async locationlistreport(req: Request, res: Response, next: NextFunction) {
@@ -264,10 +264,10 @@ export class ReportController {
             }
             res.status(httpStatus.OK).json(dataInti)
           })
-          .catch((err) => res.status(httpStatus.NOT_FOUND).json({err, msg: "not found"}))
+          .catch((err) => res.status(httpStatus.NOT_FOUND).json({err: "There is something wrong while getting locations", msg: "not found"}))
       })
       .catch((err) => {
-        res.status(httpStatus.NOT_FOUND).json({err, msg: "not found"})
+        res.status(httpStatus.NOT_FOUND).json({err: "There is something wrong while getting locations", msg: "not found"})
       })
   }
   async treelistreport(req: Request, res: Response, next: NextFunction) {
@@ -295,10 +295,10 @@ export class ReportController {
             }
             res.status(httpStatus.OK).json(dataInti)
           })
-          .catch((err) => res.status(httpStatus.NOT_FOUND).json({err, msg: "not found"}))
+          .catch((err) => res.status(httpStatus.NOT_FOUND).json({err: "There is something wrong while getting trees", msg: "not found"}))
       })
       .catch((err) => {
-        res.status(httpStatus.NOT_FOUND).json({err, msg: "not found"})
+        res.status(httpStatus.NOT_FOUND).json({err: "There is something wrong while getting trees", msg: "not found"})
       })
   }
   async usersInYear(where = {}) {

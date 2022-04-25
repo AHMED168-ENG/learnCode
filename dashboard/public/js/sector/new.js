@@ -45,11 +45,11 @@ const addNew = () => {
         type: 'POST'
     }).done(function (data) {
         $('#newForm').trigger("reset");
-        $('.toast-body').text("New Country add Successful")
+        $('.toast-body').text("New Sector add Successful")
         $('.toast').toast("show")
     }).fail(function (xhr) {
         const error = JSON.parse(xhr.responseText)
-        $("#modal-body-val").html(`<span style="font-size: large">${error.msg}<br/>&emsp;&nbsp;${error.err}</span>`)
+        $("#modal-body-val").html(`<span style="font-size: large">${error.msg}<br/>&emsp;&nbsp;${error.err ? error.err: ""}</span>`)
         $("#exampleModal").modal("show")
     }).always(function () {
         $("#submitAdd").buttonLoader("stop")

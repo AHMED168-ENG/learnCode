@@ -10,7 +10,7 @@ export class TreesBodyController {
         try {
             return await treesBody.findOne({ where: { id }, attributes: { exclude: ["createdAt", "updatedAt"] }, raw: true });
         } catch (error) {
-            return { error, msg: "Can't get trees body" };
+            return { err: "There is something wrong while getting tree body", msg: "Can't get trees body" };
         }
     }
     public newPage(req: Request, res: Response, next: NextFunction) {
@@ -34,7 +34,7 @@ export class TreesBodyController {
             return res.status(httpStatus.CREATED).json({ message: "A new Trees Body is created successfully" });
         } catch (error) {
             console.log(error)
-            return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ err: error, msg: "Can't add new trees body" });
+            return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ err: "There is something wrong while adding tree body", msg: "Can't add new trees body" });
         }
     }
     public async editPage(req: Request, res: Response, next: NextFunction) {
@@ -44,7 +44,7 @@ export class TreesBodyController {
             const data = await treesBodyController.getTreesBody(Number(req.params.id));
             return res.render("trees-bodies/edit.ejs", { title: "Edit Trees Body", data });
         } catch (error) {
-            return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ error, msg: "Can't open edit trees body page" });
+            return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ err: "There is something wrong while opening edit tree body page", msg: "Can't open edit trees body page" });
         }
     }
     public async editTreesBody(req, res: Response, next: NextFunction) {
@@ -62,7 +62,7 @@ export class TreesBodyController {
             }
             return res.status(httpStatus.OK).json({ message: "Trees Body is updated successfully" });
         } catch (error) {
-            return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ err: error, msg: "Can't edit trees body" });
+            return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ err: "There is something wrong while updating tree body", msg: "Can't edit trees body" });
         }
     }
     public async deleteTreesBody(req: Request, res: Response, next: NextFunction) {

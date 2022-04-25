@@ -70,7 +70,7 @@ const addNew = () => {
     }).done(function (data) {
         $('#newForm').trigger("reset");
         $(".custom-file-label").html("Choose file");
-        $('.toast-body').text("New Sponser add Successful")
+        $('.toast-body').text("New Tree add Successful")
         $('.toast').toast("show")
     }).fail(function (xhr) {
         const error = JSON.parse(xhr.responseText)

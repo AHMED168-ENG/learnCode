@@ -91,10 +91,10 @@ export class OrderController {
             }
             res.status(httpStatus.OK).json(dataInti)
           })
-          .catch((err) => res.status(httpStatus.NOT_FOUND).json({err, msg: "not found order"}))
+          .catch((err) => res.status(httpStatus.NOT_FOUND).json({err: "There is something wrong while getting orders", msg: "not found orders"}))
       })
       .catch((err) => {
-        res.status(httpStatus.NOT_FOUND).json({err, msg: "not found order"})
+        res.status(httpStatus.NOT_FOUND).json({err: "There is something wrong while getting orders", msg: "not found orders"})
       })
   }
   async listreport(req: Request, res: Response, next: NextFunction) {
@@ -118,10 +118,10 @@ export class OrderController {
             }
             res.status(httpStatus.OK).json(dataInti)
           })
-          .catch((err) => res.status(httpStatus.NOT_FOUND).json({err, msg: "not found order"}))
+          .catch((err) => res.status(httpStatus.NOT_FOUND).json({err: "There is something wrong while counting orders", msg: "not found orders"}))
       })
       .catch((err) => {
-        res.status(httpStatus.NOT_FOUND).json({err, msg: "not found order"})
+        res.status(httpStatus.NOT_FOUND).json({err: "There is something wrong while getting orders", msg: "not found orders"})
       })
   }
   async changeStatus(req: Request, res: Response, next: NextFunction) {

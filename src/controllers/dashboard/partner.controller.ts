@@ -35,10 +35,10 @@ export class PartnerController {
             }
             res.status(httpStatus.OK).json(dataInti)
           })
-          .catch((err) => res.status(httpStatus.NOT_FOUND).json({err, msg: "not found"}))
+          .catch((err) => res.status(httpStatus.NOT_FOUND).json({err: "There is something wrong while getting partners", msg: "not found"}))
       })
       .catch((err) => {
-        res.status(httpStatus.NOT_FOUND).json({err, msg: "not found"})
+        res.status(httpStatus.NOT_FOUND).json({err: "There is something wrong while getting partners", msg: "not found"})
       })
   }
   async newPage(req: Request, res: Response, next: NextFunction) {

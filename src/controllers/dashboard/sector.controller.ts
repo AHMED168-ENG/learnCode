@@ -31,10 +31,10 @@ export class SectorController {
             }
             res.status(httpStatus.OK).json(dataInti)
           })
-          .catch((err) => res.status(httpStatus.NOT_FOUND).json({err, msg: "not found sector"}))
+          .catch((err) => res.status(httpStatus.NOT_FOUND).json({err: "There is something wrong while getting sectors", msg: "not found sectors"}))
       })
       .catch((err) => {
-        res.status(httpStatus.NOT_FOUND).json({err, msg: "not found sector"})
+        res.status(httpStatus.NOT_FOUND).json({err: "There is something wrong while getting sectors", msg: "not found sectors"})
       })
   }
   newPage(req: Request, res: Response, next: NextFunction) {

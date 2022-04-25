@@ -31,10 +31,10 @@ export class CountryController {
             }
             res.status(httpStatus.OK).json(dataInti)
           })
-          .catch((err) => res.status(httpStatus.NOT_FOUND).json({err, msg: "not found country"}))
+          .catch((err) => res.status(httpStatus.NOT_FOUND).json({err: "There is something wrong while getting countries list", msg: "not found countries"}))
       })
       .catch((err) => {
-        res.status(httpStatus.NOT_FOUND).json({err, msg: "not found country"})
+        res.status(httpStatus.NOT_FOUND).json({err: "There is something wrong while getting countries list", msg: "not found countries"})
       })
   }
   newPage(req: Request, res: Response, next: NextFunction) {

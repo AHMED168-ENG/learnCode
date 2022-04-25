@@ -40,10 +40,10 @@ export class LocationController {
             }
             res.status(httpStatus.OK).json(dataInti)
           })
-          .catch((err) => res.status(httpStatus.NOT_FOUND).json({err, msg: "not found Location"}))
+          .catch((err) => res.status(httpStatus.NOT_FOUND).json({err: "There is something wrong while getting initiative locations", msg: "not found Locations"}))
       })
       .catch((err) => {
-        res.status(httpStatus.NOT_FOUND).json({err, msg: "not found Location"})
+        res.status(httpStatus.NOT_FOUND).json({err: "There is something wrong while getting initiative locations", msg: "not found Locations"})
       })
   }
   async newPage(req: Request, res: Response, next: NextFunction) {

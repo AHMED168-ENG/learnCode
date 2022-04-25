@@ -1,5 +1,4 @@
 import {Request, Response, NextFunction} from "express"
-import httpStatus from "http-status"
 import sequelize from "sequelize"
 import initiatives from "../../models/initiative.model"
 import {InitiativeController} from "./initiative.controller"
@@ -7,7 +6,6 @@ import {OrderController} from "./order.controller"
 import {SponserController} from "./sponser.controller"
 import {MessageController} from "./message.controller"
 import message from "../../models/message.model"
-import { UserController } from "./user.controller"
 
 export class HomeController {
   async home(req: Request, res: Response, next: NextFunction) {

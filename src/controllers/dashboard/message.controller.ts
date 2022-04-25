@@ -35,10 +35,10 @@ export class MessageController {
             }
             res.status(httpStatus.OK).json(dataInti)
           })
-          .catch((err) => res.status(httpStatus.NOT_FOUND).json({err, msg: "not found message"}))
+          .catch((err) => res.status(httpStatus.NOT_FOUND).json({err: "There is something wrong while getting messages", msg: "not found messages"}))
       })
       .catch((err) => {
-        res.status(httpStatus.NOT_FOUND).json({err, msg: "not found message"})
+        res.status(httpStatus.NOT_FOUND).json({err: "There is something wrong while getting messages", msg: "not found messages"})
       })
   }
   view(req: Request, res: Response, next: NextFunction) {

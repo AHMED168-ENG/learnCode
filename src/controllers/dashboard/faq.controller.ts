@@ -29,7 +29,7 @@ export class FAQController {
             }
             res.status(httpStatus.OK).json(dataInti)
           })
-          .catch((err) => res.status(httpStatus.NOT_FOUND).json({err, msg: "not found"}))
+          .catch((err) => res.status(httpStatus.NOT_FOUND).json({err: "There is something wrong while getting FAQs", msg: "not found"}))
       })
       .catch((err) => {
         res.status(httpStatus.NOT_FOUND).json({err, msg: "not found"})

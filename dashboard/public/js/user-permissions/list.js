@@ -1,4 +1,31 @@
 $(document).ready(function () {});
+// var addedPages = [];
+// var removedPages = [];
+// function addOrRemovePages(page_id, checked) {
+//     if (checked == "true") {
+//         addedPages.push(page_id);
+//         if (removedPages.includes(page_id)) removedPages = removedPages.filter((removedPage) => removedPage != page_id);
+//     }
+//     if (checked == "false") {
+//         removedPages.push(page_id);
+//         if (addedPages.includes(page_id)) addedPages = addedPages.filter((addedPage) => addedPage != page_id);
+//     }
+// }
+// function submit() {
+//     spinnerNotfound(1);
+//     const settings = {
+//         async: true,
+//         crossDomain: true,
+//         data: { addedPages, removedPages },
+//         url: `${window.location.pathname}/edit`,
+//         method: "Put",
+//     }
+//     $.ajax(settings).done(function (res, textStatus) {
+//         spinnerNotfound(2);
+//         addedPages = [];
+//         removedPages = [];
+//     }).fail(() => spinnerNotfound(3));
+// }
 function addOrRemovePages(page_id, checked) {
     spinnerNotfound(1);
     const settings = {

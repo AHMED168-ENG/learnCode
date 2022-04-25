@@ -33,10 +33,10 @@ export class TreeController {
             }
             res.status(httpStatus.OK).json(dataInti)
           })
-          .catch((err) => res.status(httpStatus.NOT_FOUND).json({err, msg: "not found trees"}))
+          .catch((err) => res.status(httpStatus.NOT_FOUND).json({err: "There is something wrong while getting trees", msg: "not found trees"}))
       })
       .catch((err) => {
-        res.status(httpStatus.NOT_FOUND).json({err, msg: "not found trees"})
+        res.status(httpStatus.NOT_FOUND).json({err: "There is something wrong while getting trees", msg: "not found trees"})
       })
   }
   public async detailsPage(req: Request, res: Response, next: NextFunction) {

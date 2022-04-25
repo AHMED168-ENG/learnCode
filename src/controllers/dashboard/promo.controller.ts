@@ -33,10 +33,10 @@ export class PromoController {
             }
             res.status(httpStatus.OK).json(dataInti)
           })
-          .catch((err) => res.status(httpStatus.NOT_FOUND).json({err, msg: "not found promo"}))
+          .catch((err) => res.status(httpStatus.NOT_FOUND).json({err: "There is something wrong while getting promo codes", msg: "not found promo"}))
       })
       .catch((err) => {
-        res.status(httpStatus.NOT_FOUND).json({err, msg: "not found promo"})
+        res.status(httpStatus.NOT_FOUND).json({err: "There is something wrong while getting promo codes", msg: "not found promo"})
       })
   }
   async newPage(req: Request, res: Response, next: NextFunction) {

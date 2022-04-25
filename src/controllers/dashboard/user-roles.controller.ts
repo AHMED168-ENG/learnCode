@@ -27,10 +27,10 @@ export class UserRolesController {
             }
             res.status(httpStatus.OK).json(dataInti)
           })
-          .catch((err) => res.status(httpStatus.NOT_FOUND).json({err, msg: "not found user roles"}))
+          .catch((err) => res.status(httpStatus.NOT_FOUND).json({err: "There is something wrong while getting user roles", msg: "not found user roles"}))
       })
       .catch((err) => {
-        res.status(httpStatus.NOT_FOUND).json({err, msg: "not found user roles"})
+        res.status(httpStatus.NOT_FOUND).json({err: "There is something wrong while getting user roles", msg: "not found user roles"})
       })
   }
   newPage(req: Request, res: Response, next: NextFunction) {

@@ -30,10 +30,10 @@ export class PartnerTypeController {
             }
             res.status(httpStatus.OK).json(dataInti)
           })
-          .catch((err) => res.status(httpStatus.NOT_FOUND).json({err, msg: "not found partnerType"}))
+          .catch((err) => res.status(httpStatus.NOT_FOUND).json({err: "There is something wrong while getting partner types", msg: "not found partner types"}))
       })
       .catch((err) => {
-        res.status(httpStatus.NOT_FOUND).json({err, msg: "not found partnerType"})
+        res.status(httpStatus.NOT_FOUND).json({err: "There is something wrong while getting partner types", msg: "not found partner types"})
       })
   }
   newPage(req: Request, res: Response, next: NextFunction) {

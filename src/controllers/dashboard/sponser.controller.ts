@@ -35,10 +35,10 @@ export class SponserController {
             }
             res.status(httpStatus.OK).json(dataInti)
           })
-          .catch((err) => res.status(httpStatus.NOT_FOUND).json({err, msg: "not found initiative"}))
+          .catch((err) => res.status(httpStatus.NOT_FOUND).json({err: "There is something wrong while getting sponsors", msg: "not found initiative"}))
       })
       .catch((err) => {
-        res.status(httpStatus.NOT_FOUND).json({err, msg: "not found initiatives"})
+        res.status(httpStatus.NOT_FOUND).json({err: "There is something wrong while getting sponsors", msg: "not found initiatives"})
       })
   }
   newPage(req: Request, res: Response, next: NextFunction) {

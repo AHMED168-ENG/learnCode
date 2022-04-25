@@ -3,9 +3,6 @@ import httpStatus from "http-status"
 import sequelize, { Op } from "sequelize"
 import city from "../../models/city.model"
 import country from "../../models/country.model"
-import modules from "../../models/module.model"
-import page from "../../models/page.model"
-import permissions from "../../models/permissions.model"
 import region from "../../models/region.model"
 import sector from "../../models/sector.model"
 import webAppsUsers from "../../models/user.model"
@@ -17,7 +14,7 @@ export class UserController {
       res.cookie("token", '', { expires: new Date(0) });
       return res.redirect('/');
     } catch (error) {
-      return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ error, msg: "Can't logout user" });
+      return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ err: "There is something wrong while logout this user", msg: "Can't logout user" });
     }
   }
   listPage(req: Request, res: Response, next: NextFunction) {
@@ -54,8 +51,7 @@ export class UserController {
       const dataPagination = { total: data["count"], limit, page: Number(req.query.page), pages: Math.ceil(data["count"] / limit), data: data["rows"] };
       return res.status(httpStatus.OK).json(dataPagination);
     } catch (err) {
-      console.log(err)
-      return res.status(httpStatus.NOT_FOUND).json({ err, msg: "Can't find Users" });
+      return res.status(httpStatus.NOT_FOUND).json({ err: "There is something wrong while getting users list", msg: "Can't find Users" });
     }
   }
   editPage(req: Request, res: Response, next: NextFunction) {
@@ -74,7 +70,7 @@ export class UserController {
         })
       })
       .catch((err) => {
-        res.status(httpStatus.NOT_FOUND).json({err, msg: "not found user"})
+        res.status(httpStatus.NOT_FOUND).json({err: "There is something wrong while opening edit page", msg: "not found user"})
       })
   }
   async userData(userId) {

@@ -103,7 +103,7 @@ const addNew = () => {
         window.history.back();
     }).fail(function (xhr) {
         const error = JSON.parse(xhr.responseText)
-        $("#modal-body-val").html(`<span style="font-size: large">${error.msg}<br/>&emsp;&nbsp;${error.err}</span>`)
+        $("#modal-body-val").html(`<span style="font-size: large">${error.msg}<br/>&emsp;&nbsp;${error.err ? error.err: ""}</span>`)
         $("#exampleModal").modal("show")
     }).always(function () {
         $("#submitAdd").buttonLoader("stop")
@@ -146,7 +146,7 @@ function cityListBycountry(id) {
         listRegionByCity($("#city_id option:selected").val())
     }).fail(function (xhr) {
         const error = JSON.parse(xhr.responseText)
-        $("#modal-body-val").html(`<span style="font-size: large">${error.msg}<br/>&emsp;&nbsp;${error.err}</span>`)
+        $("#modal-body-val").html(`<span style="font-size: large">${error.msg}<br/>&emsp;&nbsp;${error.err ? error.err: ""}</span>`)
         $("#exampleModal").modal("show")
     })
 }
@@ -163,7 +163,7 @@ function listRegionByCity(id) {
         });
     }).fail(function (xhr) {
         const error = JSON.parse(xhr.responseText)
-        $("#modal-body-val").html(`<span style="font-size: large">${error.msg}<br/>&emsp;&nbsp;${error.err}</span>`)
+        $("#modal-body-val").html(`<span style="font-size: large">${error.msg}<br/>&emsp;&nbsp;${error.err ? error.err: ""}</span>`)
         $("#exampleModal").modal("show")
     })
 }

@@ -47,10 +47,10 @@ export class AdminController {
             }
             res.status(httpStatus.OK).json(dataInti)
           })
-          .catch((err) => res.status(httpStatus.NOT_FOUND).json({err, msg: "not found admin"}))
+          .catch((err) => res.status(httpStatus.NOT_FOUND).json({err: "There is something wrong while getting admins list", msg: "not found admin"}))
       })
       .catch((err) => {
-        res.status(httpStatus.NOT_FOUND).json({err, msg: "not found admin"})
+        res.status(httpStatus.NOT_FOUND).json({err: "There is something wrong while getting admins list", msg: "not found admin"})
       })
   }
   async newPage(req: Request, res: Response, next: NextFunction) {
@@ -58,24 +58,24 @@ export class AdminController {
       const data = await role.findAll({ attributes: { exclude: ["createdAt", "updatedAt"] } });
       return res.render("admin/new.ejs", { title: "admin new", data });
     } catch (error) {
-      return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ error, messgae: "Can't get new admin page" });
+      return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ err: "There is something wrong while opening page", msg: "Can't get new admin page" });
     }
   }
   async addNew(req: Request, res: Response, next: NextFunction) {
     try {
       const createdAdminData: IAdminUser = req.body;
-      if (!createdAdminData || ![1, 2].includes(Number(createdAdminData.role_id))) return res.status(httpStatus.BAD_REQUEST).json({ message: "Bad Request" });
-      if (!helpers.regularExprEmail(createdAdminData.email)) return res.status(httpStatus.BAD_REQUEST).json({ message: "invalid email" });
+      if (!createdAdminData || ![1, 2].includes(Number(createdAdminData.role_id))) return res.status(httpStatus.BAD_REQUEST).json({ msg: "Bad Request" });
+      if (!helpers.regularExprEmail(createdAdminData.email)) return res.status(httpStatus.BAD_REQUEST).json({ msg: "invalid email" });
       const existedAdmin = await admin.findOne({ where: { email: createdAdminData.email } });
-      if (existedAdmin) return res.status(httpStatus.NOT_ACCEPTABLE).json({ message: "This email is already exists" });
+      if (existedAdmin) return res.status(httpStatus.NOT_ACCEPTABLE).json({ msg: "This email is already exists" });
       const password = await bcrypt.hash(createdAdminData.password, 10);
       const existedAdminWithPass = await admin.findOne({ where: { password } });
-      if (existedAdminWithPass) return res.status(httpStatus.NOT_ACCEPTABLE).json({ message: "This password is already exists" });
+      if (existedAdminWithPass) return res.status(httpStatus.NOT_ACCEPTABLE).json({ msg: "This password is already exists" });
       const request = { fullName: createdAdminData.fullName, email: createdAdminData.email, phone: createdAdminData.phone, role_id: createdAdminData.role_id, password };
       await admin.create(request);
       return res.status(httpStatus.OK).json({ msg: "new admin created" });
-    } catch (error) {
-      return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ error, messgae: "Can't add admin" });
+    } catch (err) {
+      return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ err: "There is some wrong while adding admin", msg: "Can't add admin" });
     }
   }
   async editPage(req: Request, res: Response, next: NextFunction) {
@@ -84,14 +84,14 @@ export class AdminController {
       const data = await admin.findOne({ where: { id: req.params.id }, attributes: { exclude: ["id", "createdAt", "updatedAt"] }, raw: true });
       return res.render("admin/edit.ejs", { title: "Edit admin", data, roles });
     } catch (error) {
-      return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ error, message: "Can't get admin data for edit page" });
+      return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ err: "There is something wrong while opening page", msg: "Can't get admin data for edit page" });
     }
   }
   async edit(req: Request, res: Response, next: NextFunction) {
     try {
       const updatedAdminData: IAdminUser = req.body;
-      if (!updatedAdminData || ![1, 2].includes(Number(updatedAdminData.role_id))) return res.status(httpStatus.BAD_REQUEST).json({ message: "Bad Request" });
-      if (updatedAdminData.email && !helpers.regularExprEmail(updatedAdminData.email)) return res.status(httpStatus.BAD_REQUEST).json({ message: "invalid email" });
+      if (!updatedAdminData || ![1, 2].includes(Number(updatedAdminData.role_id))) return res.status(httpStatus.BAD_REQUEST).json({ msg: "Bad Request" });
+      if (updatedAdminData.email && !helpers.regularExprEmail(updatedAdminData.email)) return res.status(httpStatus.BAD_REQUEST).json({ msg: "invalid email" });
       if (updatedAdminData.password) {
         const password: string = await bcrypt.hash(updatedAdminData.password, 5);
         req.body.password = password;
@@ -99,8 +99,7 @@ export class AdminController {
       await admin.update(req.body, { where: { id: req.params.id } });
       return res.status(httpStatus.OK).json({ msg: "admin edited" });
     } catch (error) {
-      console.log(`error: ${error}`)
-      return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ error, message: "Can't update admin data" });
+      return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ err: "There is something wrong while updating admin", msg: "Can't update admin data" });
     }
   }
 }

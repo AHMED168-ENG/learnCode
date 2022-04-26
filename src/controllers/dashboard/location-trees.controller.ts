@@ -11,6 +11,7 @@ import initiativeTrees from "../../models/initiative-trees.model"
 import trees from "../../models/trees.model"
 import {TreeController} from "./tree.controller"
 import country from "../../models/country.model"
+import { InitiativesLocationController } from "../api/initiative-location.controller"
 
 export class LocationTreesController {
   listPage(req: Request, res: Response, next: NextFunction) {
@@ -52,6 +53,7 @@ export class LocationTreesController {
       })
   }
   async newPage(req: Request, res: Response, next: NextFunction) {
+    const initiativeLocations = await new InitiativesLocationController().listAllInitLocations();
     const initiatives = await new InitiativeController().listAllInit()
     const trees = await new TreeController().listTrees()
     const countries = await new CountryController().listCountry()
@@ -60,6 +62,7 @@ export class LocationTreesController {
       initiatives,
       trees,
       countries,
+      initiativeLocations,
     })
   }
   addNew(req, res: Response, next: NextFunction) {
@@ -69,19 +72,31 @@ export class LocationTreesController {
         res.status(httpStatus.OK).json({msg: "new tree created"})
       })
       .catch((err) => {
-        res.status(400).json({msg: "Error in create new tree", err: err.errors[0].message || "unexpected error"})
+        console.log(err)
+        res.status(400).json({msg: "Error in create new tree", err: "unexpected error"})
       })
   }
   async editPage(req: Request, res: Response, next: NextFunction) {
     try {
       const id = req.params.id;
-      const initiatives = await new InitiativeController().listAllInit();
-      const trees = await new TreeController().listTrees();
+      const initiativeLocationsData = await new InitiativesLocationController().listAllInitLocations();
+      const initiativesData = await new InitiativeController().listAllInit();
+      const treesData = await new TreeController().listTrees();
       const countries = await country.findAll({ attributes: { include: ["country_id", "en_name"] } });
-      const data = await initiativeTrees.findOne({ where: { id }, raw: true });
-      return res.render("location-trees/edit.ejs", { title: "Edit location Trees", data, initiatives, countries, trees });
+      const data = await initiativeTrees.findOne({
+        where: { id },
+        attributes: { exclude: ["createdAt", "updatedAt"] },
+        include: [
+          { model: trees, attributes: ["ar_name", "en_name"] },
+          { model: initiatives, attributes: ["init_ar_name", "init_en_name"] },
+          { model: initiativeLocations, attributes: ["location_nameEn", "location_nameAr"] },
+        ],
+        raw: true,
+      });
+      return res.render("location-trees/edit.ejs", { title: "Edit location Trees", data, initiatives: initiativesData, countries, trees: treesData, initiativeLocations: initiativeLocationsData });
     } catch (error) {
-      return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ msg: "Error in Edit tree", err: error.errors[0].message || "unexpected error" });
+      console.log(error)
+      return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ msg: "Error in Edit tree", err: "unexpected error" });
     }
   }
   edit(req, res: Response, next: NextFunction) {
@@ -92,7 +107,8 @@ export class LocationTreesController {
         res.status(httpStatus.OK).json({msg: "new tree updated"})
       })
       .catch((err) => {
-        res.status(httpStatus.BAD_REQUEST).json({msg: "Error in Edit tree", err: err.errors[0].message || "unexpected error"})
+        console.log(err)
+        res.status(httpStatus.BAD_REQUEST).json({msg: "Error in Edit tree", err: "unexpected error"})
       })
   }
   active(req, res: Response, next: NextFunction) {
@@ -105,7 +121,7 @@ export class LocationTreesController {
         res.status(httpStatus.OK).json({msg: "edited"})
       })
       .catch((err) => {
-        res.status(httpStatus.BAD_REQUEST).json({msg: "Error in Edit", err: err.errors[0].message || "unexpected error"})
+        res.status(httpStatus.BAD_REQUEST).json({msg: "Error in Edit", err: "unexpected error"})
       })
   }
 }

@@ -61,7 +61,7 @@ export class MessageController {
       await message.update({ status: "read" }, { where: { message_id: messageId } });
       return res.status(httpStatus.OK).json({ msg: "message edited" });
     } catch (err) {
-      return res.status(httpStatus.BAD_REQUEST).json({ msg: "Error in Edit message", err: err.errors[0].message || "unexpected error" });
+      return res.status(httpStatus.BAD_REQUEST).json({ msg: "Error in Edit message", err: "unexpected error" });
     }
   }
   async lastNewMessage() {

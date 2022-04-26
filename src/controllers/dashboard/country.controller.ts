@@ -49,7 +49,7 @@ export class CountryController {
         res.status(httpStatus.OK).json({msg: "new country created"})
       })
       .catch((err) => {
-        res.status(400).json({msg: "Error in create new country", err: err.errors[0].message || "unexpected error"})
+        res.status(400).json({msg: "Error in create new country", err: "unexpected error"})
       })
   }
   editPage(req: Request, res: Response, next: NextFunction) {
@@ -69,7 +69,7 @@ export class CountryController {
         res.status(httpStatus.OK).json({msg: "country edited"})
       })
       .catch((err) => {
-        res.status(httpStatus.BAD_REQUEST).json({msg: "Error in edit country", err: err.errors[0].message || "unexpected error"})
+        res.status(httpStatus.BAD_REQUEST).json({msg: "Error in edit country", err: "unexpected error"})
       })
   }
   async listCountry() {

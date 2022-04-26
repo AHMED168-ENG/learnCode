@@ -60,7 +60,7 @@ export class PartnerController {
         res.status(httpStatus.OK).json({msg: "new Partner created"})
       })
       .catch((err) => {
-        res.status(400).json({msg: "Error in create new Partner", err: err.errors[0].message || "unexpected error"})
+        res.status(400).json({msg: "Error in create new Partner", err: "unexpected error"})
       })
   }
   async editPage(req: Request, res: Response, next: NextFunction) {
@@ -82,7 +82,7 @@ export class PartnerController {
         res.status(httpStatus.OK).json({msg: "Partner edited"})
       })
       .catch((err) => {
-        res.status(httpStatus.BAD_REQUEST).json({msg: "Error in Edit Partner", err: err.errors[0].message || "unexpected error"})
+        res.status(httpStatus.BAD_REQUEST).json({msg: "Error in Edit Partner", err: "unexpected error"})
       })
   }
 }

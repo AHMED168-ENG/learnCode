@@ -1,3 +1,7 @@
+$('#img').on('change', function () { files = $(this)[0].files; name = ''; for (var i = 0; i < files.length; i++) { name += '\"' + files[i].name + '\"' + (i != files.length - 1 ? ", " : ""); } $(".custom-file-label").html(name); });
+var loadFile = function (event) {
+    $("#tree_img_display").attr("src", URL.createObjectURL(event.target.files[0]));
+};
 $(function () {
     $.validator.setDefaults({
         submitHandler: function (form, event) {
@@ -5,10 +9,23 @@ $(function () {
             addNew()
         }
     });
-    // `location_id`, ``, ``, ``, ``, `region_id`, `location_status`, `deleted`, 
-    // `createdAt`, `updatedAt`, `img`, `caverArea`,`, `aboutEn`, `aboutAr` -->
     $('#newForm').validate({
         rules: {
+            location_nameAr: {
+                required: true,
+            },
+            location_nameEn: {
+                required: true,
+            },
+            location_address: {
+                required: true
+            },
+            location_long: {
+                required: true
+            },
+            location_lat: {
+                required: true
+            },
             init_id: {
                 required: true
             },
@@ -18,31 +35,32 @@ $(function () {
             region_id: {
                 required: true
             },
-            location_id: {
+            caverArea: {
                 required: true
             },
-            price: {
+            img: {
+                accept: "image/png"
+            },
+            aboutEn: {
                 required: true
             },
-            price_points: {
-                required: true
-            },
-            carbon_points: {
-                required: true
-            },
-            target_num: {
+            aboutAr: {
                 required: true
             },
         },
         messages: {
-            location_id: "Please enter a location",
+            location_nameAr: "Please enter a arabic name",
+            location_nameEn: "Please enter a english name",
+            location_address: "Please enter a address",
+            location_long: "Please enter along",
+            location_lat: "Please enter a lat",
             init_id: "Please enter a init",
             city_id: "Please enter a city",
             region_id: "Please enter a region",
-            price: "Please enter a price",
-            price_points: "Please enter a price points",
-            carbon_points: "Please enter a carbon points",
-            target_num: "Please enter a target",
+            caverArea: "Please enter a caverArea",
+            img: { accept: 'Please select `PNG` only' },
+            aboutEn: "Please enter a about en",
+            aboutAr: "Please enter a about ar",
         },
         errorElement: 'span',
         errorPlacement: function (error, element) {
@@ -60,14 +78,20 @@ $(function () {
 const addNew = () => {
     $("#submitAdd").buttonLoader("start")
     const formData = new FormData();
+    formData.append("location_nameAr", $("#location_nameAr").val());
+    formData.append("location_nameEn", $("#location_nameEn").val());
+    formData.append("location_address", $("#location_address").val());
+    formData.append("location_long", $("#location_long").val());
+    formData.append("location_lat", $("#location_lat").val());
+    formData.append("caverArea", $("#caverArea").val());
+    formData.append("aboutEn", $("#aboutEn").val());
+    formData.append("aboutAr", $("#aboutAr").val());
     formData.append("init_id", $("#init_id option:selected").val());
     formData.append("city_id", $("#city_id option:selected").val());
     formData.append("region_id", $("#region_id option:selected").val());
-    formData.append("location_id", $("#location_id option:selected").val());
-    formData.append("price", $("#price").val());
-    formData.append("price_points", $("#price_points").val());
-    formData.append("carbon_points", $("#carbon_points").val());
-    formData.append("target_num", $("#target_num").val());
+    if ($(".custom-file-input").hasClass("changed")) {
+        formData.append("img", $("#img")[0].files[0]);
+    }
     $.ajax({
         url: `${window.location.pathname}`,
         data: formData,
@@ -101,7 +125,7 @@ $(document).ready(function () {
         cityListBycountry($("#country_id option:selected").val())
     })
 
-    // get lislocation on city change 
+    // get list of region on city change 
     $("#city_id").on("change", function () {
         $('#region_id').children().remove().end()
         listRegionByCity($("#city_id option:selected").val())
@@ -116,7 +140,8 @@ function cityListBycountry(id) {
         $.each(data, function (i, item) {
             $('#city_id').append($('<option>', {
                 value: item.city_id,
-                text: `${item.en_name}  -  ${item.ar_name}`
+                text: `${item.en_name}  -  ${item.ar_name}`,
+                selected: cityId == item.city_id ? true : false
             }));
         });
 
@@ -137,7 +162,8 @@ function listRegionByCity(id) {
         $.each(data, function (i, item) {
             $('#region_id').append($('<option>', {
                 value: item.region_id,
-                text: `${item.en_name}  -  ${item.ar_name}`
+                text: `${item.en_name}  -  ${item.ar_name}`,
+                selected: regionId == item.region_id ? true : false
             }));
         });
     }).fail(function (xhr) {
@@ -154,5 +180,12 @@ $(function () {
     //Initialize Select2 Elements
     $('.select2bs4').select2({
         theme: 'bootstrap4'
+    })
+});
+
+
+$(document).ready(function () {
+    $("input,select,textarea").on("change", function () {
+        $(this).addClass("changed");
     })
 });

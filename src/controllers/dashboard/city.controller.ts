@@ -53,7 +53,7 @@ export class CityController {
         res.status(httpStatus.OK).json({msg: "new city created"})
       })
       .catch((err) => {
-        res.status(400).json({msg: "Error in create new city", err: err.errors[0].message || "unexpected error"})
+        res.status(400).json({msg: "Error in create new city", err: "unexpected error"})
       })
   }
   async editPage(req: Request, res: Response, next: NextFunction) {
@@ -75,7 +75,7 @@ export class CityController {
         res.status(httpStatus.OK).json({msg: "city edited"})
       })
       .catch((err) => {
-        res.status(httpStatus.BAD_REQUEST).json({msg: "Error in Edit city", err: err.errors[0].message || "unexpected error"})
+        res.status(httpStatus.BAD_REQUEST).json({msg: "Error in Edit city", err: "unexpected error"})
       })
   }
   async listCityByCountry(req, res: Response, next: NextFunction) {
@@ -86,7 +86,7 @@ export class CityController {
         res.status(httpStatus.OK).json(data)
       })
       .catch((err) => {
-        res.status(httpStatus.BAD_REQUEST).json({msg: "Error in Edit city", err: err.errors[0].message || "unexpected error"})
+        res.status(httpStatus.BAD_REQUEST).json({msg: "Error in Edit city", err: "unexpected error"})
       })
   }
   async listCity() {

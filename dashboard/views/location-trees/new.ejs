@@ -52,21 +52,11 @@
                   <div class="card-header">
                     <h3 class="card-title">
                       <i class="fas fa-users"></i>
-                      &nbsp;&nbsp; Add new Location
+                      &nbsp;&nbsp; Add new Location Tree
                     </h3>
                   </div>
                   <form id="newForm" action="" onsubmit="">
                     <div class="card-body">
-                      <div class="form-row mx-3 my-1">
-                        <div class="form-group col-md-6">
-                          <label for="location_nameAr">Name Arabic</label>
-                          <input type="text" id="location_nameAr" name="location_nameAr" class="form-control" placeholder="Name Arabic" />
-                        </div>
-                        <div class="form-group col-md-6">
-                          <label for="location_nameEn">Name English</label>
-                          <input type="text" id="location_nameEn" name="location_nameEn" class="form-control" placeholder="Name English" />
-                        </div>
-                      </div>
                       <div class="form-row mx-3 my-1">
                         <div class="form-group col-md-6">
                           <div class="form-group">
@@ -84,18 +74,39 @@
                           </div>
                         </div>
                         <div class="form-group col-md-6">
-                          <label for="location_address">Address</label>
-                          <input type="text" id="location_address" name="location_address" class="form-control" placeholder="Address" />
+                          <div class="form-group">
+                            <label>Initiative Location</label>
+                            <select
+                              id="location_id"
+                              class="form-control select2 select2-danger"
+                              data-dropdown-css-class="select2-danger"
+                              style="width: 100%"
+                            >
+                              <% for(let [index,data] of initiativeLocations.entries() || []){ %>
+                              <option value="<%=data.location_id%>"><%=data.location_nameEn%> - <%=data.location_nameAr%></option>
+                              <%} %>
+                            </select>
+                          </div>
                         </div>
                       </div>
                       <div class="form-row mx-3 my-1">
                         <div class="form-group col-md-6">
-                          <label for="location_lat">Latitude</label>
-                          <input type="text" id="location_lat" name="location_lat" class="form-control" placeholder="latitude" />
+                          <label for="price">Price</label>
+                          <input type="text" id="price" name="price" class="form-control" placeholder="Price" />
                         </div>
                         <div class="form-group col-md-6">
-                          <label for="location_long">Longitude</label>
-                          <input type="text" id="location_long" name="location_long" class="form-control" placeholder="longitude" />
+                          <label for="price_points">Price Points</label>
+                          <input type="text" id="price_points" name="price_points" class="form-control" placeholder="Price Points" />
+                        </div>
+                      </div>
+                      <div class="form-row mx-3 my-1">
+                        <div class="form-group col-md-6">
+                          <label for="carbon_points">Carbon Points</label>
+                          <input type="text" id="carbon_points" name="carbon_points" class="form-control" placeholder="Carbon Points" />
+                        </div>
+                        <div class="form-group col-md-6">
+                          <label for="target_num">Target</label>
+                          <input type="text" id="target_num" name="target_num" class="form-control" placeholder="Target" />
                         </div>
                       </div>
                       <div class="form-row mx-3 my-1">
@@ -124,25 +135,19 @@
                           </div>
                         </div>
                         <div class="form-group col-md-6">
-                          <label for="caverArea">Caver Area</label>
-                          <input type="text" id="caverArea" name="caverArea" class="form-control" placeholder="Caver Area" />
-                        </div>
-                      </div>
-                      <div class="form-row mx-3 my-1">
-                        <div class="form-group col-md-6">
-                          <label for="aboutEn">About en</label>
-                          <textarea type="text" id="aboutEn" name="aboutEn" class="form-control" placeholder="About en" rows="3"></textarea>
-                        </div>
-                        <div class="form-group col-md-6">
-                          <label for="aboutAr">About ar</label>
-                          <textarea type="text" id="aboutAr" name="aboutAr" class="form-control" placeholder="About ar" rows="3"></textarea>
-                        </div>
-                      </div>
-                      <div class="form-group col-md-6 mx-3" style="padding-right: 22px; padding-left: 5px">
-                        <label for="img">Image</label>
-                        <div class="custom-file">
-                          <input type="file" class="custom-file-input" id="img" name="img" accept="image/x-png" />
-                          <label class="custom-file-label" for="img">Choose file</label>
+                          <div class="form-group">
+                            <label>Tree</label>
+                            <select
+                              id="tree_id"
+                              class="form-control select2 select2-danger"
+                              data-dropdown-css-class="select2-danger"
+                              style="width: 100%"
+                            >
+                              <% for(let [index,data] of trees.entries() || []){ %>
+                              <option value="<%=data.tree_id%>"><%=data.en_name%> - <%=data.ar_name%></option>
+                              <%} %>
+                            </select>
+                          </div>
                         </div>
                       </div>
                     </div>

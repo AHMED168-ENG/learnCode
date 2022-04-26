@@ -14,6 +14,7 @@ export class LocationRoutes {
     this.router.get("/list", this.locationController.list)
     this.router.get("/new", this.locationController.newPage)
     this.router.post("/new", this.locationController.addNew)
+    this.router.get("/view/:id", this.locationController.viewPage)
     this.router.get("/edit/:id", this.locationController.editPage)
     this.router.post("/edit/:id", this.locationController.edit)
     this.router.delete("/:action/:id", this.locationController.active)

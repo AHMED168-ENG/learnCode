@@ -74,9 +74,24 @@
 
     <!-- Sidebar Menu -->
     <nav class="mt-2">
-      <ul class="nav nav-pills nav-sidebar flex-column nav-flat" data-widget="treeview" role="menu" data-accordion="false">
+      <ul class="nav nav-pills nav-sidebar flex-column nav-flat" data-widget="treeview" role="menu" data-accordion="false" id="sidebar">
         <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
+        
+      </ul>
+    </nav>
+    <!-- /.sidebar-menu -->
+  </div>
+  <!-- /.sidebar -->
+</aside>
+<script>
+  fetch("/dashboard/home/num", {
+    method: "GET",
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      data.userPermissions.forEach((userPermission) => {
+        $("#sidebar").append(`
         <li class="nav-item mb-2">
           <a href="/" class="nav-link" id="home">
             <i class="nav-icon fas fa-tachometer-alt"></i>
@@ -84,13 +99,15 @@
           </a>
         </li>
         <li class="nav-item">
-          <a href="/dashboard/sponser" class="nav-link" id="sponser">
-            <i class="nav-icon fas fa-users text-success_"></i>
-            <p>
-              Sponsors
-              <span class="badge badge-success right" id="totalSponsors">0</span>
-            </p>
-          </a>
+          <% if (${userPermission.module.name} === "Sponsors") { %>
+              <a href="/dashboard/sponser" class="nav-link" id="sponser">
+                <i class="nav-icon fas fa-users text-success_"></i>
+                <p>
+                  Sponsors
+                  <span class="badge badge-success right" id="totalSponsors">0</span>
+                </p>
+              </a>
+          <% } %>
         </li>
 
         <li class="nav-item">
@@ -470,18 +487,8 @@
             </li>
           </ul>
         </li>
-      </ul>
-    </nav>
-    <!-- /.sidebar-menu -->
-  </div>
-  <!-- /.sidebar -->
-</aside>
-<script>
-  fetch("/dashboard/home/num", {
-    method: "GET",
-  })
-    .then((response) => response.json())
-    .then((data) => {
+        `);
+      });
       data.lastNewOrders.forEach((elem) => {
         $("#notifiy-content").append(`
           <a href="/dashboard/order/view/${elem.order_id}" class="dropdown-item">

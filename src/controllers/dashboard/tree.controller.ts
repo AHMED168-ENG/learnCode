@@ -85,7 +85,7 @@ export class TreeController {
           })
         })
         .catch((err) => {
-          res.status(400).json({msg: "Error in create new tree", err: err.errors[0].message || "unexpected error"})
+          res.status(400).json({msg: "Error in create new tree", err: "unexpected error"})
         })
     }
   }
@@ -119,7 +119,7 @@ export class TreeController {
         }
       })
       .catch((err) => {
-        res.status(httpStatus.BAD_REQUEST).json({msg: "Error in Edit tree", err: err.errors[0].message || "unexpected error"})
+        res.status(httpStatus.BAD_REQUEST).json({msg: "Error in Edit tree", err: "unexpected error"})
       })
   }
   async listTrees() {

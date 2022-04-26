@@ -1,7 +1,3 @@
-$('#img').on('change', function () { files = $(this)[0].files; name = ''; for (var i = 0; i < files.length; i++) { name += '\"' + files[i].name + '\"' + (i != files.length - 1 ? ", " : ""); } $(".custom-file-label").html(name); });
-var loadFile = function (event) {
-    $("#tree_img_display").attr("src", URL.createObjectURL(event.target.files[0]));
-};
 $(function () {
     $.validator.setDefaults({
         submitHandler: function (form, event) {
@@ -11,21 +7,6 @@ $(function () {
     });
     $('#newForm').validate({
         rules: {
-            location_nameAr: {
-                required: true,
-            },
-            location_nameEn: {
-                required: true,
-            },
-            location_address: {
-                required: true
-            },
-            location_long: {
-                required: true
-            },
-            location_lat: {
-                required: true
-            },
             init_id: {
                 required: true
             },
@@ -35,32 +16,35 @@ $(function () {
             region_id: {
                 required: true
             },
-            caverArea: {
+            location_id: {
                 required: true
             },
-            img: {
-                accept: "image/png"
-            },
-            aboutEn: {
+            tree_id: {
                 required: true
             },
-            aboutAr: {
+            price: {
+                required: true
+            },
+            price_points: {
+                required: true
+            },
+            carbon_points: {
+                required: true
+            },
+            target_num: {
                 required: true
             },
         },
         messages: {
-            location_nameAr: "Please enter a arabic name",
-            location_nameEn: "Please enter a english name",
-            location_address: "Please enter a address",
-            location_long: "Please enter along",
-            location_lat: "Please enter a lat",
+            tree_id: "Please enter a tree",
+            location_id: "Please enter a location",
             init_id: "Please enter a init",
             city_id: "Please enter a city",
             region_id: "Please enter a region",
-            caverArea: "Please enter a caverArea",
-            img: { accept: 'Please select `PNG` only' },
-            aboutEn: "Please enter a about en",
-            aboutAr: "Please enter a about ar",
+            price: "Please enter a price",
+            price_points: "Please enter a price points",
+            carbon_points: "Please enter a carbon points",
+            target_num: "Please enter a target",
         },
         errorElement: 'span',
         errorPlacement: function (error, element) {
@@ -78,20 +62,15 @@ $(function () {
 const addNew = () => {
     $("#submitAdd").buttonLoader("start")
     const formData = new FormData();
-    formData.append("location_nameAr", $("#location_nameAr").val());
-    formData.append("location_nameEn", $("#location_nameEn").val());
-    formData.append("location_address", $("#location_address").val());
-    formData.append("location_long", $("#location_long").val());
-    formData.append("location_lat", $("#location_lat").val());
-    formData.append("caverArea", $("#caverArea").val());
-    formData.append("aboutEn", $("#aboutEn").val());
-    formData.append("aboutAr", $("#aboutAr").val());
+    formData.append("tree_id", $("#tree_id option:selected").val());
     formData.append("init_id", $("#init_id option:selected").val());
     formData.append("city_id", $("#city_id option:selected").val());
     formData.append("region_id", $("#region_id option:selected").val());
-    if ($(".custom-file-input").hasClass("changed")) {
-        formData.append("img", $("#img")[0].files[0]);
-    }
+    formData.append("location_id", $("#location_id option:selected").val());
+    formData.append("price", $("#price").val());
+    formData.append("price_points", $("#price_points").val());
+    formData.append("carbon_points", $("#carbon_points").val());
+    formData.append("target_num", $("#target_num").val());
     $.ajax({
         url: `${window.location.pathname}`,
         data: formData,

@@ -152,7 +152,7 @@ export class InitiativeController {
         })
         .catch((err) => {
           console.log(err)
-          res.status(400).json({msg: "Error in create new initiatives", err: err.errors[0].message || "unexpected error"})
+          res.status(400).json({msg: "Error in create new initiatives", err: "unexpected error"})
         })
     }
   }
@@ -188,7 +188,7 @@ export class InitiativeController {
         res.status(httpStatus.OK).json({msg: "Initiative edited"})
       })
       .catch((err) => {
-        res.status(httpStatus.BAD_REQUEST).json({msg: "Error in Edit Initiative", err: err.errors[0].message || "unexpected error"})
+        res.status(httpStatus.BAD_REQUEST).json({msg: "Error in Edit Initiative", err: "unexpected error"})
       })
   }
   active(req, res: Response, next: NextFunction) {
@@ -201,7 +201,7 @@ export class InitiativeController {
         res.status(httpStatus.OK).json({msg: "edited"})
       })
       .catch((err) => {
-        res.status(httpStatus.BAD_REQUEST).json({msg: "Error in Edit", err: err.errors[0].message || "unexpected error"})
+        res.status(httpStatus.BAD_REQUEST).json({msg: "Error in Edit", err: "unexpected error"})
       })
   }
   async initiativeReport() {

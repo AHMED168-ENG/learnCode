@@ -34,9 +34,9 @@ function getList(page) {
             <td>${elem.deleted == "no" ? `<span class="badge badge-success">${elem.deleted}</span>` : `<span class="badge badge-danger">${elem.deleted}</span>`}</td>
             <th scope="col">${new Date(elem.createdAt).toLocaleString('default', { month: 'short' })} ${new Date(elem.createdAt).getDay()} ${new Date(elem.createdAt).getFullYear()}</th>
             <td>
-                <a data-tooltip="Edit tree" class="btn btn-primary" href="/dashboard/initrees/edit/${elem.id}"><i class="fas fa-edit"></i></a>
-                ${elem.status == "active" ? `<button data-tooltip="Unactive tree" class="btn btn-warning" onclick='active(${elem.id},"active","yes")'><i class="fas fa-exclamation-triangle"></i></button>` : `<button data-tooltip="Active tree" class="btn btn-info" onclick='active(${elem.id},"active","no")'><i class="fas fa-exclamation-triangle"></i></button>`}
-                ${elem.deleted == "no" ? `<button data-tooltip="Delete tree" class="btn btn-danger" onclick='active(${elem.id},"delete","yes")'><i class="fas fa-trash-alt"></i></button>` : `<button data-tooltip="Restore tree" class="btn btn-success" onclick='active(${elem.id},"delete","no")'><i class="fas fa-sync-alt"></i></button>`}
+                <a data-tooltip="Edit location tree" class="btn btn-primary" href="/dashboard/initrees/edit/${elem.id}"><i class="fas fa-edit"></i></a>
+                ${elem.status == "active" ? `<button data-tooltip="Unactive location tree" class="btn btn-warning" onclick='active(${elem.id},"active","yes")'><i class="fas fa-exclamation-triangle"></i></button>` : `<button data-tooltip="Active location tree" class="btn btn-info" onclick='active(${elem.id},"active","no")'><i class="fas fa-exclamation-triangle"></i></button>`}
+                ${elem.deleted == "no" ? `<button data-tooltip="Delete location tree" class="btn btn-danger" onclick='active(${elem.id},"delete","yes")'><i class="fas fa-trash-alt"></i></button>` : `<button data-tooltip="Restore location tree" class="btn btn-success" onclick='active(${elem.id},"delete","no")'><i class="fas fa-sync-alt"></i></button>`}
             </td>
             </tr>`)
         })

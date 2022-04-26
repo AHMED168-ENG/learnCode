@@ -5,19 +5,26 @@ import helpers from "../../helper/helpers";
 import { IAdminUser } from "../../interfaces/IAdminUser";
 import bcrypt from "bcrypt";
 import role from "../../models/user-roles.model";
+const { generateToken } = require("../../helper/token") ;
 export class AdminController {
   loginPage(req: Request, res: Response, next: NextFunction) {
     return res.render("login.ejs", { title: "Login" });
   }
-  login(req: Request, res: Response, next: NextFunction) {
-    const {email, password} = req.body
-    const token = Buffer.from("aaaaaaaaaaaaaaaaaa").toString("base64")
-    // console.log(Buffer.from(req.cookies.token, "base64").toString())
-    // res.cookie("token", `${token}`).status(200).json({status: 200})
-    if (email == "admin@admin.com" && password == "admin") {
-      res.cookie("token", `${token}`).status(200).json({status: 200})
-    } else {
-      res.status(200).json({status: 201})
+  async login(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { email, password } = req.body;
+      let payload: any;
+      if (email === "admin@admin.com" && password === "admin") payload = { sub: "0", role_id: "0", username: "admin", email: "admin@admin.com", phone: "012345678910" };
+      else {
+        const user = await admin.findOne({ where: { email } });
+        const isMatch = await bcrypt.compare(password, user["password"]);
+        if (user["email"] === email && isMatch) payload = { sub: user["id"], role_id: user["role_id"], username: user["fullName"], email: user["email"], phone: user["phone"] };
+        else return res.status(200).json({ status: 201 });
+      }
+      const token = generateToken(payload);
+      return res.cookie("token", `${token}`).status(200).json({ status: 200 });
+    } catch (error) {
+      return res.status(500).json({ err: "unexpected error", msg: "Can't log in user" });
     }
   }
   listPage(req: Request, res: Response, next: NextFunction) {
@@ -64,7 +71,10 @@ export class AdminController {
   async addNew(req: Request, res: Response, next: NextFunction) {
     try {
       const createdAdminData: IAdminUser = req.body;
-      if (!createdAdminData || ![1, 2].includes(Number(createdAdminData.role_id))) return res.status(httpStatus.BAD_REQUEST).json({ msg: "Bad Request" });
+      const roles = await role.findAll();
+      const rolesIds = [];
+      for (const roleObj of roles) rolesIds.push(roleObj["id"]);
+      if (!createdAdminData || !rolesIds.includes(Number(createdAdminData.role_id))) return res.status(httpStatus.BAD_REQUEST).json({ msg: "Bad Request" });
       if (!helpers.regularExprEmail(createdAdminData.email)) return res.status(httpStatus.BAD_REQUEST).json({ msg: "invalid email" });
       const existedAdmin = await admin.findOne({ where: { email: createdAdminData.email } });
       if (existedAdmin) return res.status(httpStatus.NOT_ACCEPTABLE).json({ msg: "This email is already exists" });
@@ -90,7 +100,10 @@ export class AdminController {
   async edit(req: Request, res: Response, next: NextFunction) {
     try {
       const updatedAdminData: IAdminUser = req.body;
-      if (!updatedAdminData || ![1, 2].includes(Number(updatedAdminData.role_id))) return res.status(httpStatus.BAD_REQUEST).json({ msg: "Bad Request" });
+      const roles = await role.findAll();
+      const rolesIds = [];
+      for (const roleObj of roles) rolesIds.push(roleObj["id"]);
+      if (!updatedAdminData || !rolesIds.includes(Number(updatedAdminData.role_id))) return res.status(httpStatus.BAD_REQUEST).json({ msg: "Bad Request" });
       if (updatedAdminData.email && !helpers.regularExprEmail(updatedAdminData.email)) return res.status(httpStatus.BAD_REQUEST).json({ msg: "invalid email" });
       if (updatedAdminData.password) {
         const password: string = await bcrypt.hash(updatedAdminData.password, 5);

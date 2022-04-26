@@ -65,7 +65,7 @@ export class SponserController {
         })
         .catch((err) => {
           console.log(err)
-          res.status(400).json({msg: "Error in create new sponser", err: err.errors[0].message || "unexpected error"})
+          res.status(400).json({msg: "Error in create new sponser", err: "unexpected error"})
         })
     }
   }
@@ -100,7 +100,7 @@ export class SponserController {
         }
       })
       .catch((err) => {
-        res.status(httpStatus.BAD_REQUEST).json({msg: "Error in Edit sponsor", err: err.errors[0].message || "unexpected error"})
+        res.status(httpStatus.BAD_REQUEST).json({msg: "Error in Edit sponsor", err: "unexpected error"})
       })
   }
 

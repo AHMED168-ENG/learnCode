@@ -80,6 +80,25 @@ export class InitiativesLocationController extends Controller {
       })
     return data
   }
+  async listAllInitLocations() {
+    let data
+    await initiativeLocations
+      .findAll({
+        attributes: ["location_id", "location_nameEn", "location_nameAr"],
+        raw: true,
+      })
+      .then((d) => {
+        if (!d || d.length == 0) {
+          data = null
+        } else {
+          data = d
+        }
+      })
+      .catch((err) => {
+        data = []
+      })
+    return data
+  }
   private selectionFields() {
     return [
       "img",

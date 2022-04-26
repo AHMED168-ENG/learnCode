@@ -58,6 +58,7 @@ export class LocationController {
   addNew(req, res: Response, next: NextFunction) {
     const imgFile = req.files.img
     const imgName: string = `${helpers.randomNumber(100, 999)}_${Number(new Date())}${path.extname(imgFile.name)}`
+    req.body.imgvr = "";
     initiativeLocations
       .create(req.body)
       .then((data) => {
@@ -72,7 +73,7 @@ export class LocationController {
           .catch(() => res.status(httpStatus.OK).json({msg: "new Location created"}))
       })
       .catch((err) => {
-        res.status(400).json({msg: "Error in create new Location", err: err.errors[0].message || "unexpected error"})
+        res.status(400).json({msg: "Error in create new Location", err: "unexpected error"})
       })
   }
   async editPage(req: Request, res: Response, next: NextFunction) {
@@ -82,6 +83,19 @@ export class LocationController {
     initiativeLocations.findOne({where: {location_id: id}, raw: true}).then((data) => {
       res.render("location/edit.ejs", {
         title: "Edit Location",
+        data: data,
+        initiatives,
+        countries,
+      })
+    })
+  }
+  async viewPage(req: Request, res: Response, next: NextFunction) {
+    const id = req.params.id
+    const initiatives = await new InitiativeController().listAllInit()
+    const countries = await new CountryController().listCountry()
+    initiativeLocations.findOne({where: {location_id: id}, raw: true}).then((data) => {
+      res.render("location/view.ejs", {
+        title: "Location Details",
         data: data,
         initiatives,
         countries,
@@ -109,7 +123,7 @@ export class LocationController {
         }
       })
       .catch((err) => {
-        res.status(httpStatus.BAD_REQUEST).json({msg: "Error in Edit location", err: err.errors[0].message || "unexpected error"})
+        res.status(httpStatus.BAD_REQUEST).json({msg: "Error in Edit location", err: "unexpected error"})
       })
   }
   active(req, res: Response, next: NextFunction) {
@@ -122,7 +136,7 @@ export class LocationController {
         res.status(httpStatus.OK).json({msg: "edited"})
       })
       .catch((err) => {
-        res.status(httpStatus.BAD_REQUEST).json({msg: "Error in Edit", err: err.errors[0].message || "unexpected error"})
+        res.status(httpStatus.BAD_REQUEST).json({msg: "Error in Edit", err: "unexpected error"})
       })
   }
   async listLocationByInit(req, res: Response, next: NextFunction) {
@@ -133,7 +147,7 @@ export class LocationController {
         res.status(httpStatus.OK).json(data)
       })
       .catch((err) => {
-        res.status(httpStatus.BAD_REQUEST).json({msg: "Error in Edit location", err: err.errors[0].message || "unexpected error"})
+        res.status(httpStatus.BAD_REQUEST).json({msg: "Error in Edit location", err: "unexpected error"})
       })
   }
 }

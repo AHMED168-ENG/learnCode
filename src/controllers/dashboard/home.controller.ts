@@ -6,6 +6,10 @@ import {OrderController} from "./order.controller"
 import {SponserController} from "./sponser.controller"
 import {MessageController} from "./message.controller"
 import message from "../../models/message.model"
+import permissions from "../../models/permissions.model"
+import page from "../../models/page.model"
+import modules from "../../models/module.model"
+const { verify } = require("../../helper/token")
 
 export class HomeController {
   async home(req: Request, res: Response, next: NextFunction) {
@@ -22,6 +26,28 @@ export class HomeController {
     })
   }
 
+  async getUserPermissions(token: string) {
+    try {
+      const payload = verify(token);
+      const userPermissions = await permissions.findAll({
+        where: { role_id: payload.role_id },
+        attributes: { exclude: ["role_id", "page_id", "createdAt", "updatedAt"] },
+        include: [{ model: page, attributes: ["id", "type", "link"], include: [{ model: modules, attributes: ["name"] }] }],
+      });
+      const mappedUserPermissions = userPermissions.map((userPermission) => {
+        return {
+          id: userPermission["id"],
+          page: {
+            id: userPermission["tbl_page.id"],
+            type: userPermission["tbl_page.type"],
+            link: userPermission["tbl_page.link"],
+          },
+          module: { id: userPermission["tbl_module.id"], name: userPermission["tbl_module.name"] } };
+      });
+      return mappedUserPermissions;
+    } catch (error) { throw error; }
+  }
+
   async getSideBarNum(req: Request, res: Response, next: NextFunction) {
     try {
       const lastNewOrders = (await new OrderController().lastNewOrders()) || [];
@@ -30,7 +56,8 @@ export class HomeController {
       const messageNum = await message.count({ where: { status: "unread" } });
       const homeNumbers = (await new HomeController().homeNumbers()) || {};
       const notifiedOrders = await new OrderController().numberOfNotifiedOrders();
-      return res.status(200).json({ ...homeNumbers, lastNewOrders, lastNewMessage, ordersNum, messageNum, notifiedOrders });
+      const userPermissions = await new HomeController().getUserPermissions(req.cookies.token);
+      return res.status(200).json({ ...homeNumbers, lastNewOrders, lastNewMessage, ordersNum, messageNum, notifiedOrders, userPermissions });
     } catch (error) {
       return res.status(500).json({ msg: "Error in getting sidebar nums", err: error.errors[0].message || "unexpected error" });
     }

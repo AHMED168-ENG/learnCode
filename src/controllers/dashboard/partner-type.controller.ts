@@ -48,7 +48,7 @@ export class PartnerTypeController {
         res.status(httpStatus.OK).json({msg: "new partnerType created"})
       })
       .catch((err) => {
-        res.status(400).json({msg: "Error in create new partnerType", err: err.errors[0].message || "unexpected error"})
+        res.status(400).json({msg: "Error in create new partnerType", err: "unexpected error"})
       })
   }
   editPage(req: Request, res: Response, next: NextFunction) {
@@ -68,7 +68,7 @@ export class PartnerTypeController {
         res.status(httpStatus.OK).json({msg: "partnerType edited"})
       })
       .catch((err) => {
-        res.status(httpStatus.BAD_REQUEST).json({msg: "Error in edit partnerType", err: err.errors[0].message || "unexpected error"})
+        res.status(httpStatus.BAD_REQUEST).json({msg: "Error in edit partnerType", err: "unexpected error"})
       })
   }
   async listType() {

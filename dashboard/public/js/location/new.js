@@ -38,7 +38,7 @@ $(function () {
                 required: true
             },
             img: {
-                required: true, accept: "image/png"
+                required: false, accept: "image/png"
             },
             aboutEn: {
                 required: true
@@ -57,7 +57,7 @@ $(function () {
             city_id: "Please enter a city",
             region_id: "Please enter a region",
             caverArea: "Please enter a caverArea",
-            img: { required: 'Please add Image!', accept: 'Please select `PNG` only' },
+            img: { accept: 'Please select `PNG` only' },
             aboutEn: "Please enter a about en",
             aboutAr: "Please enter a about ar",
         },

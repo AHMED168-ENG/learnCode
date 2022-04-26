@@ -53,7 +53,7 @@ export class PromoController {
         res.status(httpStatus.OK).json({msg: "new promo created"})
       })
       .catch((err) => {
-        res.status(400).json({msg: "Error in create promo", err: err.errors[0].message || "unexpected error"})
+        res.status(400).json({msg: "Error in create promo", err: "unexpected error"})
       })
   }
   async editPage(req: Request, res: Response, next: NextFunction) {
@@ -75,7 +75,7 @@ export class PromoController {
         res.status(httpStatus.OK).json({msg: "promo edited"})
       })
       .catch((err) => {
-        res.status(httpStatus.BAD_REQUEST).json({msg: "Error in Edit promo", err: err.errors[0].message || "unexpected error"})
+        res.status(httpStatus.BAD_REQUEST).json({msg: "Error in Edit promo", err: "unexpected error"})
       })
   }
   active(req, res: Response, next: NextFunction) {
@@ -88,7 +88,7 @@ export class PromoController {
         res.status(httpStatus.OK).json({msg: "promo edited"})
       })
       .catch((err) => {
-        res.status(httpStatus.BAD_REQUEST).json({msg: "Error in Edit promo", err: err.errors[0].message || "unexpected error"})
+        res.status(httpStatus.BAD_REQUEST).json({msg: "Error in Edit promo", err: "unexpected error"})
       })
   }
 }

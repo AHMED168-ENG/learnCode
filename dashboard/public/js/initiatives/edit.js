@@ -1,5 +1,4 @@
 $('#logo').on('change', function () { files = $(this)[0].files; name = ''; for (var i = 0; i < files.length; i++) { name += '\"' + files[i].name + '\"' + (i != files.length - 1 ? ", " : ""); } $("#label_logo").html(name); });
-$('#main_img').on('change', function () { files = $(this)[0].files; name = ''; for (var i = 0; i < files.length; i++) { name += '\"' + files[i].name + '\"' + (i != files.length - 1 ? ", " : ""); } $("#main_img_logo").html(name); });
 $(function () {
     $.validator.setDefaults({
         submitHandler: function (form, event) {
@@ -40,10 +39,7 @@ $(function () {
                 required: true
             },
             logo: {
-                required: true, accept: "image/jpg,image/jpeg,image/png"
-            },
-            main_img: {
-                required: true, accept: "image/jpg,image/jpeg,image/png"
+                accept: "image/jpg,image/jpeg,image/png"
             },
             fromTo: {
                 required: true
@@ -81,13 +77,10 @@ $(function () {
                 required: "Please select a featured"
             },
             logo: {
-                required: "Please choice a logo"
-            },
-            main_img: {
-                required: "Please choice a image", accept: 'Please select img only'
+                accept: 'Please select img only'
             },
             fromTo: {
-                required: "Please choice a date", accept: 'Please select img only'
+                required: "Please choice a date"
             },
         },
         errorElement: 'span',
@@ -117,7 +110,6 @@ const addNew = () => {
     formData.append("sponsor_id", $("#sponsor_id option:selected").val());
     formData.append("featured", $("#featured option:selected").val());
     formData.append("logo", $("#logo")[0].files[0]);
-    formData.append("main_img", $("#main_img")[0].files[0]);
     formData.append("from_date", from);
     formData.append("to_date", to);
     $.ajax({
@@ -134,7 +126,7 @@ const addNew = () => {
         // $('.toast').toast("show")
     }).fail(function (xhr) {
         const error = JSON.parse(xhr.responseText)
-        $("#modal-body-val").html(`<span style="font-size: large">${error.msg}<br/>&emsp;&nbsp;${error.err ? error.err: ""}</span>`)
+        $("#modal-body-val").html(`<span style="font-size: large">${error.msg}<br/>&emsp;&nbsp;${error.err}</span>`)
         $("#exampleModal").modal("show")
     }).always(function () {
         $("#submitAdd").buttonLoader("stop")
@@ -168,7 +160,7 @@ function regionListBycity(id) {
         });
     }).fail(function (xhr) {
         const error = JSON.parse(xhr.responseText)
-        $("#modal-body-val").html(`<span style="font-size: large">${error.msg}<br/>&emsp;&nbsp;${error.err ? error.err: ""}</span>`)
+        $("#modal-body-val").html(`<span style="font-size: large">${error.msg}<br/>&emsp;&nbsp;${error.err}</span>`)
         $("#exampleModal").modal("show")
     })
 }

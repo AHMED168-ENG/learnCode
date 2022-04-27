@@ -5,7 +5,10 @@ import helpers from "../../helper/helpers";
 import { IAdminUser } from "../../interfaces/IAdminUser";
 import bcrypt from "bcrypt";
 import role from "../../models/user-roles.model";
-const { generateToken } = require("../../helper/token") ;
+import permissions from "../../models/permissions.model";
+import page from "../../models/page.model";
+import modules from "../../models/module.model";
+const { generateToken, verify } = require("../../helper/token") ;
 export class AdminController {
   loginPage(req: Request, res: Response, next: NextFunction) {
     return res.render("login.ejs", { title: "Login" });
@@ -34,29 +37,45 @@ export class AdminController {
   }
   list(req: Request, res: Response, next: NextFunction) {
     const limit = Number(req.query.limit) > 50 ? 50 : Number(req.query.limit)
-    const page = (Number(req.query.page) - 1) * limit
+    const pageIndex = (Number(req.query.page) - 1) * limit
     admin
       .findAll({
         limit: limit,
-        offset: page,
-        attributes: {exclude: ["updatedAt"]},
+        offset: pageIndex,
+        attributes: {exclude: ["role_id", "password", "updatedAt"]},
+        include: [{ model: role, attributes: ["name"] }],
       })
       .then((data) => {
         admin
           .count()
-          .then((count) => {
+          .then(async (count) => {
+            const payload = verify(req.cookies.token);
+            const isHighestAdmin = payload.role_id === "0";
+            let userPermissions, canEdit, canAdd;
+            if (!isHighestAdmin) {
+              userPermissions = await permissions.findAll({
+                where: { role_id: payload.role_id },
+                attributes: { exclude: ["role_id", "page_id", "createdAt", "updatedAt"] },
+                include: [{ model: page, attributes: ["type"] }],
+              });
+              canEdit = userPermissions.filter((per) => per["tbl_page"]["type"] === "Edit" && per["tbl_page"]["tbl_module"]["name"] === "Sahlan Admins");
+              canAdd = userPermissions.filter((per) => per["tbl_page"]["type"] === "Add" && per["tbl_page"]["tbl_module"]["name"] === "Sahlan Admins");
+            }
             const dataInti = {
               total: count,
               limit: limit,
               page: Number(req.query.page),
               pages: Math.ceil(count / limit),
               data: data,
+              canEdit,
+              canAdd,
             }
             res.status(httpStatus.OK).json(dataInti)
           })
           .catch((err) => res.status(httpStatus.NOT_FOUND).json({err: "There is something wrong while getting admins list", msg: "not found admin"}))
       })
       .catch((err) => {
+        console.log(err)
         res.status(httpStatus.NOT_FOUND).json({err: "There is something wrong while getting admins list", msg: "not found admin"})
       })
   }

@@ -13,20 +13,37 @@ function getList(page) {
     $.ajax(settings).done(function (res, textStatus) {
         // hidden spinner
         spinnerNotfound(2)
+        if (res.canAdd && res.canAdd.length) {
+            $('#addNewBtn').append(`<a type="button" href="/dashboard/city/new" class="btn btn-info">Add new</a>`)
+        }
         pagination(res.pages)
         $("#tr-th-row").empty()
-        res.data.forEach((elem) => {
-            $("#tr-th-row").append(`<tr>
-            <th scope="row">${elem.city_id}</th>
-            <td>${elem.en_name}</td>
-            <td>${elem.ar_name}</td>
-            <td>${elem.code}</td>
-            <td>${elem.tbl_country.en_name}<br />${elem.tbl_country.ar_name}</td>
-            <td>${new Date(elem.createdAt).toLocaleDateString("en-US")}</td>
-            <td>
-                <a href="/dashboard/city/edit/${elem.city_id}"><i class="fas fa-edit text-primary"></i></a></td>
-            </tr>`)
-        })
+        if (res.canEdit && res.canEdit.length) {
+            res.data.forEach((elem) => {
+                $("#tr-th-row").append(`<tr>
+                <th scope="row">${elem.city_id}</th>
+                <td>${elem.en_name}</td>
+                <td>${elem.ar_name}</td>
+                <td>${elem.code}</td>
+                <td>${elem.tbl_country.en_name}<br />${elem.tbl_country.ar_name}</td>
+                <td>${new Date(elem.createdAt).toLocaleDateString("en-US")}</td>
+                <td>
+                    <a href="/dashboard/city/edit/${elem.city_id}"><i class="fas fa-edit text-primary"></i></a></td>
+                </tr>`)
+            })
+        } else {
+            res.data.forEach((elem) => {
+                $("#tr-th-row").append(`<tr>
+                <th scope="row">${elem.city_id}</th>
+                <td>${elem.en_name}</td>
+                <td>${elem.ar_name}</td>
+                <td>${elem.code}</td>
+                <td>${elem.tbl_country.en_name}<br />${elem.tbl_country.ar_name}</td>
+                <td>${new Date(elem.createdAt).toLocaleDateString("en-US")}</td>
+                <td></td>
+                </tr>`)
+            })
+        }
     }).fail(() => spinnerNotfound(3))
 }
 function pagination(total) {

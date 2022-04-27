@@ -5,6 +5,10 @@ import bcrypt from "bcrypt"
 import sequelize from "sequelize"
 import helpers from "../../helper/helpers"
 import sponser from "../../models/sponser.model"
+import modules from "../../models/module.model"
+import page from "../../models/page.model"
+import permissions from "../../models/permissions.model"
+const { verify } = require("../../helper/token")
 
 export class SponserController {
   listPage(req: Request, res: Response, next: NextFunction) {
@@ -15,17 +19,33 @@ export class SponserController {
 
   list(req: Request, res: Response, next: NextFunction) {
     const limit = Number(req.query.limit) > 50 ? 50 : Number(req.query.limit)
-    const page = (Number(req.query.page) - 1) * limit
+    const pageIndex = (Number(req.query.page) - 1) * limit
     sponser
       .findAll({
         limit: limit,
-        offset: page,
+        offset: pageIndex,
         attributes: {exclude: ["password", "updatedAt", "createdAt"]},
       })
       .then((data) => {
         sponser
-          .count()
-          .then((count) => {
+        .count()
+        .then(async (count) => {
+            const payload = verify(req.cookies.token);
+            const isHighestAdmin = payload.role_id === "0";
+            let userPermissions, canEdit, canAdd;
+            if (!isHighestAdmin) {
+              userPermissions = await permissions.findAll({
+                where: { role_id: payload.role_id },
+                attributes: { exclude: ["role_id", "page_id", "createdAt", "updatedAt"] },
+                include: [{
+                  model: page,
+                  attributes: ["type"],
+                  include: [{ model: modules, attributes: ["name"] }],
+                }],
+              });
+              canEdit = userPermissions.filter((per) => per["tbl_page"]["type"] === "Edit" && per["tbl_page"]["tbl_module"]["name"] === "Sponsors");
+              canAdd = userPermissions.filter((per) => per["tbl_page"]["type"] === "Add" && per["tbl_page"]["tbl_module"]["name"] === "Sponsors");
+            }
             const dataInti = {
               total: count,
               limit: limit,

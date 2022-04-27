@@ -2,7 +2,11 @@ import {Request, Response, NextFunction} from "express"
 import httpStatus from "http-status"
 import city from "../../models/city.model"
 import country from "../../models/country.model"
+import modules from "../../models/module.model"
+import page from "../../models/page.model"
+import permissions from "../../models/permissions.model"
 import {CountryController} from "./country.controller"
+const { verify } = require("../../helper/token");
 
 export class CityController {
   listPage(req: Request, res: Response, next: NextFunction) {
@@ -12,24 +16,42 @@ export class CityController {
   }
   list(req: Request, res: Response, next: NextFunction) {
     const limit = Number(req.query.limit) > 50 ? 50 : Number(req.query.limit)
-    const page = (Number(req.query.page) - 1) * limit
+    const pageData = (Number(req.query.page) - 1) * limit
     city
       .findAll({
         limit: limit,
-        offset: page,
+        offset: pageData,
         attributes: {exclude: ["country_id", "updatedAt"]},
         include: [{model: country, attributes: ["country_id", "en_name", "ar_name", "createdAt"]}],
       })
       .then((data) => {
         city
           .count()
-          .then((count) => {
+          .then(async (count) => {
+            const payload = verify(req.cookies.token);
+            const isHighestAdmin = payload.role_id === "0";
+            let userPermissions, canEdit, canAdd;
+            if (!isHighestAdmin) {
+              userPermissions = await permissions.findAll({
+                where: { role_id: payload.role_id },
+                attributes: { exclude: ["role_id", "page_id", "createdAt", "updatedAt"] },
+                include: [{
+                  model: page,
+                  attributes: ["type"],
+                  include: [{ model: modules, attributes: ["name"] }],
+                }],
+              });
+              canEdit = userPermissions.filter((per) => per["tbl_page"]["type"] === "Edit" && per["tbl_page"]["tbl_module"]["name"] === "Cities List");
+              canAdd = userPermissions.filter((per) => per["tbl_page"]["type"] === "Add" && per["tbl_page"]["tbl_module"]["name"] === "Cities List");
+            }
             const dataInti = {
               total: count,
               limit: limit,
               page: Number(req.query.page),
               pages: Math.ceil(count / limit),
               data: data,
+              canAdd,
+              canEdit,
             }
             res.status(httpStatus.OK).json(dataInti)
           })

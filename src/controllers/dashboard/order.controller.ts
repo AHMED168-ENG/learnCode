@@ -10,6 +10,10 @@ import order from "../../models/order.model"
 import trees from "../../models/trees.model"
 import webAppsUsers from "../../models/user.model"
 import {Sequelize, DataTypes} from "sequelize"
+const { verify } = require("../../helper/token")
+import modules from "../../models/module.model"
+import page from "../../models/page.model"
+import permissions from "../../models/permissions.model"
 const seq = new Sequelize(...config.database)
 
 export class OrderController {
@@ -67,13 +71,13 @@ export class OrderController {
   }
   list(req: Request, res: Response, next: NextFunction) {
     const limit = Number(req.query.limit) > 50 ? 50 : Number(req.query.limit)
-    const page = (Number(req.query.page) - 1) * limit ? (Number(req.query.page) - 1) * limit : 0
+    const pageIndex = (Number(req.query.page) - 1) * limit ? (Number(req.query.page) - 1) * limit : 0
     const screenType = req.params.type
     order
       .findAll({
         where: {status: screenType},
         limit: limit,
-        offset: page,
+        offset: pageIndex,
         order: [['createdAt', 'DESC']],
         attributes: {exclude: ["updatedAt"]},
         raw: true,
@@ -81,13 +85,39 @@ export class OrderController {
       .then((data) => {
         order
           .count({where: {status: screenType}})
-          .then((count) => {
+          .then(async (count) => {
+            const payload = verify(req.cookies.token);
+            const isHighestAdmin = payload.role_id === "0";
+            let userPermissions, canEditNewOrders, canViewNewOrders, canEditInProgressOrders, canViewInProgressOrders, canViewCompletedOrders, canViewCancelledOrders;
+            if (!isHighestAdmin) {
+              userPermissions = await permissions.findAll({
+                where: { role_id: payload.role_id },
+                attributes: { exclude: ["role_id", "page_id", "createdAt", "updatedAt"] },
+                include: [{
+                  model: page,
+                  attributes: ["type"],
+                  include: [{ model: modules, attributes: ["name"] }],
+                }],
+              });
+              canEditNewOrders = userPermissions.filter((per) => per["tbl_page"]["type"] === "Edit" && per["tbl_page"]["tbl_module"]["name"] === "New Orders List");
+              canViewNewOrders = userPermissions.filter((per) => per["tbl_page"]["type"] === "View" && per["tbl_page"]["tbl_module"]["name"] === "New Orders List");
+              canEditInProgressOrders = userPermissions.filter((per) => per["tbl_page"]["type"] === "Edit" && per["tbl_page"]["tbl_module"]["name"] === "In Progress Orders List");
+              canViewInProgressOrders = userPermissions.filter((per) => per["tbl_page"]["type"] === "View" && per["tbl_page"]["tbl_module"]["name"] === "In Progress Orders List");
+              canViewCompletedOrders = userPermissions.filter((per) => per["tbl_page"]["type"] === "View" && per["tbl_page"]["tbl_module"]["name"] === "Completed Orders List");
+              canViewCancelledOrders = userPermissions.filter((per) => per["tbl_page"]["type"] === "View" && per["tbl_page"]["tbl_module"]["name"] === "Cancelled Orders List");
+            }
             const dataInti = {
               total: count,
               limit: limit,
               page: Number(req.query.page),
               pages: Math.ceil(count / limit),
               data: data,
+              canEditNewOrders,
+              canViewNewOrders,
+              canEditInProgressOrders,
+              canViewInProgressOrders,
+              canViewCompletedOrders,
+              canViewCancelledOrders,
             }
             res.status(httpStatus.OK).json(dataInti)
           })

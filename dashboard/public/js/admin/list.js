@@ -14,19 +14,35 @@ function getList(page) {
         // hidden spinner
         spinnerNotfound(2)
         pagination(res.pages)
+        if (res.canAdd && res.canAdd.length) {
+            $('#addNewBtn').append(`<a type="button" href="/dashboard/admin/new" class="btn btn-info">Add new</a>`)
+        }
         $("#tr-th-row").empty()
-        res.data.forEach((elem) => {
+        if (res.canEdit && res.canEdit.length) {
+            res.data.forEach((elem) => {
+                $("#tr-th-row").append(`<tr>
+                <th scope="row">${elem.id}</th>
+                <td>${elem.fullName}</td>
+                <td>${elem['tbl_user_role']['name']}</td>
+                <td>${elem.email}</td>
+                <td>${elem.phone}</td>
+                <td>${new Date(elem.createdAt).toLocaleDateString("en-US")}</td>
+                <td>
+                   <a href="/dashboard/admin/edit/${elem.id}"><i class="fas fa-edit text-primary"></i></a>
+                </td>
+                </tr>`)
+            })
+        } else {
             $("#tr-th-row").append(`<tr>
-            <th scope="row">${elem.id}</th>
-            <td>${elem.fullName}</td>
-            <td>${Number(elem.role_id) === 1 ? "Super Admin" : "Admin"}</td>
-            <td>${elem.email}</td>
-            <td>${elem.phone}</td>
-            <td>${new Date(elem.createdAt).toLocaleDateString("en-US")}</td>
-            <td>
-                <a href="/dashboard/admin/edit/${elem.id}"><i class="fas fa-edit text-primary"></i></a></td>
-            </tr>`)
-        })
+                <th scope="row">${elem.id}</th>
+                <td>${elem.fullName}</td>
+                <td>${elem['tbl_user_role']['name']}</td>
+                <td>${elem.email}</td>
+                <td>${elem.phone}</td>
+                <td>${new Date(elem.createdAt).toLocaleDateString("en-US")}</td>
+                <td></td>
+                </tr>`)
+        }
     }).fail(() => spinnerNotfound(3))
 }
 function pagination(total) {

@@ -1,5 +1,6 @@
 import config from "../config/config"
 import {Sequelize, DataTypes} from "sequelize"
+import role from "./user-roles.model"
 
 const sequelize = new Sequelize(...config.database)
 
@@ -93,5 +94,5 @@ const admin = sequelize.define(
   }
 )
 admin.sync()
-
+admin.belongsTo(role, {foreignKey: "role_id"})
 export default admin

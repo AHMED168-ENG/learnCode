@@ -100,12 +100,6 @@
       `);
       if (data.isHighestAdmin) {
         $("#sidebar").append(`
-        <li class="nav-item mb-2">
-          <a href="/" class="nav-link" id="home">
-            <i class="nav-icon fas fa-tachometer-alt"></i>
-            <p>Dashboard</p>
-          </a>
-        </li>
         <li class="nav-item">
           <a href="/dashboard/sponser" class="nav-link" id="sponser">
             <i class="nav-icon fas fa-users text-success_"></i>
@@ -509,7 +503,7 @@
             </li>
           `);
         }
-        const initiativeManagement = data.userPermissions.filter((userPermission) => userPermission.module.name === "Initiatives Management");
+        const initiativeManagement = data.userPermissions.filter((userPermission) => userPermission.module.name === "Initiative Management");
         if (initiativeManagement.length) {
           $('#sidebar').append(`
             <li class="nav-item">
@@ -548,7 +542,7 @@
             </li>
           `);
         }
-        const trees = data.userPermissions.filter((userPermission) => userPermission.module.name === "Trees");
+        const trees = data.userPermissions.filter((userPermission) => userPermission.module.name === "Trees List");
         const treesHeader = data.userPermissions.filter((userPermission) => userPermission.module.name === "Trees Headers");
         if (trees.length || treesHeader.length) {
           $('#sidebar').append(`
@@ -587,7 +581,7 @@
             `);
           }
         }
-        const giftsCardsManagement = data.userPermissions.filter((userPermission) => userPermission.module.name === "Gifts & cards Management");
+        const giftsCardsManagement = data.userPermissions.filter((userPermission) => userPermission.module.name === "Gift & Cards Management");
         if (treesLocation.length) {
           $('#sidebar').append(`
             <li class="nav-item">
@@ -601,10 +595,10 @@
             </li>
           `);
         }
-        const newOrders = data.userPermissions.filter((userPermission) => userPermission.module.name === "New Orders");
-        const inProgressOrders = data.userPermissions.filter((userPermission) => userPermission.module.name === "In Progress Orders");
-        const completedOrders = data.userPermissions.filter((userPermission) => userPermission.module.name === "Completed Orders");
-        const cancelledOrders = data.userPermissions.filter((userPermission) => userPermission.module.name === "Cancelled Orders");
+        const newOrders = data.userPermissions.filter((userPermission) => userPermission.module.name === "New Orders List");
+        const inProgressOrders = data.userPermissions.filter((userPermission) => userPermission.module.name === "In Progress Orders List");
+        const completedOrders = data.userPermissions.filter((userPermission) => userPermission.module.name === "Completed Orders List");
+        const cancelledOrders = data.userPermissions.filter((userPermission) => userPermission.module.name === "Cancelled Orders List");
         if (newOrders.length || inProgressOrders.length || completedOrders.length || cancelledOrders.length) {
           $('#sidebar').append(`
             <li class="nav-item has-treeview">
@@ -744,8 +738,8 @@
             `);
           }
         }
-        const listPartners = data.userPermissions.filter((userPermission) => userPermission.module.name === "List Partners");
-        const types = data.userPermissions.filter((userPermission) => userPermission.module.name === "Partner Types");
+        const listPartners = data.userPermissions.filter((userPermission) => userPermission.module.name === "Partners List");
+        const types = data.userPermissions.filter((userPermission) => userPermission.module.name === "Partner Types List");
         if (listPartners.length || types.length) {
           $('#sidebar').append(`
           <li class="nav-item has-treeview">
@@ -843,12 +837,12 @@
         const ordersReport = data.userPermissions.filter((userPermission) => userPermission.module.name === "Orders Report");
         const usersReport = data.userPermissions.filter((userPermission) => userPermission.module.name === "Users Report");
         const sponsorsReport = data.userPermissions.filter((userPermission) => userPermission.module.name === "Sponsors Report");
-        const initiativeReport = data.userPermissions.filter((userPermission) => userPermission.module.name === "Initiative Report");
-        const locationTreesReport = data.userPermissions.filter((userPermission) => userPermission.module.name === "Location Trees Report");
-        const locationReport = data.userPermissions.filter((userPermission) => userPermission.module.name === "Location Report");
+        const initiativeReport = data.userPermissions.filter((userPermission) => userPermission.module.name === "Initiatives Report");
+        const locationTreesReport = data.userPermissions.filter((userPermission) => userPermission.module.name === "Locations Trees Report");
+        const locationReport = data.userPermissions.filter((userPermission) => userPermission.module.name === "Locations Report");
         const salesReport = data.userPermissions.filter((userPermission) => userPermission.module.name === "Sales Report");
-        const calendarInitiative = data.userPermissions.filter((userPermission) => userPermission.module.name === "Calendar Initiative");
-        const userCharts = data.userPermissions.filter((userPermission) => userPermission.module.name === "User Charts");
+        const calendarInitiative = data.userPermissions.filter((userPermission) => userPermission.module.name === "Calendar Initiative Report");
+        const userCharts = data.userPermissions.filter((userPermission) => userPermission.module.name === "User Charts Report");
         if (ordersReport.length || usersReport.length || sponsorsReport.length || initiativeReport.length || locationTreesReport.length || locationReport.length || salesReport.length || calendarInitiative.length || userCharts.length) {
           $('#sidebar').append(`
             <li class="nav-item has-treeview">
@@ -1014,7 +1008,7 @@
             `);
           }
         }
-        const userPermissionsManagement = data.userPermissions.filter((userPermission) => userPermission.module.name === "User Permissions");
+        const userPermissionsManagement = data.userPermissions.filter((userPermission) => userPermission.module.name === "Permissions List");
         if (userPermissionsManagement.length) {
           $('#sidebar').append(`
             <li class="nav-item">
@@ -1025,8 +1019,8 @@
             </li>
           `);
         }
-        const countries = data.userPermissions.filter((userPermission) => userPermission.module.name === "Countries");
-        const cities = data.userPermissions.filter((userPermission) => userPermission.module.name === "Cities");
+        const countries = data.userPermissions.filter((userPermission) => userPermission.module.name === "Countries List");
+        const cities = data.userPermissions.filter((userPermission) => userPermission.module.name === "Cities List");
         const districts = data.userPermissions.filter((userPermission) => userPermission.module.name === "Districts");
         const entitySectors = data.userPermissions.filter((userPermission) => userPermission.module.name === "Entity Sectors");
         const strategyPoints = data.userPermissions.filter((userPermission) => userPermission.module.name === "Strategy Collecting Points");

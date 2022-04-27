@@ -1,7 +1,11 @@
 import { Request, Response, NextFunction } from "express";
 import httpStatus from "http-status";
 import { ICreateTreeHeaderRequest } from "../../interfaces/ICreateTreeHeaderRequest";
+import modules from "../../models/module.model";
+import page from "../../models/page.model";
+import permissions from "../../models/permissions.model";
 import treeHeader from "../../models/trees_headers.model";
+const { verify } = require("../../helper/token");
 export class TreesHeaderController {
     constructor() {}
     public listPage(req: Request, res: Response, next: NextFunction) {
@@ -10,7 +14,23 @@ export class TreesHeaderController {
     public async getTreesHeaders(req: Request, res: Response, next: NextFunction) {
         try {
             const data = await treeHeader.findAll({ attributes: { exclude: ["createdAt", "updatedAt"] }, raw: true });
-            return res.status(httpStatus.OK).json({ data });
+            const payload = verify(req.cookies.token);
+            const isHighestAdmin = payload.role_id === "0";
+            let userPermissions, canEdit, canAdd;
+            if (!isHighestAdmin) {
+              userPermissions = await permissions.findAll({
+                where: { role_id: payload.role_id },
+                attributes: { exclude: ["role_id", "page_id", "createdAt", "updatedAt"] },
+                include: [{
+                  model: page,
+                  attributes: ["type"],
+                  include: [{ model: modules, attributes: ["name"] }],
+                }],
+              });
+              canEdit = userPermissions.filter((per) => per["tbl_page"]["type"] === "Edit" && per["tbl_page"]["tbl_module"]["name"] === "Trees Headers");
+              canAdd = userPermissions.filter((per) => per["tbl_page"]["type"] === "Add" && per["tbl_page"]["tbl_module"]["name"] === "Trees Headers");
+            }
+            return res.status(httpStatus.OK).json({ data, canAdd, canEdit });
         } catch (error) {
             return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ err: "There is something wrong while getting tree headers", msg: "Can't get trees headers" });
         }

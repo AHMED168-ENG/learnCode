@@ -29,8 +29,8 @@ export class HomeController {
   async getUserPermissions(token: string) {
     try {
       const payload = verify(token);
-      const where = payload.role_id !== "0" ? { role_id: payload.role_id } : {};
       const isHighestAdmin = payload.role_id === "0";
+      const where = !isHighestAdmin ? { role_id: payload.role_id } : {};
       let mappedUserPermissions;
       if (!isHighestAdmin) {
         const userPermissions = await permissions.findAll({

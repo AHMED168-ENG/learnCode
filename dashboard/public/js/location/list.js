@@ -19,26 +19,48 @@ function getList(page) {
         // hidden spinner
         spinnerNotfound(2)
         pagination(res.pages, res.page)
+        if (res.canAdd && res.canAdd.length) {
+            $('#addNewBtn').append(`<a type="button" href="/dashboard/location/new" class="btn btn-info">Add new</a>`)
+        }
         $("#tr-th-row").empty()
-        res.data.forEach((elem) => {
-            $("#tr-th-row").append(`<tr>
-            <th scope="row">${elem.location_id}</th>
-            <td>${elem.location_nameEn}<br />${elem.location_nameAr}</td>
-            <td><img class="rounded p-0" width=45 height=45 src="/p/img/${elem.img}" alt="sponser Image"></td>
-            <td>${elem.tbl_initiative.init_en_name}<br />${elem.tbl_initiative.init_ar_name}</td>
-            <td>${elem.location_address}</td>
-            <td>${elem.tbl_city.en_name}<br />${elem.tbl_city.ar_name}</td>
-            <td>${elem.location_status == "active" ? `<span class="badge badge-success">${elem.location_status}</span>` : `<span class="badge badge-danger">${elem.location_status}</span>`}</td>
-            <td>${elem.deleted == "no" ? `<span class="badge badge-success">${elem.deleted}</span>` : `<span class="badge badge-danger">${elem.deleted}</span>`}</td>
-            <td>${new Date(elem.createdAt).toLocaleDateString("en-US")}</td>
-            <td>
-                <a data-tooltip="View location" class="btn btn-info" href="/dashboard/location/view/${elem.location_id}"><i class="fas fa-eye"></i></a>
-                <a data-tooltip="Edit location" class="btn btn-primary" href="/dashboard/location/edit/${elem.location_id}"><i class="fas fa-edit"></i></a>
-                ${elem.location_status == "active" ? `<button data-tooltip="Unactive location" class="btn btn-warning" onclick='active(${elem.location_id},"active","yes")'><i class="fas fa-exclamation-triangle"></i></button>` : `<button data-tooltip="Active location" class="btn btn-info" onclick='active(${elem.location_id},"active","no")'><i class="fas fa-exclamation-triangle"></i></button>`}
-                ${elem.deleted == "no" ? `<button data-tooltip="Delete location" class="btn btn-danger" onclick='active(${elem.location_id},"delete","yes")'><i class="fas fa-trash-alt"></i></button>` : `<button data-tooltip="Restore location" class="btn btn-success" onclick='active(${elem.location_id},"delete","no")'><i class="fas fa-sync-alt"></i></button>`}
-            </td>
-            </tr>`)
-        })
+        if (res.canEdit && res.canEdit.length) {
+            res.data.forEach((elem) => {
+                $("#tr-th-row").append(`<tr>
+                <th scope="row">${elem.location_id}</th>
+                <td>${elem.location_nameEn}<br />${elem.location_nameAr}</td>
+                <td><img class="rounded p-0" width=45 height=45 src="/p/img/${elem.img}" alt="sponser Image"></td>
+                <td>${elem.tbl_initiative.init_en_name}<br />${elem.tbl_initiative.init_ar_name}</td>
+                <td>${elem.location_address}</td>
+                <td>${elem.tbl_city.en_name}<br />${elem.tbl_city.ar_name}</td>
+                <td>${elem.location_status == "active" ? `<span class="badge badge-success">${elem.location_status}</span>` : `<span class="badge badge-danger">${elem.location_status}</span>`}</td>
+                <td>${elem.deleted == "no" ? `<span class="badge badge-success">${elem.deleted}</span>` : `<span class="badge badge-danger">${elem.deleted}</span>`}</td>
+                <td>${new Date(elem.createdAt).toLocaleDateString("en-US")}</td>
+                <td>
+                    <a data-tooltip="View location" class="btn btn-info" href="/dashboard/location/view/${elem.location_id}"><i class="fas fa-eye"></i></a>
+                    <a data-tooltip="Edit location" class="btn btn-primary" href="/dashboard/location/edit/${elem.location_id}"><i class="fas fa-edit"></i></a>
+                    ${elem.location_status == "active" ? `<button data-tooltip="Unactive location" class="btn btn-warning" onclick='active(${elem.location_id},"active","yes")'><i class="fas fa-exclamation-triangle"></i></button>` : `<button data-tooltip="Active location" class="btn btn-info" onclick='active(${elem.location_id},"active","no")'><i class="fas fa-exclamation-triangle"></i></button>`}
+                    ${elem.deleted == "no" ? `<button data-tooltip="Delete location" class="btn btn-danger" onclick='active(${elem.location_id},"delete","yes")'><i class="fas fa-trash-alt"></i></button>` : `<button data-tooltip="Restore location" class="btn btn-success" onclick='active(${elem.location_id},"delete","no")'><i class="fas fa-sync-alt"></i></button>`}
+                </td>
+                </tr>`)
+            })
+        } else {
+            res.data.forEach((elem) => {
+                $("#tr-th-row").append(`<tr>
+                <th scope="row">${elem.location_id}</th>
+                <td>${elem.location_nameEn}<br />${elem.location_nameAr}</td>
+                <td><img class="rounded p-0" width=45 height=45 src="/p/img/${elem.img}" alt="sponser Image"></td>
+                <td>${elem.tbl_initiative.init_en_name}<br />${elem.tbl_initiative.init_ar_name}</td>
+                <td>${elem.location_address}</td>
+                <td>${elem.tbl_city.en_name}<br />${elem.tbl_city.ar_name}</td>
+                <td>${elem.location_status == "active" ? `<span class="badge badge-success">${elem.location_status}</span>` : `<span class="badge badge-danger">${elem.location_status}</span>`}</td>
+                <td>${elem.deleted == "no" ? `<span class="badge badge-success">${elem.deleted}</span>` : `<span class="badge badge-danger">${elem.deleted}</span>`}</td>
+                <td>${new Date(elem.createdAt).toLocaleDateString("en-US")}</td>
+                <td>
+                    <a data-tooltip="View location" class="btn btn-info" href="/dashboard/location/view/${elem.location_id}"><i class="fas fa-eye"></i></a>
+                </td>
+                </tr>`)
+            })
+        }
     }).fail(() => spinnerNotfound(3))
 }
 function pagination(total, startPage) {

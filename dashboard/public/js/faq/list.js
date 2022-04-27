@@ -14,17 +14,32 @@ function getList(page) {
         // hidden spinner
         spinnerNotfound(2)
         pagination(res.pages)
+        if (res.canAdd && res.canAdd.length) {
+            $('#addNewBtn').append(`<a type="button" href="/dashboard/faq/new" class="btn btn-info">Add new</a>`);
+        }
         $("#tr-th-row").empty()
-        res.data.forEach((elem) => {
-            $("#tr-th-row").append(`<tr>
-            <th scope="row">${elem.id}</th>
-            <td>${elem.question_en}<br />${elem.question_ar}</td>
-            <td><i class="fas fa-calendar-alt text-primary"></i>&emsp;${moment(elem.createdAt).format('DD-MM-YYYY')}</td>
-            <td>
-                <a href="/dashboard/faq/view/${elem.id}" data-tooltip="View FAQ" class="btn btn-info"><i class="fas fa-eye"></i></a>
-                <a href="/dashboard/faq/edit/${elem.id}" data-tooltip="Edit FAQ" class="btn btn-primary"><i class="fas fa-edit"></i></a></td>
-            </tr>`)
-        })
+        if (res.canEdit && res.canEdit.length) {
+            res.data.forEach((elem) => {
+                $("#tr-th-row").append(`<tr>
+                <th scope="row">${elem.id}</th>
+                <td>${elem.question_en}<br />${elem.question_ar}</td>
+                <td><i class="fas fa-calendar-alt text-primary"></i>&emsp;${moment(elem.createdAt).format('DD-MM-YYYY')}</td>
+                <td>
+                    <a href="/dashboard/faq/view/${elem.id}" data-tooltip="View FAQ" class="btn btn-info"><i class="fas fa-eye"></i></a>
+                    <a href="/dashboard/faq/edit/${elem.id}" data-tooltip="Edit FAQ" class="btn btn-primary"><i class="fas fa-edit"></i></a></td>
+                </tr>`)
+            })
+        } else {
+            res.data.forEach((elem) => {
+                $("#tr-th-row").append(`<tr>
+                <th scope="row">${elem.id}</th>
+                <td>${elem.question_en}<br />${elem.question_ar}</td>
+                <td><i class="fas fa-calendar-alt text-primary"></i>&emsp;${moment(elem.createdAt).format('DD-MM-YYYY')}</td>
+                <td>
+                    <a href="/dashboard/faq/view/${elem.id}" data-tooltip="View FAQ" class="btn btn-info"><i class="fas fa-eye"></i></a>
+                </tr>`)
+            })
+        }
     }).fail(() => spinnerNotfound(3))
 }
 function pagination(total) {

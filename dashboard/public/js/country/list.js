@@ -14,18 +14,34 @@ function getList(page) {
         // hidden spinner
         spinnerNotfound(2)
         pagination(res.pages)
+        if (res.canAdd && res.canAdd.length) {
+            $('#addNewBtn').append(`<a type="button" href="/dashboard/country/new" class="btn btn-info">Add new</a>`)
+        }
         $("#tr-th-row").empty()
-        res.data.forEach((elem) => {
-            $("#tr-th-row").append(`<tr>
-            <th scope="row">${elem.country_id}</th>
-            <td>${elem.en_name}</td>
-            <td>${elem.ar_name}</td>
-            <td>${elem.code}</td>
-            <td>${new Date(elem.createdAt).toLocaleDateString("en-US")}</td>
-            <td>
-                <a href="/dashboard/country/edit/${elem.country_id}"><i class="fas fa-edit text-primary"></i></a></td>
-            </tr>`)
-        })
+        if (res.canEdit && res.canEdit.length) {
+            res.data.forEach((elem) => {
+                $("#tr-th-row").append(`<tr>
+                <th scope="row">${elem.country_id}</th>
+                <td>${elem.en_name}</td>
+                <td>${elem.ar_name}</td>
+                <td>${elem.code}</td>
+                <td>${new Date(elem.createdAt).toLocaleDateString("en-US")}</td>
+                <td>
+                    <a href="/dashboard/country/edit/${elem.country_id}"><i class="fas fa-edit text-primary"></i></a></td>
+                </tr>`)
+            })
+        } else {
+            res.data.forEach((elem) => {
+                $("#tr-th-row").append(`<tr>
+                <th scope="row">${elem.country_id}</th>
+                <td>${elem.en_name}</td>
+                <td>${elem.ar_name}</td>
+                <td>${elem.code}</td>
+                <td>${new Date(elem.createdAt).toLocaleDateString("en-US")}</td>
+                <td></td>
+                </tr>`)
+            })
+        }
     }).fail(() => spinnerNotfound(3))
 }
 function pagination(total) {

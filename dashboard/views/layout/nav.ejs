@@ -90,7 +90,15 @@
   })
     .then((response) => response.json())
     .then((data) => {
-      data.userPermissions.forEach((userPermission) => {
+      $("#sidebar").append(`
+        <li class="nav-item mb-2">
+          <a href="/" class="nav-link" id="home">
+            <i class="nav-icon fas fa-tachometer-alt"></i>
+            <p>Dashboard</p>
+          </a>
+        </li>
+      `);
+      if (data.isHighestAdmin) {
         $("#sidebar").append(`
         <li class="nav-item mb-2">
           <a href="/" class="nav-link" id="home">
@@ -99,15 +107,13 @@
           </a>
         </li>
         <li class="nav-item">
-          <% if (${userPermission.module.name} === "Sponsors") { %>
-              <a href="/dashboard/sponser" class="nav-link" id="sponser">
-                <i class="nav-icon fas fa-users text-success_"></i>
-                <p>
-                  Sponsors
-                  <span class="badge badge-success right" id="totalSponsors">0</span>
-                </p>
-              </a>
-          <% } %>
+          <a href="/dashboard/sponser" class="nav-link" id="sponser">
+            <i class="nav-icon fas fa-users text-success_"></i>
+            <p>
+              Sponsors
+              <span class="badge badge-success right" id="totalSponsors">0</span>
+            </p>
+          </a>
         </li>
 
         <li class="nav-item">
@@ -482,13 +488,613 @@
             <li class="nav-item">
               <a href="#" class="nav-link">
                 <i class="far fa-circle nav-icon"></i>
-                <p>Startegy Collecting Points</p>
+                <p>Strategy Collecting Points</p>
               </a>
             </li>
           </ul>
         </li>
         `);
-      });
+      } else {
+        const sponsor = data.userPermissions.filter((userPermission) => userPermission.module.name === "Sponsors");
+        if (sponsor.length) {
+          $('#sidebar').append(`
+            <li class="nav-item" id="sponsorsItem">
+              <a href="/dashboard/sponser" class="nav-link" id="sponser">
+                <i class="nav-icon fas fa-users text-success_"></i>
+                <p>
+                  Sponsors
+                  <span class="badge badge-success right" id="totalSponsors">0</span>
+                </p>
+              </a>
+            </li>
+          `);
+        }
+        const initiativeManagement = data.userPermissions.filter((userPermission) => userPermission.module.name === "Initiatives Management");
+        if (initiativeManagement.length) {
+          $('#sidebar').append(`
+            <li class="nav-item">
+              <a href="/dashboard/initiative" class="nav-link" id="initiative">
+                <i class="nav-icon fas fa-tree text-success_"></i>
+                <p>
+                  Initiatives Management
+                  <span class="badge badge-success right" id="totalInitiatives">0</span>
+                </p>
+              </a>
+            </li>
+          `);
+        }
+        const locationsManagement = data.userPermissions.filter((userPermission) => userPermission.module.name === "Locations Management");
+        if (locationsManagement.length) {
+          $('#sidebar').append(`
+            <li class="nav-item">
+              <a href="/dashboard/location" class="nav-link" id="location">
+                <i class="nav-icon fas fa-map-marked text-success_"></i>
+                <p>
+                  Locations Management
+                  <span class="badge badge-success right" id="totalLocation">0</span>
+                </p>
+              </a>
+            </li>
+          `);
+        }
+        const treesLocation = data.userPermissions.filter((userPermission) => userPermission.module.name === "Trees Location");
+        if (treesLocation.length) {
+          $('#sidebar').append(`
+            <li class="nav-item">
+              <a href="/dashboard/initrees" class="nav-link" id="initrees">
+                <i class="nav-icon fas fa-map-marked text-success_"></i>
+                <p>Trees Location</p>
+              </a>
+            </li>
+          `);
+        }
+        const trees = data.userPermissions.filter((userPermission) => userPermission.module.name === "Trees");
+        const treesHeader = data.userPermissions.filter((userPermission) => userPermission.module.name === "Trees Headers");
+        if (trees.length || treesHeader.length) {
+          $('#sidebar').append(`
+            <li class="nav-item has-treeview">
+              <a href="#" class="nav-link" id="tree">
+                <i class="nav-icon fas fa-tree textss-warning"></i>
+
+                <p>
+                  Trees Management
+                  <i class="fas fa-angle-left right"></i>
+                  <span class="badge badge-warning right"></span>
+                </p>
+              </a>
+              <ul class="nav nav-treeview" style="display: none" id="treeManagementList"></ul>
+            </li>
+          `);
+          if (trees.length) {
+            $('#treeManagementList').append(`
+              <li class="nav-item">
+                <a href="/dashboard/tree" class="nav-link" id="trees">
+                  <i class="fas fa-check-circle nav-icon textss-maroon"></i>
+                  <p>Trees</p>
+                  <span class="badge badge-warning right" id="totalTrees">0</span>
+                </a>
+              </li>
+            `);
+          }
+          if (treesHeader.length) {
+            $('#treeManagementList').append(`
+              <li class="nav-item">
+                <a href="/dashboard/tree/header" class="nav-link" id="headers">
+                  <i class="fas fa-list nav-icon textss-info"></i>
+                  <p>Trees Headers</p>
+                </a>
+              </li>
+            `);
+          }
+        }
+        const giftsCardsManagement = data.userPermissions.filter((userPermission) => userPermission.module.name === "Gifts & cards Management");
+        if (treesLocation.length) {
+          $('#sidebar').append(`
+            <li class="nav-item">
+              <a href="#" class="nav-link">
+                <i class="nav-icon fas fa-gift text-success_"></i>
+                <p>
+                  Gifts & cards Management
+                  <span class="badge badge-warning right" id="totalGift">0</span>
+                </p>
+              </a>
+            </li>
+          `);
+        }
+        const newOrders = data.userPermissions.filter((userPermission) => userPermission.module.name === "New Orders");
+        const inProgressOrders = data.userPermissions.filter((userPermission) => userPermission.module.name === "In Progress Orders");
+        const completedOrders = data.userPermissions.filter((userPermission) => userPermission.module.name === "Completed Orders");
+        const cancelledOrders = data.userPermissions.filter((userPermission) => userPermission.module.name === "Cancelled Orders");
+        if (newOrders.length || inProgressOrders.length || completedOrders.length || cancelledOrders.length) {
+          $('#sidebar').append(`
+            <li class="nav-item has-treeview">
+              <a href="#" class="nav-link" id="order">
+                <i class="nav-icon fas fa-list-ol textss-warning"></i>
+
+                <p>
+                  Listing Orders
+                  <i class="fas fa-angle-left right"></i>
+                  <span class="badge badge-warning right"></span>
+                </p>
+              </a>
+              <ul class="nav nav-treeview" style="display: none" id="listingOrders"></ul>
+            </li>
+          `);
+          if (newOrders.length) {
+            $('#listingOrders').append(`
+              <li class="nav-item">
+                <a href="/dashboard/order/new" class="nav-link" id="new">
+                  <i class="fas fa-exclamation-circle nav-icon textss-maroon"></i>
+                  <p>New Orders</p>
+                </a>
+              </li>
+            `);
+          }
+          if (inProgressOrders.length) {
+            $('#listingOrders').append(`
+              <li class="nav-item">
+                <a href="/dashboard/order/inprogress" class="nav-link" id="inprogress">
+                  <i class="fas fa-circle-notch nav-icon textss-info"></i>
+                  <p>In Progress Orders</p>
+                </a>
+              </li>
+            `);
+          }
+          if (completedOrders.length) {
+            $('#listingOrders').append(`
+              <li class="nav-item">
+                <a href="/dashboard/order/completed" class="nav-link" id="completed">
+                  <i class="far fa-check-circle nav-icon textss-success"></i>
+                  <p>Completed Orders</p>
+                </a>
+              </li>
+            `);
+          }
+          if (cancelledOrders.length) {
+            $('#listingOrders').append(`
+              <li class="nav-item">
+                <a href="/dashboard/order/cancelled" class="nav-link" id="cancelled">
+                  <i class="far fa-times-circle nav-icon textss-danger"></i>
+                  <p>Cancelled Orders</p>
+                </a>
+              </li>
+            `);
+          }
+        }
+        const promoCodes = data.userPermissions.filter((userPermission) => userPermission.module.name === "Promo Codes");
+        if (promoCodes.length) {
+          $('#sidebar').append(`
+          <li class="nav-item">
+            <a href="/dashboard/promo" id="promo" class="nav-link">
+              <i class="nav-icon fas fa-tag textss-maroon"></i>
+              <p>
+                Promo Codes
+                <span class="badge badge-warning right" id="totalPromo">0</span>
+              </p>
+            </a>
+          </li>
+          `);
+        }
+        const about = data.userPermissions.filter((userPermission) => userPermission.module.name === "About");
+        const termsConditions = data.userPermissions.filter((userPermission) => userPermission.module.name === "Terms & Conditions");
+        const privacyPolicy = data.userPermissions.filter((userPermission) => userPermission.module.name === "Privacy Policy");
+        const faq = data.userPermissions.filter((userPermission) => userPermission.module.name === "FAQ");
+        const blogs = data.userPermissions.filter((userPermission) => userPermission.module.name === "Blogs");
+        if (about.length || termsConditions.length || privacyPolicy.length || faq.length || blogs.length) {
+          $('#sidebar').append(`
+            <li class="nav-item has-treeview">
+              <a href="#" class="nav-link" id="management">
+                <i class="nav-icon fas fa-globe"></i>
+                <p>
+                  Look Ups Management
+                  <i class="fas fa-angle-left right"></i>
+                </p>
+              </a>
+              <ul class="nav nav-treeview" id="lookUpsManagement"></ul>
+            </li>
+          `);
+          if (about.length) {
+            $('#lookUpsManagement').append(`
+              <li class="nav-item">
+                <a href="/dashboard/management/about" class="nav-link" id="about">
+                  <i class="fas fa-circle-notch nav-icon textss-success"></i>
+                  <p>About</p>
+                </a>
+              </li>
+            `);
+          }
+          if (termsConditions.length) {
+            $('#lookUpsManagement').append(`
+              <li class="nav-item">
+                <a href="/dashboard/management/terms" id="terms" class="nav-link">
+                  <i class="fas fa-circle-notch nav-icon textss-warning"></i>
+                  <p>Terms and Conditions</p>
+                </a>
+              </li>
+            `);
+          }
+          if (privacyPolicy.length) {
+            $('#lookUpsManagement').append(`
+              <li class="nav-item">
+                <a href="/dashboard/management/policy" class="nav-link" id="policy">
+                  <i class="fas fa-circle-notch nav-icon textss-warning"></i>
+                  <p>Privacy Policy</p>
+                </a>
+              </li>
+            `);
+          }
+          if (faq.length) {
+            $('#lookUpsManagement').append(`
+              <li class="nav-item">
+                <a href="/dashboard/faq" class="nav-link" id="faq">
+                  <i class="fas fa-circle-notch nav-icon textss-warning"></i>
+                  <p>FAQ</p>
+                </a>
+              </li>
+            `);
+          }
+          if (blogs.length) {
+            $('#lookUpsManagement').append(`
+              <li class="nav-item">
+                <a href="#" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Blogs</p>
+                </a>
+              </li>
+            `);
+          }
+        }
+        const listPartners = data.userPermissions.filter((userPermission) => userPermission.module.name === "List Partners");
+        const types = data.userPermissions.filter((userPermission) => userPermission.module.name === "Partner Types");
+        if (listPartners.length || types.length) {
+          $('#sidebar').append(`
+          <li class="nav-item has-treeview">
+              <a href="#" class="nav-link" id="partner">
+                <i class="nav-icon fas fa-handshake textss-warning"></i>
+
+                <p>
+                  Partner
+                  <i class="fas fa-angle-left right"></i>
+                  <span class="badge badge-warning right"></span>
+                </p>
+              </a>
+              <ul class="nav nav-treeview" style="display: none" id="partnerManagement"></ul>
+            </li>
+          `);
+          if (listPartners.length) {
+            $('#partnerManagement').append(`
+              <li class="nav-item">
+                <a href="/dashboard/partner/partner-page" class="nav-link" id="partner-page">
+                  <i class="fas fa-list nav-icon textss-maroon"></i>
+                  <p>List Partners</p>
+                </a>
+              </li>
+            `);
+          }
+          if (types.length) {
+            $('#partnerManagement').append(`
+              <li class="nav-item">
+                <a href="/dashboard/partner/type" class="nav-link" id="type">
+                  <i class="fas fa-quote-left nav-icon textss-info"></i>
+                  <p>Types</p>
+                </a>
+              </li>
+            `);
+          }
+        }
+        const unread = data.userPermissions.filter((userPermission) => userPermission.module.name === "Unread Messages");
+        const read = data.userPermissions.filter((userPermission) => userPermission.module.name === "Read Messages");
+        if (unread.length || read.length) {
+          $('#sidebar').append(`
+            <li class="nav-item has-treeview">
+              <a href="#" class="nav-link" id="message">
+                <i class="nav-icon fas fa-envelope-open-text"></i>
+                <p>
+                  Messages
+                  <i class="fas fa-angle-left right"></i>
+                </p>
+              </a>
+              <ul class="nav nav-treeview" id="messagesManagement"></ul>
+            </li>
+          `);
+          if (unread.length) {
+            $('#messagesManagement').append(`
+              <li class="nav-item">
+                <a href="/dashboard/message/unread" class="nav-link" id="unread">
+                  <i class="far fa-envelope nav-icon textss-warning"></i>
+                  <p>Unread Messages</p>
+                </a>
+              </li>
+            `);
+          }
+          if (read.length) {
+            $('#messagesManagement').append(`
+              <li class="nav-item">
+                <a href="/dashboard/message/read" class="nav-link" id="read">
+                  <i class="far fa-envelope nav-icon textss-success"></i>
+                  <p>Read Messages</p>
+                </a>
+              </li>
+            `);
+          }
+        }
+        const pointsRewards = data.userPermissions.filter((userPermission) => userPermission.module.name === "Points & Rewards");
+        if (pointsRewards.length) {
+          $('#sidebar').append(`
+            <li class="nav-item">
+              <a href="#" class="nav-link">
+                <i class="nav-icon fas fa-th"></i>
+                <p>Points & Rewards</p>
+              </a>
+            </li>
+          `);
+        }
+        const carbonCalculator = data.userPermissions.filter((userPermission) => userPermission.module.name === "Carbon Calculator");
+        if (carbonCalculator.length) {
+          $('#sidebar').append(`
+            <li class="nav-item">
+              <a href="#" class="nav-link">
+                <i class="nav-icon fas fa-calculator"></i>
+                <p>Carbon Calculator</p>
+              </a>
+            </li>
+          `);
+        }
+        const ordersReport = data.userPermissions.filter((userPermission) => userPermission.module.name === "Orders Report");
+        const usersReport = data.userPermissions.filter((userPermission) => userPermission.module.name === "Users Report");
+        const sponsorsReport = data.userPermissions.filter((userPermission) => userPermission.module.name === "Sponsors Report");
+        const initiativeReport = data.userPermissions.filter((userPermission) => userPermission.module.name === "Initiative Report");
+        const locationTreesReport = data.userPermissions.filter((userPermission) => userPermission.module.name === "Location Trees Report");
+        const locationReport = data.userPermissions.filter((userPermission) => userPermission.module.name === "Location Report");
+        const salesReport = data.userPermissions.filter((userPermission) => userPermission.module.name === "Sales Report");
+        const calendarInitiative = data.userPermissions.filter((userPermission) => userPermission.module.name === "Calendar Initiative");
+        const userCharts = data.userPermissions.filter((userPermission) => userPermission.module.name === "User Charts");
+        if (ordersReport.length || usersReport.length || sponsorsReport.length || initiativeReport.length || locationTreesReport.length || locationReport.length || salesReport.length || calendarInitiative.length || userCharts.length) {
+          $('#sidebar').append(`
+            <li class="nav-item has-treeview">
+              <a href="#" class="nav-link" id="report">
+                <i class="nav-icon fas fa-chart-pie"></i>
+                <p>
+                  Reports
+                  <i class="right fas fa-angle-left"></i>
+                </p>
+              </a>
+              <ul class="nav nav-treeview" id="reportsManagement"></ul>
+            </li>
+          `);
+          if (ordersReport.length) {
+            $('#reportsManagement').append(`
+              <li class="nav-item">
+                <a href="/dashboard/report/order-repo" class="nav-link" id="order-repo">
+                  <i class="fas fa-chart-line nav-icon"></i>
+                  <p>Orders report</p>
+                </a>
+              </li>
+            `);
+          }
+          if (usersReport.length) {
+            $('#reportsManagement').append(`
+              <li class="nav-item">
+                <a href="/dashboard/report/user-repo" class="nav-link" id="user-repo">
+                  <i class="fas fa-users nav-icon"></i>
+                  <p>Users report</p>
+                </a>
+              </li>
+            `);
+          }
+          if (sponsorsReport.length) {
+            $('#reportsManagement').append(`
+              <li class="nav-item">
+                <a href="/dashboard/report/sponsor-repo" class="nav-link" id="sponsor-repo">
+                  <i class="fas fa-user-friends nav-icon"></i>
+                  <p>Sponsors report</p>
+                </a>
+              </li>
+            `);
+          }
+          if (initiativeReport.length) {
+            $('#reportsManagement').append(`
+              <li class="nav-item">
+                <a href="/dashboard/report/initiative-repo" class="nav-link" id="initiative-repo">
+                  <i class="fas fa-tree nav-icon"></i>
+                  <p>Initiative Report</p>
+                </a>
+              </li>
+            `);
+          }
+          if (locationTreesReport.length) {
+            $('#reportsManagement').append(`
+              <li class="nav-item">
+                <a href="/dashboard/report/location-trees" class="nav-link" id="location-trees">
+                  <i class="fas fa-tree nav-icon"></i>
+                  <p>Location Trees Report</p>
+                </a>
+              </li>
+            `);
+          }
+          if (locationReport.length) {
+            $('#reportsManagement').append(`
+              <li class="nav-item">
+                <a href="/dashboard/report/location-repo" class="nav-link" id="location-repo">
+                  <i class="fas fa-map nav-icon"></i>
+                  <p>Location Report</p>
+                </a>
+              </li>
+            `);
+          }
+          if (salesReport.length) {
+            $('#reportsManagement').append(`
+              <li class="nav-item">
+                <a href="/dashboard/report/sales" class="nav-link" id="sales">
+                  <i class="fas fa-money-bill-wave nav-icon"></i>
+                  <p>Sales Report</p>
+                </a>
+              </li>
+            `);
+          }
+          if (calendarInitiative.length) {
+            $('#reportsManagement').append(`
+              <li class="nav-item">
+                <a href="/dashboard/report/calendar-initiative" class="nav-link" id="calendar-initiative">
+                  <i class="fas fa-calendar-alt nav-icon"></i>
+                  <p>Calendar Initiative</p>
+                </a>
+              </li>
+            `);
+          }
+          if (userCharts.length) {
+            $('#reportsManagement').append(`
+              <li class="nav-item">
+                <a href="/dashboard/report/charts" class="nav-link" id="charts">
+                  <i class="fas fa-user-tag nav-icon"></i>
+                  <p>User charts</p>
+                </a>
+              </li>
+            `);
+          }
+        }
+        const usersClients = data.userPermissions.filter((userPermission) => userPermission.module.name === "Users - Clients");
+        if (usersClients.length) {
+          $('#sidebar').append(`
+            <li class="nav-item">
+              <a href="/dashboard/user" class="nav-link" id="user">
+                <i class="nav-icon fas fa-users"></i>
+                <p>
+                  Users - Clients
+                  <span class="badge badge-warning right" id="totalUsers">0</span>
+                </p>
+              </a>
+            </li>
+          `);
+        }
+        const sahlanMainData = data.userPermissions.filter((userPermission) => userPermission.module.name === "Sahlan Main Data");
+        if (sahlanMainData.length) {
+          $('#sidebar').append(`
+            <li class="nav-item">
+              <a href="#" class="nav-link">
+                <i class="nav-icon fa fa-cog fa-fw"></i>
+                <p>Sahlan Main Data</p>
+              </a>
+            </li>
+          `);
+        }
+        const rolesList = data.userPermissions.filter((userPermission) => userPermission.module.name === "Roles List");
+        const sahlanAdmins = data.userPermissions.filter((userPermission) => userPermission.module.name === "Sahlan Admins");
+        if (rolesList.length || sahlanAdmins.length) {
+          $('#sidebar').append(`
+            <li class="nav-item">
+              <a href="#" class="nav-link">
+                <i class="nav-icon fas fa-users"></i>
+                <p>
+                  Admins & Roles
+                  <i class="fas fa-angle-left right"></i>
+                </p>
+              </a>
+              <ul class="nav nav-treeview" id="adminRolesManagement"></ul>
+            </li>
+          `);
+          if (rolesList.length) {
+            $('#adminRolesManagement').append(`
+              <li class="nav-item">
+                <a href="/dashboard/user/roles" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Roles List</p>
+                </a>
+              </li>
+            `);
+          }
+          if (sahlanAdmins.length) {
+            $('#adminRolesManagement').append(`
+              <li class="nav-item">
+                <a href="/dashboard/admin" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Sahlan Admins</p>
+                </a>
+              </li>
+            `);
+          }
+        }
+        const userPermissionsManagement = data.userPermissions.filter((userPermission) => userPermission.module.name === "User Permissions");
+        if (userPermissionsManagement.length) {
+          $('#sidebar').append(`
+            <li class="nav-item">
+              <a href="/dashboard/user/permissions/1" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p>User Permissions</p>
+              </a>
+            </li>
+          `);
+        }
+        const countries = data.userPermissions.filter((userPermission) => userPermission.module.name === "Countries");
+        const cities = data.userPermissions.filter((userPermission) => userPermission.module.name === "Cities");
+        const districts = data.userPermissions.filter((userPermission) => userPermission.module.name === "Districts");
+        const entitySectors = data.userPermissions.filter((userPermission) => userPermission.module.name === "Entity Sectors");
+        const strategyPoints = data.userPermissions.filter((userPermission) => userPermission.module.name === "Strategy Collecting Points");
+        if (countries.length || cities.length || districts.length || entitySectors.length || strategyPoints.length) {
+          $('#sidebar').append(`
+            <li class="nav-item has-treeview">
+              <a href="#" class="nav-link">
+                <i class="nav-icon fas fa-cogs text-danger_"></i>
+                <p>
+                  General Settings
+                  <i class="fas fa-angle-left right"></i>
+                </p>
+              </a>
+              <ul class="nav nav-treeview" style="display: none" id="generalSettings"></ul>
+            </li>
+          `);
+          if (countries.length) {
+            $('#generalSettings').append(`
+            <li class="nav-item">
+              <a href="/dashboard/country" class="nav-link" id="country">
+                <i class="fas fa-globe-americas nav-icon"></i>
+                <p>Countries</p>
+              </a>
+            </li>
+            `);
+          }
+          if (cities.length) {
+            $('#generalSettings').append(`
+            <li class="nav-item">
+              <a href="/dashboard/city" class="nav-link" id="city">
+                <i class="fas fa-city nav-icon"></i>
+                <p>Cities</p>
+              </a>
+            </li>
+            `);
+          }
+          if (districts.length) {
+            $('#generalSettings').append(`
+            <li class="nav-item">
+              <a href="/dashboard/region" class="nav-link" id="region">
+                <i class="fas fa-map nav-icon"></i>
+                <p>Districts</p>
+              </a>
+            </li>
+            `);
+          }
+          if (entitySectors.length) {
+            $('#generalSettings').append(`
+            <li class="nav-item">
+              <a href="/dashboard/sector" class="nav-link" id="sector">
+                <i class="fas fa-building nav-icon"></i>
+                <p>Entity Sectors</p>
+              </a>
+            </li>
+            `);
+          }
+          if (strategyPoints.length) {
+            $('#generalSettings').append(`
+            <li class="nav-item">
+              <a href="#" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Strategy Collecting Points</p>
+              </a>
+            </li>
+            `);
+          }
+        }
+      }
       data.lastNewOrders.forEach((elem) => {
         $("#notifiy-content").append(`
           <a href="/dashboard/order/view/${elem.order_id}" class="dropdown-item">

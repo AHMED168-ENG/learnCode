@@ -14,21 +14,40 @@ function getList(page) {
         // hidden spinner
         spinnerNotfound(2)
         pagination(res.pages)
+        if (res.canAdd) {
+            $('#addNewBtn').html(`<a type="button" href="/dashboard/region/new" class="btn btn-info">Add new</a>`);
+        }
         $("#tr-th-row").empty()
-        res.data.forEach((elem) => {
-            $("#tr-th-row").append(`<tr>
-            <th scope="row">${elem.region_id}</th>
-            <td>${elem.en_name}</td>
-            <td>${elem.ar_name}</td>
-            <td>${elem.tbl_country.en_name}<br />${elem.tbl_country.ar_name}</td>
-            <td>${elem.tbl_city.en_name}<br />${elem.tbl_city.ar_name}</td>
-            <td>${elem.latitude || ""}</td>
-            <td>${elem.longitude || ""}</td>
-            <td>${new Date(elem.createdAt).toLocaleDateString("en-US")}</td>
-            <td>
-                <a href="/dashboard/region/edit/${elem.region_id}"><i class="fas fa-edit text-primary"></i></a></td>
-            </tr>`)
-        })
+        if (res.canEdit) {
+            res.data.forEach((elem) => {
+                $("#tr-th-row").append(`<tr>
+                <th scope="row">${elem.region_id}</th>
+                <td>${elem.en_name}</td>
+                <td>${elem.ar_name}</td>
+                <td>${elem.tbl_country.en_name}<br />${elem.tbl_country.ar_name}</td>
+                <td>${elem.tbl_city.en_name}<br />${elem.tbl_city.ar_name}</td>
+                <td>${elem.latitude || ""}</td>
+                <td>${elem.longitude || ""}</td>
+                <td>${new Date(elem.createdAt).toLocaleDateString("en-US")}</td>
+                <td>
+                    <a href="/dashboard/region/edit/${elem.region_id}"><i class="fas fa-edit text-primary"></i></a></td>
+                </tr>`)
+            })
+        } else {
+            res.data.forEach((elem) => {
+                $("#tr-th-row").append(`<tr>
+                <th scope="row">${elem.region_id}</th>
+                <td>${elem.en_name}</td>
+                <td>${elem.ar_name}</td>
+                <td>${elem.tbl_country.en_name}<br />${elem.tbl_country.ar_name}</td>
+                <td>${elem.tbl_city.en_name}<br />${elem.tbl_city.ar_name}</td>
+                <td>${elem.latitude || ""}</td>
+                <td>${elem.longitude || ""}</td>
+                <td>${new Date(elem.createdAt).toLocaleDateString("en-US")}</td>
+                <td></td>
+                </tr>`)
+            })
+        }
     }).fail(() => spinnerNotfound(3))
 }
 function pagination(total) {

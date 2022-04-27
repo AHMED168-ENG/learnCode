@@ -52,7 +52,7 @@ export class InitiativeController {
           .then(async (count) => {
             const payload = verify(req.cookies.token);
             const isHighestAdmin = payload.role_id === "0";
-            let userPermissions, canEdit, canAdd;
+            let userPermissions, canEdit = true, canAdd = true;
             if (!isHighestAdmin) {
               userPermissions = await permissions.findAll({
                 where: { role_id: payload.role_id },
@@ -63,8 +63,8 @@ export class InitiativeController {
                   include: [{ model: modules, attributes: ["name"] }],
                 }],
               });
-              canEdit = userPermissions.filter((per) => per["tbl_page"]["type"] === "Edit" && per["tbl_page"]["tbl_module"]["name"] === "Initiative Management");
-              canAdd = userPermissions.filter((per) => per["tbl_page"]["type"] === "Add" && per["tbl_page"]["tbl_module"]["name"] === "Initiative Management");
+              canEdit = !!userPermissions.filter((per) => per["tbl_page"]["type"] === "Edit" && per["tbl_page"]["tbl_module"]["name"] === "Initiative Management").length;
+              canAdd = !!userPermissions.filter((per) => per["tbl_page"]["type"] === "Add" && per["tbl_page"]["tbl_module"]["name"] === "Initiative Management").length;
             }
             const dataInti = {
               total: count,

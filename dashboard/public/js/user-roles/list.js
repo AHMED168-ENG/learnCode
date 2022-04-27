@@ -10,15 +10,28 @@ function getList(page) {
     $.ajax(settings).done(function (res, textStatus) {
         spinnerNotfound(2);
         pagination(res.pages);
+        if (res.canAdd) {
+            $('#addNewBtn').html(`<a type="button" href="/dashboard/user/roles/new" class="btn btn-info">Add new</a>`);
+        }
         $("#tr-th-row").empty();
-        res.data.forEach((elem) => {
-            $("#tr-th-row").append(`<tr>
-            <th scope="row">${elem.id}</th>
-            <td>${elem.name}</td>
-            <td>
-                <a href="/dashboard/user/roles/edit/${elem.id}"><i class="fas fa-edit text-primary"></i></a></td>
-            </tr>`);
-        });
+        if (res.canEdit) {
+            res.data.forEach((elem) => {
+                $("#tr-th-row").append(`<tr>
+                <th scope="row">${elem.id}</th>
+                <td>${elem.name}</td>
+                <td>
+                    <a href="/dashboard/user/roles/edit/${elem.id}"><i class="fas fa-edit text-primary"></i></a></td>
+                </tr>`);
+            });
+        } else {
+            res.data.forEach((elem) => {
+                $("#tr-th-row").append(`<tr>
+                <th scope="row">${elem.id}</th>
+                <td>${elem.name}</td>
+                <td></td>
+                </tr>`);
+            });
+        }
     }).fail(() => spinnerNotfound(3));
 }
 function pagination(total) {

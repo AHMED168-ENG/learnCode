@@ -62,13 +62,13 @@
                           <div class="form-group">
                             <label>Initiative</label>
                             <select
-                              id="init_id"
+                              id="init_id_pk"
                               class="form-control select2 select2-danger"
                               data-dropdown-css-class="select2-danger"
                               style="width: 100%"
                             >
                               <% for(let [index,data] of initiatives.entries() || []){ %>
-                              <option value="<%=data.init_id%>"><%=data.init_en_name%> - <%=data.init_ar_name%></option>
+                              <option value="<%=data.init_id_pk%>"><%=data.init_en_name%> - <%=data.init_ar_name%></option>
                               <%} %>
                             </select>
                           </div>
@@ -189,6 +189,6 @@
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     ></script>
-    <script src="/js/location/new.js"></script>
+    <script src="/js/location-trees/new.js"></script>
   </body>
 </html>

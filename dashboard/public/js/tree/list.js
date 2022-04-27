@@ -14,17 +14,33 @@ function getList(page) {
         // hidden spinner
         spinnerNotfound(2)
         pagination(res.pages)
+        if (res.canAdd) {
+            $('#addNewBtn').html(`<a type="button" href="/dashboard/tree/new" class="btn btn-info">Add new</a>`);
+        }
         $("#tr-th-row").empty()
-        res.data.forEach((elem) => {
-            $("#tr-th-row").append(`<tr>
-            <th scope="row">${elem.tree_id}</th>
-            <td>${elem.en_name}</td>
-            <td>${elem.ar_name}</td>
-            <td><img class="rounded-circle p-0" width=45 height=45 src="/p/img/${elem.img_tree}" alt="Image"></td>
-            <td>${elem.deleted == "no" ? `<span class="badge badge-success">${elem.deleted}</span>` : `<span class="badge badge-danger">${elem.deleted}</span>`}</td>
-            <td><a class="pr-2" href="/dashboard/tree/details/${elem.tree_id}"><i class="fas fa-eye text-success"></i></a><a class="pr-2" href="/dashboard/tree/edit/${elem.tree_id}"><i class="fas fa-edit text-primary"></i></a></td>
-            </tr>`)
-        })
+        if (res.canEdit) {
+            res.data.forEach((elem) => {
+                $("#tr-th-row").append(`<tr>
+                <th scope="row">${elem.tree_id}</th>
+                <td>${elem.en_name}</td>
+                <td>${elem.ar_name}</td>
+                <td><img class="rounded-circle p-0" width=45 height=45 src="/p/img/${elem.img_tree}" alt="Image"></td>
+                <td>${elem.deleted == "no" ? `<span class="badge badge-success">${elem.deleted}</span>` : `<span class="badge badge-danger">${elem.deleted}</span>`}</td>
+                <td><a class="pr-2" href="/dashboard/tree/details/${elem.tree_id}"><i class="fas fa-eye text-success"></i></a><a class="pr-2" href="/dashboard/tree/edit/${elem.tree_id}"><i class="fas fa-edit text-primary"></i></a></td>
+                </tr>`)
+            })
+        } else {
+            res.data.forEach((elem) => {
+                $("#tr-th-row").append(`<tr>
+                <th scope="row">${elem.tree_id}</th>
+                <td>${elem.en_name}</td>
+                <td>${elem.ar_name}</td>
+                <td><img class="rounded-circle p-0" width=45 height=45 src="/p/img/${elem.img_tree}" alt="Image"></td>
+                <td>${elem.deleted == "no" ? `<span class="badge badge-success">${elem.deleted}</span>` : `<span class="badge badge-danger">${elem.deleted}</span>`}</td>
+                <td></td>
+                </tr>`)
+            })
+        }
     }).fail(() => spinnerNotfound(3))
 }
 function pagination(total) {

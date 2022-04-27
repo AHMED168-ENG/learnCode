@@ -37,7 +37,7 @@ export class LocationController {
           .then(async (count) => {
             const payload = verify(req.cookies.token);
             const isHighestAdmin = payload.role_id === "0";
-            let userPermissions, canEdit, canAdd;
+            let userPermissions, canEdit = true, canAdd = true;
             if (!isHighestAdmin) {
               userPermissions = await permissions.findAll({
                 where: { role_id: payload.role_id },
@@ -48,8 +48,8 @@ export class LocationController {
                   include: [{ model: modules, attributes: ["name"] }],
                 }],
               });
-              canEdit = userPermissions.filter((per) => per["tbl_page"]["type"] === "Edit" && per["tbl_page"]["tbl_module"]["name"] === "Locations Management");
-              canAdd = userPermissions.filter((per) => per["tbl_page"]["type"] === "Add" && per["tbl_page"]["tbl_module"]["name"] === "Locations Management");
+              canEdit = !!userPermissions.filter((per) => per["tbl_page"]["type"] === "Edit" && per["tbl_page"]["tbl_module"]["name"] === "Locations Management").length;
+              canAdd = !!userPermissions.filter((per) => per["tbl_page"]["type"] === "Add" && per["tbl_page"]["tbl_module"]["name"] === "Locations Management").length;
             }
             const dataInti = {
               total: count,

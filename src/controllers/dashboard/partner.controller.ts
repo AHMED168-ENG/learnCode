@@ -14,7 +14,7 @@ const { verify } = require("../../helper/token")
 export class PartnerController {
   listPage(req: Request, res: Response, next: NextFunction) {
     res.render("partner/list.ejs", {
-      title: "Partner",
+      title: "Partners",
     })
   }
   list(req: Request, res: Response, next: NextFunction) {
@@ -32,7 +32,7 @@ export class PartnerController {
           .then(async (count) => {
             const payload = verify(req.cookies.token);
             const isHighestAdmin = payload.role_id === "0";
-            let userPermissions, canEdit, canAdd;
+            let userPermissions, canEdit = true, canAdd = true;
             if (!isHighestAdmin) {
               userPermissions = await permissions.findAll({
                 where: { role_id: payload.role_id },
@@ -43,8 +43,8 @@ export class PartnerController {
                   include: [{ model: modules, attributes: ["name"] }],
                 }],
               });
-              canEdit = userPermissions.filter((per) => per["tbl_page"]["type"] === "Edit" && per["tbl_page"]["tbl_module"]["name"] === "Partners List");
-              canAdd = userPermissions.filter((per) => per["tbl_page"]["type"] === "Add" && per["tbl_page"]["tbl_module"]["name"] === "Partners List");
+              canEdit = !!userPermissions.filter((per) => per["tbl_page"]["type"] === "Edit" && per["tbl_page"]["tbl_module"]["name"] === "Partners List").length;
+              canAdd = !!userPermissions.filter((per) => per["tbl_page"]["type"] === "Add" && per["tbl_page"]["tbl_module"]["name"] === "Partners List").length;
             }
             const dataInti = {
               total: count,
@@ -57,7 +57,10 @@ export class PartnerController {
             }
             res.status(httpStatus.OK).json(dataInti)
           })
-          .catch((err) => res.status(httpStatus.NOT_FOUND).json({err: "There is something wrong while getting partners", msg: "not found"}))
+          .catch((err) => {
+            console.log(err)
+            res.status(httpStatus.NOT_FOUND).json({err: "There is something wrong while getting partners", msg: "not found"})
+          })
       })
       .catch((err) => {
         res.status(httpStatus.NOT_FOUND).json({err: "There is something wrong while getting partners", msg: "not found"})

@@ -47,51 +47,94 @@ function getList(page = 1, from = null, to = null, search = null) {
             spinnerNotfound(2)
             pagination(res.pages, "pagination-demo")
             $("#tr-th-row").empty()
-            res.data.forEach((elem) => {
-                $("#tr-th-row").append(`<tr>
-                <th scope="row">${elem.user_id}</th>
-                <td>${elem.fullName || "—"}</td>
-                <td>${elem.gender || "—"}</td>
-                <td>${new Date(elem.birth_date).toLocaleDateString("en-US") || "—"}</td>
-                <td>${elem["tbl_country.en_name"] || "—"}</td >
-                <td>${elem["tbl_city.en_name"] || "—"}</td>
-                <td>${elem["tbl_region.en_name"] || "—"}</td>
-                <td>${elem.email ? `<a class="text-dark" href='mailto:${elem.email}'>${elem.email}</a>` : "—"}</td>
-                <td>${elem.phone ? `<a class="text-dark" href='tel:${elem.phone}'>${elem.phone}</a>` : "—"}</td>
-                <td>${elem.account_status == "active" ? `<span class="badge badge-success">${elem.account_status}</span>` : `<span class="badge badge-danger">${elem.account_status}</span>`}</td>
-                <td>${elem.deleted == "no" ? `<span class="badge badge-success">${elem.deleted}</span>` : `<span class="badge badge-danger">${elem.deleted}</span>`}</td>
-                <td>${elem.sahlan_gained_points || "—"}</td>
-                <td>${elem.carbon_gained_points || "—"}</td>
-                <td>${new Date(elem.createdAt).toLocaleDateString("en-US")}</td>
-                <td>
-                    <a href="/dashboard/user/edit/${elem.user_id}"><i class="fas fa-file-signature text-info"></i></a></td>
-                </tr> `)
-            })
+            if (res.canEdit) {
+                res.data.forEach((elem) => {
+                    $("#tr-th-row").append(`<tr>
+                    <th scope="row">${elem.user_id}</th>
+                    <td>${elem.fullName || "—"}</td>
+                    <td>${elem.gender || "—"}</td>
+                    <td>${new Date(elem.birth_date).toLocaleDateString("en-US") || "—"}</td>
+                    <td>${elem["tbl_country.en_name"] || "—"}</td >
+                    <td>${elem["tbl_city.en_name"] || "—"}</td>
+                    <td>${elem["tbl_region.en_name"] || "—"}</td>
+                    <td>${elem.email ? `<a class="text-dark" href='mailto:${elem.email}'>${elem.email}</a>` : "—"}</td>
+                    <td>${elem.phone ? `<a class="text-dark" href='tel:${elem.phone}'>${elem.phone}</a>` : "—"}</td>
+                    <td>${elem.account_status == "active" ? `<span class="badge badge-success">${elem.account_status}</span>` : `<span class="badge badge-danger">${elem.account_status}</span>`}</td>
+                    <td>${elem.deleted == "no" ? `<span class="badge badge-success">${elem.deleted}</span>` : `<span class="badge badge-danger">${elem.deleted}</span>`}</td>
+                    <td>${elem.sahlan_gained_points || "—"}</td>
+                    <td>${elem.carbon_gained_points || "—"}</td>
+                    <td>${new Date(elem.createdAt).toLocaleDateString("en-US")}</td>
+                    <td>
+                        <a href="/dashboard/user/edit/${elem.user_id}"><i class="fas fa-file-signature text-info"></i></a></td>
+                    </tr> `)
+                })
+            } else {
+                res.data.forEach((elem) => {
+                    $("#tr-th-row").append(`<tr>
+                    <th scope="row">${elem.user_id}</th>
+                    <td>${elem.fullName || "—"}</td>
+                    <td>${elem.gender || "—"}</td>
+                    <td>${new Date(elem.birth_date).toLocaleDateString("en-US") || "—"}</td>
+                    <td>${elem["tbl_country.en_name"] || "—"}</td >
+                    <td>${elem["tbl_city.en_name"] || "—"}</td>
+                    <td>${elem["tbl_region.en_name"] || "—"}</td>
+                    <td>${elem.email ? `<a class="text-dark" href='mailto:${elem.email}'>${elem.email}</a>` : "—"}</td>
+                    <td>${elem.phone ? `<a class="text-dark" href='tel:${elem.phone}'>${elem.phone}</a>` : "—"}</td>
+                    <td>${elem.account_status == "active" ? `<span class="badge badge-success">${elem.account_status}</span>` : `<span class="badge badge-danger">${elem.account_status}</span>`}</td>
+                    <td>${elem.deleted == "no" ? `<span class="badge badge-success">${elem.deleted}</span>` : `<span class="badge badge-danger">${elem.deleted}</span>`}</td>
+                    <td>${elem.sahlan_gained_points || "—"}</td>
+                    <td>${elem.carbon_gained_points || "—"}</td>
+                    <td>${new Date(elem.createdAt).toLocaleDateString("en-US")}</td>
+                    <td></td>
+                    </tr> `)
+                })
+            }
             $("#tabe-items").show();
         } else {
             // hidden spinner
             spinnerNotfound(2)
             pagination(res.pages, "pagination-entity")
             $("#tr-th-row-entity").empty()
-            res.data.forEach((elem) => {
-                $("#tr-th-row-entity").append(`<tr>
-                <th scope="row">${elem.user_id}</th>
-                <td>${elem.entity_name || "—"}</td>
-                <td>${elem.fullName || "—"}</td>
-                <td>${elem["tbl_entity_sector.en_name"] || "—"}</td>
-                <td>${elem["tbl_country.en_name"] || "—"}</td >
-                <td>${elem["tbl_city.en_name"] || "—"}</td>
-                <td>${elem.email ? `<a class="text-dark" href='mailto:${elem.email}'>${elem.email}</a>` : "—"}</td>
-                <td>${elem.phone ? `<a class="text-dark" href='tel:${elem.phone}'>${elem.phone}</a>` : "—"}</td>
-                <td>${elem.account_status == "active" ? `<span class="badge badge-success">${elem.account_status}</span>` : `<span class="badge badge-danger">${elem.account_status}</span>`}</td>
-                <td>${elem.deleted == "no" ? `<span class="badge badge-success">${elem.deleted}</span>` : `<span class="badge badge-danger">${elem.deleted}</span>`}</td>
-                <td>${elem.sahlan_gained_points || "—"}</td>
-                <td>${elem.carbon_gained_points || "—"}</td>
-                <td>${new Date(elem.createdAt).toLocaleDateString("en-US")}</td>
-                <td>
-                    <a href="/dashboard/user/edit/${elem.user_id}"><i class="fas fa-file-signature text-info"></i></a></td>
-                </tr> `)
-            })
+            if (res.canEdit) {
+                res.data.forEach((elem) => {
+                    $("#tr-th-row-entity").append(`<tr>
+                    <th scope="row">${elem.user_id}</th>
+                    <td>${elem.entity_name || "—"}</td>
+                    <td>${elem.fullName || "—"}</td>
+                    <td>${elem["tbl_entity_sector.en_name"] || "—"}</td>
+                    <td>${elem["tbl_country.en_name"] || "—"}</td >
+                    <td>${elem["tbl_city.en_name"] || "—"}</td>
+                    <td>${elem.email ? `<a class="text-dark" href='mailto:${elem.email}'>${elem.email}</a>` : "—"}</td>
+                    <td>${elem.phone ? `<a class="text-dark" href='tel:${elem.phone}'>${elem.phone}</a>` : "—"}</td>
+                    <td>${elem.account_status == "active" ? `<span class="badge badge-success">${elem.account_status}</span>` : `<span class="badge badge-danger">${elem.account_status}</span>`}</td>
+                    <td>${elem.deleted == "no" ? `<span class="badge badge-success">${elem.deleted}</span>` : `<span class="badge badge-danger">${elem.deleted}</span>`}</td>
+                    <td>${elem.sahlan_gained_points || "—"}</td>
+                    <td>${elem.carbon_gained_points || "—"}</td>
+                    <td>${new Date(elem.createdAt).toLocaleDateString("en-US")}</td>
+                    <td>
+                        <a href="/dashboard/user/edit/${elem.user_id}"><i class="fas fa-file-signature text-info"></i></a></td>
+                    </tr> `)
+                })
+            } else {
+                res.data.forEach((elem) => {
+                    $("#tr-th-row-entity").append(`<tr>
+                    <th scope="row">${elem.user_id}</th>
+                    <td>${elem.entity_name || "—"}</td>
+                    <td>${elem.fullName || "—"}</td>
+                    <td>${elem["tbl_entity_sector.en_name"] || "—"}</td>
+                    <td>${elem["tbl_country.en_name"] || "—"}</td >
+                    <td>${elem["tbl_city.en_name"] || "—"}</td>
+                    <td>${elem.email ? `<a class="text-dark" href='mailto:${elem.email}'>${elem.email}</a>` : "—"}</td>
+                    <td>${elem.phone ? `<a class="text-dark" href='tel:${elem.phone}'>${elem.phone}</a>` : "—"}</td>
+                    <td>${elem.account_status == "active" ? `<span class="badge badge-success">${elem.account_status}</span>` : `<span class="badge badge-danger">${elem.account_status}</span>`}</td>
+                    <td>${elem.deleted == "no" ? `<span class="badge badge-success">${elem.deleted}</span>` : `<span class="badge badge-danger">${elem.deleted}</span>`}</td>
+                    <td>${elem.sahlan_gained_points || "—"}</td>
+                    <td>${elem.carbon_gained_points || "—"}</td>
+                    <td>${new Date(elem.createdAt).toLocaleDateString("en-US")}</td>
+                    <td></td>
+                    </tr> `)
+                })
+            }
             $("#tabe-items-entity").show();
         }
     }).fail(() => spinnerNotfound(3))

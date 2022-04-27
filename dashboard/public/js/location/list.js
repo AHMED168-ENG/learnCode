@@ -19,11 +19,11 @@ function getList(page) {
         // hidden spinner
         spinnerNotfound(2)
         pagination(res.pages, res.page)
-        if (res.canAdd && res.canAdd.length) {
-            $('#addNewBtn').append(`<a type="button" href="/dashboard/location/new" class="btn btn-info">Add new</a>`)
+        if (res.canAdd) {
+            $('#addNewBtn').html(`<a type="button" href="/dashboard/location/new" class="btn btn-info">Add new</a>`)
         }
         $("#tr-th-row").empty()
-        if (res.canEdit && res.canEdit.length) {
+        if (res.canEdit) {
             res.data.forEach((elem) => {
                 $("#tr-th-row").append(`<tr>
                 <th scope="row">${elem.location_id}</th>

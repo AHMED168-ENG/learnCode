@@ -35,28 +35,28 @@ function getList(page) {
             <td></td>
             </tr>`)
             if (screenType == "new") {
-                if (res.canViewNewOrders && res.canViewNewOrders.length) {
-                    $(`#${elem.order_id} td:last`).html(`<a href="/dashboard/order/view/${elem.order_id}" data-tooltip="View order" class="btn btn-info"><i class="fas fa-eye"></i></a>`)
+                if (res.canViewNewOrders) {
+                    $(`#${elem.order_id} td:last`).append(`<a href="/dashboard/order/view/${elem.order_id}" data-tooltip="View order" class="btn btn-info"><i class="fas fa-eye"></i></a>`)
                 }
-                if (res.canEditNewOrders && res.canEditNewOrders.length) {
-                    $(`#${elem.order_id} td:last`).html(`
+                if (res.canEditNewOrders) {
+                    $(`#${elem.order_id} td:last`).append(`
                     <button type="button" data-tooltip="Inprogress" onclick='status(${elem.order_id},"inprogress")' class="btn btn-warning"><i class="fas fa-circle-notch"></i></button>
                     <button type="button" data-tooltip="Cancelle order" onclick='status(${elem.order_id},"cancelled")' class="btn btn-danger"><i class="fas fa-times-circle"></i></button>`)
                 }
             } else if (screenType == "inprogress") {
-                if (res.canViewInProgressOrders && res.canViewInProgressOrders.length) {
-                    $(`#${elem.order_id} td:last`).html(`<a href="/dashboard/order/view/${elem.order_id}" data-tooltip="View order" class="btn btn-info"><i class="fas fa-eye"></i></a>`)
+                if (res.canViewInProgressOrders) {
+                    $(`#${elem.order_id} td:last`).append(`<a href="/dashboard/order/view/${elem.order_id}" data-tooltip="View order" class="btn btn-info"><i class="fas fa-eye"></i></a>`)
                 }
-                if (res.canViewInProgressOrders && res.canViewInProgressOrders.length) {
-                    $(`#${elem.order_id} td:last`).html(`
+                if (res.canViewInProgressOrders) {
+                    $(`#${elem.order_id} td:last`).append(`
                     <button type="button" data-tooltip="Complete" onclick='status(${elem.order_id},"completed")' class="btn btn-success"><i class="fas fa-check-circle"></i></button>
                     <button type="button" data-tooltip="Cancelle order" onclick='status(${elem.order_id},"cancelled")' class="btn btn-danger"><i class="fas fa-times-circle"></i></button>`)
                 }
-            } else if (screenType == "completed" && res.canViewCompletedOrders && res.canViewCompletedOrders.length) {
-                $(`#${elem.order_id} td:last`).html(`
+            } else if (screenType == "completed" && res.canViewCompletedOrders) {
+                $(`#${elem.order_id} td:last`).append(`
                  <a href="/dashboard/order/view/${elem.order_id}" data-tooltip="View order" class="btn btn-info"><i class="fas fa-eye"></i></a>`)
-            } else if (screenType == "cancelled" && res.canViewCancelledOrders && res.canViewCancelledOrders.length) {
-                $(`#${elem.order_id} td:last`).html(`
+            } else if (screenType == "cancelled" && res.canViewCancelledOrders) {
+                $(`#${elem.order_id} td:last`).append(`
                 <a href="/dashboard/order/view/${elem.order_id}" data-tooltip="View order" class="btn btn-info"><i class="fas fa-eye"></i></a>`)
             }
         })

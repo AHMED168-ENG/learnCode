@@ -43,7 +43,7 @@ export class LocationTreesController {
           .then(async (count) => {
             const payload = verify(req.cookies.token);
             const isHighestAdmin = payload.role_id === "0";
-            let userPermissions, canEdit, canAdd;
+            let userPermissions, canEdit = true, canAdd = true;
             if (!isHighestAdmin) {
               userPermissions = await permissions.findAll({
                 where: { role_id: payload.role_id },
@@ -54,8 +54,8 @@ export class LocationTreesController {
                   include: [{ model: modules, attributes: ["name"] }],
                 }],
               });
-              canEdit = userPermissions.filter((per) => per["tbl_page"]["type"] === "Edit" && per["tbl_page"]["tbl_module"]["name"] === "Trees Location");
-              canAdd = userPermissions.filter((per) => per["tbl_page"]["type"] === "Add" && per["tbl_page"]["tbl_module"]["name"] === "Trees Location");
+              canEdit = !!userPermissions.filter((per) => per["tbl_page"]["type"] === "Edit" && per["tbl_page"]["tbl_module"]["name"] === "Trees Location").length;
+              canAdd = !!userPermissions.filter((per) => per["tbl_page"]["type"] === "Add" && per["tbl_page"]["tbl_module"]["name"] === "Trees Location").length;
             }
             const dataInti = {
               total: count,
@@ -94,7 +94,6 @@ export class LocationTreesController {
         res.status(httpStatus.OK).json({msg: "new tree created"})
       })
       .catch((err) => {
-        console.log(err)
         res.status(400).json({msg: "Error in create new tree", err: "unexpected error"})
       })
   }
@@ -129,7 +128,6 @@ export class LocationTreesController {
         res.status(httpStatus.OK).json({msg: "new tree updated"})
       })
       .catch((err) => {
-        console.log(err)
         res.status(httpStatus.BAD_REQUEST).json({msg: "Error in Edit tree", err: "unexpected error"})
       })
   }

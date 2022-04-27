@@ -7,7 +7,7 @@ $(function () {
     });
     $('#newForm').validate({
         rules: {
-            init_id: {
+            init_id_pk: {
                 required: true
             },
             city_id: {
@@ -38,7 +38,7 @@ $(function () {
         messages: {
             tree_id: "Please enter a tree",
             location_id: "Please enter a location",
-            init_id: "Please enter a init",
+            init_id_pk: "Please enter a init",
             city_id: "Please enter a city",
             region_id: "Please enter a region",
             price: "Please enter a price",
@@ -63,7 +63,7 @@ const addNew = () => {
     $("#submitAdd").buttonLoader("start")
     const formData = new FormData();
     formData.append("tree_id", $("#tree_id option:selected").val());
-    formData.append("init_id", $("#init_id option:selected").val());
+    formData.append("init_id_pk", $("#init_id option:selected").val());
     formData.append("city_id", $("#city_id option:selected").val());
     formData.append("region_id", $("#region_id option:selected").val());
     formData.append("location_id", $("#location_id option:selected").val());

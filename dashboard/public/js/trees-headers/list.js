@@ -11,17 +11,33 @@ function getList() {
     $.ajax(settings).done(function (res, textStatus) {
         // hidden spinner
         spinnerNotfound(2)
+        if (res.canAdd) {
+            $('#addNewBtn').html(`<a type="button" href="/dashboard/tree/header/new" class="btn btn-info">Add new</a>`);
+        }
         $("#tr-th-row").empty()
-        res.data.forEach((elem) => {
-            $("#tr-th-row").append(
-                `<tr>
-                    <th scope="row">${elem.id}</th>
-                    <td>${elem.en_name}</td>
-                    <td>${elem.ar_name}</td>
-                    <td><a href="/dashboard/tree/header/edit/${elem.id}"><i class="fas fa-edit text-primary"></i></a></td>
-                </tr>`
-            )
-        })
+        if (res.canEdit) {
+            res.data.forEach((elem) => {
+                $("#tr-th-row").append(
+                    `<tr>
+                        <th scope="row">${elem.id}</th>
+                        <td>${elem.en_name}</td>
+                        <td>${elem.ar_name}</td>
+                        <td><a href="/dashboard/tree/header/edit/${elem.id}"><i class="fas fa-edit text-primary"></i></a></td>
+                    </tr>`
+                )
+            })
+        } else {
+            res.data.forEach((elem) => {
+                $("#tr-th-row").append(
+                    `<tr>
+                        <th scope="row">${elem.id}</th>
+                        <td>${elem.en_name}</td>
+                        <td>${elem.ar_name}</td>
+                        <td></td>
+                    </tr>`
+                )
+            })
+        }
     }).fail(() => spinnerNotfound(3))
 }
 function spinnerNotfound(action) {

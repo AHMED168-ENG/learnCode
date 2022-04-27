@@ -13,12 +13,12 @@ function getList(page) {
     $.ajax(settings).done(function (res, textStatus) {
         // hidden spinner
         spinnerNotfound(2)
-        if (res.canAdd && res.canAdd.length) {
-            $('#addNewBtn').append(`<a type="button" href="/dashboard/city/new" class="btn btn-info">Add new</a>`)
+        if (res.canAdd) {
+            $('#addNewBtn').html(`<a type="button" href="/dashboard/city/new" class="btn btn-info">Add new</a>`)
         }
         pagination(res.pages)
         $("#tr-th-row").empty()
-        if (res.canEdit && res.canEdit.length) {
+        if (res.canEdit) {
             res.data.forEach((elem) => {
                 $("#tr-th-row").append(`<tr>
                 <th scope="row">${elem.city_id}</th>

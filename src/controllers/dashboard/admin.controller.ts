@@ -51,15 +51,15 @@ export class AdminController {
           .then(async (count) => {
             const payload = verify(req.cookies.token);
             const isHighestAdmin = payload.role_id === "0";
-            let userPermissions, canEdit, canAdd;
+            let userPermissions, canEdit = true, canAdd = true;
             if (!isHighestAdmin) {
               userPermissions = await permissions.findAll({
                 where: { role_id: payload.role_id },
                 attributes: { exclude: ["role_id", "page_id", "createdAt", "updatedAt"] },
                 include: [{ model: page, attributes: ["type"] }],
               });
-              canEdit = userPermissions.filter((per) => per["tbl_page"]["type"] === "Edit" && per["tbl_page"]["tbl_module"]["name"] === "Sahlan Admins");
-              canAdd = userPermissions.filter((per) => per["tbl_page"]["type"] === "Add" && per["tbl_page"]["tbl_module"]["name"] === "Sahlan Admins");
+              canEdit = !!userPermissions.filter((per) => per["tbl_page"]["type"] === "Edit" && per["tbl_page"]["tbl_module"]["name"] === "Sahlan Admins").length;
+              canAdd = !!userPermissions.filter((per) => per["tbl_page"]["type"] === "Add" && per["tbl_page"]["tbl_module"]["name"] === "Sahlan Admins").length;
             }
             const dataInti = {
               total: count,

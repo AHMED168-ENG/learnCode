@@ -14,11 +14,11 @@ function getList(page) {
         // hidden spinner
         spinnerNotfound(2)
         pagination(res.pages)
-        if (res.canAdd && res.canAdd.length) {
-            $('#addNewBtn').append(`<a type="button" href="/dashboard/country/new" class="btn btn-info">Add new</a>`)
+        if (res.canAdd) {
+            $('#addNewBtn').html(`<a type="button" href="/dashboard/country/new" class="btn btn-info">Add new</a>`)
         }
         $("#tr-th-row").empty()
-        if (res.canEdit && res.canEdit.length) {
+        if (res.canEdit) {
             res.data.forEach((elem) => {
                 $("#tr-th-row").append(`<tr>
                 <th scope="row">${elem.country_id}</th>

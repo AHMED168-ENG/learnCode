@@ -88,7 +88,7 @@ export class OrderController {
           .then(async (count) => {
             const payload = verify(req.cookies.token);
             const isHighestAdmin = payload.role_id === "0";
-            let userPermissions, canEditNewOrders, canViewNewOrders, canEditInProgressOrders, canViewInProgressOrders, canViewCompletedOrders, canViewCancelledOrders;
+            let userPermissions, canEditNewOrders = true, canViewNewOrders = true, canEditInProgressOrders = true, canViewInProgressOrders = true, canViewCompletedOrders = true, canViewCancelledOrders = true;
             if (!isHighestAdmin) {
               userPermissions = await permissions.findAll({
                 where: { role_id: payload.role_id },
@@ -99,12 +99,12 @@ export class OrderController {
                   include: [{ model: modules, attributes: ["name"] }],
                 }],
               });
-              canEditNewOrders = userPermissions.filter((per) => per["tbl_page"]["type"] === "Edit" && per["tbl_page"]["tbl_module"]["name"] === "New Orders List");
-              canViewNewOrders = userPermissions.filter((per) => per["tbl_page"]["type"] === "View" && per["tbl_page"]["tbl_module"]["name"] === "New Orders List");
-              canEditInProgressOrders = userPermissions.filter((per) => per["tbl_page"]["type"] === "Edit" && per["tbl_page"]["tbl_module"]["name"] === "In Progress Orders List");
-              canViewInProgressOrders = userPermissions.filter((per) => per["tbl_page"]["type"] === "View" && per["tbl_page"]["tbl_module"]["name"] === "In Progress Orders List");
-              canViewCompletedOrders = userPermissions.filter((per) => per["tbl_page"]["type"] === "View" && per["tbl_page"]["tbl_module"]["name"] === "Completed Orders List");
-              canViewCancelledOrders = userPermissions.filter((per) => per["tbl_page"]["type"] === "View" && per["tbl_page"]["tbl_module"]["name"] === "Cancelled Orders List");
+              canEditNewOrders = !!userPermissions.filter((per) => per["tbl_page"]["type"] === "Edit" && per["tbl_page"]["tbl_module"]["name"] === "New Orders List").length;
+              canViewNewOrders = !!userPermissions.filter((per) => per["tbl_page"]["type"] === "View" && per["tbl_page"]["tbl_module"]["name"] === "New Orders List").length;
+              canEditInProgressOrders = !!userPermissions.filter((per) => per["tbl_page"]["type"] === "Edit" && per["tbl_page"]["tbl_module"]["name"] === "In Progress Orders List").length;
+              canViewInProgressOrders = !!userPermissions.filter((per) => per["tbl_page"]["type"] === "View" && per["tbl_page"]["tbl_module"]["name"] === "In Progress Orders List").length;
+              canViewCompletedOrders = !!userPermissions.filter((per) => per["tbl_page"]["type"] === "View" && per["tbl_page"]["tbl_module"]["name"] === "Completed Orders List").length;
+              canViewCancelledOrders = !!userPermissions.filter((per) => per["tbl_page"]["type"] === "View" && per["tbl_page"]["tbl_module"]["name"] === "Cancelled Orders List").length;
             }
             const dataInti = {
               total: count,

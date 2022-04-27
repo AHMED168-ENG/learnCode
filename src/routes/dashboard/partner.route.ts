@@ -11,7 +11,7 @@ export class PartnerRoutes {
   }
   routes() {
     this.router.get("/partner-page", this.partnerController.listPage)
-    this.router.get("/list", this.partnerController.list)
+    this.router.get("/partner-page/list", this.partnerController.list)
     this.router.get("/new", this.partnerController.newPage)
     this.router.post("/new", this.partnerController.addNew)
     this.router.get("/edit/:id", this.partnerController.editPage)

@@ -449,7 +449,7 @@
             </div>
 
             <div class="row">
-              <div class="col-md-4">
+              <div class="col-md-4" id="latestsponsorsdiv">
                 <div class="card">
                   <div class="card-header">
                     <h3 class="card-title">Latest Sponsors</h3>
@@ -475,7 +475,7 @@
                 </div>
               </div>
 
-              <div class="col-md-8">
+              <div class="col-md-8" id="latestinitiativesdiv">
                 <div class="card">
                   <div class="card-header">
                     <h3 class="card-title">Last Initiatives</h3>
@@ -585,9 +585,15 @@
     const data = JSON.parse(`<%-JSON.stringify(data)%>`);
     if (!data.isHighestAdmin) {
       const sponsor = data.userPermissions.filter((userPermission) => userPermission.module.name === "Sponsors");
-      if (!sponsor.length) $('#sponsorsdiv').hide();
+      if (!sponsor.length) {
+        $('#sponsorsdiv').hide();
+        $('#latestsponsorsdiv').hide();
+      }
       const initiativeManagement = data.userPermissions.filter((userPermission) => userPermission.module.name === "Initiative Management");
-      if (!initiativeManagement.length) $('#initiativesdiv').hide();
+      if (!initiativeManagement.length) {
+        $('#initiativesdiv').hide();
+        $('#latestinitiativesdiv').hide();
+      }
       const location = data.userPermissions.filter((userPermission) => userPermission.module.name === "Locations");
       if (!location.length) $('#locationsdiv').hide();
       const gift = data.userPermissions.filter((userPermission) => userPermission.module.name === "Gift & Cards Management");
@@ -612,15 +618,15 @@
       const usersClients = data.userPermissions.filter((userPermission) => userPermission.module.name === "Users - Clients");
       if (!usersClients.length) $('#usersdiv').hide();
       const ordersReport = data.userPermissions.filter((userPermission) => userPermission.module.name === "Orders Report");
-        const usersReport = data.userPermissions.filter((userPermission) => userPermission.module.name === "Users Report");
-        const sponsorsReport = data.userPermissions.filter((userPermission) => userPermission.module.name === "Sponsors Report");
-        const initiativeReport = data.userPermissions.filter((userPermission) => userPermission.module.name === "Initiatives Report");
-        const locationTreesReport = data.userPermissions.filter((userPermission) => userPermission.module.name === "Locations Trees Report");
-        const locationReport = data.userPermissions.filter((userPermission) => userPermission.module.name === "Locations Report");
-        const salesReport = data.userPermissions.filter((userPermission) => userPermission.module.name === "Sales Report");
-        const calendarInitiative = data.userPermissions.filter((userPermission) => userPermission.module.name === "Calendar Initiative Report");
-        const userCharts = data.userPermissions.filter((userPermission) => userPermission.module.name === "User Charts Report");
-        if (!ordersReport.length && !usersReport.length && !sponsorsReport.length && !initiativeReport.length && !locationTreesReport.length && !locationReport.length && !salesReport.length && !calendarInitiative.length && !userCharts.length) $('#reportsdiv').hide();
+      const usersReport = data.userPermissions.filter((userPermission) => userPermission.module.name === "Users Report");
+      const sponsorsReport = data.userPermissions.filter((userPermission) => userPermission.module.name === "Sponsors Report");
+      const initiativeReport = data.userPermissions.filter((userPermission) => userPermission.module.name === "Initiatives Report");
+      const locationTreesReport = data.userPermissions.filter((userPermission) => userPermission.module.name === "Locations Trees Report");
+      const locationReport = data.userPermissions.filter((userPermission) => userPermission.module.name === "Locations Report");
+      const salesReport = data.userPermissions.filter((userPermission) => userPermission.module.name === "Sales Report");
+      const calendarInitiative = data.userPermissions.filter((userPermission) => userPermission.module.name === "Calendar Initiative Report");
+      const userCharts = data.userPermissions.filter((userPermission) => userPermission.module.name === "User Charts Report");
+      if (!ordersReport.length && !usersReport.length && !sponsorsReport.length && !initiativeReport.length && !locationTreesReport.length && !locationReport.length && !salesReport.length && !calendarInitiative.length && !userCharts.length) $('#reportsdiv').hide();
     }
     var ctx = $("#chart-line")
     var myLineChart = new Chart(ctx, {

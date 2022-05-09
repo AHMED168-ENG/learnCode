@@ -79,22 +79,27 @@ export class LocationController {
   }
   addNew(req, res: Response, next: NextFunction) {
     const imgFile = req.files.img
-    const imgName: string = `${helpers.randomNumber(100, 999)}_${Number(new Date())}${path.extname(imgFile.name)}`
-    req.body.imgvr = "";
+    const imgName: string = imgFile ? `${helpers.randomNumber(100, 999)}_${Number(new Date())}${path.extname(imgFile.name)}` : null
+    const imgvrFile = req.files.imgvr
+    const imgvrName: string = imgvrFile ? `${helpers.randomNumber(100, 999)}_${Number(new Date())}${path.extname(imgvrFile.name)}` : null
+    req.body.imgvr = ""
     initiativeLocations
       .create(req.body)
       .then((data) => {
         const location_id = data["location_id"]
         const fileDir: string = `locations/${location_id}/`
+        const set = {img: imgName ? `${fileDir}${imgName}` : null, imgvr: imgvrName ? `${fileDir}${imgvrName}` : null}
         initiativeLocations
-          .update({img: `${fileDir}${imgName}`}, {where: {location_id: location_id}})
+          .update(set, {where: {location_id: location_id}})
           .then((d) => {
-            helpers.imageProcessing(fileDir, imgName, imgFile.data)
+            if (imgName && imgFile) helpers.imageProcessing(fileDir, imgName, imgFile.data)
+            if (imgvrName && imgvrFile) helpers.imageProcessing(fileDir, imgvrName, imgvrFile.data)
             res.status(httpStatus.OK).json({msg: "new Location created"})
           })
-          .catch(() => res.status(httpStatus.OK).json({msg: "new Location created"}))
+          .catch(() => res.status(httpStatus.INTERNAL_SERVER_ERROR).json({msg: "Internal Server Error"}))
       })
       .catch((err) => {
+        console.log(err)
         res.status(400).json({msg: "Error in create new Location", err: "unexpected error"})
       })
   }
@@ -127,16 +132,26 @@ export class LocationController {
   edit(req, res: Response, next: NextFunction) {
     const id = req.params.id
     const imgFile = req.files ? req.files.img : null
+    const imgVRFile = req.files ? req.files.imgvr : null
     initiativeLocations
       .update(req.body, {where: {location_id: id}})
       .then((data) => {
-        if (imgFile) {
-          initiativeLocations.findOne({where: {location_id: id}, attributes: ["img"], raw: true}).then((d) => {
-            helpers.removeFile(d["img"])
-            const imgName: string = `${helpers.randomNumber(100, 999)}_${Number(new Date())}${path.extname(imgFile.name)}`
+        if (imgFile || imgVRFile) {
+          initiativeLocations.findOne({where: {location_id: id}, attributes: ["img", "imgvr"], raw: true}).then((d) => {
+            let imgName: string, imgVRName: string;
+            if (imgFile) {
+              helpers.removeFile(d["img"])
+              imgName = `${helpers.randomNumber(100, 999)}_${Number(new Date())}${path.extname(imgFile.name)}`
+            }
+            if (imgVRFile) {
+              helpers.removeFile(d["imgvr"]);
+              imgVRName = `${helpers.randomNumber(100, 999)}_${Number(new Date())}${path.extname(imgVRFile.name)}`
+            }
             const fileDir: string = `locations/${id}/`
-            initiativeLocations.update({img: `${fileDir}${imgName}`}, {where: {location_id: id}}).then((d) => {
-              helpers.imageProcessing(fileDir, imgName, imgFile.data)
+            const set = {img: imgName ? `${fileDir}${imgName}` : null, imgvr: imgVRName ? `${fileDir}${imgVRName}` : null};
+            initiativeLocations.update(set, {where: {location_id: id}}).then((d) => {
+              if (imgFile && imgName) helpers.imageProcessing(fileDir, imgName, imgFile.data)
+              if (imgVRFile && imgVRName) helpers.imageProcessing(fileDir, imgVRName, imgVRFile.data)
               res.status(httpStatus.OK).json({msg: "new location updated"})
             })
           })
@@ -145,6 +160,7 @@ export class LocationController {
         }
       })
       .catch((err) => {
+        console.log(err)
         res.status(httpStatus.BAD_REQUEST).json({msg: "Error in Edit location", err: "unexpected error"})
       })
   }

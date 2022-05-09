@@ -143,13 +143,25 @@
                       <div class="form-group col-md-6" style="padding-right: 22px; padding-left: 5px">
                         <label for="img">Image</label>
                         <div class="custom-file">
-                          <input readonly type="file" class="custom-file-input readonly" id="img" name="img" accept="image/x-png" onchange="loadFile(event)" />
-                          <label class="custom-file-label" for="img"><%= data.img || "Choose file" %></label>
+                          <input disabled type="file" class="custom-file-input readonly" id="img" name="img" accept="image/x-png" onchange="loadFile(event)" />
+                          <label class="custom-file-label" id="custom-file-label" for="img"><%= data.img || "Choose file" %></label>
                         </div>
                       </div>
                       <div class="form-group col-md-6 d-flex justify-content-center">
                         <img class="img-fluid mb-3" id="tree_img_display" width="120" height="120" src="/p/img/<%= data.img %>" alt="Photo" />
                       </div>
+                      </div>
+                      <div class="form-row mx-3 my-1">
+                        <div class="form-group col-md-6" style="padding-right: 22px; padding-left: 5px">
+                          <label for="imgvr">Image VR</label>
+                          <div class="custom-file">
+                            <input disabled type="file" class="custom-file-input readonly" id="imgvr" name="imgvr" accept="image/x-png" onchange="loadVRFile(event)" />
+                            <label class="custom-file-label" id="custom-file-label-vr" for="imgvr"><%= data.imgvr || "Choose file" %></label>
+                          </div>
+                        </div>
+                        <div class="form-group col-md-6 d-flex justify-content-center">
+                          <img class="img-fluid mb-3" id="tree_imgvr_display" width="120" height="120" src="/p/img/<%= data.imgvr %>" alt="Photo" />
+                        </div>
                       </div>
                     </div>
                     <!-- /.card-body -->

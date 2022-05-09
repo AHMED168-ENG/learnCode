@@ -28,7 +28,8 @@ function getList(page) {
                 $("#tr-th-row").append(`<tr>
                 <th scope="row">${elem.location_id}</th>
                 <td>${elem.location_nameEn}<br />${elem.location_nameAr}</td>
-                <td><img class="rounded p-0" width=45 height=45 src="/p/img/${elem.img}" alt="sponser Image"></td>
+                <td><img class="rounded p-0" width=45 height=45 src="/p/img/${elem.img}" alt="Image"></td>
+                <td><img class="rounded p-0" width=45 height=45 src="/p/img/${elem.imgvr}" alt="Image VR"></td>
                 <td>${elem.tbl_initiative.init_en_name}<br />${elem.tbl_initiative.init_ar_name}</td>
                 <td>${elem.location_address}</td>
                 <td>${elem.tbl_city.en_name}<br />${elem.tbl_city.ar_name}</td>
@@ -48,7 +49,8 @@ function getList(page) {
                 $("#tr-th-row").append(`<tr>
                 <th scope="row">${elem.location_id}</th>
                 <td>${elem.location_nameEn}<br />${elem.location_nameAr}</td>
-                <td><img class="rounded p-0" width=45 height=45 src="/p/img/${elem.img}" alt="sponser Image"></td>
+                <td><img class="rounded p-0" width=45 height=45 src="/p/img/${elem.img}" alt="Image"></td>
+                <td><img class="rounded p-0" width=45 height=45 src="/p/img/${elem.imgvr}" alt="VR Image"></td>
                 <td>${elem.tbl_initiative.init_en_name}<br />${elem.tbl_initiative.init_ar_name}</td>
                 <td>${elem.location_address}</td>
                 <td>${elem.tbl_city.en_name}<br />${elem.tbl_city.ar_name}</td>

@@ -20,9 +20,10 @@ export class HomeController {
     const lastInitiative = (await new InitiativeController().lastInitiative(lang)) || []
     const ordersInYear = (await new OrderController().ordersInYear()) || []
     const currentMonthOrders = await new OrderController().numberOfCurrentOrders();
+    const userPermissions = (await new HomeController().getUserPermissions(req.cookies.token)) || [];
     res.render("index.ejs", {
       title: "Home",
-      data: {...totalNumbers, ordersChart: ordersNum, lastSponser, lastInitiative, ordersInYear, currentMonthOrders},
+      data: {...totalNumbers, ordersChart: ordersNum, lastSponser, lastInitiative, ordersInYear, currentMonthOrders, userPermissions: userPermissions["mappedUserPermissions"], isHighestAdmin: userPermissions["isHighestAdmin"] },
     })
   }
 

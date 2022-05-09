@@ -94,6 +94,7 @@ export class LocationTreesController {
         res.status(httpStatus.OK).json({msg: "new tree created"})
       })
       .catch((err) => {
+        console.log(err)
         res.status(400).json({msg: "Error in create new tree", err: "unexpected error"})
       })
   }

@@ -1,6 +1,10 @@
-$('#img').on('change', function () { files = $(this)[0].files; name = ''; for (var i = 0; i < files.length; i++) { name += '\"' + files[i].name + '\"' + (i != files.length - 1 ? ", " : ""); } $(".custom-file-label").html(name); });
+$('#img').on('change', function () { files = $(this)[0].files; name = ''; for (var i = 0; i < files.length; i++) { name += '\"' + files[i].name + '\"' + (i != files.length - 1 ? ", " : ""); } $("#custom-file-label").html(name); });
+$('#imgvr').on('change', function () { files = $(this)[0].files; name = ''; for (var i = 0; i < files.length; i++) { name += '\"' + files[i].name + '\"' + (i != files.length - 1 ? ", " : ""); } $("#custom-file-label-vr").html(name); });
 var loadFile = function (event) {
     $("#tree_img_display").attr("src", URL.createObjectURL(event.target.files[0]));
+};
+var loadVRFile = function (event) {
+    $("#tree_imgvr_display").attr("src", URL.createObjectURL(event.target.files[0]));
 };
 $(function () {
     $.validator.setDefaults({
@@ -41,6 +45,9 @@ $(function () {
             img: {
                 accept: "image/png"
             },
+            imgvr: {
+                accept: "image/png"
+            },
             aboutEn: {
                 required: true
             },
@@ -59,6 +66,7 @@ $(function () {
             region_id: "Please enter a region",
             caverArea: "Please enter a caverArea",
             img: { accept: 'Please select `PNG` only' },
+            imgvr: { accept: 'Please select `PNG` only' },
             aboutEn: "Please enter a about en",
             aboutAr: "Please enter a about ar",
         },
@@ -91,6 +99,7 @@ const addNew = () => {
     formData.append("region_id", $("#region_id option:selected").val());
     if ($(".custom-file-input").hasClass("changed")) {
         formData.append("img", $("#img")[0].files[0]);
+        formData.append("imgvr", $("#imgvr")[0].files[0]);
     }
     $.ajax({
         url: `${window.location.pathname}`,

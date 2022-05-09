@@ -1,4 +1,5 @@
-$('#img').on('change', function () { files = $(this)[0].files; name = ''; for (var i = 0; i < files.length; i++) { name += '\"' + files[i].name + '\"' + (i != files.length - 1 ? ", " : ""); } $(".custom-file-label").html(name); });
+$('#img').on('change', function () { files = $(this)[0].files; name = ''; for (var i = 0; i < files.length; i++) { name += '\"' + files[i].name + '\"' + (i != files.length - 1 ? ", " : ""); } $("#custom-file-label").html(name); });
+$('#imgvr').on('change', function () { files = $(this)[0].files; name = ''; for (var i = 0; i < files.length; i++) { name += '\"' + files[i].name + '\"' + (i != files.length - 1 ? ", " : ""); } $("#custom-file-label-vr").html(name); });
 $(function () {
     $.validator.setDefaults({
         submitHandler: function (form, event) {
@@ -40,6 +41,9 @@ $(function () {
             img: {
                 required: false, accept: "image/png"
             },
+            imgvr: {
+                required: false
+            },
             aboutEn: {
                 required: true
             },
@@ -58,11 +62,13 @@ $(function () {
             region_id: "Please enter a region",
             caverArea: "Please enter a caverArea",
             img: { accept: 'Please select `PNG` only' },
+            imgvr: {},
             aboutEn: "Please enter a about en",
             aboutAr: "Please enter a about ar",
         },
         errorElement: 'span',
         errorPlacement: function (error, element) {
+            console.log(error)
             error.addClass('invalid-feedback');
             element.closest('.form-group').append(error);
         },
@@ -89,6 +95,8 @@ const addNew = () => {
     formData.append("city_id", $("#city_id option:selected").val());
     formData.append("region_id", $("#region_id option:selected").val());
     formData.append("img", $("#img")[0].files[0]);
+    formData.append("imgvr", $("#imgvr")[0].files[0]);
+    console.log(formData)
     $.ajax({
         url: `${window.location.pathname}`,
         data: formData,

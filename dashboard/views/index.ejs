@@ -62,7 +62,7 @@
               <!-- /.info-box -->
             </div>
             <!-- /.col -->
-            <div class="col-12 col-sm-6 col-md-2">
+            <div class="col-12 col-sm-6 col-md-2" id="sponsorsdiv">
               <div class="info-box mb-3">
                 <span class="info-box-icon bg-danger elevation-1">
                   <i class="nav-icon fas fa-users"></i>
@@ -81,7 +81,7 @@
             <!-- /.col -->
             <!-- fix for small devices only -->
             <div class="clearfix hidden-md-up"></div>
-            <div class="col-12 col-sm-6 col-md-2">
+            <div class="col-12 col-sm-6 col-md-2" id="initiativesdiv">
               <div class="info-box mb-3">
                 <span class="info-box-icon bg-success elevation-1">
                   <i class="nav-icon fas fa-tree"></i>
@@ -95,7 +95,7 @@
               <!-- /.info-box -->
             </div>
             <!-- /.col -->
-            <div class="col-12 col-sm-6 col-md-2">
+            <div class="col-12 col-sm-6 col-md-2" id="locationsdiv">
               <div class="info-box mb-3">
                 <span class="info-box-icon bg-primary elevation-1">
                   <i class="fas fa-map-marked"></i>
@@ -112,7 +112,7 @@
               <!-- /.info-box -->
             </div>
             <!-- /.col -->
-            <div class="col-12 col-sm-6 col-md-2">
+            <div class="col-12 col-sm-6 col-md-2" id="giftsdiv">
               <div class="info-box">
                 <span class="info-box-icon bg-maroon elevation-1">
                   <i class="fas fa-gift"></i>
@@ -125,7 +125,7 @@
               </div>
               <!-- /.info-box -->
             </div>
-            <div class="col-12 col-sm-6 col-md-2">
+            <div class="col-12 col-sm-6 col-md-2" id="promosdiv">
               <div class="info-box">
                 <span class="info-box-icon bg-danger elevation-1">
                   <i class="fas fa-tag"></i>
@@ -140,7 +140,7 @@
               <!-- /.info-box -->
             </div>
 
-            <div class="col-12 col-sm-6 col-md-2">
+            <div class="col-12 col-sm-6 col-md-2" id="messagesdiv">
               <div class="info-box">
                 <span class="info-box-icon bg-success elevation-1">
                   <i class="fas fa-envelope-open-text"></i>
@@ -155,7 +155,7 @@
               <!-- /.info-box -->
             </div>
 
-            <div class="col-12 col-sm-6 col-md-2">
+            <div class="col-12 col-sm-6 col-md-2" id="blogsdiv">
               <div class="info-box">
                 <span class="info-box-icon bg-info elevation-1">
                   <i class="far fa-newspaper"></i>
@@ -169,26 +169,26 @@
               </div>
               <!-- /.info-box -->
             </div>
-            <div class="col-12 col-sm-6 col-md-6">
+            <div class="col-12 col-sm-6 col-md-6" id="ordersdiv">
               <div class="card">
                 <h3 class="card-title">
                   <p></p>
-                  <a style="width: 120px" class="btn btn-app bg-info" href="/dashboard/order/new">
+                  <a style="width: 120px" class="btn btn-app bg-info" href="/dashboard/order/new" id="newdiv">
                     <span style="font-size: 14px" class="badge bg-danger"><%= data.ordersChart.New.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") %></span>
                     <i class="fas fa-exclamation-circle"></i>
                     New Orders
                   </a>
-                  <a style="width: 120px" class="btn btn-app bg-warning" href="/dashboard/order/inprogress">
+                  <a style="width: 120px" class="btn btn-app bg-warning" href="/dashboard/order/inprogress" id="inprogressdiv">
                     <span style="font-size: 14px" class="badge bg-danger"><%= data.ordersChart.inProgress.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") %></span>
                     <i class="fas fa-circle-notch"></i>
                     In Progress Orders
                   </a>
-                  <a style="width: 120px" class="btn btn-app bg-green" href="/dashboard/order/completed">
+                  <a style="width: 120px" class="btn btn-app bg-green" href="/dashboard/order/completed" id="completeddiv">
                     <span style="font-size: 14px" class="badge bg-danger"><%= data.ordersChart.completed.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") %></span>
                     <i class="far fa-check-circle"></i>
                     Completed Orders
                   </a>
-                  <a style="width: 120px" class="btn btn-app bg-danger" href="/dashboard/order/cancelled">
+                  <a style="width: 120px" class="btn btn-app bg-danger" href="/dashboard/order/cancelled" id="cancelleddiv">
                     <span style="font-size: 14px" class="badge bg-info"><%= data.ordersChart.cancelled.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") %></span>
                     <i class="far fa-times-circle"></i>
                     Cancelled Orders
@@ -205,7 +205,7 @@
             <div class="row">
               <div class="col-lg-3 col-6">
                 <!-- small box -->
-                <div class="small-box bg-info">
+                <div class="small-box bg-info" id="treesdiv">
                   <div class="inner">
                     <h3>
                       <%= data.totalTrees %>
@@ -223,7 +223,7 @@
                 </div>
               </div>
               <!-- ./col -->
-              <div class="col-lg-3 col-6">
+              <div class="col-lg-3 col-6" id="ordershdiv">
                 <!-- small box -->
                 <div class="small-box bg-success">
                   <div class="inner">
@@ -243,7 +243,7 @@
                 </div>
               </div>
               <!-- ./col -->
-              <div class="col-lg-3 col-6">
+              <div class="col-lg-3 col-6" id="usersdiv">
                 <!-- small box -->
                 <div class="small-box bg-warning">
                   <div class="inner">
@@ -261,7 +261,7 @@
                 </div>
               </div>
               <!-- ./col -->
-              <div class="col-lg-3 col-6">
+              <div class="col-lg-3 col-6" id="reportsdiv">
                 <!-- small box -->
                 <div class="small-box bg-danger">
                   <div class="inner">
@@ -582,6 +582,46 @@
 <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
 <script>
   $(document).ready(function () {
+    const data = JSON.parse(`<%-JSON.stringify(data)%>`);
+    if (!data.isHighestAdmin) {
+      const sponsor = data.userPermissions.filter((userPermission) => userPermission.module.name === "Sponsors");
+      if (!sponsor.length) $('#sponsorsdiv').hide();
+      const initiativeManagement = data.userPermissions.filter((userPermission) => userPermission.module.name === "Initiative Management");
+      if (!initiativeManagement.length) $('#initiativesdiv').hide();
+      const location = data.userPermissions.filter((userPermission) => userPermission.module.name === "Locations");
+      if (!location.length) $('#locationsdiv').hide();
+      const gift = data.userPermissions.filter((userPermission) => userPermission.module.name === "Gift & Cards Management");
+      if (!gift.length) $('#giftsdiv').hide();
+      const promo = data.userPermissions.filter((userPermission) => userPermission.module.name === "Promo Codes");
+      if (!promo.length) $('#promosdiv').hide();
+      const message = data.userPermissions.filter((userPermission) => userPermission.module.name === "Unread Messages" || userPermission.module.name === "Read Messages");
+      if (!message.length) $('#messagesdiv').hide();
+      const blog = data.userPermissions.filter((userPermission) => userPermission.module.name === "Blogs");
+      if (!blog.length) $('#blogsdiv').hide();
+      const newOrders = data.userPermissions.filter((userPermission) => userPermission.module.name === "New Orders List");
+      const inProgressOrders = data.userPermissions.filter((userPermission) => userPermission.module.name === "In Progress Orders List");
+      const completedOrders = data.userPermissions.filter((userPermission) => userPermission.module.name === "Completed Orders List");
+      const cancelledOrders = data.userPermissions.filter((userPermission) => userPermission.module.name === "Cancelled Orders List");
+      if (!newOrders.length && !inProgressOrders.length && !completedOrders.length && !cancelledOrders.length) {
+        $('#ordersdiv').hide();
+        $('#ordershdiv').hide();
+      }
+      const trees = data.userPermissions.filter((userPermission) => userPermission.module.name === "Trees List");
+      const treesHeader = data.userPermissions.filter((userPermission) => userPermission.module.name === "Trees Headers");
+      if (!trees.length && !treesHeader.length) $('#treesdiv').hide();
+      const usersClients = data.userPermissions.filter((userPermission) => userPermission.module.name === "Users - Clients");
+      if (!usersClients.length) $('#usersdiv').hide();
+      const ordersReport = data.userPermissions.filter((userPermission) => userPermission.module.name === "Orders Report");
+        const usersReport = data.userPermissions.filter((userPermission) => userPermission.module.name === "Users Report");
+        const sponsorsReport = data.userPermissions.filter((userPermission) => userPermission.module.name === "Sponsors Report");
+        const initiativeReport = data.userPermissions.filter((userPermission) => userPermission.module.name === "Initiatives Report");
+        const locationTreesReport = data.userPermissions.filter((userPermission) => userPermission.module.name === "Locations Trees Report");
+        const locationReport = data.userPermissions.filter((userPermission) => userPermission.module.name === "Locations Report");
+        const salesReport = data.userPermissions.filter((userPermission) => userPermission.module.name === "Sales Report");
+        const calendarInitiative = data.userPermissions.filter((userPermission) => userPermission.module.name === "Calendar Initiative Report");
+        const userCharts = data.userPermissions.filter((userPermission) => userPermission.module.name === "User Charts Report");
+        if (!ordersReport.length && !usersReport.length && !sponsorsReport.length && !initiativeReport.length && !locationTreesReport.length && !locationReport.length && !salesReport.length && !calendarInitiative.length && !userCharts.length) $('#reportsdiv').hide();
+    }
     var ctx = $("#chart-line")
     var myLineChart = new Chart(ctx, {
       type: "doughnut",

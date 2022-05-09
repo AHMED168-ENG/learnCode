@@ -31,7 +31,7 @@
               <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                   <li class="breadcrumb-item"><a href="/">Home</a></li>
-                  <li class="breadcrumb-item"><a href="/dashboard/location">Location</a></li>
+                  <li class="breadcrumb-item"><a href="/dashboard/initrees">Location Trees</a></li>
                   <li class="breadcrumb-item active">Edit</li>
                 </ol>
               </div>
@@ -144,7 +144,7 @@
                               style="width: 100%"
                             >
                               <% for(let [index,tree] of trees.entries() || []){ %>
-                              <option value="<%=tree.id%>"   <%= data.tree_id == tree.tree_id ? 'selected' : ''%>   ><%=tree.en_name%> - <%=tree.ar_name%></option>
+                              <option value="<%=tree.tree_id%>"   <%= data.tree_id == tree.tree_id ? 'selected' : ''%>   ><%=tree.en_name%> - <%=tree.ar_name%></option>
                               <%} %>
                             </select>
                           </div>

@@ -31,7 +31,7 @@
               <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                   <li class="breadcrumb-item"><a href="/">Home</a></li>
-                  <li class="breadcrumb-item"><a href="/dashboard/location">Location</a></li>
+                  <li class="breadcrumb-item"><a href="/dashboard/initrees">Location Trees</a></li>
                   <li class="breadcrumb-item active">new</li>
                 </ol>
               </div>
@@ -62,13 +62,13 @@
                           <div class="form-group">
                             <label>Initiative</label>
                             <select
-                              id="init_id_pk"
+                              id="init_id"
                               class="form-control select2 select2-danger"
                               data-dropdown-css-class="select2-danger"
                               style="width: 100%"
                             >
                               <% for(let [index,data] of initiatives.entries() || []){ %>
-                              <option value="<%=data.init_id_pk%>"><%=data.init_en_name%> - <%=data.init_ar_name%></option>
+                              <option value="<%=data.init_id%>"><%=data.init_en_name%> - <%=data.init_ar_name%></option>
                               <%} %>
                             </select>
                           </div>

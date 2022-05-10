@@ -184,7 +184,7 @@ export class ReportController {
           .then((count) => {
             const dataInti = {
               total: count,
-              usersChart: sponsorsChart,
+              sponsorsChart: sponsorsChart,
               data: data,
             }
             res.status(httpStatus.OK).json(dataInti)

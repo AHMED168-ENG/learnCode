@@ -66,7 +66,7 @@
                   </div>
                   <div class="card-body">
                     <div class="chart">
-                      <canvas id="userDetails" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%"></canvas>
+                      <canvas id="salesDetails" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%"></canvas>
                     </div>
                   </div>
                   <!-- /.card-body -->
@@ -127,7 +127,7 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
     <script src="/js/plugins/chart.js/Chart.min.js"></script>
-    <script>
+    <!-- <script>
       var currMonthName = moment().format("MMMM")
       var prevMonthName = moment().subtract(1, "month").format("MMMM")
       var monthsArr = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
@@ -160,7 +160,7 @@
         //-------------
         //- Details CHART -
         //-------------
-        var chartDetailsChartCanvas = $("#userDetails").get(0).getContext("2d")
+        var chartDetailsChartCanvas = $("#salesDetails").get(0).getContext("2d")
         var chartDetailsData = $.extend(true, {}, chartDetails)
         var temp0 = chartDetails.datasets[0]
         chartDetailsData.datasets[0] = temp0
@@ -177,7 +177,7 @@
           options: chartDetailsChartOptions,
         })
       })
-    </script>
+    </script> -->
     <script>
       var fromOrder = null
       var toOrder = null

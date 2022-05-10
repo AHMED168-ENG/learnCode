@@ -1,4 +1,5 @@
 var userType = "all"
+var monthsChart = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 $(document).ready(function () {
     getList()
 })
@@ -11,7 +12,10 @@ function getList(type = "all", from = null, to = null) {  // show spinner
         method: "Get",
     }
     $.ajax(settings).done(function (res) {
-        // hidden spinner
+        const fromMonth = !from ? undefined : monthsChart[new Date(from).getMonth()];
+        const toMonth = !to ? undefined : monthsChart[new Date(to).getMonth()];
+        const selectedMonths = fromMonth && toMonth ? [...new Set([fromMonth, toMonth])] : undefined;
+        changeChart(res.usersChart, selectedMonths);
         spinnerNotfound(2)
         $("#tr-th-row").empty()
         res.data.forEach((elem) => {
@@ -34,6 +38,47 @@ function getList(type = "all", from = null, to = null) {  // show spinner
     }).fail(() => spinnerNotfound(3))
 }
 
+function changeChart(inYear, selectedMonths) {
+    var months = !selectedMonths ? monthsChart : selectedMonths;
+    var monthsCountArr = months.map((m, i) => {
+        for (let element of inYear) {
+            if (element.MONTH == m) {
+                return element.count
+            }
+        }
+        return 0
+    })
+    var chartSet = {
+        labels: months,
+        datasets: [
+            {
+                label: "Initiatives per month",
+                backgroundColor: "rgba(60,141,188,0.9)",
+                borderColor: "rgba(60,141,188,0.8)",
+                pointRadius: false,
+                pointColor: "#3b8bba",
+                pointStrokeColor: "rgba(60,141,188,1)",
+                pointHighlightFill: "#fff",
+                pointHighlightStroke: "rgba(60,141,188,1)",
+                data: monthsCountArr,
+            },
+        ],
+    }
+    var extendChartSet = $.extend(true, {}, chartSet)
+    var temp1 = chartSet.datasets[0]
+    extendChartSet.datasets[0] = temp1
+    var chartOptions = {
+        responsive: true,
+        maintainAspectRatio: false,
+        datasetFill: false,
+    }
+    if (!!window.bar) window.bar.destroy();
+    window.bar = new Chart($("#initiativeDetails").get(0).getContext("2d"), {
+        type: "bar",
+        data: chartSet,
+        options: chartOptions,
+    })
+}
 
 function changeType(type) {
     getList(type, fromOrder, toOrder)

@@ -1,0 +1,69 @@
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title><%= title %> | SAHLAN</title>
+<link rel="icon" type="image/gif/png" href="/p/img/Sahlan-Favicon.png" />
+<!-- Google Font: Source Sans Pro -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback" />
+<!-- Font Awesome -->
+<link rel="stylesheet" href="/css/plugins/fontawesome-free/css/all.min.css" />
+<!-- Theme style -->
+<link rel="stylesheet" href="/css/dist/css/adminlte.min.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.25.1/moment.min.js"></script>
+<style>
+  td {
+    white-space: nowrap;
+  }
+  /* tooltip link code below */
+  a[data-tooltip],
+  button[data-tooltip] {
+    position: relative;
+  }
+  a[data-tooltip]:before,
+  a[data-tooltip]:after,
+  button[data-tooltip]:before,
+  button[data-tooltip]:after {
+    white-space: nowrap;
+    line-height: 1em;
+    opacity: 0;
+    position: absolute;
+    display: block;
+    transition: 0.4s;
+    left: 50%;
+    transform: translateX(-50%);
+    visibility: hidden;
+    overflow: hidden;
+    user-select: none;
+    pointer-events: none;
+
+    @media speech {
+      display: none;
+    }
+  }
+  a[data-tooltip]:after,
+  button[data-tooltip]:after {
+    top: -1.9em;
+    content: attr(data-tooltip);
+    background: #000;
+    color: white;
+    border-radius: 4px;
+    padding: 0.2em 0.5em;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  }
+  a[data-tooltip]:before,
+  button[data-tooltip]:before {
+    content: "";
+    top: -0.5em;
+    border: 0.5em solid rgb(0, 0, 0);
+    border-bottom-color: transparent;
+    border-left-color: transparent;
+    border-right-color: transparent;
+    z-index: 100;
+  }
+  a[data-tooltip]:hover:after,
+  a[data-tooltip]:hover:before,
+  button[data-tooltip]:hover:after,
+  button[data-tooltip]:hover:before {
+    visibility: visible;
+    opacity: 1;
+  }
+</style>

@@ -4,7 +4,8 @@ import cors from "cors"
 import * as http from "http"
 import config, {IEnv} from "./config/config"
 import routes from "./routes"
-import routeDashboard from "./routes/dashboard"
+import routeDashboard1 from "./routes/dashboard"
+import routeDashboard2 from "./routes/dashboard2"
 import auth from "./middlewares/auth.middleware"
 import appleLink from "./middlewares/apple-link.middleware"
 import authDash from "./middlewares/auth-dashboard.middleware"
@@ -52,11 +53,12 @@ export class IndexApp {
     this.app.use("/js", express.static(path.join(__dirname, "../dashboard/public/js")))
     this.app.use("/img", express.static(path.join(__dirname, "../dashboard/public/img")))
     // Setting the root path for views directory
-    this.app.set("views", path.join(__dirname, "../dashboard/views"))
+    this.app.set("views", path.join(__dirname, "../"))
     // Setting the view engine
     this.app.set("view engine", "ejs")
     this.app.use(authDash)
-    routeDashboard(this.app)
+    routeDashboard1(this.app)
+    routeDashboard2(this.app)
   }
   private route(): void {
     this.app.get("/apple-app-site-association", appleLink)
@@ -64,7 +66,7 @@ export class IndexApp {
     this.app.use(auth)
     routes(this.app)
     // this.app.use((req, res) => res.status(404).json({message: "this route not found"}))
-    this.app.use((req, res) => res.render("layout/404.ejs"))
+    this.app.use((req, res) => res.render("dashboard/views/layout/404.ejs"))
   }
 
   private testMail(): void {

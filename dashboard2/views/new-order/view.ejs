@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('../layout/heade.ejs') %>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.25.1/moment.min.js"></script>
+  </head>
+  <body class="sidebar-mini layout-fixed text-sm text-sm">
+    <style>
+      th,
+      td {
+        text-align: center;
+        vertical-align: middle !important;
+      }
+    </style>
+    <div class="wrapper">
+      <%- include('../layout/nav.ejs') %>
+      <!-- Content Wrapper. Contains page content -->
+      <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <div class="content-header">
+          <div class="container-fluid">
+            <div class="row mb-2 align-items-center mt-1">
+              <div class="col-sm-6">
+                <h4>View Order</h4>
+              </div>
+              <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                  <li class="breadcrumb-item"><a href="/">Home</a></li>
+                  <li class="breadcrumb-item active">Orders</li>
+                  <li class="breadcrumb-item active">View</li>
+                </ol>
+              </div>
+            </div>
+            <!-- /.row -->
+          </div>
+          <!-- /.container-fluid -->
+        </div>
+        <!-- /.content-header -->
+        <!-- Main content -->
+        <section class="content">
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-12">
+                <div class="callout callout-info">
+                  <h5 class="m-0">
+                    <i class="fas fa-hashtag"></i>
+                    &emsp; <%= data.order_id%>
+                    <small class="float-right">
+                      <script type="text/javascript">
+                        document.write(`From : ${moment("<%=data.createdAt%>").fromNow()}`)
+                      </script>
+                    </small>
+                  </h5>
+                </div>
+
+                <!-- Main content -->
+                <div class="invoice p-3 mb-3">
+                  <!-- title row -->
+                  <div class="row">
+                    <div class="col-12">
+                      <h4>
+                        <i class="fas fa-user text-success"></i>
+                        <a href="/dashboard/user/edit/<%= data.user_id%>" class="btn btn-link text-dark">
+                          <h4 class="text-success"><%= data.user_name || "user name" %></h4>
+                        </a>
+                        <small class="float-right text-info">
+                          <script type="text/javascript">
+                            document.write(
+                              `${moment("<%=data.createdAt%>").format("Do MMMM, YYYY")}&emsp;${moment("<%=data.createdAt%>").format("LT")}`
+                            )
+                          </script>
+                        </small>
+                      </h4>
+                    </div>
+                    <!-- /.col -->
+                  </div>
+                  <!-- info row -->
+                  <div class="row invoice-info">
+                    <div class="col-sm-4 invoice-col ml-2 mb-2">
+                      <h6>
+                        <span class="">Pay Type: <%=data.pay_type%></span>
+                      </h6>
+                      <h6>
+                        <span class="">Status: <%=data.status%></span>
+                      </h6>
+                    </div>
+                    <!-- /.col -->
+                    <div class="col-sm-4 invoice-col"></div>
+                    <!-- /.col -->
+                    <div class="col-sm-4 invoice-col"></div>
+                    <!-- /.col -->
+                  </div>
+                  <!-- /.row -->
+
+                  <!-- Table row -->
+                  <div class="row">
+                    <div class="col-12 table-responsive">
+                      <table class="table table-striped">
+                        <thead>
+                          <tr>
+                            <th>Name</th>
+                            <th>img</th>
+                            <th>Initiative</th>
+                            <th>Location</th>
+                            <th>Qty</th>
+                            <th>Price</th>
+                            <th>Total</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <% for(let [index,d] of data.tbl_orders_details.entries() || []){ %>
+                          <tr>
+                            <td><%=d.tbl_initiatives_tree.tbl_tree.en_name%> - <%=d.tbl_initiatives_tree.tbl_tree.ar_name%></td>
+                            <td>
+                              <img
+                                alt="img"
+                                class="rounded-circle p-0"
+                                width="45"
+                                height="45"
+                                src="/p/img/<%=d.tbl_initiatives_tree.tbl_tree.img_tree%>"
+                              />
+                            </td>
+                            <td><%=d.tbl_initiative.init_en_name%> - <%=d.tbl_initiative.init_ar_name%></td>
+                            <td><%=d.tbl_initiatives_location.location_nameEn%> - <%=d.tbl_initiatives_location.location_nameAr%></td>
+                            <td><%=d.quantity%></td>
+                            <td><%=d.price%> SAR</td>
+                            <td><%=d.price*d.quantity%> SAR</td>
+                          </tr>
+                          <%} %>
+                        </tbody>
+                      </table>
+                    </div>
+                    <!-- /.col -->
+                  </div>
+                  <!-- /.row -->
+
+                  <div class="row">
+                    <!-- accepted payments column -->
+                    <div class="col-6">
+                      <p class="text-muted well well-sm shadow-none" style="margin-top: 10px"></p>
+                    </div>
+                    <!-- /.col -->
+                    <div class="col-6">
+                      <div class="table-responsive">
+                        <table class="table">
+                          <tr>
+                            <th style="width: 50%">Subtotal:</th>
+                            <td><%=data.all_sum%> SAR</td>
+                          </tr>
+                          <tr class="text-danger">
+                            <th>Discount</th>
+                            <td><%=data.promo_code_percent||0%> %</td>
+                          </tr>
+                          <tr>
+                            <th>Total:</th>
+                            <td>
+                              <script type="text/javascript">
+                                document.write(
+                                  `${"<%=data.all_sum%>" * ("<%=data.promo_code_percent%>" ? "<%=data.promo_code_percent/100%>" : 1)} SAR`
+                                )
+                              </script>
+                            </td>
+                          </tr>
+                        </table>
+                      </div>
+                    </div>
+                    <!-- /.col -->
+                  </div>
+                  <!-- /.row -->
+
+                  <!-- this row will not appear when printing -->
+                  <div class="row no-print">
+                    <div class="col-12">
+                      <button type="button" class="btn btn-primary float-right" style="margin-right: 5px">
+                        <i class="fas fa-print"></i>
+                        Print
+                      </button>
+
+                      <% if(data.status == "new"){ %>
+                      <button
+                        type="button"
+                        data-tooltip="Inprogress"
+                        onclick="status('<%= data.order_id%>','inprogress')"
+                        class="btn btn-warning float-right mx-1"
+                      >
+                        <i class="fas fa-circle-notch"></i>
+                        Inprogress
+                      </button>
+                      <button
+                        type="button"
+                        data-tooltip="Cancel order"
+                        onclick="status('<%= data.order_id%>','cancelled')"
+                        class="btn btn-danger float-right mx-1"
+                      >
+                        <i class="fas fa-times-circle"></i>
+                        Cancel
+                      </button>
+                      <% }%> <% if(data.status == "inprogress"){ %>
+                      <button
+                        type="button"
+                        data-tooltip="Complete"
+                        onclick="status('<%= data.order_id%>','completed')"
+                        class="btn btn-success float-right mx-1"
+                      >
+                        <i class="fas fa-check-circle"></i>
+                        Complete
+                      </button>
+                      <button
+                        type="button"
+                        data-tooltip="Cancel order"
+                        onclick="status('<%= data.order_id%>','cancelled')"
+                        class="btn btn-danger float-right mx-1"
+                      >
+                        <i class="fas fa-times-circle"></i>
+                        Cancel
+                      </button>
+                      <% }%>
+                    </div>
+                  </div>
+                </div>
+                <!-- /.invoice -->
+              </div>
+              <!-- /.col -->
+            </div>
+            <!-- /.row -->
+          </div>
+          <!-- /.container-fluid -->
+        </section>
+
+        <!-- /.content -->
+      </div>
+      <footer class="main-footer"><%- include('../layout/footer.ejs') %></footer>
+      <div class="modal" id="chandeStatusModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Confirmation</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <p id="modal-body-status">Are you shure to make this ?!</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary" onclick="" id="ModalYesBtn">Yes</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <%- include('../layout/script.ejs') %>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.25.1/moment.min.js"></script>
+    <script>
+      $(document).ready(function () {
+        changeStatus("<%= data.order_id%>", "<%= data.status%>")
+      })
+      function status(id, status) {
+        $("#ModalYesBtn").attr("onclick", `changeStatus(${id},'${status}')`)
+        $("#modal-body-status").html(`Are you shure to change status ?`)
+        $("#chandeStatusModal").modal("show")
+      }
+      function changeStatus(id, status) {
+        const settings = {
+          async: true,
+          crossDomain: true,
+          url: `/dashboard/order/status/${id}?status=${status}&seen=1`,
+          method: "PUT",
+        }
+        $.ajax(settings).always(function () {
+          fetch("/dashboard/home/num", { method: "GET" }).then((response) => response.json()).then((data) => {
+              $("#notifiy-content").empty();
+              data.lastNewOrders.forEach((elem) => {
+                $("#notifiy-content").append(`
+                  <a href="/dashboard/order/view/${elem.order_id}" class="dropdown-item">
+                    <!-- Notifiy Start -->
+                    <div class="media">
+                      <img src="/p/img/avatar.png" alt="User Avatar" class="img-size-50 mr-3 img-circle" />
+                      <div class="media-body">
+                        <button type="button" class="close" aria-label="Close">
+                          <span aria-hidden="true">×</span>
+                        </button>
+                        <p class="text-sm">${elem.web_apps_user.fullName} placed <br><span class="text-bold">${elem.all_sum} SAR </span> order!</p>
+                        <span class="badge" style="background: rgb(205, 255, 205);"><h3 class="dropdown-item-title text-success">New order</h3></span>
+                        <p class="text-sm text-muted">
+                          <i class="far fa-clock mr-1"></i>
+                          ${new Date(elem.createdAt).toLocaleString('default', { month: 'short' })} ${new Date(elem.createdAt).getDay()} ${new Date(elem.createdAt).getFullYear()} - ${new Date(elem.createdAt).getHours()}:${new Date(elem.createdAt).getMinutes()} ${new Date(elem.createdAt).getHours() >= 12 ? 'PM' : 'AM'}
+                        </p>
+                      </div>
+                    </div>
+                    <!-- Notifiy End -->
+                  </a>
+                  <div class="dropdown-divider"></div>
+                `)
+              });
+              $("#NewOrderNumber").text(data.notifiedOrders.New);
+            }).catch((err) => { console.error(err); });
+        })
+      }
+    </script>
+  </body>
+</html>

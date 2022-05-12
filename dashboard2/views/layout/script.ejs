@@ -1,0 +1,87 @@
+<%- include('modal.ejs') %> <%- include('toast.ejs') %>
+<!-- jQuery -->
+<script src="/js/plugins/jquery/jquery.min.js"></script>
+<!-- Bootstrap 4 -->
+<script src="/js/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- jQuery UI 1.11.4 -->
+<script src="/js/plugins/jquery-ui/jquery-ui.min.js"></script>
+<!-- AdminLTE App -->
+<script src="/js/dist/js/adminlte.js"></script>
+
+<!-- disable inspect element -->
+<!-- <script>
+  $(document).contextmenu(function () {
+    return false
+  })
+  document.onkeydown = function (e) {
+    if (event.keyCode == 123) {
+      return false
+    }
+    if (e.ctrlKey && e.shiftKey && e.keyCode == "I".charCodeAt(0)) {
+      return false
+    }
+    if (e.ctrlKey && e.shiftKey && e.keyCode == "C".charCodeAt(0)) {
+      return false
+    }
+    if (e.ctrlKey && e.shiftKey && e.keyCode == "J".charCodeAt(0)) {
+      return false
+    }
+    if (e.ctrlKey && e.keyCode == "U".charCodeAt(0)) {
+      return false
+    }
+  }
+</script> -->
+<!-- Active item side bar -->
+<script>
+  var urlSplit = window.location.pathname.split("/")[2]
+  if ($(`#${urlSplit}`).length) {
+    $(`#${urlSplit}`).addClass("active")
+    if ($(`#${urlSplit}`).parent().hasClass("has-treeview")) {
+      $(`#${urlSplit}`).parent().addClass("menu-is-opening menu-open")
+      $(`#${urlSplit}`).parent().children("ul").css("display", "block")
+    }
+  } else {
+    $(`#home`).addClass("active")
+  }
+  var urlSplitSub = window.location.pathname.split("/")[3]
+  if ((urlSplitSub, $(`#${urlSplitSub}`).length)) {
+    $(`#${urlSplitSub}`).addClass("active")
+  }
+</script>
+<!-- Loading Button $(btn).buttonLoader('start'); $(btn).buttonLoader('stop'); -->
+<script>
+  ;(function ($) {
+    $.fn.buttonLoader = function (action) {
+      var self = $(this)
+      //start loading animation
+      if (action == "start") {
+        if ($(self).attr("disabled") == "disabled") {
+          e.preventDefault()
+        }
+        //disable buttons when loading state
+        $(".has-spinner").attr("disabled", "disabled")
+        $(self).attr("data-btn-text", $(self).text())
+        //binding spinner element to button and changing button text
+        $(self).html(`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>&nbspLoading...`)
+        $(self).addClass("active")
+      }
+      //stop loading animation
+      if (action == "stop") {
+        $(self).html($(self).attr("data-btn-text"))
+        $(self).removeClass("active")
+        //enable buttons after finish loading
+        $(".has-spinner").removeAttr("disabled")
+      }
+    }
+  })(jQuery)
+</script>
+<!-- To refresh page on back -->
+<script>
+  window.addEventListener("pageshow", function (event) {
+    var historyTraversal = event.persisted || (typeof window.performance != "undefined" && window.performance.navigation.type === 2)
+    if (historyTraversal) {
+      // Handle page restore.
+      window.location.reload()
+    }
+  })
+</script>

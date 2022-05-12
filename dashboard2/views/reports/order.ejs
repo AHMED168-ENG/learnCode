@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('../layout/heade.ejs') %>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+  </head>
+  <body class="sidebar-mini layout-fixed text-sm text-sm">
+    <div class="wrapper">
+      <%- include('../layout/nav.ejs') %>
+      <!-- Content Wrapper. Contains page content -->
+      <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <!-- Content Header (Page header) -->
+        <div class="content-header">
+          <div class="container-fluid">
+            <div class="row mb-2 align-items-center mt-1">
+              <div class="col-sm-6"><h1>Orders report</h1></div>
+              <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                  <li class="breadcrumb-item"><a href="/">Home</a></li>
+                  <li class="breadcrumb-item active">Orders report</li>
+                </ol>
+              </div>
+            </div>
+            <!-- /.row -->
+          </div>
+          <!-- /.container-fluid -->
+        </div>
+        <!-- /.row -->
+        <!-- /.content-header -->
+        <!-- Main content -->
+        <section class="content">
+          <div class="row col-12 mb-2 align-items-center mt-1">
+            <div class="col-6 d-flex">
+              <button type="button" data-tooltip="All Orders" onclick="changeType('all')" class="btn btn-secondary float-right mx-1">All</button>
+              <button type="button" data-tooltip="New Orders" onclick="changeType('new')" class="btn btn-info float-right mx-1">
+                <i class="fas fa-folder-plus"></i>
+                New
+              </button>
+              <button type="button" data-tooltip="In Progress Orders" onclick="changeType('inprogress')" class="btn btn-warning float-right mx-1">
+                <i class="fas fa-circle-notch"></i>
+                In Progress
+              </button>
+              <button type="button" data-tooltip="Completed Orders" onclick="changeType('completed')" class="btn btn-success float-right mx-1">
+                <i class="fas fa-check-circle"></i>
+                Completed
+              </button>
+              <button type="button" data-tooltip="Cancel Orders" onclick="changeType('cancelled')" class="btn btn-danger float-right mx-1">
+                <i class="fas fa-times-circle"></i>
+                Cancelled
+              </button>
+            </div>
+            <div class="col-6 d-flex align-items-center">
+              <div class="form-group col-md-6">
+                <label>From - To</label>
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">
+                      <i class="far fa-calendar-alt"></i>
+                    </span>
+                  </div>
+                  <input type="text" class="form-control float-right" id="fromTo" />
+                  <!-- <div class="input-group-append">
+                    <button class="btn btn-outline-primary"  onclick="fromToFunc()" type="button" id="button-addon2"><i class="fas fa-search"></i></button>
+                  </div> -->
+                </div>
+                <!-- /.input group -->
+              </div>
+            </div>
+          </div>
+          <div class="container-fluid">
+            <div class="row mt-2">
+              <div class="col-md-12">
+                <!-- BAR CHART -->
+                <div class="card card-success">
+                  <div class="card-header">
+                    <h3 class="card-title">Orders details</h3>
+                    <div class="card-tools">
+                      <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                        <i class="fas fa-minus"></i>
+                      </button>
+                      <button type="button" class="btn btn-tool" data-card-widget="remove">
+                        <i class="fas fa-times"></i>
+                      </button>
+                    </div>
+                  </div>
+                  <div class="card-body">
+                    <div class="chart">
+                      <canvas id="orderDetails" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%"></canvas>
+                    </div>
+                  </div>
+                  <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+              </div>
+
+              <div class="card card-primary card-outline col-md-12">
+                <div class="card-header">
+                  <h3 class="card-title">
+                    <i class="fas fa-dolly-flatbed"></i>
+                    &nbsp;&nbsp; Orders
+                  </h3>
+                  <div class="card-tools">
+                    <button
+                      type="button"
+                      data-tooltip="Export Excel"
+                      onclick="fnExcelReport()"
+                      id="export-excel-btn"
+                      class="btn btn-info float-right mx-1"
+                    >
+                      <i class="fas fa-file-excel"></i>
+                      Export Excel
+                    </button>
+                  </div>
+                </div>
+                <div id="spinner-notfound">
+                  <div class="w-100 d-flex justify-content-center align-items-center" style="min-height: 24em"></div>
+                </div>
+                <div id="tabe-items" class="card-body pad table-responsive">
+                  <table class="table table-bordered" id="table2excel" style="border: 1px solid #dee2e6">
+                    <thead>
+                      <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Created Date</th>
+                        <th scope="col">Customer Name</th>
+                        <th scope="col">Pay Type</th>
+                        <th scope="col">All Price</th>
+                        <th scope="col">Promo</th>
+                        <th scope="col">Total After Discount</th>
+                      </tr>
+                    </thead>
+                    <tbody id="tr-th-row"></tbody>
+                    <div class="d-flex justify-content-end" id="total"></div>
+                  </table>
+                </div>
+                <!-- /.card -->
+              </div>
+            </div>
+            <!-- /.row -->
+          </div>
+          <!-- /.container-fluid -->
+        </section>
+
+        <!-- /.content -->
+      </div>
+      <footer class="main-footer"><%- include('../layout/footer.ejs') %></footer>
+    </div>
+    <iframe id="txtArea1" style="display: none"></iframe>
+    <%- include('../layout/script.ejs') %>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script src="/js/plugins/chart.js/Chart.min.js"></script>
+    <script>
+      var fromOrder = null
+      var toOrder = null
+      $(function () {
+        $("#fromTo").daterangepicker(
+          {
+            locale: {
+              format: "YYYY-MM-DD",
+            },
+            startDate: new Date(),
+            endDate: new Date(),
+            dateFormat: "YYYY-MM-DD",
+            opens: "left",
+          },
+          function (start, end, label) {
+            fromOrder = start.format("YYYY-MM-DD")
+            toOrder = end.format("YYYY-MM-DD")
+            getList(orderType, fromOrder, toOrder)
+          }
+        )
+      })
+    </script>
+    <script src="/js/reports/order.js"></script>
+    <%- include('./export-excel.ejs') %>
+  </body>
+</html>

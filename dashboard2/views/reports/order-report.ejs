@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('../layout/heade.ejs') %>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+  </head>
+  <body class="sidebar-mini layout-fixed text-sm text-sm">
+    <div class="wrapper">
+      <%- include('../layout/nav.ejs') %>
+      <!-- Content Wrapper. Contains page content -->
+      <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <!-- Content Header (Page header) -->
+        <div class="content-header">
+          <div class="container-fluid">
+            <div class="row mb-2 align-items-center mt-1">
+              <div class="col-sm-6"><h1>Orders report</h1></div>
+              <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                  <li class="breadcrumb-item"><a href="/">Home</a></li>
+                  <li class="breadcrumb-item active">Orders report</li>
+                </ol>
+              </div>
+            </div>
+            <!-- /.row -->
+          </div>
+          <!-- /.container-fluid -->
+        </div>
+        <!-- /.content-header -->
+        <!-- Main content -->
+        <section class="content">
+          <div class="container-fluid">
+            <div class="row mt-2">
+              <div class="col-md-6">
+                <!-- Orders by last few months CHART -->
+                <div class="card card-primary">
+                  <div class="card-header">
+                    <h3 class="card-title">Orders by last few months</h3>
+
+                    <div class="card-tools">
+                      <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                        <i class="fas fa-minus"></i>
+                      </button>
+                      <button type="button" class="btn btn-tool" data-card-widget="remove">
+                        <i class="fas fa-times"></i>
+                      </button>
+                    </div>
+                  </div>
+                  <div class="card-body">
+                    <div class="chart">
+                      <canvas id="areaChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%"></canvas>
+                    </div>
+                  </div>
+                  <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+
+                <!-- DONUT CHART -->
+                <div class="card card-danger">
+                  <div class="card-header">
+                    <h3 class="card-title">Order statistics</h3>
+
+                    <div class="card-tools">
+                      <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                        <i class="fas fa-minus"></i>
+                      </button>
+                      <button type="button" class="btn btn-tool" data-card-widget="remove">
+                        <i class="fas fa-times"></i>
+                      </button>
+                    </div>
+                  </div>
+                  <div class="card-body">
+                    <canvas id="donutChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%"></canvas>
+                  </div>
+                  <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+                <!-- /.card -->
+              </div>
+              <!-- /.col (LEFT) -->
+              <div class="col-md-6">
+                <!-- LINE CHART -->
+                <div class="card card-info">
+                  <div class="card-header">
+                    <h3 class="card-title">Line Chart</h3>
+
+                    <div class="card-tools">
+                      <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                        <i class="fas fa-minus"></i>
+                      </button>
+                      <button type="button" class="btn btn-tool" data-card-widget="remove">
+                        <i class="fas fa-times"></i>
+                      </button>
+                    </div>
+                  </div>
+                  <div class="card-body">
+                    <div class="chart">
+                      <canvas id="lineChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%"></canvas>
+                    </div>
+                  </div>
+                  <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+
+                <!-- BAR CHART -->
+                <div class="card card-success">
+                  <div class="card-header">
+                    <h3 class="card-title">Income details</h3>
+
+                    <div class="card-tools">
+                      <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                        <i class="fas fa-minus"></i>
+                      </button>
+                      <button type="button" class="btn btn-tool" data-card-widget="remove">
+                        <i class="fas fa-times"></i>
+                      </button>
+                    </div>
+                  </div>
+                  <div class="card-body">
+                    <div class="chart">
+                      <canvas id="incomeDetails" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%"></canvas>
+                    </div>
+                  </div>
+                  <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+              </div>
+              <!-- /.col (RIGHT) -->
+              <div class="card col-md-12 p-0">
+                <div class="card-header">
+                  <h3 class="card-title">Last Initiatives</h3>
+
+                  <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                      <i class="fas fa-minus"></i>
+                    </button>
+                    <button type="button" class="btn btn-tool" data-card-widget="remove" title="Remove">
+                      <i class="fas fa-times"></i>
+                    </button>
+                  </div>
+                </div>
+                <div class="card-body p-0">
+                  <table class="table table-responsive projects">
+                    <thead>
+                      <tr>
+                        <th style="width: 1%">#</th>
+                        <th style="width: 15%">Initiatives Name</th>
+                        <th style="width: 5%">Sponsor</th>
+                        <th style="width: 15%">Orders Progress</th>
+                        <th style="width: 8%" class="text-center">Status</th>
+                        <th style="width: 8%" class="text-center">New Orders</th>
+                        <th style="width: 8%" class="text-center">In progress Orders</th>
+                        <th style="width: 8%" class="text-center">Completed Orders</th>
+                        <th style="width: 8%" class="text-center">Cancelled Orders</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <% for(let [index,initiative] of initiatives.entries() || []){ %>
+                      <tr>
+                        <td>#</td>
+                        <td>
+                          <a><%= initiative.init_en_name %> - <%= initiative.init_ar_name %></a>
+                          <br />
+                          <small>
+                            <script type="text/javascript">
+                              document.write(`Created ${moment(new Date("<%=initiative.createdAt%>")).format("YYYY-MM-DD")}`)
+                            </script>
+                          </small>
+                        </td>
+                        <td>
+                          <img class="rounded-circle p-0" width="45" height="45" src="/p/img/<%= initiative.sponsorImg %>" alt="sponser Image" />
+                        </td>
+                        <td class="project_progress">
+                          <div class="progress progress-sm">
+                            <div
+                              class="progress-bar bg-green"
+                              role="progressbar"
+                              aria-valuenow="57"
+                              aria-valuemin="0"
+                              aria-valuemax="100"
+                              style="width: 57%"
+                            ></div>
+                          </div>
+                          <small>57% Complete</small>
+                        </td>
+                        <td class="project-state">
+                          <span class="badge badge-success">Active</span>
+                        </td>
+
+                        <td class="project-state">
+                          <span class="badge badge-info">10</span>
+                        </td>
+                        <td class="project-state">
+                          <span class="badge badge-warning">10</span>
+                        </td>
+                        <td class="project-state">
+                          <span class="badge badge-success">10</span>
+                        </td>
+                        <td class="project-state">
+                          <span class="badge badge-danger">10</span>
+                        </td>
+                      </tr>
+                      <%} %>
+                    </tbody>
+                  </table>
+                </div>
+                <!-- /.card-body -->
+              </div>
+            </div>
+            <!-- /.row -->
+          </div>
+          <!-- /.container-fluid -->
+        </section>
+
+        <!-- /.content -->
+      </div>
+      <footer class="main-footer"><%- include('../layout/footer.ejs') %></footer>
+    </div>
+    <%- include('../layout/script.ejs') %>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script src="/js/plugins/chart.js/Chart.min.js"></script>
+    <script>
+      var currMonthName = moment().format("MMMM")
+      var prevMonthName = moment().subtract(1, "month").format("MMMM")
+      var monthsArr = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+      var ordersInYear = JSON.parse(`<%-JSON.stringify(data.ordersInYear)%>`)
+      var monthsIncomeArr = monthsArr.map((m, i) => { 
+        for (let element of ordersInYear) {
+          if (element.MONTH == m) {
+            return element.allSum
+          }
+        }
+        return 0
+      })
+      var monthsCountArr = monthsArr.map((m, i) => {
+        for (let element of ordersInYear) {
+          if (element.MONTH == m) {
+            return element.count
+          }
+        }
+        return 0
+      })
+
+      $(function () {
+        /* ChartJS
+         * -------
+         * Here we will create a few charts using ChartJS
+         */
+
+        //--------------
+        //- AREA CHART -
+        //--------------
+
+        // Get context with jQuery - using jQuery's .get() method.
+        var areaChartCanvas = $("#areaChart").get(0).getContext("2d")
+
+        var areaChartData = {
+          labels: monthsArr,
+          datasets: [
+            {
+              label: "Digital Goods",
+              backgroundColor: "rgba(60,141,188,0.9)",
+              borderColor: "rgba(60,141,188,0.8)",
+              pointRadius: false,
+              pointColor: "#3b8bba",
+              pointStrokeColor: "rgba(60,141,188,1)",
+              pointHighlightFill: "#fff",
+              pointHighlightStroke: "rgba(60,141,188,1)",
+              data: [28, 48, 40, 19, 86, 27, 90],
+            },
+            {
+              label: "Electronics",
+              backgroundColor: "rgba(210, 214, 222, 1)",
+              borderColor: "rgba(210, 214, 222, 1)",
+              pointRadius: false,
+              pointColor: "rgba(210, 214, 222, 1)",
+              pointStrokeColor: "#c1c7d1",
+              pointHighlightFill: "#fff",
+              pointHighlightStroke: "rgba(220,220,220,1)",
+              data: [65, 59, 80, 81, 56, 55, 40],
+            },
+          ],
+        }
+
+        var areaChartOptions = {
+          maintainAspectRatio: false,
+          responsive: true,
+          legend: {
+            display: false,
+          },
+          scales: {
+            xAxes: [
+              {
+                gridLines: {
+                  display: false,
+                },
+              },
+            ],
+            yAxes: [
+              {
+                gridLines: {
+                  display: false,
+                },
+              },
+            ],
+          },
+        }
+
+        // This will get the first returned node in the jQuery collection.
+        new Chart(areaChartCanvas, {
+          type: "line",
+          data: areaChartData,
+          options: areaChartOptions,
+        })
+
+        //-------------
+        //- LINE CHART -
+        //--------------
+        var lineChartCanvas = $("#lineChart").get(0).getContext("2d")
+        var lineChartOptions = $.extend(true, {}, areaChartOptions)
+        var lineChartData = $.extend(true, {}, areaChartData)
+        lineChartData.datasets[0].fill = false
+        lineChartData.datasets[1].fill = false
+        lineChartOptions.datasetFill = false
+
+        var lineChart = new Chart(lineChartCanvas, {
+          type: "line",
+          data: lineChartData,
+          options: lineChartOptions,
+        })
+
+        //-------------
+        //- DONUT CHART -
+        //-------------
+        // Get context with jQuery - using jQuery's .get() method.
+        var donutChartCanvas = $("#donutChart").get(0).getContext("2d")
+        var donutData = {
+          labels: ["New Orders", "In Progress Orders", "Completed Orders", "Cancelled Orders"],
+          datasets: [
+            {
+              data: [
+                "<%= data.ordersChart.New %>",
+                "<%= data.ordersChart.inProgress %>",
+                "<%= data.ordersChart.completed %>",
+                "<%= data.ordersChart.cancelled %>",
+              ],
+              backgroundColor: ["#17a2b8", "#ffc107", "#28a745", "#dc3545"],
+            },
+          ],
+        }
+        var donutOptions = {
+          maintainAspectRatio: false,
+          responsive: true,
+        }
+        //Create pie or douhnut chart
+        // You can switch between pie and douhnut using the method below.
+        new Chart(donutChartCanvas, {
+          type: "doughnut",
+          data: donutData,
+          options: donutOptions,
+        })
+
+        //-------------
+        //- PIE CHART -
+        //-------------
+        // Get context with jQuery - using jQuery's .get() method.
+        var pieChartCanvas = $("#pieChart").get(0).getContext("2d")
+        var pieData = donutData
+        var pieOptions = {
+          maintainAspectRatio: false,
+          responsive: true,
+        }
+        //Create pie or douhnut chart
+        // You can switch between pie and douhnut using the method below.
+        new Chart(pieChartCanvas, {
+          type: "pie",
+          data: pieData,
+          options: pieOptions,
+        })
+        //---------------------
+        //- STACKED BAR CHART -
+        //---------------------
+        var stackedBarChartCanvas = $("#stackedBarChart").get(0).getContext("2d")
+        var stackedBarChartData = $.extend(true, {}, barChartData)
+
+        var stackedBarChartOptions = {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            xAxes: [
+              {
+                stacked: true,
+              },
+            ],
+            yAxes: [
+              {
+                stacked: true,
+              },
+            ],
+          },
+        }
+
+        new Chart(stackedBarChartCanvas, {
+          type: "bar",
+          data: stackedBarChartData,
+          options: stackedBarChartOptions,
+        })
+      })
+    </script>
+    <script>
+      $(function () {
+        var incomeDetailsChart = {
+          labels: monthsArr,
+          datasets: [
+            {
+              label: "Income per month (SAR)",
+              backgroundColor: "rgba(60,141,188,0.9)",
+              borderColor: "rgba(60,141,188,0.8)",
+              pointRadius: false,
+              pointColor: "#3b8bba",
+              pointStrokeColor: "rgba(60,141,188,1)",
+              pointHighlightFill: "#fff",
+              pointHighlightStroke: "rgba(60,141,188,1)",
+              data: monthsCountArr,
+            },
+          ],
+        }
+        //-------------
+        //- BAR CHART -
+        //-------------
+        var barChartCanvas = $("#incomeDetails").get(0).getContext("2d")
+        var barChartData = $.extend(true, {}, incomeDetailsChart)
+        var temp0 = incomeDetailsChart.datasets[0]
+        barChartData.datasets[0] = temp0
+
+        var barChartOptions = {
+          responsive: true,
+          maintainAspectRatio: false,
+          datasetFill: false,
+        }
+
+        new Chart(barChartCanvas, {
+          type: "bar",
+          data: barChartData,
+          options: barChartOptions,
+        })
+      })
+    </script>
+    <!-- <script src="/js/reports/order.js"></script> -->
+  </body>
+</html>

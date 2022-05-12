@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('../layout/heade.ejs') %>
+  </head>
+  <body class="sidebar-mini layout-fixed text-sm text-sm">
+    <div class="wrapper">
+      <%- include('../layout/nav.ejs') %>
+      <div class="content-wrapper">
+        <div class="content-header">
+          <div class="container-fluid">
+            <div class="row mb-2 align-items-center mt-1">
+              <div class="col-sm-6"></div>
+              <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                  <li class="breadcrumb-item"><a href="/">Home</a></li>
+                  <li class="breadcrumb-item"><a href="/dashboard/tree">Trees</a></li>
+                  <li class="breadcrumb-item active">Edit</li>
+                </ol>
+              </div>
+            </div>
+          </div>
+        </div>
+        <section class="content">
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-md-12">
+                <div class="card card-primary">
+                  <div class="card-header">
+                    <h3 class="card-title">
+                      <i class="fas fa-users"></i>
+                      &nbsp;&nbsp; Tree Details
+                    </h3>
+                  </div>
+                  <form id="newForm">
+                    <div class="card-body">
+                      <div class="form-row mx-3 my-1">
+                        <div class="form-group col-md-6">
+                          <label for="en_name">Name en</label>
+                          <input
+                            readonly
+                            type="text"
+                            id="en_name"
+                            name="en_name"
+                            class="form-control"
+                            placeholder="name en"
+                            value="<%= data.en_name || null %>"
+                          />
+                        </div>
+                        <div class="form-group col-md-6">
+                          <label for="ar_name">Name ar</label>
+                          <input
+                            readonly
+                            type="text"
+                            id="ar_name"
+                            name="ar_name"
+                            class="form-control"
+                            placeholder="name ar"
+                            value="<%= data.ar_name || null %>"
+                          />
+                        </div>
+                      </div>
+                      <div class="form-row mx-3 my-1">
+                        <div class="form-group col-md-6">
+                          <label for="slug_en">Slug en</label>
+                          <input
+                            readonly
+                            type="text"
+                            id="slug_en"
+                            name="slug_en"
+                            class="form-control"
+                            placeholder="slug en"
+                            value="<%= data.slug_en || null %>"
+                          />
+                        </div>
+                        <div class="form-group col-md-6">
+                          <label for="slug_ar">Slug ar</label>
+                          <input
+                            readonly
+                            type="text"
+                            id="slug_ar"
+                            name="slug_ar"
+                            class="form-control"
+                            placeholder="slug ar"
+                            value="<%= data.slug_ar || null %>"
+                          />
+                        </div>
+                      </div>
+                      <div class="form-row mx-3 my-1">
+                        <div class="form-group col-md-6">
+                          <label for="en_description">Description en</label>
+                          <textarea readonly type="text" id="en_description" name="en_description" class="form-control" placeholder="description en" rows="3">
+<%= data.en_description || null %></textarea
+                          >
+                        </div>
+                        <div class="form-group col-md-6">
+                          <label for="ar_description">Description ar</label>
+                          <textarea readonly type="text" id="ar_description" name="ar_description" class="form-control" placeholder="description ar" rows="3">
+<%= data.ar_description || null %></textarea
+                          >
+                        </div>
+                      </div>
+                      <div class="form-row mx-3 my-1">
+                        <div class="form-group col-md-6">
+                          <label for="img_tree">Image</label>
+                        </div>
+                        <div class="form-group col-md-6 d-flex justify-content-center">
+                          <img class="img-fluid mb-3" id="tree_img_display" width="120" height="120" src="/p/img/<%= data.img_tree %>" alt="Photo" />
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+            <div id="accordion" role="tablist">
+              <% data.header.forEach((elem) => { %>
+                <div class="card">
+                  <div class="card-header" role="tab" id="headingOne<%= elem.id %>">
+                    <h5 class="row mb-0">
+                      <a data-toggle="collapse" href="#collapseOne<%= elem.id %>" aria-expanded="false" aria-controls="collapseOne<%= elem.id %>" class="collapsed">
+                        <%= elem.name %>
+                      </a>
+                      <div class="ml-auto">
+                        <a type="button" href="/dashboard/tree/body/new/<%= data.tree_id %>/<%= elem.id %>" class="btn btn-info">Add new</a>
+                      </div>
+                    </h5>
+                  </div>
+                  <div id="collapseOne<%= elem.id %>" class="collapse" role="tabpanel" aria-labelledby="headingOne<%= elem.id %>">
+                    <div class="card-body">
+                      <% if (elem.body.length) { %>
+                        <table class="table">
+                          <thead>
+                            <tr>
+                              <th>#</th>
+                              <th>Title</th>
+                              <th>Value</th>
+                              <th>Icon</th>
+                              <th>Actions</th>
+                            </tr>
+                          </thead>
+                          <% elem.body.forEach((body) => { %>
+                            <tbody>
+                              <td><%= body.id %></td>
+                              <td><%= body.title %></td>
+                              <td><%= body.value %></td>
+                              <td><img class="p-0" width=20 height=20 src="/p/img/<%= body.icon %>" alt="Image"></td>
+                              <td><a class="pr-2" href="/dashboard/tree/body/edit/<%= body.id %>"><i class="fas fa-edit text-primary"></i></a></td>
+                            </tbody>
+                          <% }); %>
+                        </table>
+                      <% } else { %><p class="text-secondary text-center">No tree body found</p><% } %>
+                    </div>
+                  </div>
+                </div>
+              <% }); %>
+            </div>
+          </div>
+        </section>
+      </div>
+      <footer class="main-footer"><%- include('../layout/footer.ejs') %></footer>
+    </div>
+    <%- include('../layout/script.ejs') %>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"
+      integrity="sha512-37T7leoNS06R80c8Ulq7cdCDU5MNQBwlYoy1TX/WUsLFC2eYNqtKlV0QjH7r8JpG/S0GUMZwebnVFLPd6SU5yg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/additional-methods.min.js"
+      integrity="sha512-XZEy8UQ9rngkxQVugAdOuBRDmJ5N4vCuNXCh8KlniZgDKTvf7zl75QBtaVG1lEhMFe2a2DuA22nZYY+qsI2/xA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script src="/js/tree/view.js"></script>
+  </body>
+</html>

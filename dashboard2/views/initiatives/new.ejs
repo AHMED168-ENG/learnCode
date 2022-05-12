@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('../layout/heade.ejs') %>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css"
+      integrity="sha512-nMNlpuaDPrqlEls3IX/Q56H36qvBASwb3ipuo3MxeWbsQB1881ox0cRv7UPTgBlriqoynt35KjEwgGUeUXIPnw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/select2-bootstrap-theme/0.1.0-beta.10/select2-bootstrap.min.css"
+      integrity="sha512-kq3FES+RuuGoBW3a9R2ELYKRywUEQv0wvPTItv3DSGqjpbNtGWVdvT8qwdKkqvPzT93jp8tSF4+oN4IeTEIlQA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+  </head>
+  <body class="sidebar-mini layout-fixed text-sm text-sm">
+    <div class="wrapper">
+      <%- include('../layout/nav.ejs') %>
+      <!-- Content Wrapper. Contains page content -->
+      <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <!-- Content Header (Page header) -->
+        <div class="content-header">
+          <div class="container-fluid">
+            <div class="row mb-2 align-items-center mt-1">
+              <div class="col-sm-6"></div>
+              <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                  <li class="breadcrumb-item"><a href="/">Home</a></li>
+                  <li class="breadcrumb-item"><a href="/dashboard/initiative">Initiatives</a></li>
+                  <li class="breadcrumb-item active">new</li>
+                </ol>
+              </div>
+            </div>
+            <!-- /.row -->
+          </div>
+          <!-- /.container-fluid -->
+        </div>
+        <!-- /.content-header -->
+        <!-- Main content -->
+        <!-- `init_id`, `init_ar_name`, `slug_ar`, `init_en_name`, `slug_en`, `init_ar_description`, `init_en_description`, `from_date`, 
+        `to_date`, `status`, `deleted`, `createdAt`, `updatedAt`, `city_id`, `region_id`, `featured`, `sponsor_id`, `logo` -->
+        <section class="content">
+          <div class="container-fluid">
+            <div class="row">
+              <!-- left column -->
+              <div class="col-md-12">
+                <!-- jquery validation -->
+                <div class="card card-primary">
+                  <div class="card-header">
+                    <h3 class="card-title">
+                      <i class="fas fa-users"></i>
+                      &nbsp;&nbsp; Add new Initiatives
+                    </h3>
+                  </div>
+                  <form id="newForm" action="" onsubmit="">
+                    <div class="card-body">
+                      <div class="form-row mx-3 my-1">
+                        <div class="form-group col-md-6">
+                          <label for="init_ar_name">Name Arabic</label>
+                          <input type="text" id="init_ar_name" name="init_ar_name" class="form-control" placeholder="Name Arabic" />
+                        </div>
+                        <div class="form-group col-md-6">
+                          <label for="init_en_name">Name English</label>
+                          <input type="text" id="init_en_name" name="init_en_name" class="form-control" placeholder="Name English" />
+                        </div>
+                      </div>
+                      <div class="form-row mx-3 my-1">
+                        <div class="form-group col-md-6">
+                          <label for="slug_ar">Slug Ar</label>
+                          <input type="text" id="slug_ar" name="slug_ar" class="form-control" placeholder="slug ar" />
+                        </div>
+                        <div class="form-group col-md-6">
+                          <label for="slug_en">Slug En</label>
+                          <input type="text" id="slug_en" name="slug_en" class="form-control" placeholder="slug en" />
+                        </div>
+                      </div>
+                      <div class="form-row mx-3 my-1">
+                        <div class="form-group col-md-6">
+                          <label for="init_en_description">Description en</label>
+                          <textarea
+                            type="text"
+                            id="init_en_description"
+                            name="init_en_description"
+                            class="form-control"
+                            placeholder="description en"
+                            rows="3"
+                          ></textarea>
+                        </div>
+                        <div class="form-group col-md-6">
+                          <label for="init_ar_description">Description ar</label>
+                          <textarea
+                            type="text"
+                            id="init_ar_description"
+                            name="init_ar_description"
+                            class="form-control"
+                            placeholder="description ar"
+                            rows="3"
+                          ></textarea>
+                        </div>
+                      </div>
+
+                      <div class="form-row mx-3 my-1">
+                        <div class="form-group col-md-6">
+                          <div class="form-group">
+                            <label>City</label>
+                            <select id="city_id" class="form-control select2" style="width: 100%" data-live-search="true">
+                              <% for(let [index,data] of cities.entries() || []){ %>
+                              <option value="<%=data.city_id%>"><%=data.en_name%> - <%=data.ar_name%></option>
+                              <%} %>
+                            </select>
+                          </div>
+                        </div>
+                        <div class="form-group col-md-6">
+                          <div class="form-group">
+                            <label>Region</label>
+                            <select id="region_id" name="region_id" class="form-control select2" style="width: 100%" data-live-search="true"></select>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="form-row mx-3">
+                        <div class="form-group col-md-6">
+                          <div class="form-group">
+                            <label>Sponsor</label>
+                            <select id="sponsor_id" class="form-control select2" style="width: 100%" data-live-search="true">
+                              <% for(let [index,data] of sponsors.entries() || []){ %>
+                              <option value="<%=data.sponser_id%>"><%=data.sponser_name%></option>
+                              <%} %>
+                            </select>
+                          </div>
+                        </div>
+                        <div class="form-group col-md-6">
+                          <label for="featured">Featured</label>
+                          <select id="featured" class="form-control select2" style="width: 100%" data-live-search="true">
+                            <option value="0">No</option>
+                            <option value="1">Yes</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="form-row ml-3">
+                        <div class="form-group col-md-6" style="padding-right: 22px; padding-left: 5px">
+                          <label for="logo">Logo</label>
+                          <div class="custom-file">
+                            <input type="file" class="custom-file-input" id="logo" name="logo" accept="image/x-png" />
+                            <label class="custom-file-label" id="label_logo" for="logo">Choose file</label>
+                          </div>
+                        </div>
+                        <div class="form-group col-md-6" style="padding-right: 22px; padding-left: 5px">
+                          <label for="main_img">Image</label>
+                          <div class="custom-file">
+                            <input type="file" class="custom-file-input" id="main_img" name="main_img" accept="image/x-png" />
+                            <label class="custom-file-label" id="main_img_logo" for="main_img">Choose file</label>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="form-row mx-3 my-1">
+                        <div class="form-group col-md-6">
+                          <label>From - To</label>
+                          <div class="input-group">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text">
+                                <i class="far fa-calendar-alt"></i>
+                              </span>
+                            </div>
+                            <input type="text" class="form-control float-right" id="fromTo" />
+                          </div>
+                          <!-- /.input group -->
+                        </div>
+                        <div class="form-group col-md-6"></div>
+                      </div>
+                    </div>
+                    <!-- /.card-body -->
+                    <div class="card-footer">
+                      <button id="submitAdd" type="submit" class="btn btn-primary has-spinner">Submit</button>
+                    </div>
+                  </form>
+                </div>
+                <!-- /.card -->
+              </div>
+              <!--/.col (left) -->
+            </div>
+            <!-- /.row -->
+          </div>
+          <!-- /.container-fluid -->
+        </section>
+
+        <!-- /.content -->
+      </div>
+      <footer class="main-footer"><%- include('../layout/footer.ejs') %></footer>
+    </div>
+    <%- include('../layout/script.ejs') %>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"
+      integrity="sha512-37T7leoNS06R80c8Ulq7cdCDU5MNQBwlYoy1TX/WUsLFC2eYNqtKlV0QjH7r8JpG/S0GUMZwebnVFLPd6SU5yg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/additional-methods.min.js"
+      integrity="sha512-XZEy8UQ9rngkxQVugAdOuBRDmJ5N4vCuNXCh8KlniZgDKTvf7zl75QBtaVG1lEhMFe2a2DuA22nZYY+qsI2/xA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.full.min.js"
+      integrity="sha512-RtZU3AyMVArmHLiW0suEZ9McadTdegwbgtiQl5Qqo9kunkVg1ofwueXD8/8wv3Af8jkME3DDe3yLfR8HSJfT2g=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    <script>
+      var from = moment().format()
+      var to = moment().format()
+      $(function () {
+        $("#fromTo").daterangepicker(
+          {
+            locale: {
+              format: "YYYY-MM-DD",
+            },
+            dateFormat: "YYYY-MM-DD",
+            opens: "left",
+          },
+          function (start, end, label) {
+            from = start.format("YYYY-MM-DD")
+            to = end.format("YYYY-MM-DD")
+          }
+        )
+      })
+    </script>
+    <script src="/js/initiatives/new.js"></script>
+  </body>
+</html>

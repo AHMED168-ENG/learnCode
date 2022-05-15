@@ -3,7 +3,7 @@ import httpStatus from "http-status"
 import initiatives from "../../models/initiative.model"
 import sequelize from "sequelize"
 import initiativesImg from "../../models/initiativeImg.model"
-import {CityController} from "./city.controller"
+// import {CityController} from "./destination.controller"
 import {SponserController} from "./sponser.controller"
 import helpers from "../../helper/helpers"
 import path from "path"
@@ -180,24 +180,24 @@ export class InitiativeController {
   }
 
   async newPage(req: Request, res: Response, next: NextFunction) {
-    const cities = await new CityController().listCity()
+    // const cities = await new CityController().listCity()
     const sponsors = await new SponserController().listSponser()
     res.render("dashboard/views/initiatives/new.ejs", {
       title: "Initiatives new",
-      cities,
+      // cities,
       sponsors,
     })
   }
 
   async editPage(req: Request, res: Response, next: NextFunction) {
     const id = req.params.id
-    const cities = await new CityController().listCity()
+    // const cities = await new CityController().listCity()
     const sponsors = await new SponserController().listSponser()
     initiatives.findOne({where: {init_id: id}, raw: true}).then((data) => {
       res.render("dashboard/views/initiatives/edit.ejs", {
         title: "Initiative edit",
         data: data,
-        cities,
+        // cities,
         sponsors,
       })
     })

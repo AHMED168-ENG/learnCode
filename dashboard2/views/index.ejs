@@ -31,13 +31,243 @@
         </div>
         <!-- /.content-header -->
         <!-- Main content -->
-        <section class="content w-75 m-5">
-          <div class="row d-flex justify-content-between">
-            <h4 class="text-info">Destinations</h4>
-            <a href="#">See More Details ...</a>
-          </div>
+        <section class="content">
           <div class="row">
-            <div id="carouselDestinations" class="carousel slide" data-ride="carousel">
+            <div class="col-12 col-sm-6 col-md-2" id="destinationsdiv">
+              <div class="info-box mb-3">
+                <span class="info-box-icon bg-danger elevation-1">
+                  <i class="nav-icon fas fa-map-marked"></i>
+                </span>
+                <div class="info-box-content">
+                  <span class="info-box-text">Destinations</span>
+                  <a href="/dashboard/destinations">
+                    <!-- <span class="info-box-number"><%= data.totalDestinations?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") %></span> -->
+                    <span class="info-box-number">10</span>
+                  </a>
+                </div>
+                <!-- /.info-box-content -->
+              </div>
+              <!-- /.info-box -->
+            </div>
+            <div class="clearfix hidden-md-up"></div>
+            <div class="col-12 col-sm-6 col-md-2" id="eventsdiv">
+              <div class="info-box mb-3">
+                <span class="info-box-icon bg-success elevation-1">
+                  <i class="nav-icon far fa-circle"></i>
+                </span>
+                <div class="info-box-content">
+                  <span class="info-box-text">Events</span>
+                  <a href="/dashboard/initiative"><span class="info-box-number">5</span></a>
+                  <!-- <a href="/dashboard/initiative"><span class="info-box-number"><%= data.totalInitiatives?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") %></span></a> -->
+                </div>
+                <!-- /.info-box-content -->
+              </div>
+              <!-- /.info-box -->
+            </div>
+            <div class="col-12 col-sm-6 col-md-2" id="activitiesdiv">
+              <div class="info-box mb-3">
+                <span class="info-box-icon bg-primary elevation-1">
+                  <i class="nav-icon far fa-circle"></i>
+                </span>
+                <div class="info-box-content">
+                  <span class="info-box-text">Activities</span>
+                  <a href="/dashboard/initiative"><span class="info-box-number">8</span></a>
+                  <!-- <a href="/dashboard/initiative"><span class="info-box-number"><%= data.totalInitiatives?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") %></span></a> -->
+                </div>
+                <!-- /.info-box-content -->
+              </div>
+              <!-- /.info-box -->
+            </div>
+            <div class="col-12 col-sm-6 col-md-2" id="tourGuidesdiv">
+              <div class="info-box mb-3">
+                <span class="info-box-icon bg-secondary elevation-1">
+                  <i class="nav-icon fas fa-users"></i>
+                </span>
+                <div class="info-box-content">
+                  <span class="info-box-text">Tour Guides</span>
+                  <a href="/dashboard/initiative"><span class="info-box-number">7</span></a>
+                  <!-- <a href="/dashboard/initiative"><span class="info-box-number"><%= data.totalInitiatives?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") %></span></a> -->
+                </div>
+                <!-- /.info-box-content -->
+              </div>
+              <!-- /.info-box -->
+            </div>
+            <div class="col-12 col-sm-6 col-md-2" id="providersdiv">
+              <div class="info-box mb-3">
+                <span class="info-box-icon bg-warning elevation-1">
+                  <i class="nav-icon fas fa-user"></i>
+                </span>
+                <div class="info-box-content">
+                  <span class="info-box-text">Providers</span>
+                  <a href="/dashboard/initiative"><span class="info-box-number">5</span></a>
+                  <!-- <a href="/dashboard/initiative"><span class="info-box-number"><%= data.totalInitiatives?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") %></span></a> -->
+                </div>
+                <!-- /.info-box-content -->
+              </div>
+              <!-- /.info-box -->
+            </div>
+            <div class="col-12 col-sm-6 col-md-2" id="storesdiv">
+              <div class="info-box mb-3">
+                <span class="info-box-icon bg-info elevation-1">
+                  <i class="nav-icon fas fa-store"></i>
+                  <!-- <i class="nav-icon fas fa-user"></i> -->
+                </span>
+                <div class="info-box-content">
+                  <span class="info-box-text">Stores</span>
+                  <a href="/dashboard/initiative"><span class="info-box-number">5</span></a>
+                  <!-- <a href="/dashboard/initiative"><span class="info-box-number"><%= data.totalInitiatives?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") %></span></a> -->
+                </div>
+                <!-- /.info-box-content -->
+              </div>
+              <!-- /.info-box -->
+            </div>
+            <div class="col-12 col-sm-6 col-md-2" id="tripsdiv">
+              <div class="info-box mb-3">
+                <span class="info-box-icon bg-dark elevation-1">
+                  <i class="nav-icon fas fa-campground"></i>
+                  <!-- <i class="nav-icon fas fa-user"></i> -->
+                </span>
+                <div class="info-box-content">
+                  <span class="info-box-text">Trips</span>
+                  <a href="/dashboard/initiative"><span class="info-box-number">15</span></a>
+                  <!-- <a href="/dashboard/initiative"><span class="info-box-number"><%= data.totalInitiatives?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") %></span></a> -->
+                </div>
+                <!-- /.info-box-content -->
+              </div>
+              <!-- /.info-box -->
+            </div>
+            <div class="col-12 col-sm-6 col-md-2" id="membershipsdiv">
+              <div class="info-box mb-3">
+                <span class="info-box-icon bg-info elevation-1">
+                  <i class="nav-icon fas fa-users"></i>
+                  <!-- <i class="nav-icon fas fa-user"></i> -->
+                </span>
+                <div class="info-box-content">
+                  <span class="info-box-text">Memberships</span>
+                  <a href="/dashboard/initiative"><span class="info-box-number">40</span></a>
+                  <!-- <a href="/dashboard/initiative"><span class="info-box-number"><%= data.totalInitiatives?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") %></span></a> -->
+                </div>
+                <!-- /.info-box-content -->
+              </div>
+              <!-- /.info-box -->
+            </div>
+            <div class="col-12 col-sm-6 col-md-2" id="hotelsdiv">
+              <div class="info-box mb-3">
+                <span class="info-box-icon bg-warning elevation-1">
+                  <i class="nav-icon fas fa-hotel"></i>
+                  <!-- <i class="nav-icon fas fa-user"></i> -->
+                </span>
+                <div class="info-box-content">
+                  <span class="info-box-text">Hotels</span>
+                  <a href="/dashboard/initiative"><span class="info-box-number">12</span></a>
+                  <!-- <a href="/dashboard/initiative"><span class="info-box-number"><%= data.totalInitiatives?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") %></span></a> -->
+                </div>
+                <!-- /.info-box-content -->
+              </div>
+              <!-- /.info-box -->
+            </div>
+            <div class="col-12 col-sm-6 col-md-2" id="restaurantsdiv">
+              <div class="info-box mb-3">
+                <span class="info-box-icon bg-danger elevation-1">
+                  <i class="nav-icon fas fa-store"></i>
+                  <!-- <i class="nav-icon fas fa-user"></i> -->
+                </span>
+                <div class="info-box-content">
+                  <span class="info-box-text">Restaurants</span>
+                  <a href="/dashboard/initiative"><span class="info-box-number">20</span></a>
+                  <!-- <a href="/dashboard/initiative"><span class="info-box-number"><%= data.totalInitiatives?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") %></span></a> -->
+                </div>
+                <!-- /.info-box-content -->
+              </div>
+              <!-- /.info-box -->
+            </div>
+            <div class="col-12 col-sm-6 col-md-2" id="adsdiv">
+              <div class="info-box mb-3">
+                <span class="info-box-icon bg-success elevation-1">
+                  <i class="nav-icon far fa-circle"></i>
+                  <!-- <i class="nav-icon fas fa-user"></i> -->
+                </span>
+                <div class="info-box-content">
+                  <span class="info-box-text">Advertisments</span>
+                  <a href="/dashboard/initiative"><span class="info-box-number">50</span></a>
+                  <!-- <a href="/dashboard/initiative"><span class="info-box-number"><%= data.totalInitiatives?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") %></span></a> -->
+                </div>
+                <!-- /.info-box-content -->
+              </div>
+              <!-- /.info-box -->
+            </div>
+            <div class="col-12 col-sm-6 col-md-2" id="placesdiv">
+              <div class="info-box mb-3">
+                <span class="info-box-icon bg-secondary elevation-1">
+                  <i class="nav-icon fas fa-map"></i>
+                  <!-- <i class="nav-icon fas fa-user"></i> -->
+                </span>
+                <div class="info-box-content">
+                  <span class="info-box-text">Attractive Places</span>
+                  <a href="/dashboard/initiative"><span class="info-box-number">6</span></a>
+                  <!-- <a href="/dashboard/initiative"><span class="info-box-number"><%= data.totalInitiatives?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") %></span></a> -->
+                </div>
+                <!-- /.info-box-content -->
+              </div>
+              <!-- /.info-box -->
+            </div>
+            <div class="col-lg-4 col-6" id="ticketsdiv">
+              <!-- small box -->
+              <div class="small-box bg-success">
+                <div class="inner">
+                  <!-- <h3><%= data.totalUsers?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") %></h3> -->
+                  <h3>15</h3>
+                  <p>Tickets & Orders</p>
+                </div>
+                <div class="icon">
+                  <i class="ion ion-cash"></i>
+                </div>
+                <a href="/dashboard/user" class="small-box-footer">
+                  More info
+                  <i class="fas fa-arrow-circle-right"></i>
+                </a>
+              </div>
+            </div>
+            <div class="col-lg-4 col-6" id="packagesdiv">
+              <!-- small box -->
+              <div class="small-box bg-primary">
+                <div class="inner">
+                  <!-- <h3><%= data.totalUsers?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") %></h3> -->
+                  <h3>12</h3>
+                  <p>Packages</p>
+                </div>
+                <div class="icon">
+                  <i class="ion ion-stats-bars"></i>
+                </div>
+                <a href="/dashboard/user" class="small-box-footer">
+                  More info
+                  <i class="fas fa-arrow-circle-right"></i>
+                </a>
+              </div>
+            </div>
+            <div class="col-lg-4 col-6" id="totalIncomediv">
+              <!-- small box -->
+              <div class="small-box bg-danger">
+                <div class="inner">
+                  <!-- <h3><%= data.totalUsers?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") %></h3> -->
+                  <h3>54,680 SAR</h3>
+                  <p>Total Income</p>
+                </div>
+                <div class="icon">
+                  <i class="ion ion-stats-bars"></i>
+                </div>
+                <a href="/dashboard/user" class="small-box-footer">
+                  More info
+                  <i class="fas fa-arrow-circle-right"></i>
+                </a>
+              </div>
+            </div>
+            <div id="carouselDestinations" class="carousel slide ml-5 mr-5" data-ride="carousel">
+              <div class="d-flex justify-content-between">
+                <h4 class="text-info">Destinations</h4>
+                <a href="#">See More Details ...</a>
+              </div>
+              
               <div class="carousel-inner rounded" role="listbox">
                 <div class="carousel-item active">
                   <img class="d-block" src="data:image/jpeg;base64,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" alt="900x400" data-holder-rendered="true" style="width: 1000px; height: 300px;">
@@ -63,7 +293,7 @@
             </div>
           </div>
         </section>
-        <section class="content w-75 m-5">
+        <section class="content m-5">
           <div class="row d-flex justify-content-between">
             <h4 class="text-info">Popular Events</h4>
             <a href="#">See More Details ...</a>
@@ -92,7 +322,7 @@
             </div>
           </div>
         </section>
-        <section class="content w-75 m-5">
+        <section class="content m-5">
           <div class="row d-flex justify-content-between">
             <h4 class="text-info"> Popular Activities</h4>
             <a href="#">See More Details ...</a>
@@ -121,7 +351,7 @@
             </div>
           </div>
         </section>
-        <section class="content w-75 m-5">
+        <section class="content m-5">
           <div class="row d-flex justify-content-between">
             <h4 class="text-info">Popular Trips</h4>
             <a href="#">See More Details ...</a>
@@ -147,7 +377,7 @@
             </div>
           </div>
         </section>
-        <section class="content w-75 m-5">
+        <section class="content m-5">
           <div class="row d-flex justify-content-between">
             <h4 class="text-info">Memberships</h4>
             <a href="#">See More Details ...</a>
@@ -173,7 +403,7 @@
             </div>
           </div>
         </section>
-        <section class="content w-75 m-5">
+        <section class="content m-5">
           <div class="row d-flex justify-content-between">
             <h4 class="text-info">Stores</h4>
             <a href="#">See More Details ...</a>
@@ -199,7 +429,7 @@
             </div>
           </div>
         </section>
-        <section class="content w-75 m-5">
+        <section class="content m-5">
           <div class="row d-flex justify-content-between">
             <h4 class="text-info">Tourist Guides</h4>
             <a href="#">See More Details ...</a>

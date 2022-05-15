@@ -4,7 +4,7 @@ import {AdminRoutes} from "./dashboard2/admin.route"
 import {InitiativeRoutes} from "./dashboard2/initiative.route"
 import {SponserRoutes} from "./dashboard2/sponser.route"
 import {CountryRoutes} from "./dashboard2/country.route"
-import {CityRoutes} from "./dashboard2/city.route"
+import {DestinationRoutes} from "./dashboard2/destination.route"
 import {RegionRoutes} from "./dashboard2/region.route"
 import {SectorRoutes} from "./dashboard2/sector.route"
 import {UserRoutes} from "./dashboard2/user.route"
@@ -43,7 +43,7 @@ export = (app: express.Application) => {
   // Country route
   app.use("/dashboard2/country", new CountryRoutes().router)
   // City route
-  app.use("/dashboard2/city", new CityRoutes().router)
+  app.use("/dashboard2/destination", new DestinationRoutes().router)
   // Region route
   app.use("/dashboard2/region", new RegionRoutes().router)
   // Sector route

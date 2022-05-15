@@ -16,7 +16,7 @@ import sponser from "../../models/sponser.model"
 import initiativeLocations from "../../models/initiative-location.model"
 import initiativeTrees from "../../models/initiative-trees.model"
 import trees from "../../models/trees.model"
-import {CityController} from "./city.controller"
+// import {CityController} from "./destination.controller"
 const seq = new Sequelize(...config.database)
 
 export class ReportController {
@@ -73,12 +73,12 @@ export class ReportController {
   }
   async treeReportPage(req: Request, res: Response, next: NextFunction) {
     const treeChart = (await new ReportController().treeChart()) || []
-    const cities = (await new CityController().listCity()) || []
+    // const cities = (await new CityController().listCity()) || []
 
     res.render("dashboard/views/reports/location-trees.ejs", {
       title: "Tree report",
       data: {initiativesChart: treeChart},
-      cities,
+      // cities,
     })
   }
   async salesReportPage(req: Request, res: Response, next: NextFunction) {

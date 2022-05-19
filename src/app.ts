@@ -51,6 +51,7 @@ export class IndexApp {
   private templateEngine(): void {
     this.app.use("/css", express.static(path.join(__dirname, "../dashboard/public/css")))
     this.app.use("/js", express.static(path.join(__dirname, "../dashboard/public/js")))
+    this.app.use("/dashboard2/js", express.static(path.join(__dirname, "../dashboard2/public/js")))
     this.app.use("/img", express.static(path.join(__dirname, "../dashboard/public/img")))
     // Setting the root path for views directory
     this.app.set("views", path.join(__dirname, "../"))

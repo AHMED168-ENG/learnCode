@@ -5,6 +5,7 @@ import modules from "../../models/module.model";
 import page from "../../models/page.model";
 import permissions from "../../models/permissions.model";
 import role from "../../models/user-roles.model";
+const { verify } = require("../../helper/token");
 export class UserPermissionsController {
   constructor() {}
   public async listPermissions(req: Request, res: Response, next: NextFunction): Promise<any> {
@@ -42,6 +43,25 @@ export class UserPermissionsController {
     } catch (error) {
       console.log(error)
       return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ error, messgae: "Can't edit permissions" });
+    }
+  }
+  public async getUserPermissions(token: string, moduleName: string) {
+    try {
+      const payload = verify(token);
+      const isHighestAdmin = payload.role_id === "0";
+      let userPermissions, canEdit = true, canAdd = true;
+      if (!isHighestAdmin) {
+        userPermissions = await permissions.findAll({
+          where: { role_id: payload.role_id },
+          attributes: { exclude: ["role_id", "page_id", "createdAt", "updatedAt"] },
+          include: [{ model: page, attributes: ["type"], include: [{ model: modules, attributes: ["name"] }] }],
+        });
+        canEdit = !!userPermissions.filter((per) => per["tbl_page"]["type"] === "Edit" && per["tbl_page"]["tbl_module"]["name"] === moduleName).length;
+        canAdd = !!userPermissions.filter((per) => per["tbl_page"]["type"] === "Add" && per["tbl_page"]["tbl_module"]["name"] === moduleName).length;
+      }
+      return { canAdd, canEdit };
+    } catch (error) {
+      throw error;
     }
   }
 }

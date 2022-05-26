@@ -7,6 +7,7 @@ import guide from "../../models/guide.model";
 import { CityController } from "../dashboard/city.controller";
 import bcrypt from "bcrypt";
 import { UserPermissionsController } from "../dashboard/user-permissions.controller";
+import { ModulesController } from "../dashboard/modules.controller";
 export class TourGuideController {
   public listPage(req: Request, res: Response, next: NextFunction) {
     return res.render("dashboard2/views/guide/list.ejs", { title: "Tour Guide" });
@@ -23,7 +24,8 @@ export class TourGuideController {
       }) || [];
       const countGuides = await guide.count() || 0;
       const permissions = await new UserPermissionsController().getUserPermissions(req.cookies.token, "Tourist Guide Management");
-      const dataInti = { total: countGuides, limit, page: Number(req.query.page), pages: Math.ceil(countGuides / limit) + 1, data: tourGuides, canAdd: permissions.canAdd, canEdit: permissions.canEdit };
+      const module_id = await new ModulesController().getModuleIdByName("Tourist Guide Management");
+      const dataInti = { total: countGuides, limit, page: Number(req.query.page), pages: Math.ceil(countGuides / limit) + 1, data: tourGuides, canAdd: permissions.canAdd, canEdit: permissions.canEdit, module_id };
       return res.status(httpStatus.OK).json(dataInti);
     } catch (error) {
       console.log(error)
@@ -39,7 +41,8 @@ export class TourGuideController {
         include: [{ model: city, attributes: ["ar_name", "en_name"] }],
         raw: true,
       });
-      return res.render("dashboard2/views/guide/view.ejs", { title: "View Tour Guide Details", data });
+      const module_id = await new ModulesController().getModuleIdByName("Tourist Guide Management");
+      return res.render("dashboard2/views/guide/view.ejs", { title: "View Tour Guide Details", data, module_id });
     } catch (error) {
       return res.status(500).json({ msg: "Error in get tour guide data in view page", err: "unexpected error" });
     }
@@ -87,7 +90,8 @@ export class TourGuideController {
       if (!req.params.id) return res.status(404).json({ msg: "Error in getting tour guide", err: "unexpected error" });
       const data = await guide.findOne({ where: { id: req.params.id }, attributes: { exclude: ["createdAt", "updatedAt"] }, raw: true });
       const cities = await new CityController().listCity();
-      return res.render("dashboard2/views/guide/edit.ejs", { title: "Edit Tour Guide", data, cities });
+      const module_id = await new ModulesController().getModuleIdByName("Tourist Guide Management");
+      return res.render("dashboard2/views/guide/edit.ejs", { title: "Edit Tour Guide", data, cities, module_id });
     } catch (error) {
       return res.status(500).json({ msg: "Error in get tour guide data in edit page", err: "unexpected error" });
     }

@@ -4,6 +4,7 @@ import path from "path";
 import helpers from "../../helper/helpers";
 import destination from "../../models/destination.model";
 import provider from "../../models/provider.model";
+import { ModulesController } from "../dashboard/modules.controller";
 import { UserPermissionsController } from "../dashboard/user-permissions.controller";
 import { DestinationController } from "./destination.controller";
 export class ProviderController {
@@ -25,7 +26,8 @@ export class ProviderController {
       }) || [];
       const countProviders = await provider.count() || 0;
       const permissions = await new UserPermissionsController().getUserPermissions(req.cookies.token, "Providers Management");
-      const dataInti = { total: countProviders, limit, page: Number(req.query.page), pages: Math.ceil(countProviders / limit) + 1, data: providers, canAdd: permissions.canAdd, canEdit: permissions.canEdit };
+      const module_id = await new ModulesController().getModuleIdByName("Providers Management");
+      const dataInti = { total: countProviders, limit, page: Number(req.query.page), pages: Math.ceil(countProviders / limit) + 1, data: providers, canAdd: permissions.canAdd, canEdit: permissions.canEdit, module_id };
       return res.status(httpStatus.OK).json(dataInti);
     } catch (error) {
       return res.status(httpStatus.NOT_FOUND).json({ err: "There is something wrong while getting providers list", msg: "Internal Server Error" });
@@ -40,7 +42,8 @@ export class ProviderController {
         include: [{ model: destination, attributes: ["ar_title", "en_title"] }],
         raw: true,
       });
-      return res.render("dashboard2/views/provider/view.ejs", { title: "View provider Details", data });
+      const module_id = await new ModulesController().getModuleIdByName("Providers Management");
+      return res.render("dashboard2/views/provider/view.ejs", { title: "View provider Details", data, module_id });
     } catch (error) {
       return res.status(500).json({ msg: "Error in get provider data in view page", err: "unexpected error" });
     }
@@ -79,7 +82,8 @@ export class ProviderController {
       if (!req.params.id) return res.status(404).json({ msg: "Error in getting provider", err: "unexpected error" });
       const destinations = await new DestinationController().getAllDestinations();
       const data = await provider.findOne({ where: { id: req.params.id }, attributes: { exclude: ["createdAt", "updatedAt"] }, raw: true });
-      return res.render("dashboard2/views/provider/edit.ejs", { title: "Edit provider", data, destinations });
+      const module_id = await new ModulesController().getModuleIdByName("Providers Management");
+      return res.render("dashboard2/views/provider/edit.ejs", { title: "Edit provider", data, destinations, module_id });
     } catch (error) {
       return res.status(500).json({ msg: "Error in get provider data in edit page", err: "unexpected error" });
     }
@@ -104,6 +108,13 @@ export class ProviderController {
       return res.status(httpStatus.OK).json({ msg: "provider edited" });
     } catch (error) {
       return res.status(httpStatus.BAD_REQUEST).json({msg: "Error in Edit provider", err: "unexpected error" });
+    }
+  }
+  public async getAllProviders() {
+    try {
+      return await provider.findAll({ attributes: ["id", "ar_name", "en_name"] });
+    } catch (error) {
+      throw error;
     }
   }
 }

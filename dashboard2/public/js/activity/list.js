@@ -31,6 +31,10 @@ function getList(page) {
                 <td><img class="rounded-circle p-0" width=45 height=45 src="/p/img/${elem.image}" alt="Image"></td>
                 <td><span class="badge badge-${placeStatusColor}">${elem.status}</span></td>
                 <td>
+                   <a class="m-1" data-tooltip="View More Images" href="/dashboard2/media/${res.module_id}/image/${elem.id}">View More Images</a>
+                   <a class="m-1" data-tooltip="View More Videos" href="/dashboard2/media/${res.module_id}/video/${elem.id}">View More Videos</a>
+                </td>
+                <td>
                     <a class="m-1" data-tooltip="View Activity" href="/dashboard2/activity/view/${elem.id}"><i class="fas fa-eye"></i></a>
                     <a class="m-1" href="/dashboard2/activity/edit/${elem.id}"><i class="fas fa-edit text-primary"></i></a>
                     ${elem.status == "active" ? `<i class="m-1 fas fa-exclamation-triangle text-secondary" onclick='active(${elem.id},"deactive")'></i>` : `<i class="m-1 fas fa-exclamation-triangle text-success" onclick='active(${elem.id},"active")'></i>`}</td>
@@ -47,6 +51,10 @@ function getList(page) {
                 <td>${elem.tbl_activity_category.en_name} - ${elem.tbl_activity_category.ar_name}</td>
                 <td><img class="rounded-circle p-0" width=45 height=45 src="/p/img/${elem.logo}" alt="Logo"></td>
                 <td><span class="badge badge-${placeStatusColor}">${elem.status}</span></td>
+                <td>
+                   <a class="m-1" data-tooltip="View More Images" href="/dashboard2/media/${res.module_id}/image/${elem.id}">View More Images</a>
+                   <a class="m-1" data-tooltip="View More Videos" href="/dashboard2/media/${res.module_id}/video/${elem.id}">View More Videos</a>
+                </td>
                 <td>
                     <a class="m-1" data-tooltip="View Activity" href="/dashboard2/activity/view/${elem.id}"><i class="fas fa-eye"></i></a></td>
                 </tr>`)

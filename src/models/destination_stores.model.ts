@@ -15,20 +15,6 @@ const destinationStore = sequelize.define(
       defaultValue: null,
       validate: { isInt: { msg: "Invalid destination id. It should be an integer" } },
     },
-    location_lat: {
-      type: DataTypes.DECIMAL(11, 8),
-      allowNull: true,
-      defaultValue: null,
-      validate: { isDecimal: { msg: "The give latitude is not a valid decimal number" } },
-    },
-    location_long: {
-      type: DataTypes.DECIMAL(11, 8),
-      allowNull: true,
-      defaultValue: null,
-      validate: { isDecimal: { msg: "The give latitude is not a valid decimal number" } },
-    },
-    email: { type: DataTypes.STRING, allowNull: true, defaultValue: null, unique: true, validate: { isEmail: { msg: "Invalid email format" } } },
-    phone: { type: DataTypes.STRING(25), allowNull: true, defaultValue: null, unique: true, validate: { len: { args: [0, 25], msg: "Phone numbers can not exceed 25 characters in length" } } },
     ar_description: { type: DataTypes.STRING(500), allowNull: true, defaultValue: null },
     en_description: { type: DataTypes.STRING(500), allowNull: true, defaultValue: null },
     status: {

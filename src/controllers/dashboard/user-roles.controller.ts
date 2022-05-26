@@ -88,4 +88,11 @@ export class UserRolesController {
         res.status(httpStatus.BAD_REQUEST).json({msg: "Error in edit user roles", err: "unexpected error"})
       })
   }
+  public async getRoles() {
+    try {
+      return await role.findAll({ attributes: { exclude: ["createdAt", "updatedAt"] } }) || [];
+    } catch (error) {
+      throw error;
+    }
+  }
 }

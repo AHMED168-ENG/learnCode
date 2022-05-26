@@ -12,10 +12,6 @@ $(function () {
             en_name: { required: true },
             logo: { required: true, accept: "image/png" },
             destination_id: { required: true },
-            location_lat: { required: true },
-            location_long: { required: true },
-            email: { required: true },
-            phone: { required: true },
             ar_description: { required: false },
             en_description: { required: false },
         },
@@ -24,10 +20,6 @@ $(function () {
             en_name: "Please enter a english name",
             logo: "Please enter a logo",
             destination_id: "Please enter a destination",
-            location_lat: "Please enter a latitude",
-            location_long: "Please enter a longitude",
-            email: "Please enter a email",
-            phone: "Please enter a phone",
         },
         errorElement: 'span',
         errorPlacement: function (error, element) {
@@ -49,10 +41,6 @@ const addNew = () => {
     formData.append("en_name", $("#en_name").val());
     formData.append("destination_id", $("#destination_id").val());
     formData.append("en_description", $("#en_description").val());
-    formData.append("email", $("#email").val());
-    formData.append("phone", $("#phone").val());
-    formData.append("location_lat", $("#location_lat").val());
-    formData.append("location_long", $("#location_long").val());
     formData.append("logo", $("#logo")[0].files[0]);
     $.ajax({
         url: `${window.location.pathname}`,

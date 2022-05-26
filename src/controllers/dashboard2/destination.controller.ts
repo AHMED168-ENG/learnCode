@@ -3,6 +3,7 @@ import httpStatus from "http-status";
 import path from "path";
 import helpers from "../../helper/helpers";
 import destination from "../../models/destination.model";
+import { ModulesController } from "../dashboard/modules.controller";
 import { UserPermissionsController } from "../dashboard/user-permissions.controller";
 export class DestinationController {
   constructor() {}
@@ -16,7 +17,8 @@ export class DestinationController {
       const destinations = await destination.findAll({ limit, offset, attributes: ["id", "en_title", "ar_title", "image"] }) || [];
       const countDestinations = await destination.count() || 0;
       const permissions = await new UserPermissionsController().getUserPermissions(req.cookies.token, "Destinations Management");
-      const dataInti = { total: countDestinations, limit, page: Number(req.query.page), pages: Math.ceil(countDestinations / limit) + 1, data: destinations, canAdd: permissions.canAdd, canEdit: permissions.canEdit };
+      const module_id = await new ModulesController().getModuleIdByName("Destinations Management");
+      const dataInti = { total: countDestinations, limit, page: Number(req.query.page), pages: Math.ceil(countDestinations / limit) + 1, data: destinations, canAdd: permissions.canAdd, canEdit: permissions.canEdit, module_id };
       return res.status(httpStatus.OK).json(dataInti);
     } catch (error) {
       return res.status(httpStatus.NOT_FOUND).json({ err: "There is something wrong while getting destinations list", msg: "Internal Server Error" });
@@ -26,7 +28,8 @@ export class DestinationController {
     try {
       if (!req.params.id) return res.status(404).json({ msg: "Error in getting destination", err: "unexpected error" });
       const data = await destination.findOne({ where: { id: req.params.id }, attributes: { exclude: ["createdAt", "updatedAt"] }, raw: true });
-      return res.render("dashboard2/views/destinations/view.ejs", { title: "View Destination Details", data });
+      const module_id = await new ModulesController().getModuleIdByName("Destinations Management");
+      return res.render("dashboard2/views/destinations/view.ejs", { title: "View Destination Details", data, module_id });
     } catch (error) {
       return res.status(500).json({ msg: "Error in get destination data in view page", err: "unexpected error" });
     }
@@ -63,7 +66,8 @@ export class DestinationController {
     try {
       if (!req.params.id) return res.status(404).json({ msg: "Error in getting destination", err: "unexpected error" });
       const data = await destination.findOne({ where: { id: req.params.id }, attributes: { exclude: ["createdAt", "updatedAt"] }, raw: true });
-      return res.render("dashboard2/views/destinations/edit.ejs", { title: "Edit Destination", data });
+      const module_id = await new ModulesController().getModuleIdByName("Destinations Management");
+      return res.render("dashboard2/views/destinations/edit.ejs", { title: "Edit Destination", data, module_id });
     } catch (error) {
       return res.status(500).json({ msg: "Error in get destination data in edit page", err: "unexpected error" });
     }

@@ -4,6 +4,7 @@ import path from "path";
 import helpers from "../../helper/helpers";
 import destination from "../../models/destination.model";
 import destinationStore from "../../models/destination_stores.model";
+import { ModulesController } from "../dashboard/modules.controller";
 import { UserPermissionsController } from "../dashboard/user-permissions.controller";
 import { DestinationController } from "./destination.controller";
 export class DestinationStoreController {
@@ -23,7 +24,8 @@ export class DestinationStoreController {
       }) || [];
       const countStores = await destinationStore.count() || 0;
       const permissions = await new UserPermissionsController().getUserPermissions(req.cookies.token, "Destinations Stores Management");
-      const dataInti = { total: countStores, limit, page: Number(req.query.page), pages: Math.ceil(countStores / limit) + 1, data: stores, canAdd: permissions.canAdd, canEdit: permissions.canEdit };
+      const module_id = await new ModulesController().getModuleIdByName("Destinations Stores Management");
+      const dataInti = { total: countStores, limit, page: Number(req.query.page), pages: Math.ceil(countStores / limit) + 1, data: stores, canAdd: permissions.canAdd, canEdit: permissions.canEdit, module_id };
       return res.status(httpStatus.OK).json(dataInti);
     } catch (error) {
       return res.status(httpStatus.NOT_FOUND).json({ err: "There is something wrong while getting stores list", msg: "Internal Server Error" });
@@ -38,7 +40,8 @@ export class DestinationStoreController {
         include: [{ model: destination, attributes: ["ar_title", "en_title"] }],
         raw: true,
       });
-      return res.render("dashboard2/views/destination-stores/view.ejs", { title: "View Destination store Details", data });
+      const module_id = await new ModulesController().getModuleIdByName("Destinations Stores Management");
+      return res.render("dashboard2/views/destination-stores/view.ejs", { title: "View Destination store Details", data, module_id });
     } catch (error) {
       return res.status(500).json({ msg: "Error in get destination store data in view page", err: "unexpected error" });
     }
@@ -77,7 +80,8 @@ export class DestinationStoreController {
       if (!req.params.id) return res.status(404).json({ msg: "Error in getting destination store", err: "unexpected error" });
       const destinations = await new DestinationController().getAllDestinations();
       const data = await destinationStore.findOne({ where: { id: req.params.id }, attributes: { exclude: ["createdAt", "updatedAt"] }, raw: true });
-      return res.render("dashboard2/views/destination-stores/edit.ejs", { title: "Edit Destination store", data, destinations });
+      const module_id = await new ModulesController().getModuleIdByName("Destinations Stores Management");
+      return res.render("dashboard2/views/destination-stores/edit.ejs", { title: "Edit Destination store", data, destinations, module_id });
     } catch (error) {
       return res.status(500).json({ msg: "Error in get destination store data in edit page", err: "unexpected error" });
     }
@@ -97,7 +101,6 @@ export class DestinationStoreController {
         }
         const fileDir: string = `destinations/stores/${req.params.id}/`
         const set = { logo: `${fileDir}${imgName}` || fileDir + foundDestinationStore["logo"] };
-        console.log(set)
         const updatedDestWithImages = await destinationStore.update(set, { where: { id: req.params.id }});
         if (updatedDestWithImages) { if (img && imgName) helpers.imageProcessing(fileDir, imgName, img["data"]); }
       }

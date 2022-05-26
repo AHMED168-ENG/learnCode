@@ -27,6 +27,10 @@ function getList(page) {
                 <td>${elem.tbl_destination.en_title} - ${elem.tbl_destination.ar_title}</td>
                 <td><img class="rounded-circle p-0" width=45 height=45 src="/p/img/${elem.logo}" alt="Logo"></td>
                 <td>
+                   <a class="m-1" data-tooltip="View More Images" href="/dashboard2/media/${res.module_id}/image/${elem.id}">View More Images</a>
+                   <a class="m-1" data-tooltip="View More Videos" href="/dashboard2/media/${res.module_id}/video/${elem.id}">View More Videos</a>
+                </td>
+                <td>
                     <a class="m-1" href="/dashboard2/provider/edit/${elem.id}"><i class="fas fa-edit text-primary"></i></a>
                     <a class="m-1" data-tooltip="View Provider" href="/dashboard2/provider/view/${elem.id}"><i class="fas fa-eye"></i></a></td>
                 </tr>`)
@@ -39,6 +43,10 @@ function getList(page) {
                 <td>${elem.ar_name}</td>
                 <td>${elem.tbl_destination.en_title - elem.tbl_destination.ar_title}</td>
                 <td><img class="rounded-circle p-0" width=45 height=45 src="/p/img/${elem.logo}" alt="Logo"></td>
+                <td>
+                   <a class="m-1" data-tooltip="View More Images" href="/dashboard2/media/${res.module_id}/image/${elem.id}">View More Images</a>
+                   <a class="m-1" data-tooltip="View More Videos" href="/dashboard2/media/${res.module_id}/video/${elem.id}">View More Videos</a>
+                </td>
                 <td>
                     <a class="m-1" href="/dashboard2/provider/edit/${elem.id}"><i class="fas fa-edit text-primary"></i></a>
                     <a class="m-1" data-tooltip="View Provider" href="/dashboard2/provider/view/${elem.id}"><i class="fas fa-eye"></i></a></td>

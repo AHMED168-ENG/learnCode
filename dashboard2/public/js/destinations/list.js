@@ -26,6 +26,10 @@ function getList(page) {
                 <td>${elem.ar_title}</td>
                 <td><img class="rounded-circle p-0" width=45 height=45 src="/p/img/${elem.image}" alt="Image"></td>
                 <td>
+                   <a class="m-1" data-tooltip="View More Images" href="/dashboard2/media/${res.module_id}/image/${elem.id}">View More Images</a>
+                   <a class="m-1" data-tooltip="View More Videos" href="/dashboard2/media/${res.module_id}/video/${elem.id}">View More Videos</a>
+                </td>
+                <td>
                     <a class="m-1" data-tooltip="View Destination" href="/dashboard2/destination/view/${elem.id}"><i class="fas fa-eye"></i></a>
                     <a class="m-1" href="/dashboard2/destination/edit/${elem.id}"><i class="fas fa-edit text-primary"></i></a></td>
                 </tr>`)
@@ -37,6 +41,10 @@ function getList(page) {
                 <td>${elem.en_title}</td>
                 <td>${elem.ar_title}</td>
                 <td><img class="rounded-circle p-0" width=45 height=45 src="/p/img/${elem.image}" alt="Image"></td>
+                <td>
+                   <a class="m-1" data-tooltip="View More Images" href="/dashboard2/media/${res.module_id}/image/${elem.id}">View More Images</a>
+                   <a class="m-1" data-tooltip="View More Videos" href="/dashboard2/media/${res.module_id}/video/${elem.id}">View More Videos</a>
+                </td>
                 <td><a data-tooltip="View Destination" class="btn btn-info" href="/dashboard2/destination/view/${elem.id}"><i class="fas fa-eye"></i></a></td>
                 </tr>`)
             })

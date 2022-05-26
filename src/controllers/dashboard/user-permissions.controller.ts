@@ -4,16 +4,18 @@ import { Op } from "sequelize";
 import modules from "../../models/module.model";
 import page from "../../models/page.model";
 import permissions from "../../models/permissions.model";
-import role from "../../models/user-roles.model";
+import { ModulesController } from "./modules.controller";
+import { PagesController } from "./pages.controller";
+import { UserRolesController } from "./user-roles.controller";
 const { verify } = require("../../helper/token");
 export class UserPermissionsController {
   constructor() {}
   public async listPermissions(req: Request, res: Response, next: NextFunction): Promise<any> {
     try {
-      const modulesData = await modules.findAll({ attributes: { exclude: ["createdAt", "updatedAt"] } });
-      const pagesData = await page.findAll({ attributes: { exclude: ["createdAt", "updatedAt"] } });
+      const modulesData = await new ModulesController().getModules();
+      const pagesData = await new PagesController().getPages();
       const permissionsData = await permissions.findAll({ where: { role_id: req.params.role_id }, attributes: { exclude: ["role_id", "createdAt", "updatedAt"] } });
-      const roles = await role.findAll({ attributes: { exclude: ["createdAt", "updatedAt"] } });
+      const roles = await new UserRolesController().getRoles();
       const modulesArr = [];
       for (const moduleData of modulesData) {
         const filteredPages = pagesData.filter((pageData) => moduleData["id"] === pageData["module_id"]);

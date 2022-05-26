@@ -81,7 +81,7 @@
                       </div>
                       <div class="form-row mx-3 my-1">
                         <div class="form-group col-md-6" style="padding-right: 22px; padding-left: 5px">
-                          <label for="logo">Logo</label>
+                          <label for="logo">Image</label>
                           <div class="custom-file">
                             <input type="file" class="custom-file-input" id="logo" name="logo" accept="image/x-png" onchange="loadImg(event)" />
                             <label class="custom-file-label" id="custom-file-label-img" for="logo"><%= data.logo || "Choose file" %></label>
@@ -89,54 +89,6 @@
                         </div>
                         <div class="form-group col-md-6 d-flex justify-content-center">
                           <img class="img-fluid mb-3" id="dest_store_image_display" width="120" height="120" src="/p/img/<%= data.logo %>" alt="Photo" />
-                        </div>
-                      </div>
-                      <div class="form-row mx-3 my-1">
-                        <div class="form-group col-md-6">
-                          <label for="location_lat">Latitude</label>
-                          <input
-                            type="text"
-                            id="location_lat"
-                            name="location_lat"
-                            class="form-control"
-                            placeholder="Latitude"
-                            value="<%= data.location_lat || null %>"
-                          />
-                        </div>
-                        <div class="form-group col-md-6">
-                          <label for="location_long">Longitude</label>
-                          <input
-                            type="text"
-                            id="location_long"
-                            name="location_long"
-                            class="form-control"
-                            placeholder="Longitude"
-                            value="<%= data.location_long || null %>"
-                          />
-                        </div>
-                      </div>
-                      <div class="form-row mx-3 my-1">
-                        <div class="form-group col-md-6">
-                          <label for="ar_name">Email Address</label>
-                          <input
-                            type="text"
-                            id="email"
-                            name="email"
-                            class="form-control"
-                            placeholder="Email Address"
-                            value="<%= data.email || null %>"
-                          />
-                        </div>
-                        <div class="form-group col-md-6">
-                          <label for="phone">Phone</label>
-                          <input
-                            type="text"
-                            id="phone"
-                            name="phone"
-                            class="form-control"
-                            placeholder="Phone"
-                            value="<%= data.phone || null %>"
-                          />
                         </div>
                       </div>
                       <div class="form-row mx-3 my-1">
@@ -153,6 +105,8 @@
                     <!-- /.card-body -->
                     <div class="card-footer">
                       <button id="submitForm" type="submit" class="btn btn-primary has-spinner">Update</button>
+                      <a href="/dashboard2/media/<%= module_id %>/image" class="btn btn-info has-spinner">See More Album Images</a>
+                      <a href="/dashboard2/media/<%= module_id %>/video" class="btn btn-secondary has-spinner">See More Album Videos</a>
                     </div>
                   </form>
                 </div>

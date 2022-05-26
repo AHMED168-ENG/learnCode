@@ -30,6 +30,10 @@ function getList(page) {
                 <td>${elem.email}</td>
                 <td>${elem.phone}</td>
                 <td>
+                   <a class="m-1" data-tooltip="View More Images" href="/dashboard2/media/${res.module_id}/image/${elem.id}">View More Images</a>
+                   <a class="m-1" data-tooltip="View More Videos" href="/dashboard2/media/${res.module_id}/video/${elem.id}">View More Videos</a>
+                </td>
+                <td>
                     <a class="m-1" data-tooltip="View Tour Guide" href="/dashboard2/guide/view/${elem.id}"><i class="fas fa-eye"></i></a>
                     <a class="m-1" href="/dashboard2/guide/edit/${elem.id}"><i class="fas fa-edit text-primary"></i></a>
                     ${elem.status == "active" ? `<i class="m-1 fas fa-exclamation-triangle text-secondary" onclick='active(${elem.id},"deactive")'></i>` : `<i class="m-1 fas fa-exclamation-triangle text-success" onclick='active(${elem.id},"active")'></i>`}</td>
@@ -46,6 +50,10 @@ function getList(page) {
                 <td>${elem.tbl_cities.ar_name} - ${elem.tbl_cities.en_name}</td>
                 <td>${elem.email}</td>
                 <td>${elem.phone}</td>
+                <td>
+                   <a class="m-1" data-tooltip="View More Images" href="/dashboard2/media/${res.module_id}/image/${elem.id}">View More Images</a>
+                   <a class="m-1" data-tooltip="View More Videos" href="/dashboard2/media/${res.module_id}/video/${elem.id}">View More Videos</a>
+                </td>
                 <td><a data-tooltip="View Tour Guide" class="btn btn-info" href="/dashboard2/guide/view/${elem.id}"><i class="fas fa-eye"></i></a></td>
                 </tr>`)
             })

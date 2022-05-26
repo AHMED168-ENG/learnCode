@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('../layout/heade.ejs') %>
+  </head>
+
+  <body class="sidebar-mini layout-fixed text-sm text-sm">
+    <style>
+      th,
+      td {
+        text-align: center;
+        vertical-align: middle !important;
+      }
+    </style>
+    <div class="wrapper">
+      <%- include('../layout/nav.ejs') %>
+      <!-- Content Wrapper. Contains page content -->
+      <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <div class="content-header">
+          <div class="container-fluid">
+            <div class="row mb-2 align-items-center mt-1">
+              <div class="col-sm-6" id="addNewBtn"></div>
+              <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                  <li class="breadcrumb-item"><a href="/">Home</a></li>
+                  <li class="breadcrumb-item active">Ticket Orders</li>
+                </ol>
+              </div>
+            </div>
+            <!-- /.row -->
+          </div>
+          <!-- /.container-fluid -->
+        </div>
+        <!-- /.content-header -->
+        <!-- Main content -->
+        <section class="content">
+          <div class="card card-primary card-outline">
+            <div class="card-header">
+              <h3 class="card-title">
+                <i class="fas fa-globe-americas"></i>
+                &nbsp;&nbsp; Ticket Orders
+              </h3>
+            </div>
+            <div id="spinner-notfound">
+              <div class="w-100 d-flex justify-content-center align-items-center" style="min-height: 24em"></div>
+            </div>
+            <div id="tabe-items" class="card-body pad table-responsive">
+              <table class="table table-bordered" style="border: 1px solid #dee2e6">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Name en</th>
+                    <th scope="col">Name ar</th>
+                    <th scope="col">User Name</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Phone</th>
+                    <th scope="col">Promo Code</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="tr-th-row"></tbody>
+              </table>
+              <ul id="pagination-demo" class="pagination-sm pt-2"></ul>
+            </div>
+            <!-- /.card -->
+          </div>
+          <!-- /.container-fluid -->
+        </section>
+        <!-- /.content -->
+      </div>
+      <footer class="main-footer"><%- include('../layout/footer.ejs') %></footer>
+    </div>
+    <%- include('../layout/script.ejs') %>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/twbs-pagination/1.4.2/jquery.twbsPagination.min.js"
+      integrity="sha512-frFP3ZxLshB4CErXkPVEXnd5ingvYYtYhE5qllGdZmcOlRKNEPbufyupfdSTNmoF5ICaQNO6SenXzOZvoGkiIA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script src="/dashboard2/js/ticket/list.js"></script>
+  </body>
+</html>

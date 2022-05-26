@@ -8,6 +8,7 @@ import { ActivityCategoryController } from "./activity-category.controller";
 import { DestinationController } from "./destination.controller";
 import activityCategory from "../../models/activity-category.model";
 import { UserPermissionsController } from "../dashboard/user-permissions.controller";
+import { ModulesController } from "../dashboard/modules.controller";
 export class ActivityController {
   constructor() {}
   public listPage(req: Request, res: Response, next: NextFunction) {
@@ -28,7 +29,8 @@ export class ActivityController {
       }) || [];
       const countActivities = await activity.count() || 0;
       const permissions = await new UserPermissionsController().getUserPermissions(req.cookies.token, "Destinations Activities");
-      const dataInti = { total: countActivities, limit, page: Number(req.query.page), pages: Math.ceil(countActivities / limit) + 1, data: activities, canAdd: permissions.canAdd, canEdit: permissions.canEdit };
+      const module_id = await new ModulesController().getModuleIdByName("Destinations Activities");
+      const dataInti = { total: countActivities, limit, page: Number(req.query.page), pages: Math.ceil(countActivities / limit) + 1, data: activities, canAdd: permissions.canAdd, canEdit: permissions.canEdit, module_id };
       return res.status(httpStatus.OK).json(dataInti);
     } catch (error) {
       return res.status(httpStatus.NOT_FOUND).json({ err: "There is something wrong while getting activities list", msg: "Internal Server Error" });
@@ -46,7 +48,8 @@ export class ActivityController {
         ],
         raw: true,
       });
-      return res.render("dashboard2/views/activity/view.ejs", { title: "View activity Details", data });
+      const module_id = await new ModulesController().getModuleIdByName("Destinations Activities");
+      return res.render("dashboard2/views/activity/view.ejs", { title: "View activity Details", data, module_id });
     } catch (error) {
       return res.status(500).json({ msg: "Error in get activity data in view page", err: "unexpected error" });
     }
@@ -87,7 +90,8 @@ export class ActivityController {
       const destinations = await new DestinationController().getAllDestinations();
       const activityCategories = await new ActivityCategoryController().getAllActivityCategories();
       const data = await activity.findOne({ where: { id: req.params.id }, attributes: { exclude: ["createdAt", "updatedAt"] }, raw: true });
-      return res.render("dashboard2/views/activity/edit.ejs", { title: "Edit activity", data, destinations, activityCategories });
+      const module_id = await new ModulesController().getModuleIdByName("Destinations Activities");
+      return res.render("dashboard2/views/activity/edit.ejs", { title: "Edit activity", data, destinations, activityCategories, module_id });
     } catch (error) {
       return res.status(500).json({ msg: "Error in get activity data in edit page", err: "unexpected error" });
     }

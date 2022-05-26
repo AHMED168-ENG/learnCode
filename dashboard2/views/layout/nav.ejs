@@ -147,6 +147,12 @@
           </a>
         </li>
         <li class="nav-item">
+          <a href="/dashboard2/hotel" class="nav-link" id="destination-hotel">
+            <i class="nav-icon fas fa-store text-success_"></i>
+            <p style="font-size: 13px;">Destinations Hotels</p>
+          </a>
+        </li>
+        <li class="nav-item">
           <a href="/dashboard2/activity" class="nav-link" id="destination-activity">
             <i class="nav-icon fas fa-circle text-success_"></i>
             <p style="font-size: 13px;">Destinations Activities</p>
@@ -154,7 +160,7 @@
         </li>
 
         <li class="nav-item">
-          <a href="/dashboard2/home" class="nav-link">
+          <a href="/dashboard2/event" class="nav-link">
             <i class="nav-icon fas fa-list text-success_"></i>
             <p style="font-size: 13px;">
               Events Management
@@ -180,26 +186,34 @@
         </li>
 
         <li class="nav-item">
-          <a href="/dashboard2/home" class="nav-link">
+          <a href="/dashboard2/trip" class="nav-link">
             <i class="nav-icon fas fa-circle"></i>
             <p style="font-size: 13px;">Trips Management</p>
           </a>
         </li>
 
         <li class="nav-item has-treeview">
-          <a href="/dashboard2/home" class="nav-link" id="report">
+          <a href="/dashboard2/store" class="nav-link" id="report">
             <i class="nav-icon fas fa-store"></i>
             <p style="font-size: 13px;">
               Store Management
             </p>
           </a>
         </li>
+        <li class="nav-item has-treeview">
+          <a href="/dashboard2/package" class="nav-link" id="report">
+            <i class="nav-icon far fa-circle"></i>
+            <p style="font-size: 13px;">
+              Packages Management
+            </p>
+          </a>
+        </li>
 
         <li class="nav-item">
-          <a href="/dashboard2/home" class="nav-link" id="ads">
+          <a href="/dashboard2/ads" class="nav-link" id="ads">
             <i class="nav-icon fas fa-tag"></i>
             <p style="font-size: 13px;">
-              Ads Managements
+              Ads Management
               <span class="badge badge-warning right" id="numAds">0</span>
             </p>
           </a>
@@ -213,13 +227,13 @@
           </a>
         </li>
         <li class="nav-item">
-          <a href="/dashboard2/home" class="nav-link">
+          <a href="/dashboard2/ticket" class="nav-link">
             <i class="far fa-circle nav-icon"></i>
             <p style="font-size: 13px;">Tickets Booking Management</p>
           </a>
         </li>
         <li class="nav-item">
-          <a href="/dashboard2/home" class="nav-link">
+          <a href="/dashboard2/membership" class="nav-link">
             <i class="far fa-circle nav-icon"></i>
             <p style="font-size: 13px;">Memberships Management</p>
           </a>
@@ -246,12 +260,11 @@
               </a>
             </li>
             <li class="nav-item">
-              <a href="/dashboard2/home" class="nav-link" id="region">
+              <a href="/dashboard2/event-category" class="nav-link" id="region">
                 <i class="far fa-circle nav-icon"></i>
                 <p style="font-size: 13px;">Events Categories</p>
               </a>
             </li>
-
             <li class="nav-item">
               <a href="/dashboard2/home" class="nav-link" id="sector">
                 <i class="far fa-circle nav-icon"></i>
@@ -320,6 +333,17 @@
           </li>
           `);
         }
+        const hotels = data.userPermissions.filter((userPermission) => userPermission.module.name === "Trees Location");
+        if (hotels.length) {
+          $('#sidebar').append(`
+          <li class="nav-item">
+            <a href="/dashboard2/hotel" class="nav-link" id="destination-hotel">
+              <i class="nav-icon fas fa-store text-success_"></i>
+              <p style="font-size: 13px;">Destinations Hotels</p>
+            </a>
+          </li>
+          `);
+        }
         const trees = data.userPermissions.filter((userPermission) => userPermission.module.name === "Trees List");
         if (trees.length) {
           $('#sidebar').append(`
@@ -373,7 +397,7 @@
         if (about.length) {
           $('#sidebar').append(`
           <li class="nav-item">
-            <a href="/dashboard2/home" class="nav-link">
+            <a href="/dashboard2/trip" class="nav-link">
               <i class="nav-icon fas fa-circle"></i>
               <p style="font-size: 13px;">Trips Management</p>
             </a>
@@ -384,7 +408,7 @@
         if (listPartners.length) {
           $('#sidebar').append(`
           <li class="nav-item has-treeview">
-            <a href="/dashboard2/home" class="nav-link" id="report">
+            <a href="/dashboard2/store" class="nav-link" id="report">
               <i class="nav-icon fas fa-store"></i>
               <p style="font-size: 13px;">
                 Store Management
@@ -393,14 +417,27 @@
           </li>
           `);
         }
+        const listPackages = data.userPermissions.filter((userPermission) => userPermission.module.name === "Packages Management");
+        if (listPackages.length) {
+          $('#sidebar').append(`
+              <li class="nav-item has-treeview">
+                <a href="/dashboard2/package" class="nav-link" id="report">
+                  <i class="nav-icon far fa-circle"></i>
+                  <p style="font-size: 13px;">
+                    Packages Management
+                  </p>
+                </a>
+              </li>
+          `);
+        }
         const unread = data.userPermissions.filter((userPermission) => userPermission.module.name === "Unread Messages");
         if (unread.length) {
           $('#sidebar').append(`
           <li class="nav-item">
-            <a href="/dashboard2/home" class="nav-link" id="ads">
+            <a href="/dashboard2/ads" class="nav-link" id="ads">
               <i class="nav-icon fas fa-tag"></i>
               <p style="font-size: 13px;">
-                Ads Managements
+                Ads Management
                 <span class="badge badge-warning right" id="numAds">0</span>
               </p>
             </a>
@@ -424,7 +461,7 @@
         if (carbonCalculator.length) {
           $('#sidebar').append(`
             <li class="nav-item">
-              <a href="/dashboard2/home" class="nav-link">
+              <a href="/dashboard2/ticket" class="nav-link">
                 <i class="far fa-file-circle-check" nav-icon"></i>
                 <p style="font-size: 13px;">Tickets Booking Management</p>
               </a>
@@ -435,7 +472,7 @@
         if (carbonCalculator.length) {
           $('#sidebar').append(`
             <li class="nav-item">
-              <a href="/dashboard2/home" class="nav-link">
+              <a href="/dashboard2/membership" class="nav-link">
                 <i class="far fa-circle nav-icon"></i>
                 <p style="font-size: 13px;">Memberships Management</p>
               </a>
@@ -487,7 +524,7 @@
           if (sponsorsReport.length) {
             $('#settings').append(`
                 <li class="nav-item">
-                  <a href="/dashboard2/home" class="nav-link" id="region">
+                  <a href="/dashboard2/event-category" class="nav-link" id="region">
                     <i class="far fa-circle nav-icon"></i>
                     <p style="font-size: 13px;">Events Categories</p>
                   </a>

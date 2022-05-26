@@ -13,8 +13,8 @@ export class MediaRoutes {
     this.router.get("/:module_id/:mediaType/:item_id/list", this.mediaController.list);
     this.router.get("/:module_id/:mediaType/:item_id/view/:id", this.mediaController.viewPage);
     this.router.get("/:module_id/:mediaType/:item_id/new", this.mediaController.newPage);
-    this.router.post("/:module_id/:mediaType/:item_id/new", helpers.videoUpload.single('video'), this.mediaController.addNew);
+    this.router.post("/:module_id/:mediaType/:item_id/new", this.mediaController.addNew);
     this.router.get("/:module_id/:mediaType/:item_id/edit/:id", this.mediaController.editPage);
-    this.router.put("/:module_id/:mediaType/:item_id/edit/:id", helpers.videoUpload.single('video'), this.mediaController.edit);
+    this.router.put("/:module_id/:mediaType/:item_id/edit/:id", this.mediaController.edit);
   }
 }

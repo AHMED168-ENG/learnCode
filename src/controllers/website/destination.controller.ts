@@ -50,5 +50,12 @@ export class DestinationController {
       return res.status(500).json({ msg: "Error in get destination data in view page", err: "unexpected error" });
     }
   }
-
+  public async getAllDestinations() {
+    try {
+      const destinations = await destination.findAll({ attributes: ["id", "ar_title", "en_title"] });
+      return destinations;
+    } catch (error) {
+      throw error;
+    }
+  }
 }

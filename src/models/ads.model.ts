@@ -54,6 +54,17 @@ const ads = sequelize.define(
         },
       },
     },
+    pay_type: {
+      type: DataTypes.ENUM("cash", "online"),
+      allowNull: true,
+      defaultValue: "cash",
+      validate: {
+        isIn: {
+          args: [["cash", "online"]],
+          msg: "The pay type field can only be either cash or online",
+        },
+      },
+    },
     request: {
       type: DataTypes.ENUM("new", "inprogress", "completed", "cancelled"),
       allowNull: true,

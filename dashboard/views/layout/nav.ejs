@@ -92,9 +92,9 @@
     .then((data) => {
       $("#sidebar").append(`
         <li class="nav-item mb-2">
-          <a href="/dashboard2/home" class="nav-link" id="home">
+          <a href="/home" class="nav-link" id="home">
             <i class="nav-icon fas fa-tachometer-alt"></i>
-            <p>Next Dashboard</p>
+            <p>Sahlan Website</p>
           </a>
         </li>
       `);
@@ -329,7 +329,131 @@
             <p>Carbon Calculator</p>
           </a>
         </li>
+        <li class="nav-item">
+          <a href="/dashboard/destination" class="nav-link" id="destination-management">
+            <i class="nav-icon fas fa-globe-americas text-success_"></i>
+            <p style="font-size: 13px;">
+              Destinations Management
+            </p>
+          </a>
+        </li>
 
+        <li class="nav-item">
+          <a href="/dashboard/destination-place" class="nav-link" id="destination-place">
+            <i class="nav-icon fas fa-map-marked text-success_"></i>
+            <p style="font-size: 13px;">
+              Destinations Most Popular places
+              <span class="badge badge-success right" id="mostPopularPlaces">0</span>
+            </p>
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a href="/dashboard/destination-store" class="nav-link" id="destination-store">
+            <i class="nav-icon fas fa-store text-success_"></i>
+            <p style="font-size: 13px;">
+              Destinations Stores Management
+            </p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="/dashboard/restaurant" class="nav-link" id="destination-restaurant">
+            <i class="nav-icon fas fa-store text-success_"></i>
+            <p style="font-size: 13px;">Destinations Restaurants</p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="/dashboard/hotel" class="nav-link" id="destination-hotel">
+            <i class="nav-icon fas fa-store text-success_"></i>
+            <p style="font-size: 13px;">Destinations Hotels</p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="/dashboard/activity" class="nav-link" id="destination-activity">
+            <i class="nav-icon fas fa-circle text-success_"></i>
+            <p style="font-size: 13px;">Destinations Activities</p>
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a href="/dashboard/event" class="nav-link">
+            <i class="nav-icon fas fa-list text-success_"></i>
+            <p style="font-size: 13px;">
+              Events Management
+              <span class="badge badge-warning right" id="events">0</span>
+            </p>
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a href="/dashboard/guide" id="tourist-management" class="nav-link">
+            <i class="nav-icon fas fa-user textss-maroon"></i>
+            <p style="font-size: 13px;">
+              Tourist guide Management
+            </p>
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a href="/dashboard/provider" class="nav-link">
+            <i class="nav-icon fas fa-th"></i>
+            <p style="font-size: 13px;">Providers Management</p>
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a href="/dashboard/trip" class="nav-link">
+            <i class="nav-icon fas fa-circle"></i>
+            <p style="font-size: 13px;">Trips Management</p>
+          </a>
+        </li>
+
+        <li class="nav-item has-treeview">
+          <a href="/dashboard/store" class="nav-link" id="report">
+            <i class="nav-icon fas fa-store"></i>
+            <p style="font-size: 13px;">
+              Store Management
+            </p>
+          </a>
+        </li>
+        <li class="nav-item has-treeview">
+          <a href="/dashboard/package" class="nav-link" id="report">
+            <i class="nav-icon far fa-circle"></i>
+            <p style="font-size: 13px;">
+              Packages Management
+            </p>
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a href="/dashboard/ads" class="nav-link" id="ads">
+            <i class="nav-icon fas fa-tag"></i>
+            <p style="font-size: 13px;">
+              Ads Management
+              <span class="badge badge-warning right" id="numAds">0</span>
+            </p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="/dashboard/travel" class="nav-link">
+            <i class="nav-icon fas fa-plane"></i>
+            <p style="font-size: 13px;">
+              Travel Essentials
+            </p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="/dashboard/ticket" class="nav-link">
+            <i class="far fa-circle nav-icon"></i>
+            <p style="font-size: 13px;">Tickets Booking Management</p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="/dashboard/membership" class="nav-link">
+            <i class="far fa-circle nav-icon"></i>
+            <p style="font-size: 13px;">Memberships Management</p>
+          </a>
+        </li>
         <li class="nav-item has-treeview">
           <a href="#" class="nav-link" id="report">
             <i class="nav-icon fas fa-chart-pie"></i>
@@ -483,6 +607,37 @@
               <a href="#" class="nav-link">
                 <i class="far fa-circle nav-icon"></i>
                 <p>Strategy Collecting Points</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="/dashboard/activity-category" class="nav-link" id="country">
+                <i class="far fa-circle nav-icon"></i>
+                <p style="font-size: 13px;">Activities categories</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="/dashboard/destination-category" class="nav-link" id="city">
+                <i class="far fa-circle nav-icon"></i>
+                <p style="font-size: 13px;">Destinations Interests categories</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="/dashboard/event-category" class="nav-link" id="region">
+                <i class="far fa-circle nav-icon"></i>
+                <p style="font-size: 13px;">Events Categories</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="/dashboard/audience-category" class="nav-link" id="sector">
+                <i class="far fa-circle nav-icon"></i>
+                <p style="font-size: 13px;">Audience Categories</p>
+              </a>
+            </li>
+
+            <li class="nav-item">
+              <a href="/dashboard/home" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p style="font-size: 13px;">Seasons</p>
               </a>
             </li>
           </ul>
@@ -834,6 +989,203 @@
             </li>
           `);
         }
+        const destination = data.userPermissions.filter((userPermission) => userPermission.module.name === "Destinations Management");
+        if (destination.length) {
+          $('#sidebar').append(`
+          <li class="nav-item">
+            <a href="/dashboard/destination" class="nav-link" id="destination-management">
+              <i class="nav-icon fas fa-globe-americas text-success_"></i>
+              <p style="font-size: 13px;">
+                Destinations Management
+              </p>
+            </a>
+          </li>
+          `);
+        }
+        const destinationPlaces = data.userPermissions.filter((userPermission) => userPermission.module.name === "Destinations Most Popular places");
+        if (destinationPlaces.length) {
+          $('#sidebar').append(`
+          <li class="nav-item">
+            <a href="/dashboard/destination-place" class="nav-link" id="destination-place">
+              <i class="nav-icon fas fa-map-marked text-success_"></i>
+              <p style="font-size: 13px;">
+                Destinations Most Popular places
+                <span class="badge badge-success right" id="mostPopularPlaces">0</span>
+              </p>
+            </a>
+          </li>
+          `);
+        }
+        const destinationStore = data.userPermissions.filter((userPermission) => userPermission.module.name === "Destinations Stores Management");
+        if (destinationStore.length) {
+          $('#sidebar').append(`
+          <li class="nav-item">
+            <a href="/dashboard/destination-store" class="nav-link" id="destination-store">
+              <i class="nav-icon fas fa-store text-success_"></i>
+              <p style="font-size: 13px;">
+                Destinations Stores Management
+              </p>
+            </a>
+          </li>
+          `);
+        }
+        const restaurant = data.userPermissions.filter((userPermission) => userPermission.module.name === "Destinations Restaurants");
+        if (restaurant.length) {
+          $('#sidebar').append(`
+          <li class="nav-item">
+            <a href="/dashboard/restaurant" class="nav-link" id="destination-restaurant">
+              <i class="nav-icon fas fa-store text-success_"></i>
+              <p style="font-size: 13px;">Destinations Restaurants</p>
+            </a>
+          </li>
+          `);
+        }
+        const hotels = data.userPermissions.filter((userPermission) => userPermission.module.name === "Destinations Hotels");
+        if (hotels.length) {
+          $('#sidebar').append(`
+          <li class="nav-item">
+            <a href="/dashboard/hotel" class="nav-link" id="destination-hotel">
+              <i class="nav-icon fas fa-store text-success_"></i>
+              <p style="font-size: 13px;">Destinations Hotels</p>
+            </a>
+          </li>
+          `);
+        }
+        const activities = data.userPermissions.filter((userPermission) => userPermission.module.name === "Destinations Activities");
+        if (activities.length) {
+          $('#sidebar').append(`
+          <li class="nav-item">
+            <a href="/dashboard/activity" class="nav-link" id="destination-activity">
+              <i class="nav-icon fas fa-circle text-success_"></i>
+              <p style="font-size: 13px;">Destinations Activities</p>
+            </a>
+          </li>
+          `);
+        }
+        const events = data.userPermissions.filter((userPermission) => userPermission.module.name === "Events Management");
+        if (events.length) {
+          $('#sidebar').append(`
+          <li class="nav-item">
+            <a href="/dashboard/home" class="nav-link">
+              <i class="nav-icon fas fa-list text-success_"></i>
+              <p style="font-size: 13px;">
+                Events Management
+                <span class="badge badge-warning right" id="events">0</span>
+              </p>
+            </a>
+          </li>
+          `);
+        }
+        const guide = data.userPermissions.filter((userPermission) => userPermission.module.name === "Tourist Guide Management");
+        if (guide.length) {
+          $('#sidebar').append(`
+          <li class="nav-item">
+            <a href="/dashboard/guide" id="tourist-management" class="nav-link">
+              <i class="nav-icon fas fa-user textss-maroon"></i>
+              <p style="font-size: 13px;">
+                Tourist Guide Management
+              </p>
+            </a>
+          </li>
+          `);
+        }
+        const provider = data.userPermissions.filter((userPermission) => userPermission.module.name === "Providers Management");
+        if (provider.length) {
+          $('#sidebar').append(`
+          <li class="nav-item">
+            <a href="/dashboard/provider" class="nav-link">
+              <i class="nav-icon fas fa-th"></i>
+              <p style="font-size: 13px;">Providers Management</p>
+            </a>
+          </li>
+          `);
+        }
+        const trip = data.userPermissions.filter((userPermission) => userPermission.module.name === "Trips Management");
+        if (trip.length) {
+          $('#sidebar').append(`
+          <li class="nav-item">
+            <a href="/dashboard/trip" class="nav-link">
+              <i class="nav-icon fas fa-circle"></i>
+              <p style="font-size: 13px;">Trips Management</p>
+            </a>
+          </li>
+          `);
+        }
+        const store = data.userPermissions.filter((userPermission) => userPermission.module.name === "Store Management");
+        if (store.length) {
+          $('#sidebar').append(`
+          <li class="nav-item has-treeview">
+            <a href="/dashboard/store" class="nav-link" id="report">
+              <i class="nav-icon fas fa-store"></i>
+              <p style="font-size: 13px;">
+                Store Management
+              </p>
+            </a>
+          </li>
+          `);
+        }
+        const listPackages = data.userPermissions.filter((userPermission) => userPermission.module.name === "Packages Management");
+        if (listPackages.length) {
+          $('#sidebar').append(`
+              <li class="nav-item has-treeview">
+                <a href="/dashboard/package" class="nav-link" id="report">
+                  <i class="nav-icon far fa-circle"></i>
+                  <p style="font-size: 13px;">
+                    Packages Management
+                  </p>
+                </a>
+              </li>
+          `);
+        }
+        const ads = data.userPermissions.filter((userPermission) => userPermission.module.name === "Ads Management");
+        if (ads.length) {
+          $('#sidebar').append(`
+          <li class="nav-item">
+            <a href="/dashboard/ads" class="nav-link" id="ads">
+              <i class="nav-icon fas fa-tag"></i>
+              <p style="font-size: 13px;">
+                Ads Management
+                <span class="badge badge-warning right" id="numAds">0</span>
+              </p>
+            </a>
+          </li>
+          `);
+        }
+        const travel = data.userPermissions.filter((userPermission) => userPermission.module.name === "Travel Essentials");
+        if (travel.length) {
+          $('#sidebar').append(`
+          <li class="nav-item">
+            <a href="/dashboard/travel" class="nav-link">
+              <i class="nav-icon fas fa-plane"></i>
+              <p style="font-size: 13px;">
+                Travel Essentials
+              </p>
+            </a>
+          </li>
+          `);
+        }
+        const booking = data.userPermissions.filter((userPermission) => userPermission.module.name === "Tickets Booking Management");
+        if (booking.length) {
+          $('#sidebar').append(`
+            <li class="nav-item">
+              <a href="/dashboard/ticket" class="nav-link">
+                <i class="far fa-file-circle-check" nav-icon"></i>
+                <p style="font-size: 13px;">Tickets Booking Management</p>
+              </a>
+            </li>
+          `);
+        }
+        const membership = data.userPermissions.filter((userPermission) => userPermission.module.name === "Memberships Management");
+        if (membership.length) {
+          $('#sidebar').append(`
+            <li class="nav-item">
+              <a href="/dashboard/membership" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p style="font-size: 13px;">Memberships Management</p>
+              </a>
+            </li>
+          `);
+        }
         const ordersReport = data.userPermissions.filter((userPermission) => userPermission.module.name === "Orders Report");
         const usersReport = data.userPermissions.filter((userPermission) => userPermission.module.name === "Users Report");
         const sponsorsReport = data.userPermissions.filter((userPermission) => userPermission.module.name === "Sponsors Report");
@@ -1024,6 +1376,11 @@
         const districts = data.userPermissions.filter((userPermission) => userPermission.module.name === "Districts");
         const entitySectors = data.userPermissions.filter((userPermission) => userPermission.module.name === "Entity Sectors");
         const strategyPoints = data.userPermissions.filter((userPermission) => userPermission.module.name === "Strategy Collecting Points");
+        const actCategories = data.userPermissions.filter((userPermission) => userPermission.module.name === "Activities categories");
+        const destCategories = data.userPermissions.filter((userPermission) => userPermission.module.name === "Destinations Interests categories");
+        const eventCategories = data.userPermissions.filter((userPermission) => userPermission.module.name === "Events Categories");
+        const audienceCategories = data.userPermissions.filter((userPermission) => userPermission.module.name === "Audience Categories");
+        const seasons = data.userPermissions.filter((userPermission) => userPermission.module.name === "Seasons");
         if (countries.length || cities.length || districts.length || entitySectors.length || strategyPoints.length) {
           $('#sidebar').append(`
             <li class="nav-item has-treeview">
@@ -1085,6 +1442,56 @@
                 <p>Strategy Collecting Points</p>
               </a>
             </li>
+            `);
+          }
+          if (actCategories.length) {
+            $('#settings').append(`
+                <li class="nav-item">
+                  <a href="/dashboard/activity-category" class="nav-link" id="country">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p style="font-size: 13px;">Activities categories</p>
+                  </a>
+                </li>
+            `);
+          }
+          if (destCategories.length) {
+            $('#settings').append(`
+                <li class="nav-item">
+                  <a href="/dashboard/destination-category" class="nav-link" id="city">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p style="font-size: 13px;">Destinations Interests categories</p>
+                  </a>
+                </li>
+            `);
+          }
+          if (eventCategories.length) {
+            $('#settings').append(`
+                <li class="nav-item">
+                  <a href="/dashboard/event-category" class="nav-link" id="region">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p style="font-size: 13px;">Events Categories</p>
+                  </a>
+                </li>
+            `);
+          }
+          if (audienceCategories.length) {
+            $('#settings').append(`
+                <li class="nav-item">
+                  <a href="/dashboard/audience-category" class="nav-link" id="sector">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p style="font-size: 13px;">Audience Categories</p>
+                  </a>
+                </li>
+            `);
+          }
+          if (seasons.length) {
+            $('#settings').append(`
+                <li class="nav-item">
+                  <a href="/dashboard/home" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p style="font-size: 13px;">Seasons</p>
+                  </a>
+                </li>
             `);
           }
         }

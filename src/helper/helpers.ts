@@ -1,6 +1,7 @@
 import path from "path"
 import fs from "fs"
 import sharp from "sharp"
+import multer from "multer"
 
 /**
  * This regular expression to validate an email address
@@ -101,17 +102,17 @@ function removeFile(filePath: string) {
     fs.unlink(pathDir_o, () => {})
   }
 }
+const videoStorage = multer.diskStorage({
+  destination: '../../public/',
+  filename: (req, file, cb) => { cb(null, file.fieldname + '_' + Date.now() + path.extname(file.originalname)); }
+});
+const videoUpload = multer({
+  storage: videoStorage,
+  limits: { fileSize: 10000000 },
+  fileFilter(req, file, cb) {
+    if (!file.originalname.match(/\.(mp4|MPEG-4|mkv)$/)) { return cb(new Error('Please upload a video')); }
+    cb(undefined, true);
+  }
+});
 const mimetypeImge: string[] = ["image/jpg", "image/jpeg", "image/png"]
-// const videoStorage = multer.diskStorage({
-//   destination: 'videos',
-//   filename: (req, file, cb) => { if (req.params.mediaType === 'video') cb(null, file.fieldname + '_' + Date.now() + path.extname(file.originalname)); },
-// });
-// const videoUpload = multer({
-//   storage: videoStorage,
-//   limits: { fileSize: 10000000 },
-//   fileFilter(req, file, cb) {
-//     if (!file.originalname.match(/\.(mp4|MPEG-4|mkv)$/)) return cb(new Error('Please upload a video'));
-//     cb(undefined, true);
-//   }
-// });
-export default {regularExprEmail, randomNumber, randomString, deleteProps, checkFields, imageProcessing, removeFile, mimetypeImge}
+export default {regularExprEmail, randomNumber, randomString, deleteProps, checkFields, imageProcessing, removeFile, videoUpload, mimetypeImge}

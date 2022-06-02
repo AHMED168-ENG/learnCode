@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('../layout/heade.ejs') %>
+  </head>
+  <body class="sidebar-mini layout-fixed text-sm text-sm">
+    <div class="wrapper">
+      <%- include('../layout/nav.ejs') %>
+      <!-- Content Wrapper. Contains page content -->
+      <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <!-- Content Header (Page header) -->
+        <div class="content-header">
+          <div class="container-fluid">
+            <div class="row mb-2 align-items-center mt-1">
+              <div class="col-sm-6"></div>
+              <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                  <li class="breadcrumb-item"><a href="/">Home</a></li>
+                  <li class="breadcrumb-item"><a href="/website/destination">Destinations</a></li>
+                  <li class="breadcrumb-item active">View</li>
+                </ol>
+              </div>
+            </div>
+            <!-- /.row -->
+          </div>
+          <!-- /.container-fluid -->
+        </div>
+        <!-- /.content-header -->
+        <!-- Main content -->
+        <section class="content">
+          <div class="container-fluid">
+            <div class="row">
+              <!-- left column -->
+              <div class="col-md-12">
+                <!-- jquery validation -->
+                <div class="card card-primary">
+                  <div class="card-header">
+                    <h3 class="card-title">
+                      <i class="fas fa-users"></i>
+                      &nbsp;&nbsp; View Destination
+                    </h3>
+                  </div>
+                  <form id="newForm" action="" onsubmit="">
+                    <div class="card-body">
+                      <div class="form-row mx-3 my-1">
+                        <div class="form-group col-md-6">
+                          <label for="title">Title</label>
+                          <input
+                            type="text"
+                            readonly
+                            id="title"
+                            name="title"
+                            class="form-control"
+                            placeholder="Title"
+                            value="<%= data.title || null %>"
+                          />
+                        </div>
+                      </div>
+                      <div class="form-row mx-3 my-1">
+                        <div class="form-group col-md-6">
+                          <label for="location_lat">Latitude</label>
+                          <input
+                            type="text"
+                            readonly
+                            id="location_lat"
+                            name="location_lat"
+                            class="form-control"
+                            placeholder="Latitude"
+                            value="<%= data.location_lat || null %>"
+                          />
+                        </div>
+                        <div class="form-group col-md-6">
+                          <label for="location_long">Longitude</label>
+                          <input
+                            type="text"
+                            readonly
+                            id="location_long"
+                            name="location_long"
+                            class="form-control"
+                            placeholder="Longitude"
+                            value="<%= data.location_long || null %>"
+                          />
+                        </div>
+                      </div>
+                      <div class="form-row mx-3 my-1">
+                        <div class="form-group col-md-6">
+                          <label for="description">Description</label>
+                          <textarea disabled type="text" id="description" name="description" class="form-control" placeholder="description" rows="3"><%= data.description || null %></textarea>
+                        </div>
+                      </div>
+                      <div class="form-row mx-3 my-1">
+                        <div class="form-group col-md-6 d-flex justify-content-center">
+                          <img class="img-fluid mb-3" id="dest_image_display" width="120" height="120" src="/p/img/<%= data.image %>" alt="Photo" />
+                        </div>
+                        <div class="form-group col-md-6 d-flex justify-content-center">
+                          <img class="img-fluid mb-3" id="dest_file_display" width="120" height="120" src="/p/img/<%= data.file %>" alt="Photo" />
+                        </div>
+                      </div>
+                      <div class="form-row mx-3 my-1">
+                        <div class="form-group col-md-6">
+                          <label for="when_visit">When Visit Description</label>
+                          <textarea disabled type="text" id="when_visit" name="when_visit" class="form-control" placeholder="When Visit Description" rows="3"><%= data.when_visit || null %></textarea>
+                        </div>
+                        <div class="form-group col-md-6">
+                          <label for="what_wear">What Wear Description</label>
+                          <textarea disabled type="text" id="what_wear" name="what_wear" class="form-control" placeholder="When Visit Description" rows="3"><%= data.what_wear || null %></textarea>
+                        </div>
+                      </div>
+                      <div class="form-row mx-3 my-1">
+                        <div class="form-group col-md-6">
+                          <label for="trans_desc">Transportation Description</label>
+                          <textarea disabled type="text" id="trans_desc" name="trans_desc" class="form-control" placeholder="Transportation Description" rows="3"><%= data.trans_desc || null %></textarea>
+                        </div>
+                        <div class="form-group col-md-6">
+                          <label for="travel_regulation">Travel Regulation Description</label>
+                          <textarea disabled type="text" id="travel_regulation" name="travel_regulation" class="form-control" placeholder="Travel Regulation Description en" rows="3"><%= data.travel_regulation || null %></textarea>
+                        </div>
+                      </div>
+                      <!-- <% if (data.images.length) { %>
+                        <div class="row">
+                          <div id="carouselImages" class="carousel ml-3 mt-2" data-ride="carousel">
+                            <div class="carousel-inner rounded" role="listbox">
+                              <% for (const image of data.images) { %>
+                                <div class="carousel-item active">
+                                  <div class="carousel-caption d-none d-md-block text-warning">
+                                    <h4 class="text-center" style="font-size: 40px; font-weight: bold;">Destinations</h4>
+                                    <h6 class="text-center" style="color: white;"><%= data.category %></h6>
+                                  </div>
+                                  <img class="d-block" src="/p/img/<%= image %>" alt="900x400" data-holder-rendered="true" style="width: 660px; height: 300px;">
+                                </div>
+                              <% } %>
+                            </div>
+                            <a class="carousel-control-prev" href="#carouselImages" role="button" data-slide="prev">
+                              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                              <span class="sr-only">Previous</span>
+                            </a>
+                            <a class="carousel-control-next" href="#carouselImages" role="button" data-slide="next">
+                              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                              <span class="sr-only">Next</span>
+                            </a>
+                          </div>
+                        </div>
+                      <% } %>
+                      <% if (data.videos.length) { %>
+                        <div class="row">
+                          <div id="carouselVideoExample" class="carousel slide carousel-fade" data-mdb-ride="carousel">
+                            <div class="carousel-indicators">
+                              <% for (const video of data.videos) { %>
+                                <button type="button" data-mdb-target="#carouselVideoExample" data-mdb-slide-to="<%= data.videos.indexOf(video) %>" class="active" aria-current="true" aria-label="Slide <%= video.id %>"></button>
+                              <% } %>
+                            </div>
+                            <div class="carousel-inner">
+                              <% for (const video of data.videos) { %>
+                                <div class="carousel-item active">
+                                  <video class="img-fluid" autoplay loop muted>
+                                    <source src="/p/img/<%= video %>" type="video/mp4" />
+                                  </video>
+                                  <div class="carousel-caption d-none d-md-block">
+                                    <h5>Destinations</h5>
+                                    <p><%= data.category %></p>
+                                  </div>
+                                </div>
+                              <% } %>
+                            </div>
+                            <button
+                              class="carousel-control-prev"
+                              type="button"
+                              data-mdb-target="#carouselVideoExample"
+                              data-mdb-slide="prev"
+                            >
+                              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                              <span class="visually-hidden">Previous</span>
+                            </button>
+                            <button
+                              class="carousel-control-next"
+                              type="button"
+                              data-mdb-target="#carouselVideoExample"
+                              data-mdb-slide="next"
+                            >
+                              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                              <span class="visually-hidden">Next</span>
+                            </button>
+                          </div>
+                        </div>
+                      <% } %> -->
+                    </div>
+                    <!-- /.card-body -->
+                    <div class="card-footer">
+                      <div class="m-1">
+                        <a href="/destination" class="btn btn-primary has-spinner">Cancel</a>
+                      </div>
+                      <div class="m-1">
+                        <a href="/activity?destination_id=<%= data.id %>&category=1" class="btn btn-info has-spinner">See Destination Activities</a>
+                        <a href="/hotel?destination_id=<%= data.id %>&category=1" class="btn btn-secondary has-spinner">See Destination Hotels</a>
+                        <a href="/destination-place?destination_id=<%= data.id %>&category=1" class="btn btn-secondary has-spinner">See Destination Popular Places</a>
+                        <a href="/restaurant?destination_id=<%= data.id %>&category=1" class="btn btn-info has-spinner">See Destination Restaurants</a>
+                        <a href="/destination-store?destination_id=<%= data.id %>&category=1" class="btn btn-secondary has-spinner">See Destination Shopping Stores</a>
+                        <a href="/package?destination_id=<%= data.id %>&category=1" class="btn btn-secondary has-spinner">See Destination Packages</a>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+                <!-- /.card -->
+              </div>
+              <!--/.col (left) -->
+            </div>
+            <!-- /.row -->
+          </div>
+          <!-- /.container-fluid -->
+        </section>
+
+        <!-- /.content -->
+      </div>
+      <footer class="main-footer"><%- include('../layout/footer.ejs') %></footer>
+    </div>
+    <%- include('../layout/script.ejs') %>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"
+      integrity="sha512-37T7leoNS06R80c8Ulq7cdCDU5MNQBwlYoy1TX/WUsLFC2eYNqtKlV0QjH7r8JpG/S0GUMZwebnVFLPd6SU5yg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/additional-methods.min.js"
+      integrity="sha512-XZEy8UQ9rngkxQVugAdOuBRDmJ5N4vCuNXCh8KlniZgDKTvf7zl75QBtaVG1lEhMFe2a2DuA22nZYY+qsI2/xA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+  </body>
+</html>

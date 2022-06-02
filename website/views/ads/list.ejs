@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('../layout/heade.ejs') %>
+  </head>
+  <body class="sidebar-mini layout-fixed text-sm text-sm">
+    <style>
+      th,
+      td {
+        text-align: center;
+        vertical-align: middle !important;
+      }
+    </style>
+    <div class="wrapper">
+      <%- include('../layout/nav.ejs') %>
+      <!-- Content Wrapper. Contains page content -->
+      <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <div class="content-header">
+          <div class="container-fluid">
+            <div class="row mb-2 align-items-center mt-1">
+              <div class="col-sm-6">
+                <h4><%= title %></h4>
+              </div>
+              <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                  <li class="breadcrumb-item"><a href="/">Home</a></li>
+                  <li class="breadcrumb-item active"><%= title %></li>
+                </ol>
+              </div>
+            </div>
+            <!-- /.row -->
+          </div>
+          <!-- /.container-fluid -->
+        </div>
+        <!-- /.content-header -->
+        <!-- Main content -->
+        <section class="content">
+          <div class="card card-primary card-outline">
+            <div class="card-header">
+              <h3 class="card-title">
+                <i class="fas fa-dolly-flatbed"></i>
+                &nbsp;&nbsp; <%= title %>
+              </h3>
+            </div>
+            <div id="spinner-notfound">
+              <div class="w-100 d-flex justify-content-center align-items-center" style="min-height: 24em"></div>
+            </div>
+            <div id="tabe-items" class="card-body pad table-responsive">
+              <table class="table table-bordered" style="border: 1px solid #dee2e6">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Name AR</th>
+                    <th scope="col">Name EN</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Order</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="tr-th-row"></tbody>
+              </table>
+              <ul id="pagination-demo" class="pagination-sm pt-2"></ul>
+            </div>
+            <!-- /.card -->
+          </div>
+          <!-- /.container-fluid -->
+        </section>
+        <!-- /.content -->
+      </div>
+      <footer class="main-footer"><%- include('../layout/footer.ejs') %></footer>
+      <div class="modal" id="chandeStatusModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Confirmation</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <p id="modal-body-status">Are you sure to make this ?!</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary" onclick="" id="ModalYesBtn">Yes</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <%- include('../layout/script.ejs') %>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/twbs-pagination/1.4.2/jquery.twbsPagination.min.js"
+      integrity="sha512-frFP3ZxLshB4CErXkPVEXnd5ingvYYtYhE5qllGdZmcOlRKNEPbufyupfdSTNmoF5ICaQNO6SenXzOZvoGkiIA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    x
+    <script src="/website/js/ads/list.js"></script>
+  </body>
+</html>

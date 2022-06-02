@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('../layout/heade.ejs') %>
+  </head>
+
+  <body class="sidebar-mini layout-fixed text-sm text-sm">
+    <style>
+      th,
+      td {
+        text-align: center;
+        vertical-align: middle !important;
+      }
+    </style>
+    <div class="wrapper">
+      <%- include('../layout/nav.ejs') %>
+      <!-- Content Wrapper. Contains page content -->
+      <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <div class="content-header">
+          <div class="container-fluid">
+            <div class="row mb-2 align-items-center mt-1">
+              <div class="col-sm-6" id="addNewBtn"></div>
+              <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                  <li class="breadcrumb-item"><a href="/">Home</a></li>
+                  <li class="breadcrumb-item active">Activities</li>
+                </ol>
+              </div>
+            </div>
+            <!-- /.row -->
+          </div>
+          <!-- /.container-fluid -->
+        </div>
+        <!-- /.content-header -->
+        <!-- Main content -->
+        <section class="content">
+          <div class="card card-primary card-outline">
+            <div class="card-header">
+              <h3 class="card-title">
+                <span><i class="fas fa-globe-americas"></i> &nbsp;&nbsp; Activities</span>
+                <select id="activity_category_id" name="activity_category_id" class="m-2 form-control select2 select2-danger" data-dropdown-css-class="select2-danger" style="width: 100%" onchange="location = this.value;">
+                  <% categories.forEach((category) => { %>
+                    <option value='/activity?destination_id=<%= destination_id %>&category=<%= category.id %>' <%= activity_category_id == category.id ? 'selected' : ''%>><%= category.en_name %> - <%= category.ar_name %></option>
+                  <% }); %>
+                </select>
+              </h3>
+            </div>
+            <div id="spinner-notfound">
+              <div class="w-100 d-flex justify-content-center align-items-center" style="min-height: 24em"></div>
+            </div>
+            <div id="tabe-items" class="card-body pad table-responsive">
+              <div id="tabe-items" class="card-body pad">
+                <div class="row main d-flex justify-content-center" id="tr-th-row"></div>
+                <ul id="pagination-demo" class="pagination-sm pt-2"></ul>
+              </div>
+            </div>
+            <!-- /.card -->
+          </div>
+          <!-- /.container-fluid -->
+        </section>
+        <!-- /.content -->
+      </div>
+      <footer class="main-footer"><%- include('../layout/footer.ejs') %></footer>
+    </div>
+    <%- include('../layout/script.ejs') %>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/twbs-pagination/1.4.2/jquery.twbsPagination.min.js"
+      integrity="sha512-frFP3ZxLshB4CErXkPVEXnd5ingvYYtYhE5qllGdZmcOlRKNEPbufyupfdSTNmoF5ICaQNO6SenXzOZvoGkiIA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script>
+      $(document).ready(function () {
+        getList(1)
+      })
+      function getList(page) {
+        // show spinner
+          spinnerNotfound(1)
+          const category = JSON.parse(`<%-JSON.stringify(activity_category_id)%>`);
+          const destination_id = JSON.parse(`<%-JSON.stringify(destination_id)%>`);
+          const settings = {
+              async: true,
+              crossDomain: true,
+              url: `${window.location.pathname}/list?limit=20&page=${page}&destination_id=${destination_id}&category=${category}`,
+              method: "Get",
+          }
+          $.ajax(settings).done(function (res, textStatus) {
+              // hidden spinner
+              spinnerNotfound(2)
+              pagination(res.pages)
+              $("#tr-th-row").empty()
+              res.data.forEach((elem) => {
+                  $("#tr-th-row").append(`
+                      <div class="card col-xl-2 col-lg-2 col-md-3 col-sm-4 col-xs-6 col-6 m-2">
+                          <img class="card-img-top" src="/p/img/${elem.image}" alt="Photo">
+                          <div class="card-body">
+                          <div class="row">
+                            <h4 class="card-title text-center">${elem.name}</h4>
+                          </div>
+                          <div class="row">
+                            <h6 class="card-subtitle mb-2 text-muted text-center">${elem.category}</h6>
+                          </div>
+                          <a href="/activity/view/${elem.id}" class="btn btn-primary">More Details ...</a>
+                          </div>
+                      </div>
+                  `);
+              });
+          }).fail(() => spinnerNotfound(3))
+      }
+      function pagination(total) {
+          $("#pagination-demo").twbsPagination({
+              totalPages: total,
+              visiblePages: 7,
+              onPageClick: function (event, page) {
+                  if (total != 1) getList(page)
+              },
+          })
+      }
+
+
+      function spinnerNotfound(action) {
+          // 1 => Show Spinner
+          // 2 => Hidden Spinner
+          // 3 => Notfound
+          if (action == 1) {
+              $("#tabe-items").hide();
+              $("#spinner-notfound>div").html(`<div class="spinner-border text-info" role="status"><span class="sr-only">Loading...</span></div>`);
+              $("#spinner-notfound").show();
+          } else if (action == 2) {
+              $("#spinner-notfound").hide();
+              $("#tabe-items").show();
+          } else if (action == 3) {
+              $("#tabe-items").hide();
+              $("#spinner-notfound>div").html(`<p>Not found items</p>`);
+              $("#spinner-notfound").show();
+          }
+
+      }
+    </script>
+  </body>
+</html>

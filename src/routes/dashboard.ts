@@ -23,6 +23,28 @@ import { TreeHeaderRoutes } from "./dashboard/tree-header.route"
 import { TreeBodyRoutes } from "./dashboard/tree-body.route"
 import { UserRolesRoutes } from "./dashboard/user-roles.route"
 import { UserPermissionsRoutes } from "./dashboard/user-permissions.route"
+import { ActivityCategoryRoutes } from "./dashboard/activity-category.route"
+import { ActivityRoutes } from "./dashboard/activity.route"
+import { AdsRoutes } from "./dashboard/ads.route"
+import { AudienceCategoryRoutes } from "./dashboard/audience-category.route"
+import { DestinationCategoryRoutes } from "./dashboard/destination-category.route"
+import { DestinationPlaceRoutes } from "./dashboard/destination-place.route"
+import { DestinationStoreRoutes } from "./dashboard/destination-store.route"
+import { DestinationRoutes } from "./dashboard/destination.route"
+import { EventCategoryRoutes } from "./dashboard/event-category.route"
+import { EventRoutes } from "./dashboard/event.route"
+import { TourGuideRoutes } from "./dashboard/guide.route"
+import { HotelRoutes } from "./dashboard/hotel.route"
+import { MediaRoutes } from "./dashboard/media.route"
+import { MembershipRoutes } from "./dashboard/membership.route"
+import { PackageBookingRoutes } from "./dashboard/package-booking.route"
+import { PackageRoutes } from "./dashboard/package.route"
+import { ProviderRoutes } from "./dashboard/provider.route"
+import { RestaurantRoutes } from "./dashboard/restaurant.route"
+import { StoreRoutes } from "./dashboard/store.route"
+import { TicketRoutes } from "./dashboard/ticket.route"
+import { TravelRoutes } from "./dashboard/travel.route"
+import { TripRoutes } from "./dashboard/trip.route"
 export = (app: express.Application) => {
   // Index
   app.get("/", (req, res) => res.redirect("/dashboard/home"))
@@ -74,4 +96,48 @@ export = (app: express.Application) => {
   app.use("/dashboard/partner", new PartnerRoutes().router)
   // Message route
   app.use("/dashboard/message", new MessageRoutes().router)
+  // Destination route
+  app.use("/dashboard/destination", new DestinationRoutes().router);
+  // Destination Place route
+  app.use("/dashboard/destination-place", new DestinationPlaceRoutes().router);
+  // Destination Store route
+  app.use("/dashboard/destination-store", new DestinationStoreRoutes().router);
+  // Package route
+  app.use("/dashboard/package", new PackageRoutes().router);
+  // Ticket route
+  app.use("/dashboard/ticket", new TicketRoutes().router);
+  // Trip route
+  app.use("/dashboard/trip", new TripRoutes().router);
+  // Membership route
+  app.use("/dashboard/membership", new MembershipRoutes().router);
+  // Restaurant route
+  app.use("/dashboard/restaurant", new RestaurantRoutes().router);
+  // Hotel route
+  app.use("/dashboard/hotel", new HotelRoutes().router);
+  // Activity route
+  app.use("/dashboard/activity", new ActivityRoutes().router);
+  // Activity Category route
+  app.use("/dashboard/activity-category", new ActivityCategoryRoutes().router);
+  // Destination Interest Category route
+  app.use("/dashboard/destination-category", new DestinationCategoryRoutes().router);
+  // Event route
+  app.use("/dashboard/event", new EventRoutes().router);
+  // Event Category route
+  app.use("/dashboard/event-category", new EventCategoryRoutes().router);
+  // Audience Category route
+  app.use("/dashboard/audience-category", new AudienceCategoryRoutes().router);
+  // Provider route
+  app.use("/dashboard/provider", new ProviderRoutes().router);
+  // Tour Guide route
+  app.use("/dashboard/guide", new TourGuideRoutes().router);
+  // Store route
+  app.use("/dashboard/store", new StoreRoutes().router);
+  // Media route
+  app.use("/dashboard/media", new MediaRoutes().router);
+  // Advertisement route
+  app.use("/dashboard/ads", new AdsRoutes().router);
+  // Package Booking route
+  app.use("/dashboard/package-booking", new PackageBookingRoutes().router);
+  // Travel Essentials route
+  app.use("/dashboard/travel", new TravelRoutes().router);
 }

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('../layout/heade.ejs') %>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/icheck-bootstrap/3.0.1/icheck-bootstrap.min.css"
+      integrity="sha512-8vq2g5nHE062j3xor4XxPeZiPjmRDh6wlufQlfC6pdQ/9urJkU07NM0tEREeymP++NczacJ/Q59ul+/K2eYvcg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+  </head>
+
+  <body class="sidebar-mini layout-fixed text-sm text-sm">
+    <style>
+      th,
+      td {
+        text-align: center;
+        vertical-align: middle !important;
+      }
+    </style>
+    <div class="wrapper">
+      <%- include('../layout/nav.ejs') %>
+      <!-- Content Wrapper. Contains page content -->
+      <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <div class="content-header">
+          <div class="container-fluid">
+            <div class="row mb-2 align-items-center mt-1">
+              <div class="col-sm-6">
+                <div class="form-row mx-3 my-1">
+                  <div class="form-group col-md-6">
+                    <div class="form-group">
+                      <label>Media Type</label>
+                      <select id="mediaType" name="mediaType" class="form-control select2 select2-danger" data-dropdown-css-class="select2-danger" style="width: 100%" onchange="location = this.value;">
+                        <option value='/website/media/<%= module_id %>/image/<%= item_id %>' <%= mediaType === 'image' ? 'selected' : '' %>>Images</option>
+                        <option value='/website/media/<%= module_id %>/video/<%= item_id %>' <%= mediaType === 'video' ? 'selected' : '' %>>Videos</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-6" id="addNewBtn"></div>
+              <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                  <li class="breadcrumb-item"><a href="/">Home</a></li>
+                  <li class="breadcrumb-item active">Media</li>
+                </ol>
+              </div>
+            </div>
+            <!-- /.row -->
+          </div>
+          <!-- /.container-fluid -->
+        </div>
+        <!-- /.content-header -->
+        <!-- Main content -->
+        <section class="content">
+          <div class="card card-primary card-outline">
+            <div class="card-header">
+              <h3 class="card-title">
+                <i class="fas fa-globe-americas"></i>
+                &nbsp;&nbsp; Media
+              </h3>
+            </div>
+            <div id="spinner-notfound">
+              <div class="w-100 d-flex justify-content-center align-items-center" style="min-height: 24em"></div>
+            </div>
+            <div id="tabe-items" class="card-body pad table-responsive">
+              <table class="table table-bordered" style="border: 1px solid #dee2e6">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Media</th>
+                    <th scope="col">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="tr-th-row"></tbody>
+              </table>
+              <ul id="pagination-demo" class="pagination-sm pt-2"></ul>
+            </div>
+            <!-- /.card -->
+          </div>
+          <!-- /.container-fluid -->
+        </section>
+        <!-- /.content -->
+      </div>
+      <footer class="main-footer"><%- include('../layout/footer.ejs') %></footer>
+    </div>
+    <%- include('../layout/script.ejs') %>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/twbs-pagination/1.4.2/jquery.twbsPagination.min.js"
+      integrity="sha512-frFP3ZxLshB4CErXkPVEXnd5ingvYYtYhE5qllGdZmcOlRKNEPbufyupfdSTNmoF5ICaQNO6SenXzOZvoGkiIA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script src="/website/js/media/list.js"></script>
+  </body>
+</html>

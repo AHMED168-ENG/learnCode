@@ -3,6 +3,7 @@ import { Sequelize, DataTypes } from "sequelize";
 import destination from "./destination.model";
 import eventCategory from "./event-category.model";
 import city from "./city.model";
+import audienceCategory from "./audience-category.model";
 const sequelize = new Sequelize(...config.database);
 const events = sequelize.define(
   "tbl_events",
@@ -52,10 +53,10 @@ const events = sequelize.define(
       },
     },
     audience: {
-      type: DataTypes.ENUM("all", "+12", "+18"),
+      type: DataTypes.INTEGER,
       allowNull: true,
-      defaultValue: "all",
-      validate: { isIn: { args: [["all", "+12", "+18"]], msg: "Invalid audience" } },
+      defaultValue: null,
+      validate: { isInt: { msg: "Invalid audience category id. It should be an integer" } },
     },
     type: {
       type: DataTypes.ENUM("paid", "free"),
@@ -76,4 +77,5 @@ events.sync();
 events.belongsTo(destination, { foreignKey: "destination_id" });
 events.belongsTo(eventCategory, { foreignKey: "event_category_id" });
 events.belongsTo(city, { foreignKey: "city_id" });
+events.belongsTo(audienceCategory, { foreignKey: "audience" });
 export default events;

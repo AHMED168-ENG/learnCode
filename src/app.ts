@@ -4,8 +4,8 @@ import cors from "cors"
 import * as http from "http"
 import config, {IEnv} from "./config/config"
 import routes from "./routes"
-import routeDashboard1 from "./routes/dashboard"
-import routeDashboard2 from "./routes/dashboard2"
+import routeDashboard from "./routes/dashboard"
+import routeWebsite from "./routes/website"
 import auth from "./middlewares/auth.middleware"
 import appleLink from "./middlewares/apple-link.middleware"
 import authDash from "./middlewares/auth-dashboard.middleware"
@@ -51,15 +51,15 @@ export class IndexApp {
   private templateEngine(): void {
     this.app.use("/css", express.static(path.join(__dirname, "../dashboard/public/css")))
     this.app.use("/js", express.static(path.join(__dirname, "../dashboard/public/js")))
-    this.app.use("/dashboard2/js", express.static(path.join(__dirname, "../dashboard2/public/js")))
+    this.app.use("/website/js", express.static(path.join(__dirname, "../website/public/js")))
     this.app.use("/img", express.static(path.join(__dirname, "../dashboard/public/img")))
     // Setting the root path for views directory
     this.app.set("views", path.join(__dirname, "../"))
     // Setting the view engine
     this.app.set("view engine", "ejs")
     this.app.use(authDash)
-    routeDashboard1(this.app)
-    routeDashboard2(this.app)
+    routeDashboard(this.app)
+    routeWebsite(this.app)
   }
   private route(): void {
     this.app.get("/apple-app-site-association", appleLink)

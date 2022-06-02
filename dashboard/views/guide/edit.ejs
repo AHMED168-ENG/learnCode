@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('../layout/heade.ejs') %>
+  </head>
+  <body class="sidebar-mini layout-fixed text-sm text-sm">
+    <div class="wrapper">
+      <%- include('../layout/nav.ejs') %>
+      <!-- Content Wrapper. Contains page content -->
+      <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <!-- Content Header (Page header) -->
+        <div class="content-header">
+          <div class="container-fluid">
+            <div class="row mb-2 align-items-center mt-1">
+              <div class="col-sm-6"></div>
+              <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                  <li class="breadcrumb-item"><a href="/">Home</a></li>
+                  <li class="breadcrumb-item"><a href="/dashboard/guide">Tour Guides</a></li>
+                  <li class="breadcrumb-item active">Edit</li>
+                </ol>
+              </div>
+            </div>
+            <!-- /.row -->
+          </div>
+          <!-- /.container-fluid -->
+        </div>
+        <!-- /.content-header -->
+        <!-- Main content -->
+        <section class="content">
+          <div class="container-fluid">
+            <div class="row">
+              <!-- left column -->
+              <div class="col-md-12">
+                <!-- jquery validation -->
+                <div class="card card-primary">
+                  <div class="card-header">
+                    <h3 class="card-title">
+                      <i class="fas fa-users"></i>
+                      &nbsp;&nbsp; Edit Tour Guide
+                    </h3>
+                  </div>
+                  <form id="newForm" action="" onsubmit="">
+                    <div class="card-body">
+                      <div class="form-row mx-3 my-1">
+                        <div class="form-group col-md-6">
+                          <label for="name">Name</label>
+                          <input
+                            type="text"
+                            id="name"
+                            name="name"
+                            class="form-control"
+                            placeholder="Name"
+                            value="<%= data.name || null %>"
+                          />
+                        </div>
+                        <div class="form-group col-md-6">
+                          <label for="username">Nick Name</label>
+                          <input
+                            type="text"
+                            id="username"
+                            name="username"
+                            class="form-control"
+                            placeholder="User Name or Nick Name"
+                            value="<%= data.username || null %>"
+                          />
+                        </div>
+                      </div>
+                      <div class="form-row mx-3 my-1">
+                        <div class="form-group">
+                          <label>Gender</label>
+                          <select id="gender" name="gender" class="form-control select2 select2-danger" data-dropdown-css-class="select2-danger" style="width: 100%">
+                            <option value="male" <% data.gender === 'male'? 'selected' : '' %>>Male</option>
+                            <option value="female" <% data.gender === 'female'? 'selected' : '' %>>Female</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="form-row mx-3 my-1">
+                        <div class="form-group">
+                          <label>City</label>
+                          <select id="city_id" name="city_id" class="form-control select2 select2-danger" data-dropdown-css-class="select2-danger" style="width: 100%">
+                            <% cities.forEach((city) => { %>
+                              <option value="<%= city.city_id %>" <%= data.city_id == city.city_id ? 'selected' : ''%>><%= city.ar_name %> - <%= city.en_name %></option>
+                            <% }); %>
+                          </select>
+                        </div>
+                        <div class="form-group col-md-6">
+                          <label for="email">Email</label>
+                          <input type="text" id="email" name="email" class="form-control" placeholder="Email" value="<%= data.email || null %>" />
+                        </div>
+                      </div>
+                      <div class="form-row mx-3 my-1">
+                        <div class="form-group col-md-6">
+                          <label for="phone">Phone</label>
+                          <input type="text" id="phone" name="phone" class="form-control" placeholder="phone" value="<%= data.phone || null %>" />
+                        </div>
+                        <div class="form-group col-md-6">
+                          <label for="password">Password</label>
+                          <input type="password" id="password" name="password" class="form-control" placeholder="password" value="<%= data.password || null %>" />
+                        </div>
+                      </div>
+                      <div class="form-row mx-3 my-1">
+                        <div class="form-group col-md-6" style="padding-right: 22px; padding-left: 5px">
+                          <label for="image">Image</label>
+                          <div class="custom-file">
+                            <input type="file" class="custom-file-input" id="image" name="image" accept="image/x-png" onchange="loadImg(event)" />
+                            <label class="custom-file-label" id="custom-file-label-img" for="image"><%= data.image || "Choose file" %></label>
+                          </div>
+                        </div>
+                        <div class="form-group col-md-6 d-flex justify-content-center">
+                          <img class="img-fluid mb-3" id="dest_image_display" width="120" height="120" src="/p/img/<%= data.image %>" alt="Photo" />
+                        </div>
+                      </div>
+                      <div class="form-row mx-3 my-1">
+                        <div class="form-group col-md-6" style="padding-right: 22px; padding-left: 5px">
+                          <label for="file">File</label>
+                          <div class="custom-file">
+                            <input type="file" class="custom-file-input" id="file" name="file" onchange="loadFile(event)" />
+                            <label class="custom-file-label" id="custom-file-label" for="file"><%= data.file || "Choose file" %></label>
+                          </div>
+                        </div>
+                        <div class="form-group col-md-6 d-flex justify-content-center">
+                          <img class="img-fluid mb-3" id="dest_file_display" width="120" height="120" src="/p/img/<%= data.file %>" alt="Photo" />
+                        </div>
+                      </div>
+                      <div class="form-row mx-3 my-1">
+                        <div class="form-group col-md-6">
+                          <label for="en_description">Description en</label>
+                          <textarea type="text" id="en_description" name="en_description" class="form-control" placeholder="description en" rows="3"><%= data.en_description || null %></textarea>
+                        </div>
+                        <div class="form-group col-md-6">
+                          <label for="ar_description">Description ar</label>
+                          <textarea type="text" id="ar_description" name="ar_description" class="form-control" placeholder="description ar" rows="3"><%= data.ar_description || null %></textarea>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- /.card-body -->
+                    <div class="card-footer">
+                      <button id="submitForm" type="submit" class="btn btn-primary has-spinner">Update</button>
+                      <a href="/dashboard/media/<%= module_id %>/image" class="btn btn-info has-spinner">See More Album Images</a>
+                      <a href="/dashboard/media/<%= module_id %>/video" class="btn btn-secondary has-spinner">See More Album Videos</a>
+                    </div>
+                  </form>
+                </div>
+                <!-- /.card -->
+              </div>
+              <!--/.col (left) -->
+            </div>
+            <!-- /.row -->
+          </div>
+          <!-- /.container-fluid -->
+        </section>
+
+        <!-- /.content -->
+      </div>
+      <footer class="main-footer"><%- include('../layout/footer.ejs') %></footer>
+    </div>
+    <%- include('../layout/script.ejs') %>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"
+      integrity="sha512-37T7leoNS06R80c8Ulq7cdCDU5MNQBwlYoy1TX/WUsLFC2eYNqtKlV0QjH7r8JpG/S0GUMZwebnVFLPd6SU5yg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/additional-methods.min.js"
+      integrity="sha512-XZEy8UQ9rngkxQVugAdOuBRDmJ5N4vCuNXCh8KlniZgDKTvf7zl75QBtaVG1lEhMFe2a2DuA22nZYY+qsI2/xA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script src="/js/guide/edit.js"></script>
+  </body>
+</html>

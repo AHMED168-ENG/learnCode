@@ -246,7 +246,7 @@ export class UserController extends Controller {
         res.status(httpStatus.BAD_REQUEST).json({msg: "error", err: err["errors"][0]["message"]})
       })
   }
-  async homeData(lang: string, userId) {
+  async homeData(lang, userId) {
     const ar_en = lang == "en" ? "en_name" : "ar_name"
     let data
     await webAppsUsers

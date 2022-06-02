@@ -7,7 +7,6 @@ import bcrypt from "bcrypt";
 import role from "../../models/user-roles.model";
 import permissions from "../../models/permissions.model";
 import page from "../../models/page.model";
-import modules from "../../models/module.model";
 const { generateToken, verify } = require("../../helper/token") ;
 export class AdminController {
   loginPage(req: Request, res: Response, next: NextFunction) {
@@ -17,7 +16,7 @@ export class AdminController {
     try {
       const { email, password } = req.body;
       let payload: any;
-      if (email === "admin@admin.com" && password === "admin") payload = { sub: "0", role_id: "0", username: "admin", email: "admin@admin.com", phone: "012345678910" };
+      if (email === process.env.admin_email && password === process.env.admin_password) payload = { sub: process.env.admin_id, role_id: process.env.admin_role, username: process.env.admin_name, email: process.env.admin_email, phone: process.env.admin_phone };
       else {
         const user = await admin.findOne({ where: { email } });
         const isMatch = await bcrypt.compare(password, user["password"]);

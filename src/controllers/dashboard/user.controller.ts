@@ -3,13 +3,10 @@ import httpStatus from "http-status"
 import sequelize, { Op } from "sequelize"
 import city from "../../models/city.model"
 import country from "../../models/country.model"
-import modules from "../../models/module.model"
-import page from "../../models/page.model"
-import permissions from "../../models/permissions.model"
 import region from "../../models/region.model"
 import sector from "../../models/sector.model"
 import webAppsUsers from "../../models/user.model"
-const { verify } = require("../../helper/token")
+import { UserPermissionsController } from "./user-permissions.controller"
 
 export class UserController {
   secretFields: string[] = ["user_pass", "userSalt", "updatedAt"]
@@ -52,22 +49,8 @@ export class UserController {
         ],
         raw: true,
       });
-      const payload = verify(req.cookies.token);
-      const isHighestAdmin = payload.role_id === "0";
-      let userPermissions, canEdit = true;
-      if (!isHighestAdmin) {
-        userPermissions = await permissions.findAll({
-          where: { role_id: payload.role_id },
-          attributes: { exclude: ["role_id", "page_id", "createdAt", "updatedAt"] },
-          include: [{
-            model: page,
-            attributes: ["type"],
-            include: [{ model: modules, attributes: ["name"] }],
-          }],
-        });
-        canEdit = !!userPermissions.filter((per) => per["tbl_page"]["type"] === "Edit" && per["tbl_page"]["tbl_module"]["name"] === "Users - Clients").length;
-      }
-      const dataPagination = { total: data["count"], limit, page: Number(req.query.page), pages: Math.ceil(data["count"] / limit), data: data["rows"], canEdit };
+      const permissions = await new UserPermissionsController().getUserPermissions(req.cookies.token, "Roles List");
+      const dataPagination = { total: data["count"], limit, page: Number(req.query.page), pages: Math.ceil(data["count"] / limit), data: data["rows"], canEdit: permissions.canEdit };
       return res.status(httpStatus.OK).json(dataPagination);
     } catch (err) {
       return res.status(httpStatus.NOT_FOUND).json({ err: "There is something wrong while getting users list", msg: "Can't find Users" });
@@ -131,5 +114,12 @@ export class UserController {
         data = null
       })
     return data
+  }
+  public async getUserByEmail(email: string) {
+    try {
+      return await webAppsUsers.findOne({ where: { email }, raw: true });
+    } catch (error) {
+      throw error;
+    }
   }
 }

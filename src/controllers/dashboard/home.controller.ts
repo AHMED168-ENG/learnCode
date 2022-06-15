@@ -31,9 +31,9 @@ export class HomeController {
     try {
       const payload = verify(token);
       const isHighestAdmin = payload.role_id === "0";
-      const where = !isHighestAdmin ? { role_id: payload.role_id } : {};
       let mappedUserPermissions;
       if (!isHighestAdmin) {
+        const where = { role_id: payload.role_id };
         const userPermissions = await permissions.findAll({
           where,
           attributes: { exclude: ["role_id", "page_id", "createdAt", "updatedAt"] },

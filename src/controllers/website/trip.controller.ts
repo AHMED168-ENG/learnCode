@@ -6,7 +6,17 @@ import { ModulesController } from "../dashboard/modules.controller";
 import webAppsUsers from "../../models/user.model";
 import transportation from "../../models/transportation.model";
 import trip from "../../models/trip.model";
-export class TripController {
+import { TripController } from "../dashboard/trip.controller";
+import { DestinationController } from "../dashboard/destination.controller";
+import helpers from "../../helper/helpers";
+import { UserController } from "../dashboard/user.controller";
+import { AdminController } from "../dashboard/admin.controller";
+import path from "path";
+import admin from "../../models/admin.model";
+import { TripActivityController } from "./trip-activity.controller";
+import { ActivityController } from "./activity.controller";
+const { verify } = require("../../helper/token");
+export class TripsController {
   constructor() {}
   public listPage(req: Request, res: Response, next: NextFunction) {
     return res.render("website/views/trip/list.ejs", { title: "Trips" });
@@ -15,15 +25,21 @@ export class TripController {
     try {
       const limit = Number(req.query.limit) > 50 ? 50 : Number(req.query.limit);
       const offset = (Number(req.query.page) - 1) * limit;
-      const data = await trip.findAll({
+      const lang = req["lang"] && req["lang"] === "ar" ? "ar" : "en";
+      const trips = await trip.findAll({
         limit,
         offset,
         attributes: { include: ["id", "ar_name", "en_name", "image"] },
-        include: [
-          { model: destination, attributes: ["ar_title", "en_title"] },
-          { model: webAppsUsers, attributes: ["fullName"] },
-        ],
+        include: [{ model: destination, attributes: ["ar_title", "en_title"] }],
       }) || [];
+      const data = trips.map((t) => {
+        return {
+          id: t["id"],
+          name: t[`${lang}_name`],
+          image: t["image"],
+          destination: t["tbl_destination"][`${lang}_title`],
+        };
+      });
       const countTrips = await trip.count() || 0;
       const permissions = await new UserPermissionsController().getUserPermissions(req.cookies.token, "Trips Management");
       const module_id = await new ModulesController().getModuleIdByName("Trips Management");
@@ -36,20 +52,138 @@ export class TripController {
   public async viewPage(req: Request, res: Response, next: NextFunction) {
     try {
       if (!req.params.id) return res.status(404).json({ msg: "Error in getting trip", err: "unexpected error" });
-      const data = await trip.findOne({
+      let data = await trip.findOne({
         where: { id: req.params.id },
         attributes: { exclude: ["createdAt", "updatedAt"] },
         include: [
-          { model: destination, attributes: ["ar_title", "en_title"] },
+          { model: destination, attributes: ["ar_title", "en_title", "location_lat", "location_long"] },
           { model: webAppsUsers, attributes: ["fullName", "email", "phone"] },
-          { model: transportation, attributes: ["ar_description", "en_description"] },
+          { model: admin, attributes: ["fullName", "email", "phone"] },
+          // { model: transportation, attributes: ["ar_description", "en_description"] },
         ],
         raw: true,
       });
       const module_id = await new ModulesController().getModuleIdByName("Trips Management");
-      return res.render("website/views/trip/view.ejs", { title: "View trip Details", data, module_id });
+      data['from'] = helpers.getFullTime(data['from']);
+      data['to'] = helpers.getFullTime(data['to']);
+      data["adminName"] = !data["web_apps_user"]?.fullName && !data["admin"]?.fullName ? process.env.admin_name : null;
+      data["adminEmail"] = !data["web_apps_user"]?.email && !data["admin"]?.email ? process.env.admin_email : null;
+      data["adminPhone"] = !data["web_apps_user"]?.phone && !data["admin"]?.phone ? process.env.admin_phone : null;
+      const lang = req["lang"] && req["lang"] === "ar" ? "ar" : "en";
+      const tripActivities = await new TripActivityController().list(lang, Number(req.params.id), data["from"], data["to"]);
+      return res.render("website/views/trip/view.ejs", { title: "View trip Details", data, module_id, tripActivities });
     } catch (error) {
       return res.status(500).json({ msg: "Error in get trip data in view page", err: "unexpected error" });
+    }
+  }
+  public async newPage(req: Request, res: Response, next: NextFunction) {
+    try {
+      const destinations = await new DestinationController().getAllDestinations();
+      const lang = req["lang"] && req["lang"] === "ar" ? "ar" : "en";
+      const activities = await new ActivityController().getAllActivities(lang);
+      return res.render("website/views/trip/new.ejs", { title: "Plan Your Trip", destinations, activities });
+    } catch (error) {
+      return res.status(500).json({ msg: "Can't get trip new page", err: error });
+    }
+  }
+  public async addNew(req: Request, res: Response, next: NextFunction) {
+    try {
+      const areNull = !req.body.ar_name || !req.body.en_name || !req.body.destination_id || !req.body.length || !req.body.from || !req.body.to || !req.body.activitiesDays || !req.files;
+      const activitiesDays = JSON.parse(req.body.activitiesDays);
+      const isNotArray = !Array.isArray(activitiesDays);
+      const areNotNumbers = !Number(req.body.destination_id);
+      let invaliditemsInArray;
+      for (const activityDay of activitiesDays) invaliditemsInArray = activityDay["activities"].filter((activity) => !Number(activity));
+      if (areNull || areNotNumbers || isNotArray || invaliditemsInArray.length) return res.status(400).json({ msg: "Bad Request", err: "unexpected error" });
+      const img = req.files.image;
+      const imgName: string = img ? `${helpers.randomNumber(100, 999)}_${Number(new Date())}${path.extname(img["name"])}` : null;
+      const payload = verify(req.cookies.token);
+      const webUser = await new UserController().getUserByEmail(payload.email);
+      const admin = await new AdminController().getAdminByEmail(payload.email);
+      const isUserExists = webUser || admin;
+      if (!isUserExists && payload.role_id != process.env.admin_role) return res.status(404).json({ msg: "Not Found", err: "unexpected error" });
+      req.body.user_id = webUser ? payload.user_id : null;
+      req.body.admin_id = admin ? payload.user_id : null;
+      const tripToCreate = req.body;
+      delete tripToCreate.activitiesDays;
+      const createdTrip = await trip.create(tripToCreate);
+      const createdTripActivities = createdTrip ? await new TripActivityController().addTripActivities(createdTrip["id"], activitiesDays, req.body.from) : undefined;
+      if (createdTripActivities) {
+        const fileDir: string = `trips/${createdTrip["id"]}/`
+        const set = { image: imgName ? `${fileDir}${imgName}` : null };
+        const updatedTrip = await trip.update(set, { where: { id: createdTrip["id"] } });
+        if (updatedTrip) {
+          if (imgName && img) helpers.imageProcessing(fileDir, imgName, img["data"]);
+          return res.status(httpStatus.OK).json({ msg: "New Trip created" });
+        }
+      }
+      return res.status(httpStatus.OK).json({ msg: "new trip created" });
+    } catch (error) {
+      return res.status(400).json({ msg: "Error in create new trip", err: "unexpected error" });
+    }
+  }
+  public async editPage(req: Request, res: Response, next: NextFunction) {
+    try {
+      if (!req.params.id) return res.status(404).json({ msg: "Error in getting trip", err: "unexpected error" });
+      let data = await trip.findOne({ where: { id: req.params.id }, attributes: { exclude: ["createdAt", "updatedAt"] }, raw: true });
+      const destinations = await new DestinationController().getAllDestinations();
+      const lang = req["lang"] && req["lang"] === "ar" ? "ar" : "en";
+      const activities = await new ActivityController().getAllActivities(lang);
+      const tripActivities = await new TripActivityController().list(lang, Number(req.params.id), data["from"], data["to"]);
+      data['from'] = helpers.getFullTime(data['from']);
+      data['to'] = helpers.getFullTime(data['to']);
+      return res.render("website/views/trip/edit.ejs", { title: "Edit Trip", data, destinations, tripActivities, activities });
+    } catch (error) {
+      return res.status(500).json({ msg: "Error in get trip data in edit page", err: "unexpected error" });
+    }
+  }
+  public async edit(req: Request, res: Response, next: NextFunction) {
+    try {
+      console.log(req.body)
+      if (!req.params.id) return res.status(400).json({ msg: "Bad Request", err: "unexpected error" });
+      const activitiesDays = JSON.parse(req.body.activitiesDays);
+      const img = req.files ? req.files.image : null;
+      const tripToUpdate = req.body;
+      delete tripToUpdate.activitiesDays;
+      const payload = req.query.status ? { status: req.query.status } : tripToUpdate;
+      const updatedTrip = await trip.update(payload, { where: { id: req.params.id } });
+      if (updatedTrip && img) {
+        const foundTrip = await trip.findOne({ where: { id: req.params.id }, attributes: ["image"], raw: true });
+        let updatedTripActivities;
+        if (activitiesDays.addedActivities && activitiesDays.addedActivities.length) {
+          updatedTripActivities = await new TripActivityController().addTripActivities(updatedTrip["id"], activitiesDays.addedActivities, req.body.from);
+        }
+        if (activitiesDays.addedActivities && activitiesDays.addedActivities.length) {
+          updatedTripActivities = await new TripActivityController().removeTripActivity(activitiesDays.removedActivities);
+        }
+        if (updatedTripActivities) {
+          let imgName: string;
+          if (img) {
+            helpers.removeFile(foundTrip["image"]);
+            imgName = `${helpers.randomNumber(100, 999)}_${Number(new Date())}${path.extname(img["name"])}`;
+          }
+          const fileDir: string = `trips/${req.params.id}/`
+          const set = { image: `${fileDir}${imgName}` || fileDir + foundTrip["image"] };
+          const updatedDestWithImages = await trip.update(set, { where: { id: req.params.id }});
+          if (updatedDestWithImages) {
+            if (img && imgName) helpers.imageProcessing(fileDir, imgName, img["data"]);
+          }
+        }
+      }
+      return res.status(httpStatus.OK).json({ msg: "trip edited" });
+    } catch (error) {
+      console.log(error)
+      return res.status(httpStatus.BAD_REQUEST).json({msg: "Error in Edit trip", err: "unexpected error" });
+    }
+  }
+  public async getCalendar(req: Request, res: Response, next: NextFunction) {
+    try {
+      const payload = verify(req.cookies.token);
+      const userId = payload.role_id !== process.env.admin_role ? payload.user_id : null;
+      const data = await new TripController().getAllTrips(userId);
+      return res.render("website/views/calendar.ejs", { title: "Calendar", data });
+    } catch (error) {
+      return res.status(httpStatus.BAD_REQUEST).json({msg: "Error in getting calendar trips", err: "unexpected error" });
     }
   }
 }

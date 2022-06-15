@@ -18,7 +18,7 @@ export class DestinationController {
       const countDestinations = await destination.count() || 0;
       const permissions = await new UserPermissionsController().getUserPermissions(req.cookies.token, "Destinations Management");
       const module_id = await new ModulesController().getModuleIdByName("Destinations Management");
-      const dataInti = { total: countDestinations, limit, page: Number(req.query.page), pages: Math.ceil(countDestinations / limit) + 1, data: destinations, canAdd: permissions.canAdd, canEdit: permissions.canEdit, module_id };
+      const dataInti = { total: countDestinations, limit, page: Number(req.query.page), pages: Math.ceil(countDestinations / limit) + 1, data: destinations, canAdd: permissions?.canAdd, canEdit: permissions?.canEdit, module_id };
       return res.status(httpStatus.OK).json(dataInti);
     } catch (error) {
       return res.status(httpStatus.NOT_FOUND).json({ err: "There is something wrong while getting destinations list", msg: "Internal Server Error" });

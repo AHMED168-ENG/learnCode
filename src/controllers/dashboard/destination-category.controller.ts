@@ -1,6 +1,5 @@
 import { Request, Response, NextFunction } from "express";
 import httpStatus from "http-status";
-import activityCategory from "../../models/activity-category.model";
 import destinationCategory from "../../models/destination-category.model";
 import { UserPermissionsController } from "../dashboard/user-permissions.controller";
 export class DestinationCategoryController {
@@ -15,7 +14,7 @@ export class DestinationCategoryController {
       const categories = await destinationCategory.findAll({ limit, offset, attributes: { include: ["id", "ar_name", "en_name"] } }) || [];
       const countCategories = await destinationCategory.count() || 0;
       const permissions = await new UserPermissionsController().getUserPermissions(req.cookies.token, "Destinations Interests categories");
-      const dataInti = { total: countCategories, limit, page: Number(req.query.page), pages: Math.ceil(countCategories / limit) + 1, data: categories, canAdd: permissions.canAdd, canEdit: permissions.canEdit };
+      const dataInti = { total: countCategories, limit, page: Number(req.query.page), pages: Math.ceil(countCategories / limit) + 1, data: categories, canAdd: permissions?.canAdd, canEdit: permissions?.canEdit };
       return res.status(httpStatus.OK).json(dataInti);
     } catch (error) {
       return res.status(httpStatus.NOT_FOUND).json({ err: "There is something wrong while getting categories list", msg: "Internal Server Error" });

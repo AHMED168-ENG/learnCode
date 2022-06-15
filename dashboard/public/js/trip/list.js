@@ -15,22 +15,46 @@ function getList(page) {
         spinnerNotfound(2)
         pagination(res.pages)
         $("#tr-th-row").empty()
-        res.data.forEach((elem) => {
-            $("#tr-th-row").append(`<tr>
-            <th scope="row">${elem.id}</th>
-            <td>${elem.en_name}</td>
-            <td>${elem.ar_name}</td>
-            <td><img class="rounded-circle p-0" width=45 height=45 src="/p/img/${elem.image}" alt="Image"></td>
-            <td>${elem.tbl_destination.en_title} - ${elem.tbl_destination.ar_title}</td>
-            <td>${data.tbl_web_apps_user.fullName}</td>
-            <td>
-               <a class="m-1" data-tooltip="View More Images" href="/dashboard/media/${res.module_id}/image/${elem.id}">View More Images</a>
-               <a class="m-1" data-tooltip="View More Videos" href="/dashboard/media/${res.module_id}/video/${elem.id}">View More Videos</a>
-            </td>
-            <td>
-                <a class="m-1" data-tooltip="View Trip" href="/dashboard/trip/view/${elem.id}"><i class="fas fa-eye"></i></a></td>
-            </tr>`)
-        })
+        if (res.canAdd) {
+            $('#addNewBtn').html(`<a type="button" href="/dashboard/trip/new" class="btn btn-info">Add new</a>`);
+        }
+        if (res.canEdit) {
+            res.data.forEach((elem) => {
+                $("#tr-th-row").append(`<tr>
+                <th scope="row">${elem.id}</th>
+                <td>${elem.en_name}</td>
+                <td>${elem.ar_name}</td>
+                <td><img class="rounded-circle p-0" width=45 height=45 src="/p/img/${elem.image}" alt="Image"></td>
+                <td>${elem.tbl_destination.en_title} - ${elem.tbl_destination.ar_title}</td>
+                <td>${elem.tbl_web_apps_user?.fullName || elem.admin?.fullName || "Admin"}</td>
+                <td>
+                   <a class="m-1" data-tooltip="View More Images" href="/dashboard/media/${res.module_id}/image/${elem.id}">View More Images</a>
+                   <a class="m-1" data-tooltip="View More Videos" href="/dashboard/media/${res.module_id}/video/${elem.id}">View More Videos</a>
+                </td>
+                <td>
+                    <a class="m-1" data-tooltip="View Trip" href="/dashboard/trip/view/${elem.id}"><i class="fas fa-eye"></i></a>
+                    <a href="/dashboard/trip/edit/${elem.id}"><i class="fas fa-edit text-primary"></i></a>
+                </td>
+                </tr>`)
+            })
+        } else {
+            res.data.forEach((elem) => {
+                $("#tr-th-row").append(`<tr>
+                <th scope="row">${elem.id}</th>
+                <td>${elem.en_name}</td>
+                <td>${elem.ar_name}</td>
+                <td><img class="rounded-circle p-0" width=45 height=45 src="/p/img/${elem.image}" alt="Image"></td>
+                <td>${elem.tbl_destination.en_title} - ${elem.tbl_destination.ar_title}</td>
+                <td>${elem.tbl_web_apps_user?.fullName || elem.admin?.fullName || "Admin"}</td>
+                <td>
+                   <a class="m-1" data-tooltip="View More Images" href="/dashboard/media/${res.module_id}/image/${elem.id}">View More Images</a>
+                   <a class="m-1" data-tooltip="View More Videos" href="/dashboard/media/${res.module_id}/video/${elem.id}">View More Videos</a>
+                </td>
+                <td>
+                    <a class="m-1" data-tooltip="View Trip" href="/dashboard/trip/view/${elem.id}"><i class="fas fa-eye"></i></a></td>
+                </tr>`)
+            })
+        }
     }).fail(() => spinnerNotfound(3))
 }
 function pagination(total) {

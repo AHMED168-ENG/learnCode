@@ -29,6 +29,11 @@ function randomNumber(min: number = 1000, max: number = 9000) {
 function randomString(min: number = 1000, max: number = 9000) {
   return (Math.random() + 1).toString(36).substring(4)
 }
+function getFullTime(dateString: string) {
+  let date = new Date(dateString);
+  date.setMinutes(date.getMinutes() - date.getTimezoneOffset());
+  return date.toISOString().slice(0,16);
+}
 
 /**
  * Function delete any property in interface
@@ -115,4 +120,4 @@ const videoUpload = multer({
   }
 });
 const mimetypeImge: string[] = ["image/jpg", "image/jpeg", "image/png"]
-export default {regularExprEmail, randomNumber, randomString, deleteProps, checkFields, imageProcessing, removeFile, videoUpload, mimetypeImge}
+export default {regularExprEmail, randomNumber, randomString, deleteProps, checkFields, imageProcessing, removeFile, videoUpload, mimetypeImge, getFullTime}

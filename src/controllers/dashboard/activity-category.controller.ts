@@ -14,7 +14,7 @@ export class ActivityCategoryController {
       const categories = await activityCategory.findAll({ limit, offset, attributes: { include: ["id", "ar_name", "en_name"] } }) || [];
       const countStores = await activityCategory.count() || 0;
       const permissions = await new UserPermissionsController().getUserPermissions(req.cookies.token, "Activities categories");
-      const dataInti = { total: countStores, limit, page: Number(req.query.page), pages: Math.ceil(countStores / limit) + 1, data: categories, canAdd: permissions.canAdd, canEdit: permissions.canEdit };
+      const dataInti = { total: countStores, limit, page: Number(req.query.page), pages: Math.ceil(countStores / limit) + 1, data: categories, canAdd: permissions?.canAdd, canEdit: permissions?.canEdit };
       return res.status(httpStatus.OK).json(dataInti);
     } catch (error) {
       return res.status(httpStatus.NOT_FOUND).json({ err: "There is something wrong while getting categories list", msg: "Internal Server Error" });

@@ -25,7 +25,7 @@ export class StoreController {
       const countStores = await store.count() || 0;
       const permissions = await new UserPermissionsController().getUserPermissions(req.cookies.token, "Store Management");
       const module_id = await new ModulesController().getModuleIdByName("Store Management");
-      const dataInti = { total: countStores, limit, page: Number(req.query.page), pages: Math.ceil(countStores / limit) + 1, data: stores, canAdd: permissions.canAdd, canEdit: permissions.canEdit, module_id };
+      const dataInti = { total: countStores, limit, page: Number(req.query.page), pages: Math.ceil(countStores / limit) + 1, data: stores, canAdd: permissions?.canAdd, canEdit: permissions?.canEdit, module_id };
       return res.status(httpStatus.OK).json(dataInti);
     } catch (error) {
       return res.status(httpStatus.NOT_FOUND).json({ err: "There is something wrong while getting stores list", msg: "Internal Server Error" });

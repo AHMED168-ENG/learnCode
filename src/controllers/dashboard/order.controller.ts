@@ -1,6 +1,6 @@
 import {Request, Response, NextFunction} from "express"
 import httpStatus from "http-status"
-import sequelize, {Op, where} from "sequelize"
+import sequelize, {Op} from "sequelize"
 import config from "../../config/config"
 import initiativeLocations from "../../models/initiative-location.model"
 import initiativeTrees from "../../models/initiative-trees.model"
@@ -9,11 +9,8 @@ import orderDetails from "../../models/order-details.model"
 import order from "../../models/order.model"
 import trees from "../../models/trees.model"
 import webAppsUsers from "../../models/user.model"
-import {Sequelize, DataTypes} from "sequelize"
-const { verify } = require("../../helper/token")
-import modules from "../../models/module.model"
-import page from "../../models/page.model"
-import permissions from "../../models/permissions.model"
+import {Sequelize} from "sequelize"
+import { UserPermissionsController } from "./user-permissions.controller"
 const seq = new Sequelize(...config.database)
 
 export class OrderController {
@@ -86,38 +83,20 @@ export class OrderController {
         order
           .count({where: {status: screenType}})
           .then(async (count) => {
-            const payload = verify(req.cookies.token);
-            const isHighestAdmin = payload.role_id === "0";
-            let userPermissions, canEditNewOrders = true, canViewNewOrders = true, canEditInProgressOrders = true, canViewInProgressOrders = true, canViewCompletedOrders = true, canViewCancelledOrders = true;
-            if (!isHighestAdmin) {
-              userPermissions = await permissions.findAll({
-                where: { role_id: payload.role_id },
-                attributes: { exclude: ["role_id", "page_id", "createdAt", "updatedAt"] },
-                include: [{
-                  model: page,
-                  attributes: ["type"],
-                  include: [{ model: modules, attributes: ["name"] }],
-                }],
-              });
-              canEditNewOrders = !!userPermissions.filter((per) => per["tbl_page"]["type"] === "Edit" && per["tbl_page"]["tbl_module"]["name"] === "New Orders List").length;
-              canViewNewOrders = !!userPermissions.filter((per) => per["tbl_page"]["type"] === "View" && per["tbl_page"]["tbl_module"]["name"] === "New Orders List").length;
-              canEditInProgressOrders = !!userPermissions.filter((per) => per["tbl_page"]["type"] === "Edit" && per["tbl_page"]["tbl_module"]["name"] === "In Progress Orders List").length;
-              canViewInProgressOrders = !!userPermissions.filter((per) => per["tbl_page"]["type"] === "View" && per["tbl_page"]["tbl_module"]["name"] === "In Progress Orders List").length;
-              canViewCompletedOrders = !!userPermissions.filter((per) => per["tbl_page"]["type"] === "View" && per["tbl_page"]["tbl_module"]["name"] === "Completed Orders List").length;
-              canViewCancelledOrders = !!userPermissions.filter((per) => per["tbl_page"]["type"] === "View" && per["tbl_page"]["tbl_module"]["name"] === "Cancelled Orders List").length;
-            }
+            const modulesArray = ["New Orders List", "In Progress Orders List", "Completed Orders List"];
+            const permissions = await new UserPermissionsController().getUserPermissions(req.cookies.token, modulesArray);
             const dataInti = {
               total: count,
               limit: limit,
               page: Number(req.query.page),
               pages: Math.ceil(count / limit),
-              data: data,
-              canEditNewOrders,
-              canViewNewOrders,
-              canEditInProgressOrders,
-              canViewInProgressOrders,
-              canViewCompletedOrders,
-              canViewCancelledOrders,
+              data,
+              canEditNewOrders: permissions.length > 1 ? permissions[0].canEdit : permissions[0].canEdit,
+              canViewNewOrders: permissions.length > 1 ? permissions[0].canView : permissions[0].canView,
+              canEditInProgressOrders: permissions.length > 1 ? permissions[1].canEdit : permissions[0].canEdit,
+              canViewInProgressOrders: permissions.length > 1 ? permissions[1].canView : permissions[0].canView,
+              canViewCompletedOrders: permissions.length > 1 ? permissions[2].canView : permissions[0].canView,
+              canViewCancelledOrders: permissions.length > 1 ? permissions[2].canView : permissions[0].canView,
             }
             res.status(httpStatus.OK).json(dataInti)
           })

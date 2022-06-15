@@ -13,6 +13,9 @@ import eventCategory from "../../models/event-category.model";
 import { EventCategoryController } from "./event-category.controller";
 import audienceCategory from "../../models/audience-category.model";
 import { AudienceCategoryController } from "./audience-category.controller";
+import { Op } from "sequelize";
+import { MediaController } from "../dashboard/media.controller";
+const { verify } = require("../../helper/token");
 export class EventController {
   constructor() {}
   public listPage(req: Request, res: Response, next: NextFunction) {
@@ -45,7 +48,7 @@ export class EventController {
   public async viewPage(req: Request, res: Response, next: NextFunction) {
     try {
       if (!req.params.id) return res.status(404).json({ msg: "Error in getting event", err: "unexpected error" });
-      const data = await events.findOne({
+      let data = await events.findOne({
         where: { id: req.params.id },
         attributes: { exclude: ["createdAt", "updatedAt"] },
         include: [
@@ -57,7 +60,10 @@ export class EventController {
         raw: true,
       });
       const module_id = await new ModulesController().getModuleIdByName("Events Management");
-      return res.render("website/views/event/view.ejs", { title: "View event Details", data, module_id });
+      const album = await new MediaController().getAllMedia(module_id, data["id"]);
+      data['from'] = helpers.getFullTime(data['from']);
+      data['to'] = helpers.getFullTime(data['to']);
+      return res.render("website/views/event/view.ejs", { title: "View event Details", data, images: album.images });
     } catch (error) {
       return res.status(500).json({ msg: "Error in get event data in view page", err: "unexpected error" });
     }
@@ -101,8 +107,10 @@ export class EventController {
       const eventCategories = await new EventCategoryController().getAllEventCategories();
       const audienceCategories = await new AudienceCategoryController().getAllAudienceCategories();
       const cities = await new CityController().listCity();
-      const data = await events.findOne({ where: { id: req.params.id }, attributes: { exclude: ["createdAt", "updatedAt"] }, raw: true });
       const module_id = await new ModulesController().getModuleIdByName("Events Management");
+      let data = await events.findOne({ where: { id: req.params.id }, attributes: { exclude: ["createdAt", "updatedAt"] }, raw: true });
+      data['from'] = helpers.getFullTime(data['from']);
+      data['to'] = helpers.getFullTime(data['to']);
       return res.render("website/views/event/edit.ejs", { title: "Edit event", data, destinations, eventCategories, audienceCategories, cities, module_id });
     } catch (error) {
       return res.status(500).json({ msg: "Error in get event data in edit page", err: "unexpected error" });
@@ -129,6 +137,24 @@ export class EventController {
       return res.status(httpStatus.OK).json({ msg: "event edited" });
     } catch (error) {
       return res.status(httpStatus.BAD_REQUEST).json({msg: "Error in Edit event", err: "unexpected error" });
+    }
+  }
+  public async getCalendar(req: Request, res: Response, next: NextFunction) {
+    try {
+      const payload = verify(req.cookies.token);
+      const userId = payload.role_id !== process.env.admin_role ? payload.user_id : null;
+      const data = await new EventController().getAllEvents(userId);
+      return res.render("website/views/event/list.ejs", { title: "Calendar", data });
+    } catch (error) {
+      return res.status(httpStatus.BAD_REQUEST).json({msg: "Error in getting calendar trips", err: "unexpected error" });
+    }
+  }
+  public async getAllEvents(userId: number) {
+    try {
+      const where = userId ? { [Op.or]: { user_id: userId, admin_id: userId } } : {};
+      return await events.findAll({ where, attributes: ["id", "ar_name", "en_name", "from"] });
+    } catch (error) {
+      throw error;
     }
   }
 }

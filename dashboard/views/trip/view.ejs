@@ -86,7 +86,7 @@
                       <div class="form-row mx-3 my-1">
                         <div class="form-group col-md-6">
                           <label for="from">Start Date Time</label>
-                          <input readonly class="form-control" type="datetime-local" id="from" value="<%= data.from" />
+                          <input readonly class="form-control" type="datetime-local" id="from" value="<%= data.from %>" />
                         </div>
                         <div class="form-group col-md-6">
                           <label for="to">End Date Time</label>
@@ -114,7 +114,7 @@
                             name="username"
                             class="form-control"
                             placeholder="User Name"
-                            value="<%= data.tbl_web_apps_user.fullName || null %>"
+                            value="<%= data.tbl_web_apps_user ? data.tbl_web_apps_user.fullName : data.admin ? data.admin.fullName : data.adminName || null %>"
                           />
                         </div>
                         <div class="form-group col-md-6">
@@ -126,7 +126,7 @@
                             name="email"
                             class="form-control"
                             placeholder="Email"
-                            value="<%= data.tbl_web_apps_user.email || null %>"
+                            value="<%= data.tbl_web_apps_user ? data.tbl_web_apps_user.email : data.admin ? data.admin.email : data.adminEmail || null %>"
                           />
                         </div>
                       </div>
@@ -140,7 +140,7 @@
                             name="phone"
                             class="form-control"
                             placeholder="Phone"
-                            value="<%= data.tbl_web_apps_user.phone || null %>"
+                            value="<%= data.tbl_web_apps_user ? data.tbl_web_apps_user.phone : data.admin ? data.admin.phone : data.adminPhone || null %>"
                           />
                         </div>
                       </div>
@@ -154,18 +154,8 @@
                             name="destination"
                             class="form-control"
                             placeholder="Destination"
-                            value="<%= data.tbl_destination.ar_title || null %> - <%= data.tbl_destination.en_title || null %>"
+                            value="<%= data['tbl_destination.en_title'] || null %> - <%= data['tbl_destination.ar_title'] || null %>"
                           />
-                        </div>
-                      </div>
-                      <div class="form-row mx-3 my-1">
-                        <div class="form-group col-md-6">
-                          <label for="en_trans_description">Transportation Description en</label>
-                          <textarea disabled type="text" id="en_trans_description" name="en_trans_description" class="form-control" placeholder="description en" rows="3"><%= data.tbl_transportation.en_description || null %></textarea>
-                        </div>
-                        <div class="form-group col-md-6">
-                          <label for="ar_trans_description">Transportation Description ar</label>
-                          <textarea disabled type="text" id="ar_trans_description" name="ar_trans_description" class="form-control" placeholder="description ar" rows="3"><%= data.tbl_transportation.ar_description || null %></textarea>
                         </div>
                       </div>
                       <div class="form-row mx-3 my-1">
@@ -182,8 +172,8 @@
                     <!-- /.card-body -->
                     <div class="card-footer">
                       <a href="/dashboard/trip" class="btn btn-primary has-spinner">Cancel</a>
-                      <a href="/dashboard/media/<%= module_id %>/image" class="btn btn-info has-spinner">See More Album Images</a>
-                      <a href="/dashboard/media/<%= module_id %>/video" class="btn btn-secondary has-spinner">See More Album Videos</a>
+                      <a href="/dashboard/media/<%= module_id %>/image/<%= data.id %>" class="btn btn-info has-spinner">See More Album Images</a>
+                      <a href="/dashboard/media/<%= module_id %>/video/<%= data.id %>" class="btn btn-secondary has-spinner">See More Album Videos</a>
                     </div>
                   </form>
                 </div>

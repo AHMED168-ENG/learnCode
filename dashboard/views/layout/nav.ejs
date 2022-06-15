@@ -37,7 +37,7 @@
       <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
         <div id="notifiy-content"></div>
         <a href="/dashboard/order/new" class="dropdown-item dropdown-footer">See All New Orders</a>
-      </div>
+      </div
     </li>
     <!-- End Notifications Menu -->
     <li class="nav-item">
@@ -357,7 +357,7 @@
           </a>
         </li>
         <li class="nav-item">
-          <a href="/dashboard/restaurant" class="nav-link" id="destination-restaurant">
+          <a href="/dashboard/ticket-booking" class="nav-link" id="destination-restaurant">
             <i class="nav-icon fas fa-store text-success_"></i>
             <p style="font-size: 13px;">Destinations Restaurants</p>
           </a>
@@ -443,9 +443,15 @@
           </a>
         </li>
         <li class="nav-item">
-          <a href="/dashboard/ticket" class="nav-link">
+          <a href="/dashboard/ticket/order" class="nav-link">
             <i class="far fa-circle nav-icon"></i>
             <p style="font-size: 13px;">Tickets Booking Management</p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="/dashboard/ticket" class="nav-link">
+            <i class="far fa-circle nav-icon"></i>
+            <p style="font-size: 13px;">Tickets Management</p>
           </a>
         </li>
         <li class="nav-item">
@@ -754,7 +760,7 @@
         const inProgressOrders = data.userPermissions.filter((userPermission) => userPermission.module.name === "In Progress Orders List");
         const completedOrders = data.userPermissions.filter((userPermission) => userPermission.module.name === "Completed Orders List");
         const cancelledOrders = data.userPermissions.filter((userPermission) => userPermission.module.name === "Cancelled Orders List");
-        if (newOrders.length || inProgressOrders.length || completedOrders.length || cancelledOrders.length) {
+        if (newOrders.length || inProgressOrders.length || cancelledOrders.length || completedOrders.length) {
           $('#sidebar').append(`
             <li class="nav-item has-treeview">
               <a href="#" class="nav-link" id="order">
@@ -1032,12 +1038,12 @@
         const restaurant = data.userPermissions.filter((userPermission) => userPermission.module.name === "Destinations Restaurants");
         if (restaurant.length) {
           $('#sidebar').append(`
-          <li class="nav-item">
-            <a href="/dashboard/restaurant" class="nav-link" id="destination-restaurant">
-              <i class="nav-icon fas fa-store text-success_"></i>
-              <p style="font-size: 13px;">Destinations Restaurants</p>
-            </a>
-          </li>
+            <li class="nav-item">
+              <a href="/dashboard/restaurant" class="nav-link" id="destination-restaurant">
+                <i class="nav-icon fas fa-store text-success_"></i>
+                <p style="font-size: 13px;">Destinations Restaurants</p>
+              </a>
+            </li>
           `);
         }
         const hotels = data.userPermissions.filter((userPermission) => userPermission.module.name === "Destinations Hotels");
@@ -1151,6 +1157,66 @@
           </li>
           `);
         }
+        const newAdsOrders = data.userPermissions.filter((userPermission) => userPermission.module.name === "New Advertisements");
+        const inProgressAdsOrders = data.userPermissions.filter((userPermission) => userPermission.module.name === "In Progress Advertisements");
+        const completedAdsOrders = data.userPermissions.filter((userPermission) => userPermission.module.name === "Completed Advertisements");
+        const cancelledAdsOrders = data.userPermissions.filter((userPermission) => userPermission.module.name === "Cancelled Advertisements");
+        if (newAdsOrders.length || inProgressAdsOrders.length || completedAdsOrders.length || cancelledAdsOrders.length) {
+          $('#sidebar').append(`
+            <li class="nav-item has-treeview">
+              <a href="#" class="nav-link" id="ads-order">
+                <i class="nav-icon fas fa-list-ol textss-warning"></i>
+
+                <p>
+                  Advertisements Orders
+                  <i class="fas fa-angle-left right"></i>
+                  <span class="badge badge-warning right"></span>
+                </p>
+              </a>
+              <ul class="nav nav-treeview" style="display: none" id="restaurant-order"></ul>
+            </li>
+          `);
+        }
+        if (newAdsOrders.length) {
+          $('#sidebar').append(`
+          <li class="nav-item">
+            <a href="/dashboard/ads/new" class="nav-link" id="new-ads">
+              <i class="nav-icon fas fa-store text-success_"></i>
+              <p style="font-size: 13px;">New Advertisements Orders</p>
+            </a>
+          </li>
+          `);
+        }
+        if (inProgressAdsOrders.length) {
+          $('#sidebar').append(`
+          <li class="nav-item">
+            <a href="/dashboard/ads/inprogress" class="nav-link" id="inprogress-ads">
+              <i class="nav-icon fas fa-store text-success_"></i>
+              <p style="font-size: 13px;">In Progress Advertisements Orders</p>
+            </a>
+          </li>
+          `);
+        }
+        if (completedAdsOrders.length) {
+          $('#sidebar').append(`
+          <li class="nav-item">
+            <a href="/dashboard/ads/completed" class="nav-link" id="completed-ads">
+              <i class="nav-icon fas fa-store text-success_"></i>
+              <p style="font-size: 13px;">Completed Advertisements Orders</p>
+            </a>
+          </li>
+          `);
+        }
+        if (cancelledAdsOrders.length) {
+          $('#sidebar').append(`
+          <li class="nav-item">
+            <a href="/dashboard/ads/cancelled" class="nav-link" id="cancelled-ads">
+              <i class="nav-icon fas fa-store text-success_"></i>
+              <p style="font-size: 13px;">Cancelled Advertisements Orders</p>
+            </a>
+          </li>
+          `);
+        }
         const travel = data.userPermissions.filter((userPermission) => userPermission.module.name === "Travel Essentials");
         if (travel.length) {
           $('#sidebar').append(`
@@ -1168,11 +1234,82 @@
         if (booking.length) {
           $('#sidebar').append(`
             <li class="nav-item">
-              <a href="/dashboard/ticket" class="nav-link">
+              <a href="/dashboard/ticket/order" class="nav-link">
                 <i class="far fa-file-circle-check" nav-icon"></i>
                 <p style="font-size: 13px;">Tickets Booking Management</p>
               </a>
             </li>
+          `);
+        }
+        const ticket = data.userPermissions.filter((userPermission) => userPermission.module.name === "Tickets Management");
+        if (ticket.length) {
+          $('#sidebar').append(`
+          <li class="nav-item">
+            <a href="/dashboard/ticket" class="nav-link">
+              <i class="far fa-circle nav-icon"></i>
+              <p style="font-size: 13px;">Tickets Management</p>
+            </a>
+          </li>
+          `);
+        }
+        const newPackageBookingOrders = data.userPermissions.filter((userPermission) => userPermission.module.name === "New Package Bookings");
+        const inProgressPackageBookingOrders = data.userPermissions.filter((userPermission) => userPermission.module.name === "In Progress Package Bookings");
+        const completedPackageBookingOrders = data.userPermissions.filter((userPermission) => userPermission.module.name === "Completed Package Bookings");
+        const cancelledPackageBookingOrders = data.userPermissions.filter((userPermission) => userPermission.module.name === "Cancelled Package Bookings");
+        if (newPackageBookingOrders.length || inProgressPackageBookingOrders.length || completedPackageBookingOrders.length || cancelledPackageBookingOrders.length) {
+          $('#sidebar').append(`
+            <li class="nav-item has-treeview">
+              <a href="#" class="nav-link" id="ads-order">
+                <i class="nav-icon fas fa-list-ol textss-warning"></i>
+
+                <p>
+                  New Package Bookings
+                  <i class="fas fa-angle-left right"></i>
+                  <span class="badge badge-warning right"></span>
+                </p>
+              </a>
+              <ul class="nav nav-treeview" style="display: none" id="package-booking-order"></ul>
+            </li>
+          `);
+        }
+        if (newPackageBookingOrders.length) {
+          $('#sidebar').append(`
+          <li class="nav-item">
+            <a href="/dashboard/package-booking/new" class="nav-link" id="package-booking-order">
+              <i class="nav-icon fas fa-store text-success_"></i>
+              <p style="font-size: 13px;">New Package Bookings</p>
+            </a>
+          </li>
+          `);
+        }
+        if (inProgressPackageBookingOrders.length) {
+          $('#sidebar').append(`
+          <li class="nav-item">
+            <a href="/dashboard/package-booking/inprogress" class="nav-link" id="package-booking-order">
+              <i class="nav-icon fas fa-store text-success_"></i>
+              <p style="font-size: 13px;">In Progress Package Bookings</p>
+            </a>
+          </li>
+          `);
+        }
+        if (completedPackageBookingOrders.length) {
+          $('#sidebar').append(`
+          <li class="nav-item">
+            <a href="/dashboard/package-booking/completed" class="nav-link" id="package-booking-order">
+              <i class="nav-icon fas fa-store text-success_"></i>
+              <p style="font-size: 13px;">Completed Package Bookings</p>
+            </a>
+          </li>
+          `);
+        }
+        if (cancelledPackageBookingOrders.length) {
+          $('#sidebar').append(`
+          <li class="nav-item">
+            <a href="/dashboard/package-booking/cancelled" class="nav-link" id="package-booking-order">
+              <i class="nav-icon fas fa-store text-success_"></i>
+              <p style="font-size: 13px;">Cancelled Package Bookings</p>
+            </a>
+          </li>
           `);
         }
         const membership = data.userPermissions.filter((userPermission) => userPermission.module.name === "Memberships Management");

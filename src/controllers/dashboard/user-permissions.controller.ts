@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from "express";
+import { Request, Response, NextFunction, response } from "express";
 import httpStatus from "http-status";
 import { Op } from "sequelize";
 import modules from "../../models/module.model";
@@ -47,21 +47,33 @@ export class UserPermissionsController {
       return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ error, messgae: "Can't edit permissions" });
     }
   }
-  public async getUserPermissions(token: string, moduleName: string) {
+  public async getUserPermissions(token: string, moduleNames: any) {
     try {
       const payload = verify(token);
       const isHighestAdmin = payload.role_id === "0";
-      let userPermissions, canEdit = true, canAdd = true;
+      let userPermissions, canEdit = true, canAdd = true, canView = true;
+      const results = [];
       if (!isHighestAdmin) {
         userPermissions = await permissions.findAll({
           where: { role_id: payload.role_id },
           attributes: { exclude: ["role_id", "page_id", "createdAt", "updatedAt"] },
           include: [{ model: page, attributes: ["type"], include: [{ model: modules, attributes: ["name"] }] }],
         });
-        canEdit = !!userPermissions.filter((per) => per["tbl_page"]["type"] === "Edit" && per["tbl_page"]["tbl_module"]["name"] === moduleName).length;
-        canAdd = !!userPermissions.filter((per) => per["tbl_page"]["type"] === "Add" && per["tbl_page"]["tbl_module"]["name"] === moduleName).length;
+        if (Array.isArray(moduleNames) && moduleNames.length) {
+          for (const moduleName of moduleNames) {
+            canEdit = !!userPermissions.filter((per) => per["tbl_page"]["type"] === "Edit" && per["tbl_page"]["tbl_module"]["name"] === moduleName).length;
+            canAdd = !!userPermissions.filter((per) => per["tbl_page"]["type"] === "Add" && per["tbl_page"]["tbl_module"]["name"] === moduleName).length;
+            canView = !!userPermissions.filter((per) => per["tbl_page"]["type"] === "View" && per["tbl_page"]["tbl_module"]["name"] === moduleName).length;
+            results.push({ canAdd, canEdit, canView });
+          }
+        } else {
+          canEdit = !!userPermissions.filter((per) => per["tbl_page"]["type"] === "Edit" && per["tbl_page"]["tbl_module"]["name"] === moduleNames).length;
+          canAdd = !!userPermissions.filter((per) => per["tbl_page"]["type"] === "Add" && per["tbl_page"]["tbl_module"]["name"] === moduleNames).length;
+          canView = !!userPermissions.filter((per) => per["tbl_page"]["type"] === "View" && per["tbl_page"]["tbl_module"]["name"] === moduleNames).length;
+        }
       }
-      return { canAdd, canEdit };
+      if (!results.length) results.push({ canAdd, canEdit, canView });
+      return results.length > 1 ? results : results[0];
     } catch (error) {
       throw error;
     }

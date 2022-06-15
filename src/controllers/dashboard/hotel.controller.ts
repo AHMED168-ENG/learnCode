@@ -24,7 +24,7 @@ export class HotelController {
       const countHotels = await hotel.count() || 0;
       const permissions = await new UserPermissionsController().getUserPermissions(req.cookies.token, "Destinations Hotels");
       const module_id = await new ModulesController().getModuleIdByName("Destinations Hotels");
-      const dataInti = { total: countHotels, limit, page: Number(req.query.page), pages: Math.ceil(countHotels / limit) + 1, data: hotels, canAdd: permissions.canAdd, canEdit: permissions.canEdit, module_id };
+      const dataInti = { total: countHotels, limit, page: Number(req.query.page), pages: Math.ceil(countHotels / limit) + 1, data: hotels, canAdd: permissions?.canAdd, canEdit: permissions?.canEdit, module_id };
       return res.status(httpStatus.OK).json(dataInti);
     } catch (error) {
       console.log(error)

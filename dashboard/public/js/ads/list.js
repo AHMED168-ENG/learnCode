@@ -34,25 +34,26 @@ function getList(page) {
             <td></td>
             </tr>`)
             $(`#${elem.id} td:last`).append(`<a href="/dashboard/ads/view/${elem.id}" data-tooltip="View ads" class="btn btn-info"><i class="fas fa-eye"></i></a>`)
-            if (res.canEdit) {
-                if (elem.request == "new") {
-                    $(`#${elem.id} td:last`).append(`
-                    <button type="button" data-tooltip="Inprogress" onclick='request(${elem.id},"inprogress")' class="btn btn-warning"><i class="fas fa-circle-notch"></i></button>
-                    <button type="button" data-tooltip="Cancelle ads" onclick='request(${elem.id},"cancelled")' class="btn btn-danger"><i class="fas fa-times-circle"></i></button>
-                    ${elem.status == "active" ? `<i class="m-1 fas fa-exclamation-triangle text-secondary" onclick='active(${elem.id},"deactive")'></i>` : `<i class="m-1 fas fa-exclamation-triangle text-success" onclick='active(${elem.id},"active")'></i>`}`)
-                } else if (elem.request == "inprogress") {
-                    $(`#${elem.id} td:last`).append(`
-                    <button type="button" data-tooltip="Complete" onclick='request(${elem.id},"completed")' class="btn btn-success"><i class="fas fa-check-circle"></i></button>
-                    <button type="button" data-tooltip="Cancelle ads" onclick='request(${elem.id},"cancelled")' class="btn btn-danger"><i class="fas fa-times-circle"></i></button>
-                    ${elem.status == "active" ? `<i class="m-1 fas fa-exclamation-triangle text-secondary" onclick='active(${elem.id},"deactive")'></i>` : `<i class="m-1 fas fa-exclamation-triangle text-success" onclick='active(${elem.id},"active")'></i>`}`)
-                } else if (elem.request == "completed") {
-                    $(`#${elem.id} td:last`).append(`
-                     ${elem.status == "active" ? `<i class="m-1 fas fa-exclamation-triangle text-secondary" onclick='active(${elem.id},"deactive")'></i>` : `<i class="m-1 fas fa-exclamation-triangle text-success" onclick='active(${elem.id},"active")'></i>`}`)
-                } else if (elem.request == "cancelled") {
-                    $(`#${elem.id} td:last`).append(`
-                    ${elem.status == "active" ? `<i class="m-1 fas fa-exclamation-triangle text-secondary" onclick='active(${elem.id},"deactive")'></i>` : `<i class="m-1 fas fa-exclamation-triangle text-success" onclick='active(${elem.id},"active")'></i>`}
-                    `)
-                }
+            if (elem.request == "new" && res.canEditNew) {
+                $(`#${elem.id} td:last`).append(`
+                <button type="button" data-tooltip="Inprogress" onclick='request(${elem.id},"inprogress")' class="btn btn-warning"><i class="fas fa-circle-notch"></i></button>
+                <button type="button" data-tooltip="Cancelle ads" onclick='request(${elem.id},"cancelled")' class="btn btn-danger"><i class="fas fa-times-circle"></i></button>
+                ${elem.status == "active" ? `<i class="m-1 fas fa-exclamation-triangle text-secondary" onclick='active(${elem.id},"deactive")'></i>` : `<i class="m-1 fas fa-exclamation-triangle text-success" onclick='active(${elem.id},"active")'></i>`}`)
+            }
+            if (elem.request == "inprogress" && res.canEditInProgress) {
+                $(`#${elem.id} td:last`).append(`
+                <button type="button" data-tooltip="Complete" onclick='request(${elem.id},"completed")' class="btn btn-success"><i class="fas fa-check-circle"></i></button>
+                <button type="button" data-tooltip="Cancelle ads" onclick='request(${elem.id},"cancelled")' class="btn btn-danger"><i class="fas fa-times-circle"></i></button>
+                ${elem.status == "active" ? `<i class="m-1 fas fa-exclamation-triangle text-secondary" onclick='active(${elem.id},"deactive")'></i>` : `<i class="m-1 fas fa-exclamation-triangle text-success" onclick='active(${elem.id},"active")'></i>`}`)
+            }
+            if (elem.request == "completed" && res.canEditCompleted) {
+                $(`#${elem.id} td:last`).append(`
+                 ${elem.status == "active" ? `<i class="m-1 fas fa-exclamation-triangle text-secondary" onclick='active(${elem.id},"deactive")'></i>` : `<i class="m-1 fas fa-exclamation-triangle text-success" onclick='active(${elem.id},"active")'></i>`}`)
+            }
+            if (elem.request == "cancelled" && res.canEditCancelled) {
+                $(`#${elem.id} td:last`).append(`
+                ${elem.status == "active" ? `<i class="m-1 fas fa-exclamation-triangle text-secondary" onclick='active(${elem.id},"deactive")'></i>` : `<i class="m-1 fas fa-exclamation-triangle text-success" onclick='active(${elem.id},"active")'></i>`}
+                `)
             }
         })
     }).fail(() => spinnerNotfound(3))

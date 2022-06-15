@@ -71,60 +71,12 @@
                       </div>
                       <div class="form-row mx-3 my-1">
                         <div class="form-group col-md-6">
-                          <label for="username">User Name</label>
-                          <input
-                            type="text"
-                            readonly
-                            id="username"
-                            name="username"
-                            class="form-control"
-                            placeholder="User Name"
-                            value="<%= data.tbl_web_apps_user.fullName || null %>"
-                          />
-                        </div>
-                        <div class="form-group col-md-6">
-                          <label for="email">Email</label>
-                          <input
-                            type="text"
-                            readonly
-                            id="email"
-                            name="email"
-                            class="form-control"
-                            placeholder="Email"
-                            value="<%= data.tbl_web_apps_user.email || null %>"
-                          />
-                        </div>
-                      </div>
-                      <div class="form-row mx-3 my-1">
-                        <div class="form-group col-md-6">
-                          <label for="phone">Phone</label>
-                          <input
-                            type="text"
-                            readonly
-                            id="phone"
-                            name="phone"
-                            class="form-control"
-                            placeholder="Phone"
-                            value="<%= data.tbl_web_apps_user.phone || null %>"
-                          />
-                        </div>
-                      </div>
-                      <div class="form-row mx-3 my-1">
-                        <div class="form-group col-md-6">
                           <label for="price">Price</label>
                           <input type="number" readonly id="price" name="price" class="form-control" placeholder="Name Arabic" value="<%= data.price || null %>" />
                         </div>
                         <div class="form-group col-md-6">
-                          <label for="promo">Promo Code</label>
-                          <input
-                            type="text"
-                            readonly
-                            id="promo"
-                            name="promo"
-                            class="form-control"
-                            placeholder="Promo Code"
-                            value="<%= data.tbl_promo_code.promo_name || null %>"
-                          />
+                          <label for="quantity">Quantity</label>
+                          <input type="number" readonly id="quantity" name="quantity" class="form-control" placeholder="Name Arabic" value="<%= data.quantity || null %>" />
                         </div>
                       </div>
                       <div class="form-row mx-3 my-1">
@@ -137,12 +89,16 @@
                           <textarea disabled type="text" id="ar_description" name="ar_description" class="form-control" placeholder="description ar" rows="3"><%= data.ar_description || null %></textarea>
                         </div>
                       </div>
+                      <div class="form-group">
+                        <h3 class="text-center">Location</h3>
+                        <div id="googleMap" style="width:100%; height:400px;"></div>
+                      </div>
                     </div>
                     <!-- /.card-body -->
                     <div class="card-footer">
                       <a href="/dashboard/ticket" class="btn btn-primary has-spinner">Cancel</a>
-                      <a href="/dashboard/media/<%= module_id %>/image" class="btn btn-info has-spinner">See More Album Images</a>
-                      <a href="/dashboard/media/<%= module_id %>/video" class="btn btn-secondary has-spinner">See More Album Videos</a>
+                      <a href="/dashboard/media/<%= module_id %>/image/<%= data.id %>" class="btn btn-info has-spinner">See More Album Images</a>
+                      <a href="/dashboard/media/<%= module_id %>/video/<%= data.id %>" class="btn btn-secondary has-spinner">See More Album Videos</a>
                     </div>
                   </form>
                 </div>
@@ -160,6 +116,22 @@
       <footer class="main-footer"><%- include('../layout/footer.ejs') %></footer>
     </div>
     <%- include('../layout/script.ejs') %>
+    <script>
+      var data = JSON.parse(`<%-JSON.stringify(data)%>`);
+      var initMap = () => {
+        var mapProp = {
+          center: { lat: data['location_lat'], lng: data['location_long'] },
+          scaleControl: true,
+          fullscreenControlOptions: { position: google.maps.ControlPosition.RIGHT_BOTTOM },
+          mapTypeId: 'hybrid',
+          zoom: 12,
+        };
+        var map = new google.maps.Map(document.getElementById('googleMap'), mapProp);
+        var marker = new google.maps.Marker({ position: mapProp.center, map, draggable: false, animation: google.maps.Animation.BOUNC });
+        marker.setMap(map);
+      };
+    </script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDVAIyZekr82kt8-pDk64xbyp26J1CnbTY&callback=initMap&v=weekly"></script>
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"
       integrity="sha512-37T7leoNS06R80c8Ulq7cdCDU5MNQBwlYoy1TX/WUsLFC2eYNqtKlV0QjH7r8JpG/S0GUMZwebnVFLPd6SU5yg=="

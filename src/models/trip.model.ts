@@ -3,6 +3,7 @@ import { Sequelize, DataTypes } from "sequelize";
 import destination from "./destination.model";
 import webAppsUsers from "./user.model";
 import transportation from "./transportation.model";
+import admin from "./admin.model";
 const sequelize = new Sequelize(...config.database);
 const trip = sequelize.define(
   "tbl_trips",
@@ -23,12 +24,18 @@ const trip = sequelize.define(
       defaultValue: null,
       validate: { isInt: { msg: "Invalid user id. It should be an integer" } },
     },
-    transportation_id: {
+    admin_id: {
       type: DataTypes.INTEGER,
       allowNull: true,
       defaultValue: null,
-      validate: { isInt: { msg: "Invalid transportation id. It should be an integer" } },
+      validate: { isInt: { msg: "Invalid admin id. It should be an integer" } },
     },
+    // transportation_id: {
+    //   type: DataTypes.INTEGER,
+    //   allowNull: true,
+    //   defaultValue: null,
+    //   validate: { isInt: { msg: "Invalid transportation id. It should be an integer" } },
+    // },
     length: { type: DataTypes.DECIMAL(18, 2), allowNull: false },
     ar_description: { type: DataTypes.STRING(500), allowNull: true, defaultValue: null },
     en_description: { type: DataTypes.STRING(500), allowNull: true, defaultValue: null },
@@ -57,6 +64,7 @@ const trip = sequelize.define(
 );
 trip.sync();
 trip.belongsTo(destination, { foreignKey: "destination_id" });
-trip.belongsTo(transportation, { foreignKey: "transportation_id" });
+// trip.belongsTo(transportation, { foreignKey: "transportation_id" });
 trip.belongsTo(webAppsUsers, { foreignKey: "user_id" });
+trip.belongsTo(admin, { foreignKey: "admin_id" });
 export default trip;

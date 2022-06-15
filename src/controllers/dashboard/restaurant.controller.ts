@@ -27,7 +27,7 @@ export class RestaurantController {
       const countRestaurants = await restaurant.count() || 0;
       const permissions = await new UserPermissionsController().getUserPermissions(req.cookies.token, "Destinations Restaurants");
       const module_id = await new ModulesController().getModuleIdByName("Destinations Restaurants");
-      const dataInti = { total: countRestaurants, limit, page: Number(req.query.page), pages: Math.ceil(countRestaurants / limit) + 1, data: restaurants, canAdd: permissions.canAdd, canEdit: permissions.canEdit, module_id };
+      const dataInti = { total: countRestaurants, limit, page: Number(req.query.page), pages: Math.ceil(countRestaurants / limit) + 1, data: restaurants, canAdd: permissions?.canAdd, canEdit: permissions?.canEdit, module_id };
       return res.status(httpStatus.OK).json(dataInti);
     } catch (error) {
       return res.status(httpStatus.NOT_FOUND).json({ err: "There is something wrong while getting restaurants list", msg: "Internal Server Error" });

@@ -16,20 +16,22 @@ function getList(page) {
         pagination(res.pages)
         $("#tr-th-row").empty()
         res.data.forEach((elem) => {
-            $("#tr-th-row").append(`<tr>
-            <th scope="row">${elem.id}</th>
-            <td>${elem.en_name}</td>
-            <td>${elem.ar_name}</td>
-            <td><img class="rounded-circle p-0" width=45 height=45 src="/p/img/${elem.image}" alt="Image"></td>
-            <td>${elem.tbl_destination.en_title} - ${elem.tbl_destination.ar_title}</td>
-            <td>${data.tbl_web_apps_user.fullName}</td>
-            <td>
-               <a class="m-1" data-tooltip="View More Images" href="/website/media/${res.module_id}/image/${elem.id}">View More Images</a>
-               <a class="m-1" data-tooltip="View More Videos" href="/website/media/${res.module_id}/video/${elem.id}">View More Videos</a>
-            </td>
-            <td>
-                <a class="m-1" data-tooltip="View Trip" href="/website/trip/view/${elem.id}"><i class="fas fa-eye"></i></a></td>
-            </tr>`)
+            $("#tr-th-row").append(`
+                <div class="card col-xl-2 col-lg-2 col-md-3 col-sm-4 col-xs-6 col-6 m-2">
+                    <img class="card-img-top" src="/p/img/${elem.image}" alt="Photo">
+                    <div class="card-body">
+                        <div class="mb-4">
+                            <h4 class="card-title d-flex justify-content-between">
+                                <span>${elem.name}</span>
+                            </h4>
+                            <h6 class="card-title d-flex justify-content-between text-secondary">
+                                <span>${elem.destination}</span>
+                            </h6>
+                        </div>
+                        <a href="/trip/view/${elem.id}" class="btn btn-primary">More Details</a>
+                    </div>
+                </div>
+            `);
         })
     }).fail(() => spinnerNotfound(3))
 }

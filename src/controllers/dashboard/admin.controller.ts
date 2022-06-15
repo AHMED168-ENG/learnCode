@@ -5,8 +5,8 @@ import helpers from "../../helper/helpers";
 import { IAdminUser } from "../../interfaces/IAdminUser";
 import bcrypt from "bcrypt";
 import role from "../../models/user-roles.model";
-import permissions from "../../models/permissions.model";
-import page from "../../models/page.model";
+import { UserPermissionsController } from "./user-permissions.controller";
+import { UserController } from "./user.controller";
 const { generateToken, verify } = require("../../helper/token") ;
 export class AdminController {
   loginPage(req: Request, res: Response, next: NextFunction) {
@@ -15,16 +15,18 @@ export class AdminController {
   async login(req: Request, res: Response, next: NextFunction) {
     try {
       const { email, password } = req.body;
-      let payload: any;
-      if (email === process.env.admin_email && password === process.env.admin_password) payload = { sub: process.env.admin_id, role_id: process.env.admin_role, username: process.env.admin_name, email: process.env.admin_email, phone: process.env.admin_phone };
+      let payload: any, webUser: any;
+      if (email === process.env.admin_email && password === process.env.admin_password) payload = { user_id: process.env.admin_id, role_id: process.env.admin_role, username: process.env.admin_name, email: process.env.admin_email, phone: process.env.admin_phone };
       else {
-        const user = await admin.findOne({ where: { email } });
+        webUser = await new UserController().getUserByEmail(email);
+        const adminUser = await admin.findOne({ where: { email } });
+        const user = adminUser || webUser;
         const isMatch = await bcrypt.compare(password, user["password"]);
-        if (user["email"] === email && isMatch) payload = { sub: user["id"], role_id: user["role_id"], username: user["fullName"], email: user["email"], phone: user["phone"] };
+        if (user["email"] === email && isMatch) payload = { user_id: user["id"], role_id: user["role_id"], username: user["fullName"], email: user["email"], phone: user["phone"] };
         else return res.status(200).json({ status: 201 });
       }
       const token = generateToken(payload);
-      return res.cookie("token", `${token}`).status(200).json({ status: 200 });
+      return res.cookie("token", `${token}`).status(200).json({ status: 200, webUser });
     } catch (error) {
       return res.status(500).json({ err: "unexpected error", msg: "Can't log in user" });
     }
@@ -48,26 +50,15 @@ export class AdminController {
         admin
           .count()
           .then(async (count) => {
-            const payload = verify(req.cookies.token);
-            const isHighestAdmin = payload.role_id === "0";
-            let userPermissions, canEdit = true, canAdd = true;
-            if (!isHighestAdmin) {
-              userPermissions = await permissions.findAll({
-                where: { role_id: payload.role_id },
-                attributes: { exclude: ["role_id", "page_id", "createdAt", "updatedAt"] },
-                include: [{ model: page, attributes: ["type"] }],
-              });
-              canEdit = !!userPermissions.filter((per) => per["tbl_page"]["type"] === "Edit" && per["tbl_page"]["tbl_module"]["name"] === "Sahlan Admins").length;
-              canAdd = !!userPermissions.filter((per) => per["tbl_page"]["type"] === "Add" && per["tbl_page"]["tbl_module"]["name"] === "Sahlan Admins").length;
-            }
+            const permissions = await new UserPermissionsController().getUserPermissions(req.cookies.token, "Sahlan Admins");
             const dataInti = {
               total: count,
               limit: limit,
               page: Number(req.query.page),
               pages: Math.ceil(count / limit),
               data: data,
-              canEdit,
-              canAdd,
+              canEdit: permissions.canEdit,
+              canAdd: permissions.canAdd,
             }
             res.status(httpStatus.OK).json(dataInti)
           })
@@ -95,7 +86,8 @@ export class AdminController {
       if (!createdAdminData || !rolesIds.includes(Number(createdAdminData.role_id))) return res.status(httpStatus.BAD_REQUEST).json({ msg: "Bad Request" });
       if (!helpers.regularExprEmail(createdAdminData.email)) return res.status(httpStatus.BAD_REQUEST).json({ msg: "invalid email" });
       const existedAdmin = await admin.findOne({ where: { email: createdAdminData.email } });
-      if (existedAdmin) return res.status(httpStatus.NOT_ACCEPTABLE).json({ msg: "This email is already exists" });
+      const existedAdminInUsersModel = await new UserController().getUserByEmail(createdAdminData.email);
+      if (existedAdmin || existedAdminInUsersModel) return res.status(httpStatus.NOT_ACCEPTABLE).json({ msg: "This user is already exists with this email" });
       const password = await bcrypt.hash(createdAdminData.password, 10);
       const existedAdminWithPass = await admin.findOne({ where: { password } });
       if (existedAdminWithPass) return res.status(httpStatus.NOT_ACCEPTABLE).json({ msg: "This password is already exists" });
@@ -131,6 +123,13 @@ export class AdminController {
       return res.status(httpStatus.OK).json({ msg: "admin edited" });
     } catch (error) {
       return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ err: "There is something wrong while updating admin", msg: "Can't update admin data" });
+    }
+  }
+  public async getAdminByEmail(email: string) {
+    try {
+      return await admin.findOne({ where: { email }, attributes: ["fullName"] });
+    } catch (error) {
+      throw error;
     }
   }
 }

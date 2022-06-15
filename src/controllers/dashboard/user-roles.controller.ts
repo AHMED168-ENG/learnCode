@@ -1,10 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import httpStatus from "http-status";
-import modules from "../../models/module.model";
-import page from "../../models/page.model";
-import permissions from "../../models/permissions.model";
 import role from "../../models/user-roles.model";
-const { verify } = require("../../helper/token");
+import { UserPermissionsController } from "./user-permissions.controller";
 export class UserRolesController {
   listPage(req: Request, res: Response, next: NextFunction) {
     return res.render("dashboard/views/user-roles/list.ejs", { title: "User Roles" });
@@ -22,30 +19,15 @@ export class UserRolesController {
         role
           .count()
           .then(async (count) => {
-            const payload = verify(req.cookies.token);
-            const isHighestAdmin = payload.role_id === "0";
-            let userPermissions, canEdit = true, canAdd = true;
-            if (!isHighestAdmin) {
-              userPermissions = await permissions.findAll({
-                where: { role_id: payload.role_id },
-                attributes: { exclude: ["role_id", "page_id", "createdAt", "updatedAt"] },
-                include: [{
-                  model: page,
-                  attributes: ["type"],
-                  include: [{ model: modules, attributes: ["name"] }],
-                }],
-              });
-              canEdit = !!userPermissions.filter((per) => per["tbl_page"]["type"] === "Edit" && per["tbl_page"]["tbl_module"]["name"] === "Roles List").length;
-              canAdd = !!userPermissions.filter((per) => per["tbl_page"]["type"] === "Add" && per["tbl_page"]["tbl_module"]["name"] === "Roles List").length;
-            }
+            const permissions = await new UserPermissionsController().getUserPermissions(req.cookies.token, "Roles List");
             const dataInti = {
               total: count,
               limit: limit,
               page: Number(req.query.page),
               pages: Math.ceil(count / limit),
               data: data,
-              canAdd,
-              canEdit,
+              canAdd: permissions.canAdd,
+              canEdit: permissions.canEdit,
             }
             res.status(httpStatus.OK).json(dataInti)
           })

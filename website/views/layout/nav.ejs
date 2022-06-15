@@ -12,17 +12,17 @@
       </a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" style="font-size: 12px;" href="#">
+      <a class="nav-link" style="font-size: 12px;" href="/trip/new">
         Plan Your Trip
       </a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" style="font-size: 12px;" href="#">
+      <a class="nav-link" style="font-size: 12px;" href="/event/calendar">
         Events
       </a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" style="font-size: 12px;" href="#">
+      <a class="nav-link" style="font-size: 12px;" href="/trip/calendar">
         Calendar
       </a>
     </li>
@@ -85,6 +85,12 @@
       <ul class="nav nav-pills nav-sidebar flex-column nav-flat" data-widget="treeview" role="menu" data-accordion="false" id="sidebar">
         <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
+        <li class="nav-item mb-2">
+          <a href="/dashboard/home" class="nav-link" id="home">
+            <i class="nav-icon fas fa-tachometer-alt"></i>
+            <p>Sahlan Dashboard</p>
+          </a>
+        </li>
         <li class="nav-item">
           <a href="/favourite" class="nav-link" id="favourites">
             <i class="nav-icon fas fa-star text-success_"></i>
@@ -102,13 +108,13 @@
           </a>
         </li>
         <li class="nav-item">
-          <a href="/trip" class="nav-link">
+          <a href="/trip/new" class="nav-link">
             <i class="nav-icon fas fa-circle"></i>
             <p style="font-size: 13px;">Plan Your Trip</p>
           </a>
         </li>
         <li class="nav-item">
-          <a href="/event" class="nav-link">
+          <a href="/event/calendar" class="nav-link">
             <i class="nav-icon fas fa-list text-success_"></i>
             <p style="font-size: 13px;">
               Events
@@ -117,7 +123,7 @@
           </a>
         </li>
         <li class="nav-item">
-          <a href="/guide" id="tourist-management" class="nav-link">
+          <a href="/trip/calendar" id="tourist-management" class="nav-link">
             <i class="nav-icon far fa-calendar textss-maroon"></i>
             <p style="font-size: 13px;">
               Calendar
@@ -153,7 +159,7 @@
           <a href="/ads" class="nav-link" id="ads">
             <i class="nav-icon fas fa-tag"></i>
             <p style="font-size: 13px;">
-              Request Adsvertisements
+              Request Advertisements
               <span class="badge badge-warning right" id="numAds">0</span>
             </p>
           </a>

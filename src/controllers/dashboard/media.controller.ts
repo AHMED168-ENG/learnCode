@@ -102,8 +102,8 @@ export class MediaController {
   }
   public async getAllMedia(module_id: any, item_id: any) {
     try {
-      const images = await album_image.findAll({ where: { [Op.and]: { module_id, item_id } }, attributes: { exclude: ["createdAt", "updatedAt"] } });
-      const videos = await album_video.findAll({ where: { [Op.and]: { module_id, item_id } }, attributes: { exclude: ["createdAt", "updatedAt"] } });
+      const images = await album_image.findAll({ where: { [Op.and]: { module_id, item_id } }, attributes: { exclude: ["createdAt", "updatedAt"] }, raw: true });
+      const videos = await album_video.findAll({ where: { [Op.and]: { module_id, item_id } }, attributes: { exclude: ["createdAt", "updatedAt"] }, raw: true });
       return { images, videos };
     } catch (error) {
       throw error;

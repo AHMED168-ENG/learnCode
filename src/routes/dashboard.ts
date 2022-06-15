@@ -45,9 +45,10 @@ import { StoreRoutes } from "./dashboard/store.route"
 import { TicketRoutes } from "./dashboard/ticket.route"
 import { TravelRoutes } from "./dashboard/travel.route"
 import { TripRoutes } from "./dashboard/trip.route"
+import { GuideTripRoutes } from "./dashboard/guide-trip.route"
 export = (app: express.Application) => {
   // Index
-  app.get("/", (req, res) => res.redirect("/dashboard/home"))
+  app.get("/dashboard", (req, res) => res.redirect("/dashboard/home"))
   // Home route
   app.use("/dashboard/home", new HomeRoutes().router)
   // Admin route
@@ -140,4 +141,6 @@ export = (app: express.Application) => {
   app.use("/dashboard/package-booking", new PackageBookingRoutes().router);
   // Travel Essentials route
   app.use("/dashboard/travel", new TravelRoutes().router);
+  // Tour Guide Trip route
+  app.use("/dashboard/guide-trip", new GuideTripRoutes().router);
 }

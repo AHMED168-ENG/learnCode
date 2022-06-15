@@ -30,7 +30,7 @@ export class ActivityController {
       const countActivities = await activity.count() || 0;
       const permissions = await new UserPermissionsController().getUserPermissions(req.cookies.token, "Destinations Activities");
       const module_id = await new ModulesController().getModuleIdByName("Destinations Activities");
-      const dataInti = { total: countActivities, limit, page: Number(req.query.page), pages: Math.ceil(countActivities / limit) + 1, data: activities, canAdd: permissions.canAdd, canEdit: permissions.canEdit, module_id };
+      const dataInti = { total: countActivities, limit, page: Number(req.query.page), pages: Math.ceil(countActivities / limit) + 1, data: activities, canAdd: permissions?.canAdd, canEdit: permissions?.canEdit, module_id };
       return res.status(httpStatus.OK).json(dataInti);
     } catch (error) {
       return res.status(httpStatus.NOT_FOUND).json({ err: "There is something wrong while getting activities list", msg: "Internal Server Error" });

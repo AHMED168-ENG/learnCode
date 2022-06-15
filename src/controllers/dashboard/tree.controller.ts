@@ -2,12 +2,9 @@ import {Request, Response, NextFunction} from "express"
 import httpStatus from "http-status"
 import path from "path"
 import helpers from "../../helper/helpers"
-import modules from "../../models/module.model"
-import page from "../../models/page.model"
-import permissions from "../../models/permissions.model"
 import trees from "../../models/trees.model"
 import { TreesInfoController } from "../api/trees-info.controller"
-const { verify } = require("../../helper/token")
+import { UserPermissionsController } from "./user-permissions.controller"
 
 export class TreeController {
   listPage(req: Request, res: Response, next: NextFunction) {
@@ -28,30 +25,15 @@ export class TreeController {
         trees
           .count()
           .then(async (count) => {
-            const payload = verify(req.cookies.token);
-            const isHighestAdmin = payload.role_id === "0";
-            let userPermissions, canEdit = true, canAdd = true;
-            if (!isHighestAdmin) {
-              userPermissions = await permissions.findAll({
-                where: { role_id: payload.role_id },
-                attributes: { exclude: ["role_id", "page_id", "createdAt", "updatedAt"] },
-                include: [{
-                  model: page,
-                  attributes: ["type"],
-                  include: [{ model: modules, attributes: ["name"] }],
-                }],
-              });
-              canEdit = !!userPermissions.filter((per) => per["tbl_page"]["type"] === "Edit" && per["tbl_page"]["tbl_module"]["name"] === "Trees List").length;
-              canAdd = !!userPermissions.filter((per) => per["tbl_page"]["type"] === "Add" && per["tbl_page"]["tbl_module"]["name"] === "Trees List").length;
-            }
+            const permissions = await new UserPermissionsController().getUserPermissions(req.cookies.token, "Trees List");
             const dataInti = {
               total: count,
               limit: limit,
               page: Number(req.query.page),
               pages: Math.ceil(count / limit),
               data: data,
-              canAdd,
-              canEdit,
+              canAdd: permissions.canAdd,
+              canEdit: permissions.canEdit,
             }
             res.status(httpStatus.OK).json(dataInti)
           })

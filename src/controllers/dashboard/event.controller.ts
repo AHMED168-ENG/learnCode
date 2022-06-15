@@ -36,7 +36,7 @@ export class EventController {
       const countEvents = await events.count() || 0;
       const permissions = await new UserPermissionsController().getUserPermissions(req.cookies.token, "Events Management");
       const module_id = await new ModulesController().getModuleIdByName("Events Management");
-      const dataInti = { total: countEvents, limit, page: Number(req.query.page), pages: Math.ceil(countEvents / limit) + 1, data, canAdd: permissions.canAdd, canEdit: permissions.canEdit, module_id };
+      const dataInti = { total: countEvents, limit, page: Number(req.query.page), pages: Math.ceil(countEvents / limit) + 1, data, canAdd: permissions?.canAdd, canEdit: permissions?.canEdit, module_id };
       return res.status(httpStatus.OK).json(dataInti);
     } catch (error) {
       return res.status(httpStatus.NOT_FOUND).json({ err: "There is something wrong while getting events list", msg: "Internal Server Error" });
@@ -45,7 +45,8 @@ export class EventController {
   public async viewPage(req: Request, res: Response, next: NextFunction) {
     try {
       if (!req.params.id) return res.status(404).json({ msg: "Error in getting event", err: "unexpected error" });
-      const data = await events.findOne({
+      const module_id = await new ModulesController().getModuleIdByName("Events Management");
+      let data = await events.findOne({
         where: { id: req.params.id },
         attributes: { exclude: ["createdAt", "updatedAt"] },
         include: [
@@ -56,7 +57,8 @@ export class EventController {
         ],
         raw: true,
       });
-      const module_id = await new ModulesController().getModuleIdByName("Events Management");
+      data['from'] = helpers.getFullTime(data['from']);
+      data['to'] = helpers.getFullTime(data['to']);
       return res.render("dashboard/views/event/view.ejs", { title: "View event Details", data, module_id });
     } catch (error) {
       return res.status(500).json({ msg: "Error in get event data in view page", err: "unexpected error" });
@@ -101,8 +103,10 @@ export class EventController {
       const eventCategories = await new EventCategoryController().getAllEventCategories();
       const audienceCategories = await new AudienceCategoryController().getAllAudienceCategories();
       const cities = await new CityController().listCity();
-      const data = await events.findOne({ where: { id: req.params.id }, attributes: { exclude: ["createdAt", "updatedAt"] }, raw: true });
       const module_id = await new ModulesController().getModuleIdByName("Events Management");
+      let data = await events.findOne({ where: { id: req.params.id }, attributes: { exclude: ["createdAt", "updatedAt"] }, raw: true });
+      data['from'] = helpers.getFullTime(data['from']);
+      data['to'] = helpers.getFullTime(data['to']);
       return res.render("dashboard/views/event/edit.ejs", { title: "Edit event", data, destinations, eventCategories, audienceCategories, cities, module_id });
     } catch (error) {
       return res.status(500).json({ msg: "Error in get event data in edit page", err: "unexpected error" });

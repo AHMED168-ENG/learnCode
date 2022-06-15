@@ -16,6 +16,7 @@ function getList(page) {
         if (res.canAdd) {
             $('#addNewBtn').html(`<a type="button" href="/dashboard/guide/new" class="btn btn-info">Add new</a>`)
         }
+        console.log(res.canAdd, res.canEdit)
         pagination(res.pages)
         $("#tr-th-row").empty()
         if (res.canEdit) {
@@ -47,7 +48,7 @@ function getList(page) {
                 <td>${elem.username}</td>
                 <td>${elem.gender}</td>
                 <td><img class="rounded-circle p-0" width=45 height=45 src="/p/img/${elem.image}" alt="Image"></td>
-                <td>${elem.tbl_cities.ar_name} - ${elem.tbl_cities.en_name}</td>
+                <td>${elem.tbl_city.ar_name} - ${elem.tbl_city.en_name}</td>
                 <td>${elem.email}</td>
                 <td>${elem.phone}</td>
                 <td>

@@ -29,7 +29,7 @@ export class PackageBookingController {
       const countBookings = await packageBooking.count() || 0;
       const permissions = await new UserPermissionsController().getUserPermissions(req.cookies.token, "Package Booking Management");
       const module_id = await new ModulesController().getModuleIdByName("Package Booking Management");
-      const dataInti = { total: countBookings, limit, page: Number(req.query.page), pages: Math.ceil(countBookings / limit) + 1, data, canAdd: permissions.canAdd, canEdit: permissions.canEdit, module_id };
+      const dataInti = { total: countBookings, limit, page: Number(req.query.page), pages: Math.ceil(countBookings / limit) + 1, data, canAdd: permissions?.canAdd, canEdit: permissions?.canEdit, module_id };
       return res.status(httpStatus.OK).json(dataInti);
     } catch (error) {
       console.log(error)

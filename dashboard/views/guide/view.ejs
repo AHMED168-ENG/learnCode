@@ -123,8 +123,9 @@
                     <!-- /.card-body -->
                     <div class="card-footer">
                       <a href="/dashboard/guide" class="btn btn-primary has-spinner">Cancel</a>
-                      <a href="/dashboard/media/<%= module_id %>/image" class="btn btn-info has-spinner">See More Album Images</a>
-                      <a href="/dashboard/media/<%= module_id %>/video" class="btn btn-secondary has-spinner">See More Album Videos</a>
+                      <a href="/dashboard/guide-trip/<%= data.id %>" class="btn btn-success has-spinner">Show Trips</a>
+                      <a href="/dashboard/media/<%= module_id %>/image/<%= data.id %>" class="btn btn-info has-spinner">See More Album Images</a>
+                      <a href="/dashboard/media/<%= module_id %>/video/<%= data.id %>" class="btn btn-secondary has-spinner">See More Album Videos</a>
                     </div>
                   </form>
                 </div>

@@ -1,10 +1,7 @@
 import {Request, Response, NextFunction} from "express"
 import httpStatus from "http-status"
-const { verify } = require("../../helper/token")
-import modules from "../../models/module.model"
-import page from "../../models/page.model"
 import partnerType from "../../models/partner-type.model"
-import permissions from "../../models/permissions.model"
+import { UserPermissionsController } from "./user-permissions.controller"
 
 export class PartnerTypeController {
   listPage(req: Request, res: Response, next: NextFunction) {
@@ -25,30 +22,15 @@ export class PartnerTypeController {
         partnerType
           .count()
           .then(async (count) => {
-            const payload = verify(req.cookies.token);
-            const isHighestAdmin = payload.role_id === "0";
-            let userPermissions, canEdit = true, canAdd = true;
-            if (!isHighestAdmin) {
-              userPermissions = await permissions.findAll({
-                where: { role_id: payload.role_id },
-                attributes: { exclude: ["role_id", "page_id", "createdAt", "updatedAt"] },
-                include: [{
-                  model: page,
-                  attributes: ["type"],
-                  include: [{ model: modules, attributes: ["name"] }],
-                }],
-              });
-              canEdit = !!userPermissions.filter((per) => per["tbl_page"]["type"] === "Edit" && per["tbl_page"]["tbl_module"]["name"] === "Partner Types List").length;
-              canAdd = !!userPermissions.filter((per) => per["tbl_page"]["type"] === "Add" && per["tbl_page"]["tbl_module"]["name"] === "Partner Types List").length;
-            }
+            const permissions = await new UserPermissionsController().getUserPermissions(req.cookies.token, "Partner Types List");
             const dataInti = {
               total: count,
               limit: limit,
               page: Number(req.query.page),
               pages: Math.ceil(count / limit),
-              data: data,
-              canEdit,
-              canAdd,
+              data,
+              canEdit: permissions.canEdit,
+              canAdd: permissions.canAdd,
             }
             res.status(httpStatus.OK).json(dataInti)
           })

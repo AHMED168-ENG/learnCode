@@ -15,5 +15,6 @@ export class EventRoutes {
     this.router.post("/new", this.eventController.addNew);
     this.router.get("/edit/:id", this.eventController.editPage);
     this.router.put("/edit/:id", this.eventController.edit);
+    this.router.get("/calendar", this.eventController.getCalendar);
   }
 }

@@ -14,7 +14,7 @@ export class AudienceCategoryController {
       const categories = await audienceCategory.findAll({ limit, offset, attributes: { exclude: ["createdAt", "updatedAt"] } }) || [];
       const countCategories = await audienceCategory.count() || 0;
       const permissions = await new UserPermissionsController().getUserPermissions(req.cookies.token, "Audience Categories");
-      const dataInti = { total: countCategories, limit, page: Number(req.query.page), pages: Math.ceil(countCategories / limit) + 1, data: categories, canAdd: permissions.canAdd, canEdit: permissions.canEdit };
+      const dataInti = { total: countCategories, limit, page: Number(req.query.page), pages: Math.ceil(countCategories / limit) + 1, data: categories, canAdd: permissions?.canAdd, canEdit: permissions?.canEdit };
       return res.status(httpStatus.OK).json(dataInti);
     } catch (error) {
       return res.status(httpStatus.NOT_FOUND).json({ err: "There is something wrong while getting categories list", msg: "Internal Server Error" });

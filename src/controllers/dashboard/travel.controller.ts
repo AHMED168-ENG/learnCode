@@ -11,7 +11,7 @@ export class TravelController {
     try {
       const data = await essentials.findAll({ attributes: { exclude: ["createdAt", "updatedAt"] } }) || [];
       const permissions = await new UserPermissionsController().getUserPermissions(req.cookies.token, "Travel Essentials");
-      const dataInti = { data, canAdd: permissions.canAdd, canEdit: permissions.canEdit };
+      const dataInti = { data, canAdd: permissions?.canAdd, canEdit: permissions?.canEdit };
       return res.status(httpStatus.OK).json(dataInti);
     } catch (error) {
       return res.status(httpStatus.NOT_FOUND).json({ err: "There is something wrong while getting travel essentials list", msg: "Internal Server Error" });

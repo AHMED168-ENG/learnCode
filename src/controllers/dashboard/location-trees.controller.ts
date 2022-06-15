@@ -3,19 +3,13 @@ import httpStatus from "http-status"
 import initiatives from "../../models/initiative.model"
 import initiativeLocations from "../../models/initiative-location.model"
 import {CountryController} from "./country.controller"
-import city from "../../models/city.model"
 import {InitiativeController} from "./initiative.controller"
-import helpers from "../../helper/helpers"
-import path from "path"
 import initiativeTrees from "../../models/initiative-trees.model"
 import trees from "../../models/trees.model"
 import {TreeController} from "./tree.controller"
 import country from "../../models/country.model"
 import { InitiativesLocationController } from "../api/initiative-location.controller"
-const { verify } = require("../../helper/token")
-import permissions from "../../models/permissions.model"
-import page from "../../models/page.model"
-import modules from "../../models/module.model"
+import { UserPermissionsController } from "./user-permissions.controller"
 
 export class LocationTreesController {
   listPage(req: Request, res: Response, next: NextFunction) {
@@ -41,30 +35,15 @@ export class LocationTreesController {
         initiativeTrees
           .count()
           .then(async (count) => {
-            const payload = verify(req.cookies.token);
-            const isHighestAdmin = payload.role_id === "0";
-            let userPermissions, canEdit = true, canAdd = true;
-            if (!isHighestAdmin) {
-              userPermissions = await permissions.findAll({
-                where: { role_id: payload.role_id },
-                attributes: { exclude: ["role_id", "page_id", "createdAt", "updatedAt"] },
-                include: [{
-                  model: page,
-                  attributes: ["type"],
-                  include: [{ model: modules, attributes: ["name"] }],
-                }],
-              });
-              canEdit = !!userPermissions.filter((per) => per["tbl_page"]["type"] === "Edit" && per["tbl_page"]["tbl_module"]["name"] === "Trees Location").length;
-              canAdd = !!userPermissions.filter((per) => per["tbl_page"]["type"] === "Add" && per["tbl_page"]["tbl_module"]["name"] === "Trees Location").length;
-            }
+            const permissions = await new UserPermissionsController().getUserPermissions(req.cookies.token, "Trees Location");
             const dataInti = {
               total: count,
               limit: limit,
               page: Number(req.query.page),
               pages: Math.ceil(count / limit),
               data: data,
-              canAdd,
-              canEdit,
+              canAdd: permissions.canAdd,
+              canEdit: permissions.canEdit,
             }
             res.status(httpStatus.OK).json(dataInti)
           })

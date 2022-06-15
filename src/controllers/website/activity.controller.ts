@@ -62,11 +62,17 @@ export class ActivityController {
         images: albums.images,
         videos: albums.videos,
       };
-      console.log(data)
       return res.render("website/views/activity/view.ejs", { title: "View activity Details", data });
     } catch (error) {
-      console.log(error)
       return res.status(500).json({ msg: "Error in get activity data in view page", err: "unexpected error" });
+    }
+  }
+  public async getAllActivities(lang: string) {
+    try {
+      const activities = await activity.findAll({ attributes: ["id", `${lang}_name`, "image"], include: [{ model: activityCategory, attributes: [`${lang}_name`] }] });
+      return activities.map((act) => { return { id: act["id"], name: act[`${lang}_name`], image: act["image"], category: act["tbl_activity_category"][`${lang}_name`] } });;
+    } catch (error) {
+      throw error;
     }
   }
   private async getRelatedActivities(destination_id: string, activity_id: string) {

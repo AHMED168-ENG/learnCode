@@ -13,9 +13,9 @@ function getList(page) {
     $.ajax(settings).done(function (res, textStatus) {
         // hidden spinner
         spinnerNotfound(2)
-        // if (res.canAdd) {
-        //     $('#addNewBtn').html(`<a type="button" href="/dashboard/ticket/new" class="btn btn-info">Add new</a>`)
-        // }
+        if (res.canAdd) {
+            $('#addNewBtn').html(`<a type="button" href="/dashboard/ticket/new" class="btn btn-info">Add new</a>`)
+        }
         pagination(res.pages)
         $("#tr-th-row").empty()
         var placeStatusColor = "";
@@ -26,13 +26,12 @@ function getList(page) {
                 <th scope="row">${elem.id}</th>
                 <td>${elem.en_name}</td>
                 <td>${elem.ar_name}</td>
-                <td>${data.tbl_web_apps_user.fullName}</td>
-                <td>${data.tbl_web_apps_user.email}</td>
-                <td>${data.tbl_web_apps_user.phone}</td>
-                <td>${data.tbl_promo_code.promo_name}</td>
+                <td>${elem.price}</td>
+                <td>${elem.quantity}</td>
                 <td><span class="badge badge-${placeStatusColor}">${elem.status}</span></td>
                 <td>
                     <a class="m-1" data-tooltip="View Ticket" href="/dashboard/ticket/view/${elem.id}"><i class="fas fa-eye"></i></a>
+                    <a class="m-1" href="/dashboard/ticket/edit/${elem.id}"><i class="fas fa-edit text-primary"></i></a>
                     ${elem.status == "active" ? `<i class="m-1 fas fa-exclamation-triangle text-secondary" onclick='active(${elem.id},"deactive")'></i>` : `<i class="m-1 fas fa-exclamation-triangle text-success" onclick='active(${elem.id},"active")'></i>`}
                 </tr>`)
             })
@@ -43,13 +42,12 @@ function getList(page) {
                 <th scope="row">${elem.id}</th>
                 <td>${elem.en_name}</td>
                 <td>${elem.ar_name}</td>
-                <td>${data.tbl_web_apps_user.fullName}</td>
-                <td>${data.tbl_web_apps_user.email}</td>
-                <td>${data.tbl_web_apps_user.phone}</td>
-                <td>${data.tbl_promo_code.promo_name}</td>
+                <td>${elem.price}</td>
+                <td>${elem.quantity}</td>
                 <td><span class="badge badge-${placeStatusColor}">${elem.status}</span></td>
                 <td>
-                    <a class="m-1" data-tooltip="View Ticket" href="/dashboard/ticket/view/${elem.id}"><i class="fas fa-eye"></i></a></td>
+                    <a class="m-1" data-tooltip="View Ticket" href="/dashboard/ticket/view/${elem.id}"><i class="fas fa-eye"></i></a>
+                </td>
                 </tr>`)
             })
         }

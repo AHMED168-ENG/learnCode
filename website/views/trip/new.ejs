@@ -151,16 +151,24 @@
       var oldFrom = null;
       var oldTo = null;
       $(document).ready(function () {
-        $('body').click(function() {
+        $('#from').change(function() {
           fromDate = $("#from").val();
           toDate = $("#to").val();
-          oldFrom = fromDate;
-          oldTo = toDate;
           days = Math.ceil(Math.abs(new Date(toDate).getTime() - new Date(fromDate).getTime()) / (1000 * 3600 * 24));
-          if (days && (oldFrom !== fromDate || oldTo !== toDate || !show)) {
+          if (!!days && (oldFrom !== fromDate || oldTo !== toDate || !show)) {
             show = true;
             $('#accordion').empty();
-            getActivitiesDays();
+            getActivitiesDays(days);
+          }
+        });
+        $('#to').change(function() {
+          fromDate = $("#from").val();
+          toDate = $("#to").val();
+          days = Math.ceil(Math.abs(new Date(toDate).getTime() - new Date(fromDate).getTime()) / (1000 * 3600 * 24));
+          if (!!days && (oldFrom !== fromDate || oldTo !== toDate || !show)) {
+            show = true;
+            $('#accordion').empty();
+            getActivitiesDays(days);
           }
         });
       });
@@ -190,7 +198,7 @@
                       <h6 class="card-subtitle text-secondary"><span>${activity.category}</span></h6>
                     </div>
                     <div class="row m-1 d-flex justify-content-center">
-                      <button type="button" class="btn btn-primary" id="addRemoveBtn-${activity.id}" onclick="addRemove('${i}', '${activity.id}')">
+                      <button type="button" class="btn btn-primary" id="addRemoveBtn-${activity.id}-${i}" onclick="addRemove('${i}', '${activity.id}')">
                         <i class="fas fa-plus"></i>
                       </button>
                     </div>

@@ -30,7 +30,10 @@ export class TripActivityController {
     try {
       const payload = [];
       for (const activitiesDay of activitiesDays) {
-        for (const activity of activitiesDay.activities) payload.push({ trip_id, activity_id: activity, day: this.getNewDate(from, Number(activity.day)) });
+        for (const activity of activitiesDay.activities) {
+          const day = this.getNewDate(from, Number(activitiesDay.day));
+          payload.push({ trip_id, activity_id: activity, day });
+        }
       }
       return await tripActivity.bulkCreate(payload);
     } catch (error) {

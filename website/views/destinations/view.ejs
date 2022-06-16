@@ -117,7 +117,7 @@
                           <textarea disabled type="text" id="travel_regulation" name="travel_regulation" class="form-control" placeholder="Travel Regulation Description en" rows="3"><%= data.travel_regulation || null %></textarea>
                         </div>
                       </div>
-                      <!-- <% if (data.images.length) { %>
+                      <!-- <% if (data.images && data.images.length) { %>
                         <div class="row">
                           <div id="carouselImages" class="carousel ml-3 mt-2" data-ride="carousel">
                             <div class="carousel-inner rounded" role="listbox">
@@ -142,7 +142,7 @@
                           </div>
                         </div>
                       <% } %>
-                      <% if (data.videos.length) { %>
+                      <% if (data.videos && data.videos.length) { %>
                         <div class="row">
                           <div id="carouselVideoExample" class="carousel slide carousel-fade" data-mdb-ride="carousel">
                             <div class="carousel-indicators">
@@ -191,7 +191,7 @@
                         <a href="/destination" class="btn btn-primary has-spinner">Cancel</a>
                       </div>
                       <div class="m-1">
-                        <a href="/activity?destination_id=<%= data.id %>&category=1" class="btn btn-info has-spinner">See Destination Activities</a>
+                        <a href="/activity?destination_id=<%= data.id %>&category=all" class="btn btn-info has-spinner">See Destination Activities</a>
                         <a href="/hotel?destination_id=<%= data.id %>&category=1" class="btn btn-secondary has-spinner">See Destination Hotels</a>
                         <a href="/destination-place?destination_id=<%= data.id %>&category=1" class="btn btn-secondary has-spinner">See Destination Popular Places</a>
                         <a href="/restaurant?destination_id=<%= data.id %>&category=1" class="btn btn-info has-spinner">See Destination Restaurants</a>

@@ -17,7 +17,7 @@ export class ActivityController {
     try {
       const limit = Number(req.query.limit) > 50 ? 50 : Number(req.query.limit);
       const offset = (Number(req.query.page) - 1) * limit;
-      const where = req.query.destination_id ? { destination_id: req.query.destination_id } : {};
+      const where = req.query.destination_id ? req.query.category !== "all" ? { [Op.and]: [{ destination_id: req.query.destination_id }, { activity_category_id: req.query.category }] } : { destination_id: req.query.destination_id } : {};
       const activities = await activity.findAll({
         limit,
         offset,
@@ -47,7 +47,7 @@ export class ActivityController {
         raw: true,
       });
       const module_id = await new ModulesController().getModuleIdByName("Destinations Activities");
-      const albums = await new MediaController().getAllMedia(module_id, activityData["id"]);
+      const albums = module_id ? await new MediaController().getAllMedia(module_id, activityData["id"]) : undefined;
       const relatedActivities = await new ActivityController().getRelatedActivities(activityData["destination_id"], activityData["id"]);
       const lang = req["lang"] === "ar" ? "ar" : "en";
       const data = {
@@ -59,8 +59,8 @@ export class ActivityController {
         lat: activityData[`tbl_destination.location_lat`],
         long: activityData[`tbl_destination.location_long`],
         activities: relatedActivities,
-        images: albums.images,
-        videos: albums.videos,
+        images: albums?.images,
+        videos: albums?.videos,
       };
       return res.render("website/views/activity/view.ejs", { title: "View activity Details", data });
     } catch (error) {

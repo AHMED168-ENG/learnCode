@@ -3,17 +3,17 @@ function addRemove(day, activity_id) {
     const isExist = activitiesArr.find((activity) => activity.day === day && activity.activity_id === activity_id);
     if (!isExist) {
         addToTrip(day, activity_id);
-        $('#addRemoveBtn-' + activity_id).html('<i class="fas fa-plus"></i>');
+        $('#addRemoveBtn-' + activity_id + '-' + day).html('<i class="fas fa-minus"></i>');
     } else {
         removeFromTrip(day, activity_id);
-        $('#addRemoveBtn-' + activity_id).html('<i class="fas fa-minus"></i>');
+        $('#addRemoveBtn-' + activity_id + '-' + day).html('<i class="fas fa-plus"></i>');
     }
 }
 function addToTrip(day, activity_id) {
     activitiesArr.push({ day, activity_id });
 }
 function removeFromTrip(day, activity_id) {
-    activitiesArr = activitiesArr.filter((activity) => activity.day === day && activity.activity_id !== activity_id);
+    activitiesArr = activitiesArr.filter((activity) => (activity.day === day && activity.activity_id !== activity_id) || activity.day !== day);
 }
 $('#image').on('change', function () { files = $(this)[0].files; name = ''; for (var i = 0; i < files.length; i++) { name += '\"' + files[i].name + '\"' + (i != files.length - 1 ? ", " : ""); } $("#custom-file-label-img").html(name); });
 $(function () {

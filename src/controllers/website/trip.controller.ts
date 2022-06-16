@@ -119,7 +119,7 @@ export class TripsController {
       }
       return res.status(httpStatus.OK).json({ msg: "new trip created" });
     } catch (error) {
-      return res.status(400).json({ msg: "Error in create new trip", err: "unexpected error" });
+      return res.status(500).json({ msg: "Error in create new trip", err: "unexpected error" });
     }
   }
   public async editPage(req: Request, res: Response, next: NextFunction) {

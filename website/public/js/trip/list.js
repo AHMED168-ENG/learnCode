@@ -20,14 +20,12 @@ function getList(page) {
                 <div class="card col-xl-2 col-lg-2 col-md-3 col-sm-4 col-xs-6 col-6 m-2">
                     <img class="card-img-top" src="/p/img/${elem.image}" alt="Photo">
                     <div class="card-body">
-                        <div class="mb-4">
-                            <h4 class="card-title d-flex justify-content-between">
-                                <span>${elem.name}</span>
-                            </h4>
-                            <h6 class="card-title d-flex justify-content-between text-secondary">
-                                <span>${elem.destination}</span>
-                            </h6>
+                        <div>
+                            <h4 class="card-title">${elem.name}</h4>
+                            <h6 class="card-subtitle text-secondary">${elem.destination}</h6>
                         </div>
+                    </div>
+                    <div class="d-flex justify-content-center mb-2">
                         <a href="/trip/view/${elem.id}" class="btn btn-primary">More Details</a>
                     </div>
                 </div>

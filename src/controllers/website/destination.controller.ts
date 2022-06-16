@@ -29,7 +29,7 @@ export class DestinationController {
       const module_id = await new ModulesController().getModuleIdByName("Destinations Management");
       const dest = await destination.findOne({ where: { id: req.params.id }, attributes: { exclude: ["createdAt", "updatedAt"] }, raw: true });
       const lang = req["lang"] === "ar" ? "ar" : "en";
-      const albums = await new MediaController().getAllMedia(module_id, dest["id"]);
+      const albums = module_id ? await new MediaController().getAllMedia(module_id, dest["id"]) : undefined;
       const data = {
         id: dest["id"],
         image: dest["image"],
@@ -42,8 +42,8 @@ export class DestinationController {
         what_wear: dest[`${lang}_what_wear`],
         trans_desc: dest[`${lang}_trans_desc`],
         travel_regulation: dest[`${lang}_travel_regulation`],
-        images: albums.images,
-        videos: albums.videos,
+        images: albums?.images,
+        videos: albums?.videos,
       };
       return res.render("website/views/destinations/view.ejs", { title: "View Destination Details", data, module_id });
     } catch (error) {

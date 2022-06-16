@@ -4,22 +4,21 @@ function addRemove(day, activity_id, isExistAct) {
     const isExist = activitiesArr.find((activity) => activity.day === day && activity.activity_id === activity_id);
     if (!isExist) {
         addToTrip(day, activity_id);
-        $('#addRemoveBtn-' + activity_id).html('<i class="fas fa-plus"></i>');
+        $('#addRemoveBtn-' + activity_id + '-' + day).html('<i class="fas fa-minus"></i>');
     } else {
         removeActivities(day, activity_id, isExistAct);
-        $('#addRemoveBtn-' + activity_id).html('<i class="fas fa-minus"></i>');
+        $('#addRemoveBtn-' + activity_id + '-' + day).html('<i class="fas fa-plus"></i>');
     }
 }
 function addToTrip(day, activity_id) {
     activitiesArr.push({ day, activity_id });
-    console.log({ added: activitiesArr })
 }
 function removeFromTrip(day, activity_id) {
-    activitiesArr = activitiesArr.filter((activity) => activity.day === day && activity.activity_id !== activity_id);
+    activitiesArr = activitiesArr.filter((activity) => (activity.day === day && activity.activity_id !== activity_id) || activity.day !== day);
 }
 function removeActivities(day, activity_id, isExist) {
-    if (isExist != "true") removeFromTrip(day, activity_id);
-    else removedActivities.push(activity_id);
+    if (!isExist) removeFromTrip(day, activity_id);
+    else removedActivities.push(isExist.id);
     console.log({ removed: removedActivities })
 }
 $('#image').on('change', function () { files = $(this)[0].files; name = ''; for (var i = 0; i < files.length; i++) { name += '\"' + files[i].name + '\"' + (i != files.length - 1 ? ", " : ""); } $("#custom-file-label-img").html(name); });
@@ -80,10 +79,9 @@ const edit = () => {
     if ($(".custom-file-input").hasClass("changed")) {
         formData.append("image", $("#image")[0].files[0]);
     }
-    const activitiesDays = JSON.stringify({ addedActivities, removedActivities });
-    formData.append("activitiesDays", activitiesDays);
-    if ($('.changed').length !== 0) {
-        $("#submitForm").buttonLoader("start")
+    if ($('.changed').length !== 0 || addedActivities.length || removedActivities.length) {
+        const activitiesDays = JSON.stringify({ addedActivities, removedActivities });
+        formData.append("activitiesDays", activitiesDays);
         $.ajax({
             url: `${window.location.pathname}`,
             data: formData,

@@ -179,25 +179,26 @@
                                 </h5>
                               </div>
                               <div id="collapse<%= i %>" class="collapse" role="tabpanel" aria-labelledby="<%= i %>">
-                                <div class="row card-body" id="activities-cards-<%= i %>"></div>
-                              </div>
-                            </div>
-                            <% for (const activity of tripActivity.activities) { %>
-                              <div class="card col-xl-2 col-lg-3 col-md-3 col-sm-4 col-xs-6 col-6 m-2">
-                                <img class="card-img-top" src="/p/img/<%= activity.image %>" alt="Photo">
-                                <div class="card-body">
-                                    <div class="row m-1 d-flex justify-content-center">
-                                        <h4 class="card-title"><span><%= activity.name %></span></h4>
+                                <div class="row card-body" id="activities-cards-<%= i %>">
+                                  <% for (const activity of tripActivity.activities) { %>
+                                    <div class="card col-xl-2 col-lg-3 col-md-3 col-sm-4 col-xs-6 col-6 m-2">
+                                      <img class="card-img-top" src="/p/img/<%= activity.image %>" alt="Photo">
+                                      <div class="card-body">
+                                          <div class="row m-1 d-flex justify-content-center">
+                                              <h4 class="card-title"><span><%= activity.name %></span></h4>
+                                          </div>
+                                          <div class="row m-1 d-flex justify-content-center">
+                                            <h6 class="card-subtitle text-secondary"><span><%= activity.category %></span></h6>
+                                          </div>
+                                          <div class="row m-1 d-flex justify-content-center">
+                                            <a href="/activity/view/<%= activity.id %>" class="btn btn-primary">More Details</a>
+                                          </div>
+                                      </div>
                                     </div>
-                                    <div class="row m-1 d-flex justify-content-center">
-                                      <h6 class="card-subtitle text-secondary"><span><%= activity.category %></span></h6>
-                                    </div>
-                                    <div class="row m-1 d-flex justify-content-center">
-                                      <a href="/activity/view/<%= activity.id %>" class="btn btn-primary">More Details</a>
-                                    </div>
+                                  <% } %>
                                 </div>
                               </div>
-                            <% } %>
+                            </div>
                           <% } %>
                         </div>
                       <% } %>

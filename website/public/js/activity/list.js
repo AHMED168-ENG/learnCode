@@ -1,7 +1,5 @@
 $(document).ready(function () {
-    const activity_category_id = JSON.parse(`<%-JSON.stringify(activity_category_id)%>`);
-    const destination_id = JSON.parse(`<%-JSON.stringify(destination_id)%>`);
-    getList(1, activity_category_id, destination_id)
+    getList(1)
 })
 function getList(page, category, destination_id) {
     // show spinner

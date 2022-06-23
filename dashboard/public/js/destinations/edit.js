@@ -62,8 +62,10 @@ const edit = () => {
         formData.append("image", $("#image")[0].files[0]);
         formData.append("file", $("#file")[0].files[0]);
     }
-    if ($('.changed').length !== 0) {
+    if ($('.changed').length !== 0 || ($("#location_lat").val() && $("#location_long").val())) {
         $("#submitForm").buttonLoader("start")
+        formData.append("location_lat", $("#location_lat").val());
+        formData.append("location_long", $("#location_long").val());
         $.ajax({
             url: `${window.location.pathname}`,
             data: formData,

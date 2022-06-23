@@ -84,11 +84,11 @@
                       <div class="form-row mx-3 my-1">
                         <div class="form-group col-md-6">
                           <label for="from">Start Date Time</label>
-                          <input class="form-control" type="datetime-local" id="from" value="<%= data.from %>" />
+                          <input class="form-control" type="datetime-local" id="from" name="from" value="<%= data.from %>" />
                         </div>
                         <div class="form-group col-md-6">
                           <label for="to">End Date Time</label>
-                          <input class="form-control" type="datetime-local" id="to" value="<%= data.to %>" />
+                          <input class="form-control" type="datetime-local" id="to" name="to" value="<%= data.to %>" />
                         </div>
                       </div>
                       <div class="form-row mx-3 my-1">
@@ -187,8 +187,7 @@
       function getActivitiesDays(days) {
         if (days > tripActivities.length) {
           for (let day = tripActivities.length; day < days; day++) tripActivities.push({ day: day - 1, activities: [] });
-        }
-        else if (days < tripActivities.length) tripActivities.splice(days, tripActivities.length - days);
+        } else if (days < tripActivities.length) tripActivities.splice(days, tripActivities.length - days);
         for (const tripActivity of tripActivities) {
           $('#accordion').append(`
             <div class="card">
@@ -215,7 +214,7 @@
                       <h6 class="card-subtitle text-secondary"><span>${activity.category}</span></h6>
                     </div>
                     <div class="row m-1 d-flex justify-content-center">
-                      <button type="button" class="btn btn-primary" id="addRemoveBtn-${activity.id}-${tripActivities.indexOf(tripActivity)}" onclick="addRemove('${tripActivities.indexOf(tripActivity)}', '${activity.id}', ${isExist})">
+                      <button type="button" class="btn btn-primary" id="addRemoveBtn-${activity.id}-${tripActivities.indexOf(tripActivity)}" onclick="addRemove('${tripActivities.indexOf(tripActivity)}', '${activity.id}', '${isExist}')">
                         ${!isExist ? `<i class="fas fa-plus"></i>` : `<i class="fas fa-minus"></i>`}
                       </button>
                     </div>

@@ -152,7 +152,7 @@ export class EventController {
   public async getAllEvents(userId: number) {
     try {
       const where = userId ? { [Op.or]: { user_id: userId, admin_id: userId } } : {};
-      return await events.findAll({ where, attributes: ["id", "ar_name", "en_name", "from"] });
+      return await events.findAll({ where, attributes: ["id", "ar_name", "en_name", "from"], raw: true });
     } catch (error) {
       throw error;
     }

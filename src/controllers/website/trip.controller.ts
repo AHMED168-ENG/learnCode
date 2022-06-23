@@ -6,7 +6,6 @@ import { ModulesController } from "../dashboard/modules.controller";
 import webAppsUsers from "../../models/user.model";
 import transportation from "../../models/transportation.model";
 import trip from "../../models/trip.model";
-import { TripController } from "../dashboard/trip.controller";
 import { DestinationController } from "../dashboard/destination.controller";
 import helpers from "../../helper/helpers";
 import { UserController } from "../dashboard/user.controller";
@@ -15,6 +14,7 @@ import path from "path";
 import admin from "../../models/admin.model";
 import { TripActivityController } from "./trip-activity.controller";
 import { ActivityController } from "./activity.controller";
+import { Op } from "sequelize";
 const { verify } = require("../../helper/token");
 export class TripsController {
   constructor() {}
@@ -139,51 +139,42 @@ export class TripsController {
   }
   public async edit(req: Request, res: Response, next: NextFunction) {
     try {
-      console.log(req.body)
       if (!req.params.id) return res.status(400).json({ msg: "Bad Request", err: "unexpected error" });
       const activitiesDays = JSON.parse(req.body.activitiesDays);
-      const img = req.files ? req.files.image : null;
       const tripToUpdate = req.body;
       delete tripToUpdate.activitiesDays;
       const payload = req.query.status ? { status: req.query.status } : tripToUpdate;
-      const updatedTrip = await trip.update(payload, { where: { id: req.params.id } });
-      if (updatedTrip && img) {
-        const foundTrip = await trip.findOne({ where: { id: req.params.id }, attributes: ["image"], raw: true });
-        let updatedTripActivities;
-        if (activitiesDays.addedActivities && activitiesDays.addedActivities.length) {
-          updatedTripActivities = await new TripActivityController().addTripActivities(updatedTrip["id"], activitiesDays.addedActivities, req.body.from);
+      if (payload && payload !== {}) await trip.update(payload, { where: { id: req.params.id } });
+      const img = req.files ? req.files.image : null;
+      const foundTrip = await trip.findOne({ where: { id: req.params.id }, attributes: ["id", "image", "from"], raw: true });
+      if (img) {
+        let imgName: string;
+        helpers.removeFile(foundTrip["image"]);
+        imgName = `${helpers.randomNumber(100, 999)}_${Number(new Date())}${path.extname(img["name"])}`;
+        const fileDir: string = `trips/${req.params.id}/`
+        const set = { image: `${fileDir}${imgName}` || fileDir + foundTrip["image"] };
+        const updatedDestWithImages = await trip.update(set, { where: { id: req.params.id }});
+        if (updatedDestWithImages) {
+          if (img && imgName) helpers.imageProcessing(fileDir, imgName, img["data"]);
         }
-        if (activitiesDays.addedActivities && activitiesDays.addedActivities.length) {
-          updatedTripActivities = await new TripActivityController().removeTripActivity(activitiesDays.removedActivities);
-        }
-        if (updatedTripActivities) {
-          let imgName: string;
-          if (img) {
-            helpers.removeFile(foundTrip["image"]);
-            imgName = `${helpers.randomNumber(100, 999)}_${Number(new Date())}${path.extname(img["name"])}`;
-          }
-          const fileDir: string = `trips/${req.params.id}/`
-          const set = { image: `${fileDir}${imgName}` || fileDir + foundTrip["image"] };
-          const updatedDestWithImages = await trip.update(set, { where: { id: req.params.id }});
-          if (updatedDestWithImages) {
-            if (img && imgName) helpers.imageProcessing(fileDir, imgName, img["data"]);
-          }
-        }
+      }
+      if (activitiesDays.addedActivities && activitiesDays.addedActivities.length) {
+        await new TripActivityController().addTripActivities(foundTrip["id"], activitiesDays.addedActivities, foundTrip["from"]);
+      }
+      if (activitiesDays.removedActivities && activitiesDays.removedActivities.length) {
+        await new TripActivityController().removeTripActivity(activitiesDays.removedActivities);
       }
       return res.status(httpStatus.OK).json({ msg: "trip edited" });
     } catch (error) {
-      console.log(error)
       return res.status(httpStatus.BAD_REQUEST).json({msg: "Error in Edit trip", err: "unexpected error" });
     }
   }
-  public async getCalendar(req: Request, res: Response, next: NextFunction) {
+  public async getAllTrips(userId?: number) {
     try {
-      const payload = verify(req.cookies.token);
-      const userId = payload.role_id !== process.env.admin_role ? payload.user_id : null;
-      const data = await new TripController().getAllTrips(userId);
-      return res.render("website/views/calendar.ejs", { title: "Calendar", data });
+      const where = userId ? { [Op.or]: { user_id: userId, admin_id: userId } } : {};
+      return await trip.findAll({ where, attributes: ["id", "ar_name", "en_name", "from"], raw: true });
     } catch (error) {
-      return res.status(httpStatus.BAD_REQUEST).json({msg: "Error in getting calendar trips", err: "unexpected error" });
+      throw error;
     }
   }
 }

@@ -3,6 +3,14 @@ import httpStatus from "http-status";
 import destination from "../../models/destination.model";
 import { ModulesController } from "../dashboard/modules.controller";
 import { MediaController } from "../dashboard/media.controller";
+import { ActivityController } from "./activity.controller";
+import { DestinationPlaceController } from "./destination-place.controller";
+import { RestaurantController } from "./restaurant.controller";
+import { HotelController } from "./hotel.controller";
+import { DestinationStoreController } from "./destination-store.controller";
+import { PackageController } from "./package.controller";
+import { Op } from "sequelize";
+import { DestinationTransportationController } from "../dashboard/destination-transportation.controller";
 export class DestinationController {
   constructor() {}
   public async listPage(req: Request, res: Response, next: NextFunction) {
@@ -28,8 +36,26 @@ export class DestinationController {
       if (!req.params.id) return res.status(404).json({ msg: "Error in getting destination", err: "unexpected error" });
       const module_id = await new ModulesController().getModuleIdByName("Destinations Management");
       const dest = await destination.findOne({ where: { id: req.params.id }, attributes: { exclude: ["createdAt", "updatedAt"] }, raw: true });
+      const where = {
+        [Op.and]: [
+          { id: { [Op.ne]: req.params.id } },
+          { location_lat: { [Op.gte]: dest["location_lat"] - 0.25 } },
+          { location_lat: { [Op.lte]: dest["location_lat"] + 0.25 } },
+          { location_long: { [Op.gte]: dest["location_long"] - 0.25 } },
+          { location_long: { [Op.lte]: dest["location_long"] + 0.25 } },
+        ],
+      };
+      const nearDestinations = await new DestinationController().getAllDestinations(where);
       const lang = req["lang"] === "ar" ? "ar" : "en";
       const albums = module_id ? await new MediaController().getAllMedia(module_id, dest["id"]) : undefined;
+      const activities = await new ActivityController().getAllActivities(lang, dest["id"]);
+      const places = await new DestinationPlaceController().getAllDestinationPlaces(lang, dest["id"]);
+      const restaurants = await new RestaurantController().getAllDestinationRestaurants(lang, dest["id"]);
+      const hotels = await new HotelController().getAllDestinationHotels(lang, dest["id"]);
+      const destinationStores = await new DestinationStoreController().getAllDestinationStores(lang, dest["id"]);
+      const packages = await new PackageController().getAllDestinationPackages(lang, dest["id"]);
+      const transportations = await new DestinationController().getAllDestinationTransportations(dest["id"]);
+      // const city = await helpers.getCityLocation(dest["location_lat"], dest["location_long"]);
       const data = {
         id: dest["id"],
         image: dest["image"],
@@ -44,16 +70,34 @@ export class DestinationController {
         travel_regulation: dest[`${lang}_travel_regulation`],
         images: albums?.images,
         videos: albums?.videos,
+        activities,
+        places,
+        restaurants,
+        hotels,
+        destinationStores,
+        packages,
+        nearDestinations,
+        transportations,
       };
       return res.render("website/views/destinations/view.ejs", { title: "View Destination Details", data, module_id });
     } catch (error) {
+      console.log(error)
       return res.status(500).json({ msg: "Error in get destination data in view page", err: "unexpected error" });
     }
   }
-  public async getAllDestinations() {
+  public async getAllDestinations(where: any = {}) {
     try {
-      const destinations = await destination.findAll({ attributes: ["id", "ar_title", "en_title"] });
+      const destinations = await destination.findAll({ where, attributes: ["id", "ar_title", "en_title"], raw: true });
       return destinations;
+    } catch (error) {
+      throw error;
+    }
+  }
+  public async getAllDestinationTransportations(destination_id: number) {
+    try {
+      const destTrans = await new DestinationTransportationController().getAllDestinationTransportations(destination_id);
+      const data = destTrans.map((dt) => { return { id: dt["tbl_transportation.id"], name: dt["tbl_transportation.name"], type: dt["tbl_transportation.type"] }; });
+      return data;
     } catch (error) {
       throw error;
     }

@@ -126,14 +126,14 @@
                           </tr>
                           <tr class="text-danger">
                             <th>Discount</th>
-                            <td><%=data.tbl_promo_codes.percent||0%> %</td>
+                            <td><%=data['tbl_promo_code.percent']||0%> %</td>
                           </tr>
                           <tr>
                             <th>Total:</th>
                             <td>
                               <script type="text/javascript">
                                 document.write(
-                                  `${"<%=data.price%>" * ("<%=data.tbl_promo_codes.percent%>" ? "<%=data.tbl_promo_codes.percent/100%>" : 1)} SAR`
+                                  `${"<%=data.price%>" * (1 - ("<%=data['tbl_promo_code.percent']%>" / 100))} SAR`
                                 )
                               </script>
                             </td>
@@ -215,7 +215,7 @@
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-              <button type="button" class="btn btn-primary" onclick="" id="ModalYesBtn">Yes</button>
+              <button type="button" class="btn btn-primary" onclick="changeRequest('<%= data.id%>', '<%= data.request%>')" id="ModalYesBtn">Yes</button>
             </div>
           </div>
         </div>
@@ -225,7 +225,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.25.1/moment.min.js"></script>
     <script>
       $(document).ready(function () {
-        changeRequest("<%= data.id%>", "<%= data.request%>")
+        
       })
       function request(id, request) {
         $("#ModalYesBtn").attr("onclick", `changeRequest(${id},'${request}')`)
@@ -239,9 +239,7 @@
           url: `/dashboard/ads/edit/${id}?request=${request}`,
           method: "PUT",
         }
-        $.ajax(settings).always(function () {
-            window.location.reload();
-        });
+        $.ajax(settings).always(function () { window.location.reload(); });
         // $.ajax(settings).always(function () {
         //   fetch("/dashboard/home/num", { method: "GET" }).then((response) => response.json()).then((data) => {
         //       $("#notifiy-content").empty();

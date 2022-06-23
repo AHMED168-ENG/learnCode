@@ -1,5 +1,6 @@
 import config from "../config/config";
 import { Sequelize, DataTypes } from "sequelize";
+import promo from "./promo.model";
 const sequelize = new Sequelize(...config.database);
 const ads = sequelize.define(
   "tbl_ads",
@@ -8,6 +9,7 @@ const ads = sequelize.define(
     en_name: { type: DataTypes.STRING, allowNull: false },
     ar_name: { type: DataTypes.STRING, allowNull: false },
     price: { type: DataTypes.DECIMAL(18, 2), allowNull: false },
+    promo: { type: DataTypes.INTEGER, allowNull: true, defaultValue: null, validate: { isNumeric: { msg: "The promo code id can only be a number" } } },
     location_lat: {
       type: DataTypes.DECIMAL(11, 8),
       allowNull: true,
@@ -80,5 +82,6 @@ const ads = sequelize.define(
   },
   { charset: "utf8", collate: "utf8_general_ci" },
 );
+ads.belongsTo(promo, { foreignKey: "promo" });
 ads.sync();
 export default ads;

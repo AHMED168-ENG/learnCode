@@ -15,6 +15,5 @@ export class TripRoutes {
     this.router.post("/new", this.tripController.addNew);
     this.router.get("/edit/:id", this.tripController.editPage);
     this.router.put("/edit/:id", this.tripController.edit);
-    this.router.get("/calendar", this.tripController.getCalendar);
   }
 }

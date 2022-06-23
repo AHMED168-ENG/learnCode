@@ -56,7 +56,7 @@
     <%- include('./layout/script.ejs') %>
     <script src="/js/plugins/fullcalendar/min.js"></script>
     <script>
-      var data = JSON.parse(`<%-JSON.stringify(data)%>`)
+      var data = JSON.parse(`<%-JSON.stringify(data)%>`);
       var Calendar = FullCalendar.Calendar
       var calendarEl = document.getElementById("calendar")
       var calendar = new Calendar(calendarEl, {
@@ -72,15 +72,15 @@
             {
               title: `${d.en_name} - ${d.ar_name}`,
               start: new Date(d.from),
-              url: `/trip/view/${d.id}`,
-              backgroundColor: "#39DB63",
-              borderColor: "#39DB63",
+              url: `/${d.type}/view/${d.id}`,
+              backgroundColor: `${d.color}`,
+              borderColor: `${d.color}`,
               allDay: false,
             },
           ]
         }),
         editable: false,
-        droppable: false, // this allows things to be dropped onto the calendar !!!
+        droppable: true, // this allows things to be dropped onto the calendar !!!
       })
 
       calendar.render()

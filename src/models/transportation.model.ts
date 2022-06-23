@@ -7,6 +7,8 @@ const transportation = sequelize.define(
   "tbl_transportations",
   {
     id: { type: DataTypes.INTEGER, primaryKey: true, allowNull: false, autoIncrement: true },
+    type: { type: DataTypes.STRING, allowNull: false },
+    name: { type: DataTypes.STRING, allowNull: false },
     rental_company_id: {
       type: DataTypes.INTEGER,
       allowNull: true,

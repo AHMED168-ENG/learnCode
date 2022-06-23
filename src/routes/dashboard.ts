@@ -46,6 +46,11 @@ import { TicketRoutes } from "./dashboard/ticket.route"
 import { TravelRoutes } from "./dashboard/travel.route"
 import { TripRoutes } from "./dashboard/trip.route"
 import { GuideTripRoutes } from "./dashboard/guide-trip.route"
+import { TransportationRoutes } from "./dashboard/transportation.route"
+import { DestinationTransportationRoutes } from "./dashboard/destination-transportation.route"
+import { RentalCompanyRoutes } from "./dashboard/rental-company.route"
+import { DriverRoutes } from "./dashboard/driver.route"
+import { CompanyOfferRoutes } from "./dashboard/company-offer.route"
 export = (app: express.Application) => {
   // Index
   app.get("/dashboard", (req, res) => res.redirect("/dashboard/home"))
@@ -99,6 +104,16 @@ export = (app: express.Application) => {
   app.use("/dashboard/message", new MessageRoutes().router)
   // Destination route
   app.use("/dashboard/destination", new DestinationRoutes().router);
+  // Transportation route
+  app.use("/dashboard/transportation", new TransportationRoutes().router);
+  // Destination Transportation route
+  app.use("/dashboard/destination-transportation", new DestinationTransportationRoutes().router);
+  // Rental Company route
+  app.use("/dashboard/rental-company", new RentalCompanyRoutes().router);
+  // Company Offer route
+  app.use("/dashboard/company-offer", new CompanyOfferRoutes().router);
+  // Driver route
+  app.use("/dashboard/driver", new DriverRoutes().router);
   // Destination Place route
   app.use("/dashboard/destination-place", new DestinationPlaceRoutes().router);
   // Destination Store route

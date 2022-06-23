@@ -37,7 +37,7 @@
       <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
         <div id="notifiy-content"></div>
         <a href="/dashboard/order/new" class="dropdown-item dropdown-footer">See All New Orders</a>
-      </div
+      </div>
     </li>
     <!-- End Notifications Menu -->
     <li class="nav-item">
@@ -337,7 +337,24 @@
             </p>
           </a>
         </li>
-
+        <li class="nav-item">
+          <a href="/dashboard/transportation" class="nav-link">
+            <i class="fas fa-car nav-icon"></i>
+            <p style="font-size: 13px;">Transportations Management</p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="/dashboard/rental-company" class="nav-link">
+            <i class="fas fa-building nav-icon"></i>
+            <p style="font-size: 13px;">Rental Company Management</p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="/dashboard/driver" class="nav-link">
+            <i class="fas fa-user nav-icon"></i>
+            <p style="font-size: 13px;">Driver Management</p>
+          </a>
+        </li>
         <li class="nav-item">
           <a href="/dashboard/destination-place" class="nav-link" id="destination-place">
             <i class="nav-icon fas fa-map-marked text-success_"></i>
@@ -357,7 +374,7 @@
           </a>
         </li>
         <li class="nav-item">
-          <a href="/dashboard/ticket-booking" class="nav-link" id="destination-restaurant">
+          <a href="/dashboard/restaurant" class="nav-link" id="destination-restaurant">
             <i class="nav-icon fas fa-store text-success_"></i>
             <p style="font-size: 13px;">Destinations Restaurants</p>
           </a>
@@ -1006,6 +1023,39 @@
               </p>
             </a>
           </li>
+          `);
+        }
+        const transportation = data.userPermissions.filter((userPermission) => userPermission.module.name === "Destinations Transportations Management");
+        if (transportation.length) {
+          $('#sidebar').append(`
+            <li class="nav-item">
+              <a href="/dashboard/transportation" class="nav-link">
+                <i class="fa-solid fa-car-bus"></i>
+                <p style="font-size: 13px;">Transportations Management</p>
+              </a>
+            </li>
+          `);
+        }
+        const rentalCompany = data.userPermissions.filter((userPermission) => userPermission.module.name === "Rental Company Management");
+        if (rentalCompany.length) {
+          $('#sidebar').append(`
+            <li class="nav-item">
+              <a href="/dashboard/rental-company" class="nav-link">
+                <i class="fas fa-building nav-icon"></i>
+                <p style="font-size: 13px;">Rental Company Management</p>
+              </a>
+            </li>
+          `);
+        }
+        const driver = data.userPermissions.filter((userPermission) => userPermission.module.name === "Driver Management");
+        if (driver.length) {
+          $('#sidebar').append(`
+            <li class="nav-item">
+              <a href="/dashboard/driver" class="nav-link">
+                <i class="fas fa-user nav-icon"></i>
+                <p style="font-size: 13px;">Driver Management</p>
+              </a>
+            </li>
           `);
         }
         const destinationPlaces = data.userPermissions.filter((userPermission) => userPermission.module.name === "Destinations Most Popular places");

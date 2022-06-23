@@ -21,6 +21,7 @@ function getList(page) {
         pagination(res.pages, res.page)
         $("#tr-th-row").empty()
         var placeStatusColor = "";
+        console.log(res)
         res.data.forEach((elem) => {
             placeStatusColor = elem.status === "active" ? "success" : "secondary";
             $("#tr-th-row").append(`
@@ -28,31 +29,33 @@ function getList(page) {
             <th scope="row">${elem.id}</th>
             <td>${elem.en_name}</td>
             <td>${elem.ar_name}</td>
-            <td>${elem.price || 0} %</td>
+            <td>${elem.price || 0}</td>
             <td>${elem.request}</td>
             <td><span class="badge badge-${placeStatusColor}">${elem.status}</span></td>
             <td></td>
             </tr>`)
-            $(`#${elem.id} td:last`).append(`<a href="/dashboard/ads/view/${elem.id}" data-tooltip="View ads" class="btn btn-info"><i class="fas fa-eye"></i></a>`)
+            $(`#${elem.id} td:last`).append(`
+               <a href="/dashboard/ads/view/${elem.id}" class="btn btn-info" data-tooltip="View ads"><i class="fas fa-eye"></i></a>
+               ${elem.status == "active" ? `<button class="btn btn-secondary"><i class="m-1 fas fa-exclamation-triangle" onclick='active(${elem.id},"deactive")'></i></button>` : `<button class="btn btn-success"><i class="m-1 fas fa-exclamation-triangle" onclick='active(${elem.id},"active")'></i></button>`}
+            `)
             if (elem.request == "new" && res.canEditNew) {
                 $(`#${elem.id} td:last`).append(`
                 <button type="button" data-tooltip="Inprogress" onclick='request(${elem.id},"inprogress")' class="btn btn-warning"><i class="fas fa-circle-notch"></i></button>
                 <button type="button" data-tooltip="Cancelle ads" onclick='request(${elem.id},"cancelled")' class="btn btn-danger"><i class="fas fa-times-circle"></i></button>
-                ${elem.status == "active" ? `<i class="m-1 fas fa-exclamation-triangle text-secondary" onclick='active(${elem.id},"deactive")'></i>` : `<i class="m-1 fas fa-exclamation-triangle text-success" onclick='active(${elem.id},"active")'></i>`}`)
+                `)
             }
             if (elem.request == "inprogress" && res.canEditInProgress) {
                 $(`#${elem.id} td:last`).append(`
                 <button type="button" data-tooltip="Complete" onclick='request(${elem.id},"completed")' class="btn btn-success"><i class="fas fa-check-circle"></i></button>
                 <button type="button" data-tooltip="Cancelle ads" onclick='request(${elem.id},"cancelled")' class="btn btn-danger"><i class="fas fa-times-circle"></i></button>
-                ${elem.status == "active" ? `<i class="m-1 fas fa-exclamation-triangle text-secondary" onclick='active(${elem.id},"deactive")'></i>` : `<i class="m-1 fas fa-exclamation-triangle text-success" onclick='active(${elem.id},"active")'></i>`}`)
+                `)
             }
             if (elem.request == "completed" && res.canEditCompleted) {
                 $(`#${elem.id} td:last`).append(`
-                 ${elem.status == "active" ? `<i class="m-1 fas fa-exclamation-triangle text-secondary" onclick='active(${elem.id},"deactive")'></i>` : `<i class="m-1 fas fa-exclamation-triangle text-success" onclick='active(${elem.id},"active")'></i>`}`)
+                 `)
             }
             if (elem.request == "cancelled" && res.canEditCancelled) {
                 $(`#${elem.id} td:last`).append(`
-                ${elem.status == "active" ? `<i class="m-1 fas fa-exclamation-triangle text-secondary" onclick='active(${elem.id},"deactive")'></i>` : `<i class="m-1 fas fa-exclamation-triangle text-success" onclick='active(${elem.id},"active")'></i>`}
                 `)
             }
         })

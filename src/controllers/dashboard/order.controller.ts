@@ -91,16 +91,19 @@ export class OrderController {
               page: Number(req.query.page),
               pages: Math.ceil(count / limit),
               data,
-              canEditNewOrders: permissions.length > 1 ? permissions[0].canEdit : permissions[0].canEdit,
-              canViewNewOrders: permissions.length > 1 ? permissions[0].canView : permissions[0].canView,
-              canEditInProgressOrders: permissions.length > 1 ? permissions[1].canEdit : permissions[0].canEdit,
-              canViewInProgressOrders: permissions.length > 1 ? permissions[1].canView : permissions[0].canView,
-              canViewCompletedOrders: permissions.length > 1 ? permissions[2].canView : permissions[0].canView,
-              canViewCancelledOrders: permissions.length > 1 ? permissions[2].canView : permissions[0].canView,
+              canEditNewOrders: permissions[0]?.canEdit,
+              canViewNewOrders: permissions[0]?.canView,
+              canEditInProgressOrders: permissions.length > 1 ? permissions[1].canEdit : permissions[0]?.canEdit,
+              canViewInProgressOrders: permissions.length > 1 ? permissions[1].canView : permissions[0]?.canView,
+              canViewCompletedOrders: permissions.length > 1 ? permissions[2].canView : permissions[0]?.canView,
+              canViewCancelledOrders: permissions.length > 1 ? permissions[2].canView : permissions[0]?.canView,
             }
             res.status(httpStatus.OK).json(dataInti)
           })
-          .catch((err) => res.status(httpStatus.NOT_FOUND).json({err: "There is something wrong while getting orders", msg: "not found orders"}))
+          .catch((err) => {
+            console.log(err)
+            return res.status(httpStatus.NOT_FOUND).json({err: "There is something wrong while getting orders", msg: "not found orders"})
+          })
       })
       .catch((err) => {
         res.status(httpStatus.NOT_FOUND).json({err: "There is something wrong while getting orders", msg: "not found orders"})

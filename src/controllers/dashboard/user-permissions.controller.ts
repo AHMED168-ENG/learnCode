@@ -72,7 +72,14 @@ export class UserPermissionsController {
           canView = !!userPermissions.filter((per) => per["tbl_page"]["type"] === "View" && per["tbl_page"]["tbl_module"]["name"] === moduleNames).length;
         }
       }
-      if (!results.length) results.push({ canAdd, canEdit, canView });
+      if (!results.length) {
+        let i = 0;
+        const length = Array.isArray(moduleNames) ? moduleNames.length : 1;
+        do {
+          results.push({ canAdd, canEdit, canView });
+          i++;
+        } while (i < length);
+      }
       return results.length > 1 ? results : results[0];
     } catch (error) {
       throw error;

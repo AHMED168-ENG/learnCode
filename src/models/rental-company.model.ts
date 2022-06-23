@@ -8,6 +8,7 @@ const rentalCompany = sequelize.define(
     name: { type: DataTypes.STRING, allowNull: true, defaultValue: null },
     email: { type: DataTypes.STRING, allowNull: true, defaultValue: null, unique: true, validate: { isEmail: { msg: "Invalid email format" } } },
     phone: { type: DataTypes.STRING(25), allowNull: true, defaultValue: null, unique: true, validate: { len: { args: [0, 25], msg: "Phone numbers can not exceed 25 characters in length" } } },
+    address: { type: DataTypes.STRING, allowNull: true, defaultValue: null },
     ar_about: { type: DataTypes.STRING(500), allowNull: true, defaultValue: null },
     en_about: { type: DataTypes.STRING(500), allowNull: true, defaultValue: null },
   },

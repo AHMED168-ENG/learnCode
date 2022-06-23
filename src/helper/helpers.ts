@@ -2,7 +2,7 @@ import path from "path"
 import fs from "fs"
 import sharp from "sharp"
 import multer from "multer"
-
+import NodeGeocoder from "node-geocoder";
 /**
  * This regular expression to validate an email address
  * Check if Email has the right syntax
@@ -34,6 +34,11 @@ function getFullTime(dateString: string) {
   date.setMinutes(date.getMinutes() - date.getTimezoneOffset());
   return date.toISOString().slice(0,16);
 }
+const getCityLocation = async (lat: number, lon: number) => {
+  const options = { provider: "google", httpAdapter: "https", apiKey: process.env.GOOGLE_API_KEY, formatter: "json" };
+  const geocoder = NodeGeocoder(options);
+  return await geocoder.reverse({ lat, lon });
+};
 
 /**
  * Function delete any property in interface
@@ -120,4 +125,4 @@ const videoUpload = multer({
   }
 });
 const mimetypeImge: string[] = ["image/jpg", "image/jpeg", "image/png"]
-export default {regularExprEmail, randomNumber, randomString, deleteProps, checkFields, imageProcessing, removeFile, videoUpload, mimetypeImge, getFullTime}
+export default {regularExprEmail, randomNumber, randomString, deleteProps, checkFields, imageProcessing, removeFile, videoUpload, mimetypeImge, getFullTime, getCityLocation}

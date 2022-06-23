@@ -67,10 +67,11 @@ export class ActivityController {
       return res.status(500).json({ msg: "Error in get activity data in view page", err: "unexpected error" });
     }
   }
-  public async getAllActivities(lang: string) {
+  public async getAllActivities(lang: string, destinationOrCategoryId?: number) {
     try {
-      const activities = await activity.findAll({ attributes: ["id", `${lang}_name`, "image"], include: [{ model: activityCategory, attributes: [`${lang}_name`] }] });
-      return activities.map((act) => { return { id: act["id"], name: act[`${lang}_name`], image: act["image"], category: act["tbl_activity_category"][`${lang}_name`] } });;
+      const where = destinationOrCategoryId ? { [Op.or]: [{ destination_id: destinationOrCategoryId }, { activity_category_id: destinationOrCategoryId }] } : {};
+      const activities = await activity.findAll({ where, attributes: ["id", `${lang}_name`, "image"], include: [{ model: activityCategory, attributes: [`${lang}_name`] }] });
+      return activities.map((act) => { return { id: act["id"], name: act[`${lang}_name`], image: act["image"], category: act["tbl_activity_category"][`${lang}_name`] } });
     } catch (error) {
       throw error;
     }

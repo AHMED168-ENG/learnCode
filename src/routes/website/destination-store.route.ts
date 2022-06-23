@@ -11,9 +11,9 @@ export class DestinationStoreRoutes {
     this.router.get("/", this.destinationStoreController.listPage);
     this.router.get("/list", this.destinationStoreController.list);
     this.router.get("/view/:id", this.destinationStoreController.viewPage);
-    this.router.get("/new", this.destinationStoreController.newPage);
-    this.router.post("/new", this.destinationStoreController.addNew);
-    this.router.get("/edit/:id", this.destinationStoreController.editPage);
-    this.router.put("/edit/:id", this.destinationStoreController.edit);
+    // this.router.get("/new", this.destinationStoreController.newPage);
+    // this.router.post("/new", this.destinationStoreController.addNew);
+    // this.router.get("/edit/:id", this.destinationStoreController.editPage);
+    // this.router.put("/edit/:id", this.destinationStoreController.edit);
   }
 }

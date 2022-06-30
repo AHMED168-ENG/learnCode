@@ -1,5 +1,6 @@
 var activitiesArr = [];
-function addRemove(day, activity_id) {
+var guidesArr = [];
+function addRemoveActivity(day, activity_id) {
     const isExist = activitiesArr.find((activity) => activity.day === day && activity.activity_id === activity_id);
     if (!isExist) {
         addToTrip(day, activity_id);
@@ -15,6 +16,18 @@ function addToTrip(day, activity_id) {
 function removeFromTrip(day, activity_id) {
     activitiesArr = activitiesArr.filter((activity) => (activity.day === day && activity.activity_id !== activity_id) || activity.day !== day);
 }
+function addRemoveGuide(guide_id) {
+    const isExist = guidesArr.find((guide) => guide === guide_id);
+    if (!isExist) {
+        addToGuide(guide_id);
+        $('#addRemoveGuideBtn-' + guide_id).html('<i class="fas fa-minus"></i>');
+    } else {
+        removeFromGuide(guide_id);
+        $('#addRemoveGuideBtn-' + guide_id).html('<i class="fas fa-plus"></i>');
+    }
+}
+function addToGuide(guide_id) { guidesArr.push(guide_id); }
+function removeFromGuide(guide_id) { guidesArr = guidesArr.filter((guide) => guide !== guide_id); }
 $('#image').on('change', function () { files = $(this)[0].files; name = ''; for (var i = 0; i < files.length; i++) { name += '\"' + files[i].name + '\"' + (i != files.length - 1 ? ", " : ""); } $("#custom-file-label-img").html(name); });
 $(function () {
     $.validator.setDefaults({
@@ -76,6 +89,7 @@ const addNew = () => {
     formData.append("from", $("#from").val());
     formData.append("to", $("#to").val());
     formData.append("image", $("#image")[0].files[0]);
+    formData.append("guides", JSON.stringify(guidesArr));
     formData.append("activitiesDays", JSON.stringify(activitiesDays));
     $.ajax({
         url: `${window.location.pathname}`,

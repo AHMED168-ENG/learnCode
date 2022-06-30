@@ -27,3 +27,4 @@ const login = (e) => {
         }
     })
 }
+function goToSignUpPage() { window.location.replace('/user/register'); }

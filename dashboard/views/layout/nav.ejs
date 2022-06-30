@@ -512,6 +512,18 @@
               </a>
             </li>
             <li class="nav-item">
+              <a href="/dashboard/report/fav-destination-repo" class="nav-link" id="fav-destination-repo">
+                <i class="fas fa-tree nav-icon"></i>
+                <p>Favourite Destinations Report</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="/dashboard/report/fav-event-repo" class="nav-link" id="fav-event-repo">
+                <i class="fas fa-star nav-icon"></i>
+                <p>Favourite Events Report</p>
+              </a>
+            </li>
+            <li class="nav-item">
               <a href="/dashboard/report/location-trees" class="nav-link" id="location-trees">
                 <i class="fas fa-tree nav-icon"></i>
                 <p>Location Trees Report</p>
@@ -529,11 +541,16 @@
                 <p>Sales Report</p>
               </a>
             </li>
-
             <li class="nav-item">
               <a href="/dashboard/report/calendar-initiative" class="nav-link" id="calendar-initiative">
                 <i class="fas fa-calendar-alt nav-icon"></i>
                 <p>Calendar Initiative</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="/dashboard/report/calendar" class="nav-link" id="allUsersCalendar">
+                <i class="fas fa-calendar-alt nav-icon"></i>
+                <p>All Users Calendar</p>
               </a>
             </li>
 
@@ -1377,12 +1394,15 @@
         const usersReport = data.userPermissions.filter((userPermission) => userPermission.module.name === "Users Report");
         const sponsorsReport = data.userPermissions.filter((userPermission) => userPermission.module.name === "Sponsors Report");
         const initiativeReport = data.userPermissions.filter((userPermission) => userPermission.module.name === "Initiatives Report");
+        const favouriteDestinationsReport = data.userPermissions.filter((userPermission) => userPermission.module.name === "Favourite Destinations Report");
+        const favouriteEventsReport = data.userPermissions.filter((userPermission) => userPermission.module.name === "Favourite Events Report");
         const locationTreesReport = data.userPermissions.filter((userPermission) => userPermission.module.name === "Locations Trees Report");
         const locationReport = data.userPermissions.filter((userPermission) => userPermission.module.name === "Locations Report");
         const salesReport = data.userPermissions.filter((userPermission) => userPermission.module.name === "Sales Report");
         const calendarInitiative = data.userPermissions.filter((userPermission) => userPermission.module.name === "Calendar Initiative Report");
+        const calendar = data.userPermissions.filter((userPermission) => userPermission.module.name === "All Users Calendar Report");
         const userCharts = data.userPermissions.filter((userPermission) => userPermission.module.name === "User Charts Report");
-        if (ordersReport.length || usersReport.length || sponsorsReport.length || initiativeReport.length || locationTreesReport.length || locationReport.length || salesReport.length || calendarInitiative.length || userCharts.length) {
+        if (ordersReport.length || usersReport.length || sponsorsReport.length || initiativeReport.length || locationTreesReport.length || locationReport.length || favouriteDestinationsReport.length || salesReport.length || calendarInitiative.length || calendar.length || userCharts.length) {
           $('#sidebar').append(`
             <li class="nav-item has-treeview">
               <a href="#" class="nav-link" id="report">
@@ -1435,6 +1455,26 @@
               </li>
             `);
           }
+          if (favouriteDestinationsReport.length) {
+            $('#reportsManagement').append(`
+              <li class="nav-item">
+                <a href="/dashboard/report/fav-destination-repo" class="nav-link" id="fav-destination-repo">
+                  <i class="fas fa-star nav-icon"></i>
+                  <p>Favourite Destinations Report</p>
+                </a>
+              </li>
+            `);
+          }
+          if (favouriteEventsReport.length) {
+            $('#reportsManagement').append(`
+              <li class="nav-item">
+                <a href="/dashboard/report/fav-event-repo" class="nav-link" id="fav-event-repo">
+                  <i class="fas fa-star nav-icon"></i>
+                  <p>Favourite Events Report</p>
+                </a>
+              </li>
+            `);
+          }
           if (locationTreesReport.length) {
             $('#reportsManagement').append(`
               <li class="nav-item">
@@ -1471,6 +1511,16 @@
                 <a href="/dashboard/report/calendar-initiative" class="nav-link" id="calendar-initiative">
                   <i class="fas fa-calendar-alt nav-icon"></i>
                   <p>Calendar Initiative</p>
+                </a>
+              </li>
+            `);
+          }
+          if (calendar.length) {
+            $('#reportsManagement').append(`
+              <li class="nav-item">
+                <a href="/dashboard/report/calendar" class="nav-link" id="allUsersCalendar">
+                  <i class="fas fa-calendar-alt nav-icon"></i>
+                  <p>All Users Calendar</p>
                 </a>
               </li>
             `);

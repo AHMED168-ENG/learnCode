@@ -2,6 +2,28 @@
 <html lang="en">
   <head>
     <%- include('../layout/heade.ejs') %>
+    <style>
+      .star {
+          visibility:hidden;
+          font-size:25px;
+          cursor:pointer;
+      }
+      .star:before {
+        content: "\2605";
+        position: absolute;
+        visibility:visible;
+        color: gold;
+      }
+      .star:checked:before {
+        content: "\2606";
+        position: absolute;
+      }
+      .star:checked:after {
+        content: "\2606";
+        position: absolute;
+        color: gold;
+      }
+    </style>
   </head>
 
   <body class="sidebar-mini layout-fixed text-sm text-sm">

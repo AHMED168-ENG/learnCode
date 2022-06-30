@@ -17,6 +17,10 @@ import initiativeLocations from "../../models/initiative-location.model"
 import initiativeTrees from "../../models/initiative-trees.model"
 import trees from "../../models/trees.model"
 import {CityController} from "./city.controller"
+import { CalendarController } from "../website/calendar.controller"
+import { FavouriteController } from "../website/favourite.controller"
+import { DestinationController } from "../website/destination.controller"
+import { EventController } from "../website/event.controller"
 const seq = new Sequelize(...config.database)
 
 export class ReportController {
@@ -97,12 +101,56 @@ export class ReportController {
       return res.status(500).json({ err, msg: "Can't get chart data" });
     }
   }
+  public async getFavouriteDestinations(req: Request, res: Response, next: NextFunction) {
+    try {
+      return res.render("dashboard/views/reports/favourite-destination-report.ejs", { title: "Most Favourite Destinations Report" });
+    } catch (error) {
+      return res.status(500).json({ msg: "Can't get most favourite destinations data", err: error });
+    }
+  }
+  public async getFavouriteEvents(req: Request, res: Response, next: NextFunction) {
+    try {
+      return res.render("dashboard/views/reports/favourite-event-report.ejs", { title: "Most Favourite Events Report" });
+    } catch (error) {
+      return res.status(500).json({ msg: "Can't get most favourite events data", err: error });
+    }
+  }
+  async getAllUsersCalendar(req: Request, res: Response, next: NextFunction) {
+    try {
+      const data = await new CalendarController().getCalendarData();
+      return res.render("dashboard/views/reports/calendar.ejs", { title: "All Users Calendar", data });
+    } catch (error) {
+      return res.status(500).json({ msg: "Can't get Calendar data", err: error });
+    }
+  }
   async calendarInitiative(req: Request, res: Response, next: NextFunction) {
     const initiativeDate = await new InitiativeController().listDateFromTo()
     res.render("dashboard/views/reports/calendar-nitiative.ejs", {
       title: "Calendar Initiative",
       data: initiativeDate,
     })
+  }
+  public async getFavouriteDestinationsList(req: Request, res: Response, next: NextFunction) {
+    try {
+      const fromTo = !!req.query.from && !!req.query.to ? { from: req.query.from, to: req.query.to } : null;
+      const favouriteDestinations = await new FavouriteController().getFavourites("destination", null, null, null, fromTo);
+      const allDestinations = await new DestinationController().getAllDestinations();
+      const data = new ReportController().getFavouritesPerItem(favouriteDestinations, allDestinations, ["en_title", "ar_title"]);
+      return res.status(200).json({ data });
+    } catch (error) {
+      return res.status(500).json({ msg: "Can't get favourite destinations list data", err: error });
+    }
+  }
+  public async getFavouriteEventList(req: Request, res: Response, next: NextFunction) {
+    try {
+      const fromTo = !!req.query.from && !!req.query.to ? { from: req.query.from, to: req.query.to } : null;
+      const favouriteEvents = await new FavouriteController().getFavourites("event", null, null, null, fromTo);
+      const allEvents = await new EventController().getAllEvents();
+      const data = new ReportController().getFavouritesPerItem(favouriteEvents, allEvents, ["en_name", "ar_name"]);
+      return res.status(200).json({ data });
+    } catch (error) {
+      return res.status(500).json({ msg: "Can't get events list data", err: error });
+    }
   }
   async userNumbers(from?: any, to?: any) {
     let data
@@ -135,7 +183,7 @@ export class ReportController {
       })
     return data
   }
-
+  
   async userlistReport(req: Request, res: Response, next: NextFunction) {
     const fromTo = req.query.from != "null" ? {createdAt: {[Op.and]: [{[Op.gte]: req.query.from}, {[Op.lte]: req.query.to}]}} : {}
     const screenType = req.params.type == "all" ? {} : {gender: req.params.type}
@@ -330,6 +378,19 @@ export class ReportController {
       .catch((e) => (data = null))
     return data
   }
+  async getCategoryChart(where = {}, category: string) {
+    const whereCon = "YEAR(createdAt) = YEAR(CURDATE())"
+    let data
+    await seq
+      .query(
+        `SELECT MONTHNAME(createdAt) AS MONTH, COUNT(*) AS "count"
+               FROM tbl_${category} WHERE ${whereCon} GROUP BY MONTH`,
+        {type: sequelize.QueryTypes.SELECT}
+      )
+      .then((d: any) => (data = d))
+      .catch((e) => (data = null))
+    return data
+  }
   async initiativesChart(where = {}) {
     const whereCon = "YEAR(createdAt) = YEAR(CURDATE())"
     let data
@@ -368,5 +429,30 @@ export class ReportController {
       .then((d: any) => (data = d))
       .catch((e) => (data = null))
     return data
+  }
+  private getFavouritesPerItem(favourites: any[], all: any[], attributes: string[]): any {
+    try {
+      let favItemsIds = favourites.map((favouite) => { return favouite.item_id; });
+      const mappedFavourites = favourites.map((favourite) => {
+        return {
+          id: favourite.id,
+          user_id: favourite.user_id,
+          username: favourite["web_apps_user.fullName"] || favourite["web_apps_user.email"] || favourite["web_apps_user.phone"],
+          user_type: favourite.user_type,
+          item_id: favourite.item_id,
+          createdAt: favourite.createdAt,
+        };
+      });
+      const response: any[] = [];
+      for (const favItemId of [...new Set(favItemsIds)]) {
+        const foundItem = all.find((item) => item.id === favItemId);
+        const name = `${foundItem[attributes[0]]}${attributes[1] ? ` - ${foundItem[attributes[1]]}` : ''}`;
+        const favouritesPerItemId = mappedFavourites.filter((item) => item.item_id === favItemId);
+        response.push({ id: favItemId, name, favourites: favouritesPerItemId });
+      }
+      return response;
+    } catch (error) {
+      throw error;
+    }
   }
 }

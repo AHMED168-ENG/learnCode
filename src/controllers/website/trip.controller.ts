@@ -15,6 +15,8 @@ import admin from "../../models/admin.model";
 import { TripActivityController } from "./trip-activity.controller";
 import { ActivityController } from "./activity.controller";
 import { Op } from "sequelize";
+import { GuideTripController } from "./guide-trip.controller";
+import { TourGuideController } from "./guide.controller";
 const { verify } = require("../../helper/token");
 export class TripsController {
   constructor() {}
@@ -71,7 +73,8 @@ export class TripsController {
       data["adminPhone"] = !data["web_apps_user"]?.phone && !data["admin"]?.phone ? process.env.admin_phone : null;
       const lang = req["lang"] && req["lang"] === "ar" ? "ar" : "en";
       const tripActivities = await new TripActivityController().list(lang, Number(req.params.id), data["from"], data["to"]);
-      return res.render("website/views/trip/view.ejs", { title: "View trip Details", data, module_id, tripActivities });
+      const tripGuides = await new GuideTripController().getTourguidesWithTrip(data["id"]);
+      return res.render("website/views/trip/view.ejs", { title: "View trip Details", data, module_id, tripActivities, tripGuides });
     } catch (error) {
       return res.status(500).json({ msg: "Error in get trip data in view page", err: "unexpected error" });
     }
@@ -81,19 +84,22 @@ export class TripsController {
       const destinations = await new DestinationController().getAllDestinations();
       const lang = req["lang"] && req["lang"] === "ar" ? "ar" : "en";
       const activities = await new ActivityController().getAllActivities(lang);
-      return res.render("website/views/trip/new.ejs", { title: "Plan Your Trip", destinations, activities });
+      const guides = await new TourGuideController().getAllGuides();
+      return res.render("website/views/trip/new.ejs", { title: "Plan Your Trip", destinations, activities, guides });
     } catch (error) {
       return res.status(500).json({ msg: "Can't get trip new page", err: error });
     }
   }
   public async addNew(req: Request, res: Response, next: NextFunction) {
     try {
-      const areNull = !req.body.ar_name || !req.body.en_name || !req.body.destination_id || !req.body.length || !req.body.from || !req.body.to || !req.body.activitiesDays || !req.files;
+      const areNull = !req.body.ar_name || !req.body.en_name || !req.body.destination_id || !req.body.length || !req.body.from || !req.body.to || !req.body.activitiesDays || !req.body.guides || !req.files;
       const activitiesDays = JSON.parse(req.body.activitiesDays);
-      const isNotArray = !Array.isArray(activitiesDays);
+      const guides = JSON.parse(req.body.guides);
+      const isNotArray = !Array.isArray(activitiesDays) || !Array.isArray(guides);
       const areNotNumbers = !Number(req.body.destination_id);
       let invaliditemsInArray;
       for (const activityDay of activitiesDays) invaliditemsInArray = activityDay["activities"].filter((activity) => !Number(activity));
+      invaliditemsInArray = guides.filter((guide) => !Number(guide));
       if (areNull || areNotNumbers || isNotArray || invaliditemsInArray.length) return res.status(400).json({ msg: "Bad Request", err: "unexpected error" });
       const img = req.files.image;
       const imgName: string = img ? `${helpers.randomNumber(100, 999)}_${Number(new Date())}${path.extname(img["name"])}` : null;
@@ -108,7 +114,8 @@ export class TripsController {
       delete tripToCreate.activitiesDays;
       const createdTrip = await trip.create(tripToCreate);
       const createdTripActivities = createdTrip ? await new TripActivityController().addTripActivities(createdTrip["id"], activitiesDays, req.body.from) : undefined;
-      if (createdTripActivities) {
+      const createdGuides = createdTrip && createdTripActivities ? await new GuideTripController().addTripGuides(createdTrip["id"], guides) : undefined;
+      if (createdTripActivities && createdGuides) {
         const fileDir: string = `trips/${createdTrip["id"]}/`
         const set = { image: imgName ? `${fileDir}${imgName}` : null };
         const updatedTrip = await trip.update(set, { where: { id: createdTrip["id"] } });
@@ -130,9 +137,11 @@ export class TripsController {
       const lang = req["lang"] && req["lang"] === "ar" ? "ar" : "en";
       const activities = await new ActivityController().getAllActivities(lang);
       const tripActivities = await new TripActivityController().list(lang, Number(req.params.id), data["from"], data["to"]);
+      const guides = await new TourGuideController().getAllGuides();
+      const tripGuides = await new GuideTripController().getTourguidesWithTrip(data["id"]);
       data['from'] = helpers.getFullTime(data['from']);
       data['to'] = helpers.getFullTime(data['to']);
-      return res.render("website/views/trip/edit.ejs", { title: "Edit Trip", data, destinations, tripActivities, activities });
+      return res.render("website/views/trip/edit.ejs", { title: "Edit Trip", data, destinations, tripActivities, activities, guides, tripGuides });
     } catch (error) {
       return res.status(500).json({ msg: "Error in get trip data in edit page", err: "unexpected error" });
     }
@@ -141,8 +150,10 @@ export class TripsController {
     try {
       if (!req.params.id) return res.status(400).json({ msg: "Bad Request", err: "unexpected error" });
       const activitiesDays = JSON.parse(req.body.activitiesDays);
+      const guides = JSON.parse(req.body.guides);
       const tripToUpdate = req.body;
       delete tripToUpdate.activitiesDays;
+      delete tripToUpdate.guides;
       const payload = req.query.status ? { status: req.query.status } : tripToUpdate;
       if (payload && payload !== {}) await trip.update(payload, { where: { id: req.params.id } });
       const img = req.files ? req.files.image : null;
@@ -164,8 +175,15 @@ export class TripsController {
       if (activitiesDays.removedActivities && activitiesDays.removedActivities.length) {
         await new TripActivityController().removeTripActivity(activitiesDays.removedActivities);
       }
+      if (guides.addedGuides && guides.addedGuides.length) {
+        await new GuideTripController().addTripGuides(foundTrip["id"], guides.addedGuides);
+      }
+      if (guides.removedGuides && guides.removedGuides.length) {
+        await new GuideTripController().removeTripGuide(guides.removedGuides);
+      }
       return res.status(httpStatus.OK).json({ msg: "trip edited" });
     } catch (error) {
+      console.log(error)
       return res.status(httpStatus.BAD_REQUEST).json({msg: "Error in Edit trip", err: "unexpected error" });
     }
   }

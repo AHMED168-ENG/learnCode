@@ -11,6 +11,9 @@ import { DestinationStoreController } from "./destination-store.controller";
 import { PackageController } from "./package.controller";
 import { Op } from "sequelize";
 import { DestinationTransportationController } from "../dashboard/destination-transportation.controller";
+import { FavouriteController } from "./favourite.controller";
+import { ItemCatgeory } from "../../enums/item-category.enum";
+const { verify } = require("../../helper/token");
 export class DestinationController {
   constructor() {}
   public async listPage(req: Request, res: Response, next: NextFunction) {
@@ -25,7 +28,9 @@ export class DestinationController {
       const countDestinations = await destination.count() || 0;
       const lang = req.query && req.query.lang === "ar" ? "ar" : "en";
       const data = destinations.map((destination) => { return { id: destination["id"], image: destination["image"], title: destination[`${lang}_title`] }; });
-      const dataInti = { total: countDestinations, limit, page: Number(req.query.page), pages: Math.ceil(countDestinations / limit) + 1, data };
+      const payload = verify(req.cookies.token);
+      const favourites = await new FavouriteController().getFavourites(ItemCatgeory.destination, payload.user_id, payload.user_type);
+      const dataInti = { total: countDestinations, limit, page: Number(req.query.page), pages: Math.ceil(countDestinations / limit) + 1, data, favourites };
       return res.status(httpStatus.OK).json(dataInti);
     } catch (error) {
       return res.status(httpStatus.NOT_FOUND).json({ err: "There is something wrong while getting destinations list", msg: "Internal Server Error" });
@@ -55,6 +60,8 @@ export class DestinationController {
       const destinationStores = await new DestinationStoreController().getAllDestinationStores(lang, dest["id"]);
       const packages = await new PackageController().getAllDestinationPackages(lang, dest["id"]);
       const transportations = await new DestinationController().getAllDestinationTransportations(dest["id"]);
+      const payload = verify(req.cookies.token);
+      const favourites = await new FavouriteController().getFavourites(ItemCatgeory.destination, payload.user_id, payload.user_type, dest["id"]);
       // const city = await helpers.getCityLocation(dest["location_lat"], dest["location_long"]);
       const data = {
         id: dest["id"],
@@ -78,6 +85,7 @@ export class DestinationController {
         packages,
         nearDestinations,
         transportations,
+        favourite: favourites && favourites.length ? favourites[0]: null,
       };
       return res.render("website/views/destinations/view.ejs", { title: "View Destination Details", data, module_id });
     } catch (error) {

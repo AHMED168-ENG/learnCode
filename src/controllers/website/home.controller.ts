@@ -1,21 +1,30 @@
 import {Request, Response, NextFunction} from "express"
 import sequelize from "sequelize"
 import initiatives from "../../models/initiative.model"
-import { UserController } from "../api/users.controller"
+import { CartController } from "../api/cart.controller"
+import { AdminController } from "../dashboard/admin.controller"
+import { UserController } from "../dashboard/user.controller"
 const { verify } = require("../../helper/token")
 export class HomeController {
   public async home(req: Request, res: Response, next: NextFunction) {
     try {
       const payload = verify(req.cookies.token);
-      const user = (await new UserController().homeData(req.query.lang, payload.user_id)) || {};
-      return res.render("website/views/index.ejs", { title: "Home", lang: req.query.lang });
+      const isHighestAdmin = payload.email === process.env.admin_email;
+      const admin = !isHighestAdmin ? await new AdminController().getAdminByEmail(payload.email) : payload;
+      const user = await new UserController().getUserByEmail(payload.email);
+      return res.render("website/views/index.ejs", { title: "Home", admin, user });
     } catch (error) {
       return res.status(500).json({ msg: "Can't open home page", err: error });
     }
   }
-  async getSideBarNum(req: Request, res: Response, next: NextFunction) {
+  public async getNavNumbers(req: Request, res: Response, next: NextFunction) {
     try {
-      return res.status(200).json({});
+      const payload = verify(req.cookies.token);
+      const isHighestAdmin = payload.email === process.env.admin_email;
+      const admin = !isHighestAdmin ? await new AdminController().getAdminByEmail(payload.email) : payload;
+      const user = await new UserController().getUserByEmail(payload.email);
+      const cartCount = await new CartController().cardCount(user["user_id"]);
+      return res.status(200).json({ cartCount, admin, user });
     } catch (error) {
       return res.status(500).json({ msg: "Error in getting sidebar nums", err: error.errors[0].message || "unexpected error" });
     }

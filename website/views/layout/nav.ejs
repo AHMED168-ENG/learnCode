@@ -4,8 +4,8 @@
 </div> -->
 
 <!-- Navbar -->
-<nav class="main-header navbar navbar-expand navbar-dark navbar-light">
-  <ul class="navbar-nav ml-auto">
+<nav class="main-header navbar navbar-expand navbar-dark navbar-light d-flex justify-content-between">
+  <ul class="navbar-nav mr-auto">
     <li class="nav-item">
       <a class="nav-link" style="font-size: 12px;" href="/destination">
         Explore Destinations
@@ -46,6 +46,8 @@
         Request ads
       </a>
     </li>
+  </ul>
+  <ul class="navbar-nav ml-auto">
     <li class="nav-item">
       <button class="nav-link btn btn-none" style="font-size: 12px;" onclick="changeLang('ar')">ar</button>
     </li>
@@ -55,6 +57,12 @@
     <li class="nav-item">
       <a class="nav-link" data-widget="fullscreen" href="#" role="button">
         <i class="fas fa-expand-arrows-alt"></i>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="/home">
+        <i class="fa fa-shopping-cart text-warning" aria-hidden="true"></i>
+        <span class="badge badge-warning" style="color: none" id="cartCount"></span>
       </a>
     </li>
     <li class="nav-item">
@@ -74,23 +82,14 @@
   <div class="sidebar">
     <!-- Sidebar user panel (optional) -->
     <div class="user-panel mt-3 pb-3 mb-3 d-flex" id="user-title">
-      <div class="row ml-4">
-        <img class="rounded-circle p-0" width=45 height=45 src="/p/img/avatar.png" alt="Image">
-        <span class="text-center text-light mt-1 ml-1"><a href="/home" style="font-size: 18px;">Ahmed Mohamed</a></span>
-      </div>
+      
     </div>
-
     <!-- Sidebar Menu -->
     <nav class="mt-2">
       <ul class="nav nav-pills nav-sidebar flex-column nav-flat" data-widget="treeview" role="menu" data-accordion="false" id="sidebar">
         <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
-        <li class="nav-item mb-2">
-          <a href="/dashboard/home" class="nav-link" id="home">
-            <i class="nav-icon fas fa-tachometer-alt"></i>
-            <p>Sahlan Dashboard</p>
-          </a>
-        </li>
+        <li class="nav-item mb-2" id="dashboard-link"></li>
         <li class="nav-item">
           <a href="/favourite" class="nav-link" id="favourites">
             <i class="nav-icon fas fa-star text-success_"></i>
@@ -178,31 +177,67 @@
   </div>
 </aside>
 <script>
-  var language = "en";
-  getHomeData(language);
-  function getHomeData(lang) {
-    fetch(`/home?lang=${lang}`, { method: "GET" }).then((response) => response.json()).then((data) => {
-      $('#lang').html(`<a class="nav-link" style="font-size: 13px;" onclick="changeLang('${data.lang}')">${data.lang}</a>`);
-      if (data.user) {
-        $('#user-title').append(`
-          <div class="row">
-            <img class="rounded-circle p-0" width=45 height=45 src="/p/img/${data.user.user_img}" alt="Image">
-            <span class="text-center">${data.user.username}</span>
-          </div>
-        `);
-      }
-    });
-  }
-  function changeLang(lang) {
-    const settings = {
-        async: true,
-        crossDomain: true,
-        url: `${window.location.pathname}?lang=${lang === "ar" ? "ar" : "en"}`,
-        method: "Get",
-    };
-    $.ajax(settings).done(function (res, textStatus) {
-        console.log(res.data)
-    }).fail(() => {});
-    fetch(`${window.location.pathname}?lang=${lang === "ar" ? "ar" : "en"}`, { method: "GET" }).then((response) => response.json());
-  }
+  fetch(`/home/num`, { method: "GET" }).then((response) => response.json()).then((data) => {
+    if (data.admin) {
+      $('#dashboard-link').append(`
+        <a href="/dashboard/home" class="nav-link" id="home">
+          <i class="nav-icon fas fa-tachometer-alt"></i>
+          <p>Sahlan Dashboard</p>
+        </a>
+      `);
+    }
+    $('#user-title').append(`
+      <div class="row ml-4">
+        <img class="rounded-circle p-0" width=45 height=45 src="/p/img/${ data.user ? data.user.user_img || 'avatar.png' : 'avatar.png' }" alt="Image">
+        <span class="text-center text-light mt-1 ml-1"><a href="/home" style="font-size: 15px;">${ data.admin ? data.admin.fullName || data.admin.username : data.user.fullName || data.user.email }</a></span>
+      </div>
+    `);
+    // $('#cartCount').append(`${cartCount}`);
+  }).catch((error) => console.error(error));
+  // fetch(`/home/user`, { method: "GET" }).then((response) => response.json()).then((data) => {
+  //   // $('#lang').html(`<a class="nav-link" style="font-size: 13px;" onclick="changeLang('${data.lang}')">${data.lang}</a>`);
+  //   if (!data.isAdmin) $('#dashboard-link').hide();
+  //   if (data.user) {
+  //     $('#user-title').empty();
+  //     $('#user-title').append(`
+  //       <div class="row">
+  //         <img class="rounded-circle p-0" width=45 height=45 src="/p/img/${data.user.user_img}" alt="Image">
+  //         <span class="text-center">${data.user.fullName}</span>
+  //       </div>
+  //     `);
+  //   }
+  // }).catch((err) => {
+  //   console.log({err})
+  // });
+  // var language = "en";
+  // getHomeData(language);
+  // function getHomeData(lang) {
+  //   fetch(`/home`, { method: "GET" }).then((response) => response.json()).then((data) => {
+  //     $('#lang').html(`<a class="nav-link" style="font-size: 13px;" onclick="changeLang('${data.lang}')">${data.lang}</a>`);
+  //     if (!data.isAdmin) $('#dashboard-link').hide();
+  //     if (data.user) {
+  //       $('#user-title').empty();
+  //       $('#user-title').append(`
+  //         <div class="row">
+  //           <img class="rounded-circle p-0" width=45 height=45 src="/p/img/${data.user.user_img}" alt="Image">
+  //           <span class="text-center">${data.user.fullName}</span>
+  //         </div>
+  //       `);
+  //     }
+  //   }).catch((err) => {
+  //     console.log(err)
+  //   });
+  // }
+  // function changeLang(lang) {
+  //   const settings = {
+  //       async: true,
+  //       crossDomain: true,
+  //       url: `${window.location.pathname}?lang=${lang === "ar" ? "ar" : "en"}`,
+  //       method: "Get",
+  //   };
+  //   $.ajax(settings).done(function (res, textStatus) {
+  //       console.log(res.data)
+  //   }).fail(() => {});
+  //   fetch(`${window.location.pathname}?lang=${lang === "ar" ? "ar" : "en"}`, { method: "GET" }).then((response) => response.json());
+  // }
 </script>

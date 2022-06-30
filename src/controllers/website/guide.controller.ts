@@ -136,4 +136,11 @@ export class TourGuideController {
       return res.status(httpStatus.BAD_REQUEST).json({msg: "Error in Edit tour guide", err: "unexpected error" });
     }
   }
+  public async getAllGuides() {
+    try {
+      return await guide.findAll({ attributes: ["id", "name", "username", "image"], raw: true }) || [];
+    } catch (error) {
+      throw error;
+    }
+  }
 }

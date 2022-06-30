@@ -2,6 +2,31 @@
 <html lang="en">
   <head>
     <%- include('../layout/heade.ejs') %>
+    <style>
+      .star {
+          visibility:hidden;
+          font-size:30px;
+          cursor:pointer;
+      }
+      .star:before {
+        content: "\2605";
+        position: absolute;
+        visibility:visible;
+        color: gold;
+      }
+      .star:checked:before {
+        content: "\2606";
+        position: absolute;
+      }
+      .star:checked:after {
+        content: "\2606";
+        position: absolute;
+        color: gold;
+      }
+      input[type="checkbox"]:checked {
+        background-color:gold;
+      }
+    </style>
   </head>
   <body class="sidebar-mini layout-fixed text-sm text-sm">
     <div class="wrapper">
@@ -35,11 +60,15 @@
               <div class="col-md-12">
                 <!-- jquery validation -->
                 <div class="card card-primary">
-                  <div class="card-header">
+                  <div class="card-header d-flex justify-content-between">
                     <h3 class="card-title">
                       <i class="fas fa-users"></i>
                       &nbsp;&nbsp; View Destination
                     </h3>
+                    <div class="form-check">
+                      <input class="form-check-input" id="addFav" onclick="addToFavourite('<%= data.id %>')" type="checkbox" value="<%= !!data.favourite %>" <%= !!data.favourite ? 'checked' : '' %> title="Add To Favourite" style="<%= !!data.favourite ? 'background-color: gold;' : 'background-color: white;' %>">
+                      <label for="addFav"> Add To Favourites</label>
+                    </div>
                   </div>
                   <form id="newForm" action="" onsubmit="">
                     <div class="card-body">
@@ -400,6 +429,11 @@
         //   infoWindow = new google.maps.InfoWindow({ position: mapsMouseEvent.latLng });
         // });
       };
+      function addToFavourite(item_id) {
+          const checked = $('#addFav').val() == "true" ? "false" : "true";
+          const settings = { async: true, crossDomain: true, url: `/favourite`, data: { item_id, category: "destination", checked }, method: "PUT" };
+          $.ajax(settings).done(function (res, textStatus) { window.location.reload(); }).fail(() => spinnerNotfound(3)); 
+      }
     </script>
     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDVAIyZekr82kt8-pDk64xbyp26J1CnbTY&callback=initMap&v=weekly"></script>
     <script

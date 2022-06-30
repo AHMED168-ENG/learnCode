@@ -113,7 +113,8 @@
                           <textarea type="text" id="ar_description" name="ar_description" class="form-control" placeholder="description ar" rows="3"><%= data.ar_description || null %></textarea>
                         </div>
                       </div>
-                      <% if (activities && activities.length) { %><div id="accordion" role="tablist"></div><% } %>
+                      <% if (guides && guides.length) { %><div id="accordion" class="guides" role="tablist"></div><% } %>
+                      <% if (activities && activities.length) { %><div id="accordion" class="activities" role="tablist"></div><% } %>
                     </div>
                     <!-- /.card-body -->
                     <div class="card-footer">
@@ -148,6 +149,8 @@
       referrerpolicy="no-referrer"
     ></script>
     <script>
+      var guides = JSON.parse(`<%-JSON.stringify(guides)%>`);
+      var tripGuides = JSON.parse(`<%-JSON.stringify(tripGuides)%>`);
       var activities = JSON.parse(`<%-JSON.stringify(activities)%>`);
       var tripActivities = JSON.parse(`<%-JSON.stringify(tripActivities)%>`);
       var fromDate = null;
@@ -162,6 +165,7 @@
         oldFrom = fromDate;
         oldTo = toDate;
         days = Math.ceil(Math.abs(new Date(toDate).getTime() - new Date(fromDate).getTime()) / (1000 * 3600 * 24));
+        getTourguides();
         getActivitiesDays();
         $('#from').change(function() {
           fromDate = $("#from").val();
@@ -169,7 +173,7 @@
           days = Math.ceil(Math.abs(new Date(toDate).getTime() - new Date(fromDate).getTime()) / (1000 * 3600 * 24));
           if (!!days && (oldFrom !== fromDate || oldTo !== toDate || !show)) {
             show = true;
-            $('#accordion').empty();
+            $('.activities').empty();
             getActivitiesDays(days);
           }
         });
@@ -179,17 +183,58 @@
           days = Math.ceil(Math.abs(new Date(toDate).getTime() - new Date(fromDate).getTime()) / (1000 * 3600 * 24));
           if (!!days && (oldFrom !== fromDate || oldTo !== toDate || !show)) {
             show = true;
-            $('#accordion').empty();
+            $('.activities').empty();
             getActivitiesDays(days);
           }
         });
       });
+      function getTourguides() {
+        $('.guides').append(`
+          <div class="card">
+            <div class="card-header" role="tab" id="tripsGuides">
+              <h5 class="mb-0">
+                <a data-toggle="collapse" href="#collapseTripsGuides" aria-expanded="true" aria-controls="tripsGuides">Tour Guides</a>
+              </h5>
+            </div>
+            <div id="collapseTripsGuides" class="collapse show" role="tabpanel" aria-labelledby="tripsGuides">
+              <div class="row card-body" id="guides-cards"></div>
+            </div>
+          </div>
+        `);
+        const existGuideArr = [];
+        for (const guide of guides) {
+          let isExistGuide = tripGuides.find((tg) => tg.id === guide.id);
+          existGuideArr.push(isExistGuide);
+          const guideObj = existGuideArr[guides.indexOf(guide)];
+          $('#guides-cards').append(`
+            <div class="card col-xl-2 col-lg-3 col-md-3 col-sm-4 col-xs-6 col-6 m-2">
+              <img class="card-img-top" src="/p/img/${ guide.image }" alt="Photo">
+              <div class="card-body">
+                  <div class="row m-1 d-flex justify-content-center">
+                      <h4 class="card-title"><span>${ guide.name }</span></h4>
+                  </div>
+                  <div class="row m-1 d-flex justify-content-center">
+                    <h6 class="card-subtitle text-secondary"><span>${ guide.username }</span></h6>
+                  </div>
+                  <div class="row m-1 d-flex justify-content-center">
+                    <button type="button" class="btn btn-primary" id="addRemoveGuideBtn-${guide.id}" onclick="addRemoveGuide('${guide.id}', '${guideObj?.id}')">
+                      ${!guideObj ? `<i class="fas fa-plus"></i>` : `<i class="fas fa-minus"></i>`}
+                    </button>
+                  </div>
+                  <div class="row m-1 d-flex justify-content-center">
+                    <a href="/guide/view/${ guide.id }" class="btn btn-primary">More Details</a>
+                  </div>
+              </div>
+            </div>
+          `);
+        }
+      }
       function getActivitiesDays(days) {
         if (days > tripActivities.length) {
           for (let day = tripActivities.length; day < days; day++) tripActivities.push({ day: day - 1, activities: [] });
         } else if (days < tripActivities.length) tripActivities.splice(days, tripActivities.length - days);
         for (const tripActivity of tripActivities) {
-          $('#accordion').append(`
+          $('.activities').append(`
             <div class="card">
               <div class="card-header" role="tab" id="${tripActivities.indexOf(tripActivity)}">
                 <h5 class="mb-0">
@@ -201,8 +246,11 @@
               </div>
             </div>
           `);
+          const existActArr = [];
           for (const activity of activities) {
             let isExist = tripActivity.activities.find((ta) => ta.activity_id === activity.id);
+            existActArr.push(isExist);
+            const activityObj = existActArr[activities.indexOf(activity)];
             $('#activities-cards' + `-${tripActivities.indexOf(tripActivity)}`).append(`
               <div class="card col-xl-2 col-lg-3 col-md-3 col-sm-4 col-xs-6 col-6 m-2">
                 <img class="card-img-top" src="/p/img/${activity.image}" alt="Photo">
@@ -214,8 +262,8 @@
                       <h6 class="card-subtitle text-secondary"><span>${activity.category}</span></h6>
                     </div>
                     <div class="row m-1 d-flex justify-content-center">
-                      <button type="button" class="btn btn-primary" id="addRemoveBtn-${activity.id}-${tripActivities.indexOf(tripActivity)}" onclick="addRemove('${tripActivities.indexOf(tripActivity)}', '${activity.id}', '${isExist}')">
-                        ${!isExist ? `<i class="fas fa-plus"></i>` : `<i class="fas fa-minus"></i>`}
+                      <button type="button" class="btn btn-primary" id="addRemoveBtn-${activity.id}-${tripActivities.indexOf(tripActivity)}" onclick="addRemoveActivity('${tripActivities.indexOf(tripActivity)}', '${activity.id}', '${activityObj?.id}')">
+                        ${!activityObj ? `<i class="fas fa-plus"></i>` : `<i class="fas fa-minus"></i>`}
                       </button>
                     </div>
                     <div class="row m-1 d-flex justify-content-center">

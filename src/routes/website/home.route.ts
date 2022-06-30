@@ -11,6 +11,6 @@ export class HomeRoutes {
   }
   routes() {
     this.router.get("/", this.homeController.home)
-    this.router.get("/num", this.homeController.getSideBarNum)
+    this.router.get("/num", this.homeController.getNavNumbers)
   }
 }

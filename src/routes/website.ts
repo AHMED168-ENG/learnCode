@@ -1,10 +1,16 @@
 import express from "express";
+import { FavouriteRoutes } from "./website/favourite.route";
 import { ActivityRoutes } from "./website/activity.route";
 import { CalendarRoutes } from "./website/calendar.route";
+import { CartRoutes } from "./website/cart.route";
 import { DestinationRoutes } from "./website/destination.route";
+import { EventCartRoutes } from "./website/event-cart.route";
 import { EventRoutes } from "./website/event.route";
+import { TourGuideRoutes } from "./website/guide.route";
 import { HomeRoutes } from "./website/home.route";
+import { TripCartRoutes } from "./website/trip-cart.route";
 import { TripRoutes } from "./website/trip.route";
+import { UserRoutes } from "./website/user.route";
 export = (app: express.Application) => {
   // Index
   app.get("/", (req, res) => res.redirect("/home"));
@@ -16,8 +22,16 @@ export = (app: express.Application) => {
   app.use("/activity", new ActivityRoutes().router);
   // Trip route
   app.use("/trip", new TripRoutes().router);
+  // Cart route
+  app.use("/cart", new CartRoutes(new TripCartRoutes(), new EventCartRoutes()).router);
   // Event route
   app.use("/event", new EventRoutes().router);
   // Calendar route
   app.use("/calendar", new CalendarRoutes().router);
+  // User route
+  app.use("/user", new UserRoutes().router);
+  // Tourguide route
+  app.use("/guide", new TourGuideRoutes().router);
+  // Favourite route
+  app.use("/favourite", new FavouriteRoutes().router);
 }

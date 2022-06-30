@@ -3,6 +3,28 @@
   <head>
     <%- include('../layout/heade.ejs') %>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <style>
+      .star {
+          visibility:hidden;
+          font-size:30px;
+          cursor:pointer;
+      }
+      .star:before {
+        content: "\2605";
+        position: absolute;
+        visibility:visible;
+        color: gold;
+      }
+      .star:checked:before {
+        content: "\2606";
+        position: absolute;
+      }
+      .star:checked:after {
+        content: "\2606";
+        position: absolute;
+        color: gold;
+      }
+    </style>
   </head>
   <body class="sidebar-mini layout-fixed text-sm text-sm">
     <div class="wrapper">
@@ -18,7 +40,7 @@
               <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                   <li class="breadcrumb-item"><a href="/">Home</a></li>
-                  <li class="breadcrumb-item"><a href="/dashboard/event">Events</a></li>
+                  <li class="breadcrumb-item"><a href="/event/calendar">Events</a></li>
                   <li class="breadcrumb-item active">View</li>
                 </ol>
               </div>
@@ -36,11 +58,15 @@
               <div class="col-md-12">
                 <!-- jquery validation -->
                 <div class="card card-primary">
-                  <div class="card-header">
+                  <div class="card-header d-flex justify-content-between">
                     <h3 class="card-title">
                       <i class="fas fa-users"></i>
                       &nbsp;&nbsp; View Event
                     </h3>
+                    <div class="form-check">
+                      <input class="form-check-input" id="addFav" onclick="addToFavourite('<%= data.id %>')" type="checkbox" value="<%= !!favourite %>" <%= !!favourite ? 'checked' : '' %> title="Add To Favourite">
+                      <label for="addFav"> Add To Favourites</label>
+                    </div>
                   </div>
                   <form id="newForm" action="" onsubmit="">
                     <div class="card-body">
@@ -110,7 +136,7 @@
                         <div class="form-group col-md-6">
                           <div class="form-group">
                             <label>Event Type</label>
-                            <select disabled disabled id="type" name="type" class="form-control select2 select2-danger" data-dropdown-css-class="select2-danger" style="width: 100%">
+                            <select disabled id="type" name="type" class="form-control select2 select2-danger" data-dropdown-css-class="select2-danger" style="width: 100%">
                               <option value="<%= data.type %>" selected><%= data.type %></option>
                             </select>
                           </div>
@@ -199,6 +225,11 @@
         $('.carousel-item').first().addClass('active');
         $('#carousel').carousel();
       });
+      function addToFavourite(item_id) {
+          const checked = $('#addFav').val() == "true" ? "false" : "true";
+          const settings = { async: true, crossDomain: true, url: `/favourite`, data: { item_id, category: "event", checked }, method: "PUT" };
+          $.ajax(settings).done(function (res, textStatus) { window.location.reload(); }).fail(() => spinnerNotfound(3)); 
+      }
     </script>
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"

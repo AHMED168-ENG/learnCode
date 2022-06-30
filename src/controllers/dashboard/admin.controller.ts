@@ -21,8 +21,9 @@ export class AdminController {
         webUser = await new UserController().getUserByEmail(email);
         const adminUser = await admin.findOne({ where: { email } });
         const user = adminUser || webUser;
-        const isMatch = await bcrypt.compare(password, user["password"]);
-        if (user["email"] === email && isMatch) payload = { user_id: user["id"], role_id: user["role_id"], username: user["fullName"], email: user["email"], phone: user["phone"] };
+        const userPass = user["password"] || user["user_pass"];
+        const isMatch = await bcrypt.compare(password, userPass);
+        if (user["email"] === email && isMatch) payload = { user_id: user["user_id"] || user["id"], role_id: user["role_id"], username: user["fullName"], email: user["email"], phone: user["phone"], user_type: webUser ? webUser.user_type : null };
         else return res.status(200).json({ status: 201 });
       }
       const token = generateToken(payload);

@@ -108,7 +108,8 @@
                           <textarea type="text" id="ar_description" name="ar_description" class="form-control" placeholder="description ar" rows="3"></textarea>
                         </div>
                       </div>
-                      <% if (activities && activities.length) { %><div id="accordion" role="tablist"></div><% } %>
+                      <% if (guides && guides.length) { %><div id="accordion" class="guides" role="tablist"></div><% } %>
+                      <% if (activities && activities.length) { %><div id="accordion" class="activities" role="tablist"></div><% } %>
                     </div>
                     <!-- /.card-body -->
                     <div class="card-footer">
@@ -144,6 +145,7 @@
     ></script>
     <script>
       var activities = JSON.parse(`<%-JSON.stringify(activities)%>`);
+      var guides = JSON.parse(`<%-JSON.stringify(guides)%>`);
       var fromDate = null;
       var toDate = null;
       var days;
@@ -151,13 +153,14 @@
       var oldFrom = null;
       var oldTo = null;
       $(document).ready(function () {
+        getTourguides();
         $('#from').change(function() {
           fromDate = $("#from").val();
           toDate = $("#to").val();
           days = Math.ceil(Math.abs(new Date(toDate).getTime() - new Date(fromDate).getTime()) / (1000 * 3600 * 24));
           if (!!days && (oldFrom !== fromDate || oldTo !== toDate || !show)) {
             show = true;
-            $('#accordion').empty();
+            $('.activities').empty();
             getActivitiesDays(days);
           }
         });
@@ -167,11 +170,48 @@
           days = Math.ceil(Math.abs(new Date(toDate).getTime() - new Date(fromDate).getTime()) / (1000 * 3600 * 24));
           if (!!days && (oldFrom !== fromDate || oldTo !== toDate || !show)) {
             show = true;
-            $('#accordion').empty();
+            $('.activities').empty();
             getActivitiesDays(days);
           }
         });
       });
+      function getTourguides() {
+        $('.guides').append(`
+          <div class="card">
+            <div class="card-header" role="tab" id="tripsGuides">
+              <h5 class="mb-0">
+                <a data-toggle="collapse" href="#collapseTripsGuides" aria-expanded="true" aria-controls="tripsGuides">Tour Guides</a>
+              </h5>
+            </div>
+            <div id="collapseTripsGuides" class="collapse show" role="tabpanel" aria-labelledby="tripsGuides">
+              <div class="row card-body" id="guides-cards"></div>
+            </div>
+          </div>
+        `);
+        for (const guide of guides) {
+          $('#guides-cards').append(`
+            <div class="card col-xl-2 col-lg-3 col-md-3 col-sm-4 col-xs-6 col-6 m-2">
+              <img class="card-img-top" src="/p/img/${ guide.image }" alt="Photo">
+              <div class="card-body">
+                  <div class="row m-1 d-flex justify-content-center">
+                      <h4 class="card-title"><span>${ guide.name }</span></h4>
+                  </div>
+                  <div class="row m-1 d-flex justify-content-center">
+                    <h6 class="card-subtitle text-secondary"><span>${ guide.username }</span></h6>
+                  </div>
+                  <div class="row m-1 d-flex justify-content-center">
+                    <button type="button" class="btn btn-primary" id="addRemoveGuideBtn-${guide.id}" onclick="addRemoveGuide('${guide.id}')">
+                      <i class="fas fa-plus"></i>
+                    </button>
+                  </div>
+                  <div class="row m-1 d-flex justify-content-center">
+                    <a href="/guide/view/${ guide.id }" class="btn btn-primary">More Details</a>
+                  </div>
+              </div>
+            </div>
+          `);
+        }
+      }
       function getActivitiesDays() {
         for (let i = 0; i < days; i++) {
           $('#accordion').append(`
@@ -198,7 +238,7 @@
                       <h6 class="card-subtitle text-secondary"><span>${activity.category}</span></h6>
                     </div>
                     <div class="row m-1 d-flex justify-content-center">
-                      <button type="button" class="btn btn-primary" id="addRemoveBtn-${activity.id}-${i}" onclick="addRemove('${i}', '${activity.id}')">
+                      <button type="button" class="btn btn-primary" id="addRemoveBtn-${activity.id}-${i}" onclick="addRemoveActivity('${i}', '${activity.id}')">
                         <i class="fas fa-plus"></i>
                       </button>
                     </div>

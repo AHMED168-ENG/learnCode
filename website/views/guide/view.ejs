@@ -17,7 +17,7 @@
               <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                   <li class="breadcrumb-item"><a href="/">Home</a></li>
-                  <li class="breadcrumb-item"><a href="/website/guide">Tour Guides</a></li>
+                  <li class="breadcrumb-item"><a href="/guide">Tour Guides</a></li>
                   <li class="breadcrumb-item active">View</li>
                 </ol>
               </div>
@@ -122,9 +122,9 @@
                     </div>
                     <!-- /.card-body -->
                     <div class="card-footer">
-                      <a href="/website/guide" class="btn btn-primary has-spinner">Cancel</a>
-                      <a href="/website/media/<%= module_id %>/image" class="btn btn-info has-spinner">See More Album Images</a>
-                      <a href="/website/media/<%= module_id %>/video" class="btn btn-secondary has-spinner">See More Album Videos</a>
+                      <button onclick="history.back()" class="btn btn-primary has-spinner">Cancel</button>
+                      <a href="/dashboard/media/<%= module_id %>/image" class="btn btn-info has-spinner">See More Album Images</a>
+                      <a href="/dashboard/media/<%= module_id %>/video" class="btn btn-secondary has-spinner">See More Album Videos</a>
                     </div>
                   </form>
                 </div>

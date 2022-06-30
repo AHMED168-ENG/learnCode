@@ -12,6 +12,7 @@ export class ReportRoutes {
   routes() {
     this.router.get("/order-repo", this.reportController.orderReportPage)
     this.router.get("/calendar-initiative", this.reportController.calendarInitiative)
+    this.router.get("/calendar", this.reportController.getAllUsersCalendar)
     this.router.get("/charts", this.reportController.chartsPage)
     this.router.get("/user-repo", this.reportController.userReportPage)
     this.router.get("/:type/userlistreport", this.reportController.userlistReport)
@@ -24,5 +25,9 @@ export class ReportRoutes {
     this.router.get("/sales", this.reportController.salesReportPage)
     this.router.get("/location-trees", this.reportController.treeReportPage)
     this.router.get("/treelistreport", this.reportController.treelistreport)
+    this.router.get("/fav-destination-repo", this.reportController.getFavouriteDestinations)
+    this.router.get("/fav-destination-list", this.reportController.getFavouriteDestinationsList)
+    this.router.get("/fav-event-repo", this.reportController.getFavouriteEvents)
+    this.router.get("/fav-event-list", this.reportController.getFavouriteEventList)
   }
 }

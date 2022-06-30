@@ -7,7 +7,7 @@ import region from "../../models/region.model"
 import sector from "../../models/sector.model"
 import webAppsUsers from "../../models/user.model"
 import { UserPermissionsController } from "./user-permissions.controller"
-
+const { verify } = require("../../helper/token");
 export class UserController {
   secretFields: string[] = ["user_pass", "userSalt", "updatedAt"]
   logout(req: Request, res: Response, next: NextFunction) {
@@ -118,6 +118,14 @@ export class UserController {
   public async getUserByEmail(email: string) {
     try {
       return await webAppsUsers.findOne({ where: { email }, raw: true });
+    } catch (error) {
+      throw error;
+    }
+  }
+  public async getUserData(token: string) {
+    try {
+      const payload = verify(token);
+      return await webAppsUsers.findOne({ where: { email: payload.email }, raw: true });
     } catch (error) {
       throw error;
     }

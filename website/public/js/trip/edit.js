@@ -1,6 +1,34 @@
+var guidesArr = [];
+var removedGuides = [];
 var activitiesArr = [];
 var removedActivities = [];
-function addRemove(day, activity_id, isExistAct) {
+var addedActivities = [];
+function addRemoveGuide(guide_id, isExistGuide) {
+    const isExist = guidesArr.find((guide) => guide === guide_id);
+    if (!isExist && isExistGuide == 'undefined') {
+        addGuides(guide_id);
+        $('#addRemoveGuideBtn-' + guide_id).html('<i class="fas fa-minus"></i>');
+    } else {
+        removeGuides(guide_id, isExistGuide);
+        $('#addRemoveGuideBtn-' + guide_id).html('<i class="fas fa-plus"></i>');
+    }
+    guidesArr = guidesArr.filter((act) => act != 'undefined');
+    removedGuides = removedGuides.filter((ra) => ra != 'undefined');
+}
+function addGuides(guide_id) { guidesArr.push(guide_id); }
+function removeGuides(guide_id, isExist) {
+    const isIncluded = guidesArr.find((ac) => ac === guide_id);
+    const foundRemovedGuide = removedGuides.find((ra) => ra === isExist);
+    if (foundRemovedGuide) {
+        removedGuides = removedGuides.filter((guide) => guide !== isExist);
+        $('#addRemoveGuideBtn-' + guide_id).html('<i class="fas fa-minus"></i>');
+    } else {
+        if (isIncluded) guidesArr = guidesArr.filter((guide) => guide !== guide_id);
+        if (isExist) removedGuides.push(isExist);
+        $('#addRemoveGuideBtn-' + guide_id).html('<i class="fas fa-plus"></i>');
+    }
+}
+function addRemoveActivity(day, activity_id, isExistAct) {
     const isExist = activitiesArr.find((activity) => activity.day === day && activity.activity_id === activity_id);
     if (!isExist && isExistAct == 'undefined') {
         addActivities(day, activity_id);
@@ -9,20 +37,27 @@ function addRemove(day, activity_id, isExistAct) {
         removeActivities(day, activity_id, isExistAct);
         $('#addRemoveBtn-' + activity_id + '-' + day).html('<i class="fas fa-plus"></i>');
     }
-    console.log({activitiesArr, removedActivities})
+    activitiesArr = activitiesArr.filter((act) => act.activity_id != 'undefined');
+    removedActivities = removedActivities.filter((ra) => ra != 'undefined');
+    const days = activitiesArr.map((a) => { return a.day; });
+    for (const day of [...new Set(days)]) {
+        const activitiesPerDay = activitiesArr.filter((act) => act.day === day);
+        const activities = activitiesPerDay.map((ac) => { return ac.activity_id; });
+        addedActivities.push({ day, activities });
+    }
 }
-function addActivities(day, activity_id) {
-    activitiesArr.push({ day, activity_id });
-}
+function addActivities(day, activity_id) { activitiesArr.push({ day, activity_id }); }
 function removeActivities(day, activity_id, isExist) {
     const isIncluded = activitiesArr.find((ac) => ac.day === day && ac.activity_id === activity_id);
-    const foundRemovedActivity = removedActivities.find((ra) => ra === isExist.id);
-    if (isExist != 'undefined' && !foundRemovedActivity) removedActivities.push(isExist.id);
-    if (isIncluded) {
-        if (isExist == 'undefined' && foundRemovedActivity) removedActivities = removedActivities.filter((activity) => activity !== isExist.id);
-        else activitiesArr = activitiesArr.filter((activity) => (activity.day === day && activity.activity_id !== activity_id) || activity.day !== day);
+    const foundRemovedActivity = removedActivities.find((ra) => ra === isExist);
+    if (foundRemovedActivity) {
+        removedActivities = removedActivities.filter((activity) => activity !== isExist);
+        $('#addRemoveBtn-' + activity_id + '-' + day).html('<i class="fas fa-minus"></i>');
+    } else {
+        if (isIncluded) activitiesArr = activitiesArr.filter((activity) => (activity.day === day && activity.activity_id !== activity_id) || activity.day !== day);
+        if (isExist) removedActivities.push(isExist);
+        $('#addRemoveBtn-' + activity_id + '-' + day).html('<i class="fas fa-plus"></i>');
     }
-    if (!isIncluded && isExist != 'undefined' && foundRemovedActivity) removedActivities = removedActivities.filter((activity) => activity !== isExist.id);
 }
 $('#image').on('change', function () { files = $(this)[0].files; name = ''; for (var i = 0; i < files.length; i++) { name += '\"' + files[i].name + '\"' + (i != files.length - 1 ? ", " : ""); } $("#custom-file-label-img").html(name); });
 var loadImg = function (event) {
@@ -70,18 +105,10 @@ $(function () {
     });
 });
 const edit = () => {
-    const addedActivities = [];
-    const days = activitiesArr.map((a) => { return a.day; });
-    for (const day of [...new Set(days)]) {
-        const activitiesPerDay = activitiesArr.filter((act) => act.day === day);
-        const activities = activitiesPerDay.map((ac) => { return ac.activity_id; });
-        addedActivities.push({ day, activities });
-    }
     $("#submitAdd").buttonLoader("start");
-    let activitiesDays = [];
-    if (addedActivities.length || removedActivities.length) {
-        activitiesDays = JSON.stringify({ addedActivities, removedActivities });
-    }
+    let activitiesDays = [], tripGuides = [];
+    activitiesDays = JSON.stringify({ addedActivities, removedActivities });
+    tripGuides = JSON.stringify({ addedGuides: guidesArr, removedGuides });
     const formData = new FormData();
     formData.append("ar_name", $("#ar_name").val());
     formData.append("en_name", $("#en_name").val());
@@ -91,12 +118,9 @@ const edit = () => {
     formData.append("ar_description", $("#ar_description").val());
     formData.append("from", $("#from").val());
     formData.append("to", $("#to").val());
-    formData.append("activitiesDays", JSON.stringify(activitiesDays));
+    formData.append("guides", tripGuides);
+    formData.append("activitiesDays", activitiesDays);
     if (!!$("#image")[0].files[0]) formData.append("image", $("#image")[0].files[0]);
-    // $(".changed").each(function () {
-    // });
-    // if ($('.changed').length !== 0 || activitiesDays.length) {
-    // }
     $.ajax({
         url: `${window.location.pathname}`,
         data: formData,

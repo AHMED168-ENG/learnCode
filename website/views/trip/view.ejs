@@ -169,6 +169,35 @@
                           <textarea disabled type="text" id="ar_description" name="ar_description" class="form-control" placeholder="description ar" rows="3"><%= data.ar_description || null %></textarea>
                         </div>
                       </div>
+                      <div class="row d-flex justify-content-center">
+                        <div class="row">
+                          <h2 class="text-secondary">Tourguides</h2>
+                        </div>
+                        <div class="row card-body d-flex justify-content-center" id="guides-cards">
+                          <% if (tripGuides && tripGuides.length) { %>
+                            <% for (const guide of tripGuides) { %>
+                              <div class="card col-xl-2 col-lg-3 col-md-3 col-sm-4 col-xs-6 col-6 m-2">
+                                <img class="card-img-top" src="/p/img/<%= guide.image %>" alt="Photo">
+                                <div class="card-body">
+                                    <div class="row m-1 d-flex justify-content-center">
+                                        <h4 class="card-title"><span><%= guide.name %></span></h4>
+                                    </div>
+                                    <div class="row m-1 d-flex justify-content-center">
+                                      <h6 class="card-subtitle text-secondary"><span><%= guide.username %></span></h6>
+                                    </div>
+                                    <div class="row m-1 d-flex justify-content-center">
+                                      <a href="/guide/view/<%= guide.id %>" class="btn btn-primary">More Details</a>
+                                    </div>
+                                </div>
+                              </div>
+                            <% } %>
+                          <% } else { %>
+                            <div class="d-flex justify-content-center">
+                              <p class="lead">No Tourguides have been assigned to this trip yet!</p>                            
+                            </div>
+                          <% } %>
+                        </div>
+                      </div>
                       <% if (tripActivities && tripActivities.length) { %>
                         <div id="accordion" role="tablist">
                           <% for (let [i, tripActivity] of tripActivities.entries() || []) { %>

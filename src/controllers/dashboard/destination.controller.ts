@@ -50,9 +50,9 @@ export class DestinationsController {
     }
   }
   public async newPage(req: Request, res: Response, next: NextFunction) {
-    const cities = await new CityController().listCity();
-    const data = cities.map((cityData) => { return { id: cityData.city_id, name: `${cityData.en_name} - ${cityData.ar_name}` }; });
-    return res.render("dashboard/views/destinations/new.ejs", { title: "Destination new", data });
+    const citiesData = await new CityController().listCity();
+    const cities = citiesData.map((cityData) => { return { id: cityData.city_id, name: `${cityData.en_name} - ${cityData.ar_name}` }; });
+    return res.render("dashboard/views/destinations/new.ejs", { title: "Destination new", cities });
   }
   public async addNew(req: Request, res: Response, next: NextFunction) {
     try {

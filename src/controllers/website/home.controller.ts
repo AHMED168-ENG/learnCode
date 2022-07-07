@@ -1,9 +1,10 @@
 import {Request, Response, NextFunction} from "express"
-import sequelize from "sequelize"
+import sequelize, { Op } from "sequelize"
 import initiatives from "../../models/initiative.model"
 import { CartController } from "../api/cart.controller"
 import { AdminController } from "../dashboard/admin.controller"
 import { UserController } from "../dashboard/user.controller"
+import { TourGuideController } from "./guide.controller"
 const { verify } = require("../../helper/token")
 export class HomeController {
   public async home(req: Request, res: Response, next: NextFunction) {
@@ -21,12 +22,13 @@ export class HomeController {
     try {
       const payload = verify(req.cookies.token);
       const isHighestAdmin = payload.email === process.env.admin_email;
-      const admin = !isHighestAdmin ? await new AdminController().getAdminByEmail(payload.email) : payload;
+      const admin = await new AdminController().getAdminByEmail(payload.email);
       const user = await new UserController().getUserByEmail(payload.email);
-      const cartCount = await new CartController().cardCount(user["user_id"]);
-      return res.status(200).json({ cartCount, admin, user });
+      const guide = await new TourGuideController().getGuide({ email: payload.email });
+      // const cartCount = await new CartController().cardCount(user["user_id"]);
+      return res.status(200).json({ admin, user, guide, isHighestAdmin });
     } catch (error) {
-      return res.status(500).json({ msg: "Error in getting sidebar nums", err: error.errors[0].message || "unexpected error" });
+      return res.status(500).json({ msg: "Error in getting sidebar nums", err: error || "unexpected error" });
     }
   }
   async homeNumbers() {

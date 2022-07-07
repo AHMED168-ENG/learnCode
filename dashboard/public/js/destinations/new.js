@@ -11,6 +11,7 @@ $(function () {
         rules: {
             ar_title: { required: true },
             en_title: { required: true },
+            city_id: { required: true },
             image: { required: true, accept: "image/png" },
             file: { required: false },
             location_lat: { required: true },
@@ -29,6 +30,7 @@ $(function () {
         messages: {
             ar_name: "Please enter a arabic name",
             en_name: "Please enter a english name",
+            city_id: "Please enter a city",
             image: "Please enter an image",
             location_lat: "Please enter a latitude",
             location_long: "Please enter a longitude",
@@ -51,6 +53,7 @@ const addNew = () => {
     const formData = new FormData();
     formData.append("ar_title", $("#ar_title").val());
     formData.append("en_title", $("#en_title").val());
+    formData.append("city_id", $("#city_id").val());
     formData.append("location_lat", $("#location_lat").val());
     formData.append("location_long", $("#location_long").val());
     formData.append("en_description", $("#en_description").val());

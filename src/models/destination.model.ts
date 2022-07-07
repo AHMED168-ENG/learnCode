@@ -1,5 +1,6 @@
 import config from "../config/config";
 import { Sequelize, DataTypes } from "sequelize";
+import city from "./city.model";
 const sequelize = new Sequelize(...config.database);
 const destination = sequelize.define(
   "tbl_destinations",
@@ -8,6 +9,7 @@ const destination = sequelize.define(
     en_title: { type: DataTypes.STRING, allowNull: true, defaultValue: null },
     ar_title: { type: DataTypes.STRING, allowNull: true, defaultValue: null },
     image: { type: DataTypes.STRING(500), allowNull: true, defaultValue: null, validate: { len: [0, 500] } },
+    city_id: { type: DataTypes.INTEGER, allowNull: true, defaultValue: null, validate: { isInt: { msg: "Invalid city id. It should be an integer" } } },
     location_lat: {
       type: DataTypes.DECIMAL(11, 8),
       allowNull: true,
@@ -34,5 +36,6 @@ const destination = sequelize.define(
   },
   { charset: "utf8", collate: "utf8_general_ci" },
 );
+destination.belongsTo(city, { foreignKey: "city_id" });
 destination.sync();
 export default destination;

@@ -5,7 +5,7 @@ import helpers from "../../helper/helpers";
 import destination from "../../models/destination.model";
 import activity from "../../models/activity.model";
 import { ActivityCategoryController } from "./activity-category.controller";
-import { DestinationController } from "./destination.controller";
+import { DestinationsController } from "./destination.controller";
 import activityCategory from "../../models/activity-category.model";
 import { UserPermissionsController } from "../dashboard/user-permissions.controller";
 import { ModulesController } from "../dashboard/modules.controller";
@@ -56,7 +56,7 @@ export class ActivityController {
   }
   public async newPage(req: Request, res: Response, next: NextFunction) {
     try {
-      const destinations = await new DestinationController().getAllDestinations();
+      const destinations = await new DestinationsController().getAllDestinations();
       const activityCategories = await new ActivityCategoryController().getAllActivityCategories();
       return res.render("dashboard/views/activity/new.ejs", { title: "activity new", destinations, activityCategories });
     } catch (error) {
@@ -87,7 +87,7 @@ export class ActivityController {
   public async editPage(req: Request, res: Response, next: NextFunction) {
     try {
       if (!req.params.id) return res.status(404).json({ msg: "Error in getting activity", err: "unexpected error" });
-      const destinations = await new DestinationController().getAllDestinations();
+      const destinations = await new DestinationsController().getAllDestinations();
       const activityCategories = await new ActivityCategoryController().getAllActivityCategories();
       const data = await activity.findOne({ where: { id: req.params.id }, attributes: { exclude: ["createdAt", "updatedAt"] }, raw: true });
       const module_id = await new ModulesController().getModuleIdByName("Destinations Activities");

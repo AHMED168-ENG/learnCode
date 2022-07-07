@@ -20,7 +20,12 @@ import {CityController} from "./city.controller"
 import { CalendarController } from "../website/calendar.controller"
 import { FavouriteController } from "../website/favourite.controller"
 import { DestinationController } from "../website/destination.controller"
+import { DestinationsController } from "../dashboard/destination.controller"
 import { EventController } from "../website/event.controller"
+import destination from "../../models/destination.model"
+import { ActivityController } from "../website/activity.controller"
+import { TripActivityController } from "../website/trip-activity.controller"
+import { GuideRatingController } from "../website/guide-rating.controller"
 const seq = new Sequelize(...config.database)
 
 export class ReportController {
@@ -103,16 +108,45 @@ export class ReportController {
   }
   public async getFavouriteDestinations(req: Request, res: Response, next: NextFunction) {
     try {
-      return res.render("dashboard/views/reports/favourite-destination-report.ejs", { title: "Most Favourite Destinations Report" });
+      return res.render("dashboard/views/reports/destination-report.ejs", { title: "Most Favourite Destinations Report" });
     } catch (error) {
       return res.status(500).json({ msg: "Can't get most favourite destinations data", err: error });
     }
   }
+  public async getRegisteredUserWithDestinationsReport(req: Request, res: Response, next: NextFunction) {
+    try {
+      return res.render("dashboard/views/reports/destination-user-report.ejs", { title: "Get Registered Users With Destinations Report" });
+    } catch (error) {
+      return res.status(500).json({ msg: "Can't get registered users with destinations data", err: error });
+    }
+  }
+  public async getAllRelatedToDestination(req: Request, res: Response, next: NextFunction) {
+    try {
+      const data = await new DestinationsController().getAllDestinations(req.params.id);
+      return res.render("dashboard/views/reports/destination-count-report.ejs", { title: "All Related to Destination Report", data: data[0] });
+    } catch (error) {
+      return res.status(500).json({ msg: "Can't get all related to destination data", err: error });
+    }
+  }
   public async getFavouriteEvents(req: Request, res: Response, next: NextFunction) {
     try {
-      return res.render("dashboard/views/reports/favourite-event-report.ejs", { title: "Most Favourite Events Report" });
+      return res.render("dashboard/views/reports/event-report.ejs", { title: "Most Favourite Events Report" });
     } catch (error) {
       return res.status(500).json({ msg: "Can't get most favourite events data", err: error });
+    }
+  }
+  public async getGuidesRatings(req: Request, res: Response, next: NextFunction) {
+    try {
+      return res.render("dashboard/views/reports/guide-report.ejs", { title: "Tour Guides Report" });
+    } catch (error) {
+      return res.status(500).json({ msg: "Can't get most favourite events data", err: error });
+    }
+  }
+  public async getActivityReport(req: Request, res: Response, next: NextFunction) {
+    try {
+      return res.render("dashboard/views/reports/activity-report.ejs", { title: "Activity Report" });
+    } catch (error) {
+      return res.status(500).json({ msg: "Can't get activity report data", err: error });
     }
   }
   async getAllUsersCalendar(req: Request, res: Response, next: NextFunction) {
@@ -136,9 +170,19 @@ export class ReportController {
       const favouriteDestinations = await new FavouriteController().getFavourites("destination", null, null, null, fromTo);
       const allDestinations = await new DestinationController().getAllDestinations();
       const data = new ReportController().getFavouritesPerItem(favouriteDestinations, allDestinations, ["en_title", "ar_title"]);
-      return res.status(200).json({ data });
+      const destinationsIds = data.map((item) => { return item.id; });
+      const otherDestinations = allDestinations.filter((destinationData) => !destinationsIds.includes(destinationData["id"]));
+      return res.status(200).json({ data, otherDestinations });
     } catch (error) {
       return res.status(500).json({ msg: "Can't get favourite destinations list data", err: error });
+    }
+  }
+  public async getAllRelatedToDestinationList(req: Request, res: Response, next: NextFunction) {
+    try {
+      const data = await new DestinationsController().countAllRelatedToDestination(Number(req.params.id));
+      return res.status(200).json({ msg: "get and count all related to destination data successfully", data });
+    } catch (error) {
+      return res.status(500).json({ msg: "Can't get all related to destination list data", err: error });
     }
   }
   public async getFavouriteEventList(req: Request, res: Response, next: NextFunction) {
@@ -150,6 +194,33 @@ export class ReportController {
       return res.status(200).json({ data });
     } catch (error) {
       return res.status(500).json({ msg: "Can't get events list data", err: error });
+    }
+  }
+  public async getGuideRatingList(req: Request, res: Response, next: NextFunction) {
+    try {
+      const fromTo = !!req.query.from && !!req.query.to ? { from: req.query.from, to: req.query.to } : null;
+      const data = await new GuideRatingController().getGuidesRatings();
+      return res.status(200).json({ data });
+    } catch (error) {
+      return res.status(500).json({ msg: "Can't get events list data", err: error });
+    }
+  }
+  public async getTopActivitiesList(req: Request, res: Response, next: NextFunction) {
+    try {
+      const fromTo = !!req.query.from && !!req.query.to ? { from: req.query.from, to: req.query.to } : null;
+      const data = await new TripActivityController().countTopActivities(fromTo?.from, fromTo?.to);
+      return res.status(200).json({ data });
+    } catch (error) {
+      return res.status(500).json({ msg: "Can't get top activities list data", err: error });
+    }
+  }
+  public async getRegisteredUsersWithDestinationsList(req: Request, res: Response, next: NextFunction) {
+    try {
+      const fromTo = !!req.query.from && !!req.query.to ? { from: req.query.from, to: req.query.to } : null;
+      const data = await new DestinationsController().findAndCountAllRegisteredUsersWithDestinations(fromTo?.from, fromTo?.to);
+      return res.status(200).json({ data });
+    } catch (error) {
+      return res.status(500).json({ msg: "Can't get registered users with destinations list data", err: error });
     }
   }
   async userNumbers(from?: any, to?: any) {

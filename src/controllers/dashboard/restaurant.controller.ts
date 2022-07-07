@@ -6,10 +6,10 @@ import destination from "../../models/destination.model";
 import restaurant from "../../models/restaurant.model";
 import { ModulesController } from "../dashboard/modules.controller";
 import { UserPermissionsController } from "../dashboard/user-permissions.controller";
-import { DestinationController } from "./destination.controller";
+import { DestinationsController } from "./destination.controller";
 export class RestaurantController {
-  constructor(private destinationController?: DestinationController) {
-    this.destinationController = this.destinationController ? this.destinationController : new DestinationController();
+  constructor(private destinationController?: DestinationsController) {
+    this.destinationController = this.destinationController ? this.destinationController : new DestinationsController();
   }
   public listPage(req: Request, res: Response, next: NextFunction) {
     return res.render("dashboard/views/restaurant/list.ejs", { title: "Restaurants" });

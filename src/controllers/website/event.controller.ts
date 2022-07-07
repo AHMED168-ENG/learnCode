@@ -16,6 +16,7 @@ import { AudienceCategoryController } from "./audience-category.controller";
 import { MediaController } from "../dashboard/media.controller";
 import { FavouriteController } from "./favourite.controller";
 import { ItemCatgeory } from "../../enums/item-category.enum";
+import { UserController } from "../dashboard/user.controller";
 const { verify } = require("../../helper/token");
 export class EventController {
   constructor() {}
@@ -63,10 +64,12 @@ export class EventController {
       const module_id = await new ModulesController().getModuleIdByName("Events Management");
       const album = await new MediaController().getAllMedia(module_id, data["id"]);
       const payload = verify(req.cookies.token);
-      const favourites = await new FavouriteController().getFavourites(ItemCatgeory.event, payload.user_id, payload.user_type, data["id"]);
+      const user = await new UserController().getUserByEmail(payload.email);
+      let favourite;
+      if (user) favourite = await new FavouriteController().getFavourite(payload.user_id, data["id"], payload.user_type, ItemCatgeory.event);
       data['from'] = helpers.getFullTime(data['from']);
       data['to'] = helpers.getFullTime(data['to']);
-      return res.render("website/views/event/view.ejs", { title: "View event Details", data, images: album.images, favourite: favourites && favourites.length ? favourites[0]: null });
+      return res.render("website/views/event/view.ejs", { title: "View event Details", data, images: album.images, favourite, user });
     } catch (error) {
       return res.status(500).json({ msg: "Error in get event data in view page", err: "unexpected error" });
     }

@@ -9,39 +9,31 @@ function getList(type = "all", from = null, to = null) {  // show spinner
     const settings = {
         async: true,
         crossDomain: true,
-        url: `/dashboard/report/fav-event-list${query}`,
+        url: `/dashboard/report/guide-list${query}`,
         method: "Get",
     }
     $.ajax(settings).done(function (res) {
-        const favouriteEvents = res.data.map((elem) => { return { name: elem.name, favourites: elem.favourites.length }; });
-        changeChart(favouriteEvents);
+        const sortedData = res.data.sort(function (a, b) { return b.rating - a.rating; });
+        const topFive = sortedData.slice(Math.max(sortedData.length - 5, 0));
+        changeChart(topFive);
         // hidden spinner
         spinnerNotfound(2)
         $("#tr-th-row").empty()
         res.data.forEach((elem) => {
-            for (const favourite of elem.favourites) {
-                $("#tr-th-row").append(`<tr id="${elem.id}">
-                <th scope="row">${elem.id}</th>
-                <td>${elem.name}</td>
-                <td>${favourite.username}</td>
-                <td>${favourite.user_type}</td>
-                <td>${new Date(favourite.createdAt).toLocaleDateString("en-US")}</td>
-                <td>
-                    <span class="text-info"><i class="fas fa-calendar-alt"></i>&emsp;${moment(favourite.createdAt).format('DD-MM-YYYY')}</span><br />
-                    <span class="text-danger"><i class="fas fa-clock"></i>&emsp;${moment(favourite.createdAt).format('LT')}</span>
-                </td>
-                </tr>`);
-            }
+            $("#tr-th-row").append(`<tr id="${elem.id}">
+            <th scope="row">${elem.id}</th>
+            <td>${elem.name}</td>
+            <td>${elem.rating}</td>
+            </tr>`);
         })
     }).fail(() => spinnerNotfound(3))
 }
-function changeChart(favouriteEvents) {
-    console.log(favouriteEvents.map((favouriteDestination) => { return favouriteDestination.favourites.length; }))
+function changeChart(data) {
     var chartSet = {
-        labels: favouriteEvents.map((favouriteDestination) => { return favouriteDestination.name; }),
+        labels: data?.map((item) => { return item.name; }) || [],
         datasets: [
             {
-                label: "Favourites per Destination",
+                label: "Average Rating Per Tour Guide",
                 backgroundColor: "rgba(60,141,188,0.9)",
                 borderColor: "rgba(60,141,188,0.8)",
                 pointRadius: false,
@@ -49,7 +41,7 @@ function changeChart(favouriteEvents) {
                 pointStrokeColor: "rgba(60,141,188,1)",
                 pointHighlightFill: "#fff",
                 pointHighlightStroke: "rgba(60,141,188,1)",
-                data: favouriteEvents.map((favouriteDestination) => { return favouriteDestination.favourites; }),
+                data: data.map((item) => { return item.rating; }),
             },
         ],
     }
@@ -62,7 +54,7 @@ function changeChart(favouriteEvents) {
         datasetFill: false,
     }
     if (!!window.bar) window.bar.destroy();
-    window.bar = new Chart($("#favouriteEventsDetails").get(0).getContext("2d"), {
+    window.bar = new Chart($("#topGuidesRatings").get(0).getContext("2d"), {
         type: "bar",
         data: chartSet,
         options: chartOptions,

@@ -17,6 +17,7 @@ $(function () {
         rules: {
             ar_title: { required: true },
             en_title: { required: true },
+            city_id: { required: true },
             image: { accept: "image/png" },
             file: {},
             location_lat: { required: true },
@@ -35,6 +36,7 @@ $(function () {
         messages: {
             ar_title: "Please enter a arabic title",
             en_title: "Please enter a english title",
+            city_id: "Please enter a city",
             image: { accept: "image/png" },
             file: {},
             location_lat: "Please enter an latitude",

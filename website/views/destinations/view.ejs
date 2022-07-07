@@ -56,6 +56,13 @@
         <section class="content">
           <div class="container-fluid">
             <div class="row">
+              <% if (data.user) { %>
+                <div class="col-sm-12 d-flex justify-content-center">
+                  <div class="form-group mt-2">
+                    <button class="btn btn-primary" id="Addfav" onclick="addToFavourites('<%= data.id %>', '<%= !data.favourite %>', 'destination')" type="submit"><%= !!data.favourite? 'Remove Favourite' : 'Add Favourite' %></button>
+                  </div>
+                </div>
+              <% } %>
               <!-- left column -->
               <div class="col-md-12">
                 <!-- jquery validation -->
@@ -65,10 +72,6 @@
                       <i class="fas fa-users"></i>
                       &nbsp;&nbsp; View Destination
                     </h3>
-                    <div class="form-check">
-                      <input class="form-check-input" id="addFav" onclick="addToFavourite('<%= data.id %>')" type="checkbox" value="<%= !!data.favourite %>" <%= !!data.favourite ? 'checked' : '' %> title="Add To Favourite" style="<%= !!data.favourite ? 'background-color: gold;' : 'background-color: white;' %>">
-                      <label for="addFav"> Add To Favourites</label>
-                    </div>
                   </div>
                   <form id="newForm" action="" onsubmit="">
                     <div class="card-body">
@@ -84,6 +87,16 @@
                             placeholder="Title"
                             value="<%= data.title || null %>"
                           />
+                        </div>
+                      </div>
+                      <div class="form-row mx-3 my-1">
+                        <div class="form-group col-md-6">
+                          <div class="form-group">
+                            <label>City</label>
+                            <select disabled id="city_id" name="city_id" class="form-control select2 select2-danger" data-dropdown-css-class="select2-danger" style="width: 100%">
+                              <option value="<%=data.city.id%>" selected><%= data.city.name %></option>
+                            </select>
+                          </div>
                         </div>
                       </div>
                       <div class="form-row mx-3 my-1">
@@ -213,6 +226,11 @@
                                     <div class="row m-1 d-flex justify-content-center">
                                       <h6 class="card-subtitle text-secondary"><span><%= activity.category %></span></h6>
                                     </div>
+                                    <% if (data.user) { %>
+                                      <div class="row m-1 d-flex justify-content-center">
+                                          <button class="btn btn-primary" id="Addfav-<%= activity.id %>" onclick="addToFavourites('<%= activity.id %>', '<%= !data.favourites.find((ft) => ft.item_id === activity.id && ft.category === `activity`) %>', 'activity')" type="submit"><%= data.favourites.find((ft) => ft.item_id === activity.id && ft.category === 'activity') ? 'Remove Favourite' : 'Add Favourite' %></button>
+                                      </div>
+                                    <% } %>
                                     <div class="row m-1 d-flex justify-content-center">
                                       <a href="/activity/view/<%= activity.id %>" class="btn btn-primary">More Details</a>
                                     </div>
@@ -239,6 +257,11 @@
                                     <div class="row m-1 d-flex justify-content-center">
                                         <h4 class="card-title"><span><%= hotel.name %></span></h4>
                                     </div>
+                                    <% if (data.user) { %>
+                                      <div class="row m-1 d-flex justify-content-center">
+                                          <button class="btn btn-primary" id="Addfav-<%= hotel.id %>" onclick="addToFavourites('<%= hotel.id %>', '<%= !data.favourites.find((ft) => ft.item_id === hotel.id && ft.category === `hotel`) %>', 'hotel')" type="submit"><%= data.favourites.find((ft) => ft.item_id === hotel.id && ft.category === 'hotel') ? 'Remove Favourite' : 'Add Favourite' %></button>
+                                      </div>
+                                    <% } %>
                                     <div class="row m-1 d-flex justify-content-center">
                                       <a href="/hotel/view/<%= hotel.id %>" class="btn btn-primary">More Details</a>
                                     </div>
@@ -265,6 +288,11 @@
                                     <div class="row m-1 d-flex justify-content-center">
                                         <h4 class="card-title"><span><%= place.name %></span></h4>
                                     </div>
+                                    <% if (data.user) { %>
+                                      <div class="row m-1 d-flex justify-content-center">
+                                          <button class="btn btn-primary" id="Addfav-<%= place.id %>" onclick="addToFavourites('<%= place.id %>', '<%= !data.favourites.find((ft) => ft.item_id === place.id && ft.category === `place`) %>', 'place')" type="submit"><%= data.favourites.find((ft) => ft.item_id === place.id && ft.category === 'place') ? 'Remove Favourite' : 'Add Favourite' %></button>
+                                      </div>
+                                    <% } %>
                                     <div class="row m-1 d-flex justify-content-center">
                                       <a href="/destination-place/view/<%= place.id %>" class="btn btn-primary">More Details</a>
                                     </div>
@@ -291,6 +319,11 @@
                                     <div class="row m-1 d-flex justify-content-center">
                                         <h4 class="card-title"><span><%= restaurant.name %></span></h4>
                                     </div>
+                                    <% if (data.user) { %>
+                                      <div class="row m-1 d-flex justify-content-center">
+                                          <button class="btn btn-primary" id="Addfav-<%= restaurant.id %>" onclick="addToFavourites('<%= restaurant.id %>', '<%= !data.favourites.find((ft) => ft.item_id === restaurant.id && ft.category === `restaurant`) %>', 'restaurant')" type="submit"><%= data.favourites.find((ft) => ft.item_id === restaurant.id && ft.category === 'restaurant') ? 'Remove Favourite' : 'Add Favourite' %></button>
+                                      </div>
+                                    <% } %>
                                     <div class="row m-1 d-flex justify-content-center">
                                       <a href="/restaurant/view/<%= restaurant.id %>" class="btn btn-primary">More Details</a>
                                     </div>
@@ -317,6 +350,11 @@
                                     <div class="row m-1 d-flex justify-content-center">
                                         <h4 class="card-title"><span><%= store.name %></span></h4>
                                     </div>
+                                    <% if (data.user) { %>
+                                      <div class="row m-1 d-flex justify-content-center">
+                                          <button class="btn btn-primary" id="Addfav-<%= store.id %>" onclick="addToFavourites('<%= store.id %>', '<%= !data.favourites.find((ft) => ft.item_id === store.id && ft.category === `store`) %>', 'store')" type="submit"><%= data.favourites.find((ft) => ft.item_id === store.id && ft.category === 'store') ? 'Remove Favourite' : 'Add Favourite' %></button>
+                                      </div>
+                                    <% } %>
                                     <div class="row m-1 d-flex justify-content-center">
                                       <a href="/destination-store/view/<%= store.id %>" class="btn btn-primary">More Details</a>
                                     </div>
@@ -343,6 +381,11 @@
                                     <div class="row m-1 d-flex justify-content-center">
                                         <h4 class="card-title"><span><%= package.name %></span></h4>
                                     </div>
+                                    <% if (data.user) { %>
+                                      <div class="row m-1 d-flex justify-content-center">
+                                          <button class="btn btn-primary" id="Addfav-<%= package.id %>" onclick="addToFavourites('<%= package.id %>', '<%= !data.favourites.find((ft) => ft.item_id === package.id && ft.category === `package`) %>', 'package')" type="submit"><%= data.favourites.find((ft) => ft.item_id === package.id && ft.category === 'package') ? 'Remove Favourite' : 'Add Favourite' %></button>
+                                      </div>
+                                    <% } %>
                                     <div class="row m-1 d-flex justify-content-center">
                                       <a href="/package/view/<%= package.id %>" class="btn btn-primary">More Details</a>
                                     </div>
@@ -429,10 +472,9 @@
         //   infoWindow = new google.maps.InfoWindow({ position: mapsMouseEvent.latLng });
         // });
       };
-      function addToFavourite(item_id) {
-          const checked = $('#addFav').val() == "true" ? "false" : "true";
-          const settings = { async: true, crossDomain: true, url: `/favourite`, data: { item_id, category: "destination", checked }, method: "PUT" };
-          $.ajax(settings).done(function (res, textStatus) { window.location.reload(); }).fail(() => spinnerNotfound(3)); 
+      function addToFavourites(item_id, checked, category) {
+        const settings = { url: `/favourite`, data: JSON.stringify({ item_id, checked, category }), contentType: "application/json", type: 'PUT' };
+        $.ajax(settings).done(function (data) { location.reload(); }).fail(() => location.reload());
       }
     </script>
     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDVAIyZekr82kt8-pDk64xbyp26J1CnbTY&callback=initMap&v=weekly"></script>

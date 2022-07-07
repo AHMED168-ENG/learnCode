@@ -13,6 +13,8 @@ import { Op } from "sequelize";
 import { DestinationTransportationController } from "../dashboard/destination-transportation.controller";
 import { FavouriteController } from "./favourite.controller";
 import { ItemCatgeory } from "../../enums/item-category.enum";
+import city from "../../models/city.model";
+import { UserController } from "../dashboard/user.controller";
 const { verify } = require("../../helper/token");
 export class DestinationController {
   constructor() {}
@@ -29,8 +31,10 @@ export class DestinationController {
       const lang = req.query && req.query.lang === "ar" ? "ar" : "en";
       const data = destinations.map((destination) => { return { id: destination["id"], image: destination["image"], title: destination[`${lang}_title`] }; });
       const payload = verify(req.cookies.token);
-      const favourites = await new FavouriteController().getFavourites(ItemCatgeory.destination, payload.user_id, payload.user_type);
-      const dataInti = { total: countDestinations, limit, page: Number(req.query.page), pages: Math.ceil(countDestinations / limit) + 1, data, favourites };
+      const user = await new UserController().getUserByEmail(payload.email);
+      let favourites;
+      if (user) favourites = await new FavouriteController().getFavourites(ItemCatgeory.destination, payload.user_id, payload.user_type);
+      const dataInti = { total: countDestinations, limit, page: Number(req.query.page), pages: Math.ceil(countDestinations / limit) + 1, data, favourites, user };
       return res.status(httpStatus.OK).json(dataInti);
     } catch (error) {
       return res.status(httpStatus.NOT_FOUND).json({ err: "There is something wrong while getting destinations list", msg: "Internal Server Error" });
@@ -40,7 +44,12 @@ export class DestinationController {
     try {
       if (!req.params.id) return res.status(404).json({ msg: "Error in getting destination", err: "unexpected error" });
       const module_id = await new ModulesController().getModuleIdByName("Destinations Management");
-      const dest = await destination.findOne({ where: { id: req.params.id }, attributes: { exclude: ["createdAt", "updatedAt"] }, raw: true });
+      const dest = await destination.findOne({
+        where: { id: req.params.id },
+        attributes: { exclude: ["createdAt", "updatedAt"] },
+        include: [{ model: city, attributes: ["ar_name", "en_name"] }],
+        raw: true,
+      });
       const where = {
         [Op.and]: [
           { id: { [Op.ne]: req.params.id } },
@@ -59,13 +68,19 @@ export class DestinationController {
       const hotels = await new HotelController().getAllDestinationHotels(lang, dest["id"]);
       const destinationStores = await new DestinationStoreController().getAllDestinationStores(lang, dest["id"]);
       const packages = await new PackageController().getAllDestinationPackages(lang, dest["id"]);
-      const transportations = await new DestinationController().getAllDestinationTransportations(dest["id"]);
+      const transportations = await new DestinationController().getCityTransportations(dest["city_id"]);
       const payload = verify(req.cookies.token);
-      const favourites = await new FavouriteController().getFavourites(ItemCatgeory.destination, payload.user_id, payload.user_type, dest["id"]);
+      const user = await new UserController().getUserByEmail(payload.email);
+      let favourite, favourites;
+      if (user) {
+        favourite = await new FavouriteController().getFavourite(payload.user_id, dest["id"], payload.user_type, ItemCatgeory.destination);
+        favourites = await new FavouriteController().getAllFavourites(payload.user_id, payload.user_type);
+      }
       // const city = await helpers.getCityLocation(dest["location_lat"], dest["location_long"]);
       const data = {
         id: dest["id"],
         image: dest["image"],
+        city: { id: dest["city_id"], name: dest[`tbl_city.${lang}_name`] },
         file: dest["file"],
         location_lat: dest["location_lat"],
         location_long: dest["location_long"],
@@ -85,7 +100,9 @@ export class DestinationController {
         packages,
         nearDestinations,
         transportations,
-        favourite: favourites && favourites.length ? favourites[0]: null,
+        favourites,
+        favourite,
+        user,
       };
       return res.render("website/views/destinations/view.ejs", { title: "View Destination Details", data, module_id });
     } catch (error) {
@@ -101,11 +118,20 @@ export class DestinationController {
       throw error;
     }
   }
-  public async getAllDestinationTransportations(destination_id: number) {
+  public async getAllDestinationTransportations(destinationIds: number[]) {
     try {
-      const destTrans = await new DestinationTransportationController().getAllDestinationTransportations(destination_id);
+      const destTrans = await new DestinationTransportationController().getAllDestinationTransportations(destinationIds);
       const data = destTrans.map((dt) => { return { id: dt["tbl_transportation.id"], name: dt["tbl_transportation.name"], type: dt["tbl_transportation.type"] }; });
       return data;
+    } catch (error) {
+      throw error;
+    }
+  }
+  public async getCityTransportations(city_id: number) {
+    try {
+      const destinationsCity = await destination.findAll({ where: { city_id }, attributes: ["id"], raw: true }) || [];
+      const destinationsIds = destinationsCity.map((destinationCity) => { return destinationCity["id"]; });
+      return await new DestinationController().getAllDestinationTransportations(destinationsIds);
     } catch (error) {
       throw error;
     }

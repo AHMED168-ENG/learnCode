@@ -26,6 +26,17 @@ export class TripActivityController {
       throw error;
     }
   }
+  public async countTopActivities(from?: any, to?: any) {
+    try {
+      const tripsActivities = await tripActivity.findAll({ attributes: ["createdAt", "activity_id"], include: [{ model: activity, attributes: ["ar_name", "en_name"] }], raw: true }) || [];
+      let filteredTripsActivities = tripsActivities;
+      if (!!from && !!to) filteredTripsActivities = tripsActivities.filter((ta) => new Date(ta["createdAt"]) >= new Date(from) && new Date(ta["createdAt"]) <= new Date(to));
+      const data = new TripActivityController().mapActivitiesWithTrips(filteredTripsActivities);
+      return data;
+    } catch (error) {
+      throw error;
+    }
+  }
   public async addTripActivities(trip_id: number, activitiesDays: any[], from: any) {
     try {
       const payload = [];
@@ -43,6 +54,20 @@ export class TripActivityController {
   public async removeTripActivity(ids: number[]) {
     try {
       return await tripActivity.destroy({ where: { id: { [Op.in]: ids } } });
+    } catch (error) {
+      throw error;
+    }
+  }
+  private mapActivitiesWithTrips(tripsActivities: any[]) {
+    try {
+      const activities = tripsActivities.map((ta) => { return { id: ta["activity_id"], name: `${ta["tbl_activity.en_name"]} - ${ta["tbl_activity.ar_name"]}` }; });
+      const response = [];
+      const removedDuplicatedActivities = [...new Map(activities.map(item => [item["id"], item])).values()];
+      for (const activity of removedDuplicatedActivities) {
+        const tripsWithActivity = tripsActivities.filter((tripActivityData) => tripActivityData.activity_id === activity.id);
+        response.push({ id: activity.id, name: activity.name, count: tripsWithActivity.length });
+      }
+      return response;
     } catch (error) {
       throw error;
     }

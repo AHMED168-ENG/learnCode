@@ -178,7 +178,7 @@
 </aside>
 <script>
   fetch(`/home/num`, { method: "GET" }).then((response) => response.json()).then((data) => {
-    if (data.admin) {
+    if (data.isHighestAdmin) {
       $('#dashboard-link').append(`
         <a href="/dashboard/home" class="nav-link" id="home">
           <i class="nav-icon fas fa-tachometer-alt"></i>
@@ -188,8 +188,8 @@
     }
     $('#user-title').append(`
       <div class="row ml-4">
-        <img class="rounded-circle p-0" width=45 height=45 src="/p/img/${ data.user ? data.user.user_img || 'avatar.png' : 'avatar.png' }" alt="Image">
-        <span class="text-center text-light mt-1 ml-1"><a href="/home" style="font-size: 15px;">${ data.admin ? data.admin.fullName || data.admin.username : data.user.fullName || data.user.email }</a></span>
+        <img class="rounded-circle p-0" width=45 height=45 src="/p/img/${ data.user ? data.user.user_img || data.user.image || 'avatar.png' : 'avatar.png' }" alt="Image">
+        <span class="text-center text-light mt-1 ml-1"><a href="/home" style="font-size: 15px;">${ !!data.admin || !!data.user || !!data.guide ? data.admin ? data.admin?.fullName || data.admin?.username : data.user?.fullName || data.user?.email || data.guide?.name : 'Admin' }</a></span>
       </div>
     `);
     // $('#cartCount').append(`${cartCount}`);

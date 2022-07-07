@@ -6,7 +6,7 @@ import destination from "../../models/destination.model";
 import store from "../../models/store.model";
 import { ModulesController } from "../dashboard/modules.controller";
 import { UserPermissionsController } from "../dashboard/user-permissions.controller";
-import { DestinationController } from "./destination.controller";
+import { DestinationsController } from "./destination.controller";
 export class StoreController {
   constructor() {}
   public listPage(req: Request, res: Response, next: NextFunction) {
@@ -48,7 +48,7 @@ export class StoreController {
   }
   public async newPage(req: Request, res: Response, next: NextFunction) {
     try {
-      const destinations = await new DestinationController().getAllDestinations();
+      const destinations = await new DestinationsController().getAllDestinations();
       return res.render("dashboard/views/store/new.ejs", { title: "Store new", destinations });
     } catch (error) {
       return res.status(500).json({ msg: "Can't get destinations or open new store page", err: error });
@@ -78,7 +78,7 @@ export class StoreController {
   public async editPage(req: Request, res: Response, next: NextFunction) {
     try {
       if (!req.params.id) return res.status(404).json({ msg: "Error in getting store", err: "unexpected error" });
-      const destinations = await new DestinationController().getAllDestinations();
+      const destinations = await new DestinationsController().getAllDestinations();
       const data = await store.findOne({ where: { id: req.params.id }, attributes: { exclude: ["createdAt", "updatedAt"] }, raw: true });
       const module_id = await new ModulesController().getModuleIdByName("Store Management");
       return res.render("dashboard/views/store/edit.ejs", { title: "Edit Store", data, destinations, module_id });

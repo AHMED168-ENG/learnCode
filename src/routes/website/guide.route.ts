@@ -11,9 +11,8 @@ export class TourGuideRoutes {
     this.router.get("/", this.tourGuideController.listPage);
     this.router.get("/list", this.tourGuideController.list);
     this.router.get("/view/:id", this.tourGuideController.viewPage);
-    this.router.get("/new", this.tourGuideController.newPage);
-    this.router.post("/new", this.tourGuideController.addNew);
-    this.router.get("/edit/:id", this.tourGuideController.editPage);
-    this.router.put("/edit/:id", this.tourGuideController.edit);
+    this.router.get("/register", this.tourGuideController.getRegisterPage);
+    this.router.post("/register", this.tourGuideController.signup);
+    this.router.post("/resetPassword", this.tourGuideController.resetPassword);
   }
 }

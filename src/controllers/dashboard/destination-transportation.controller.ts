@@ -2,13 +2,14 @@ import { Request, Response, NextFunction } from "express";
 import httpStatus from "http-status";
 import { UserPermissionsController } from "./user-permissions.controller";
 import { ModulesController } from "./modules.controller";
-import { DestinationController } from "./destination.controller";
+import { DestinationsController } from "./destination.controller";
 import { TransportationController } from "./transportation.controller";
 import destinationTransportation from "../../models/destination-transportation.model";
 import transportation from "../../models/transportation.model";
 import rentalCompany from "../../models/rental-company.model";
 import driver from "../../models/driver.model";
 import destination from "../../models/destination.model";
+import { Op } from "sequelize";
 export class DestinationTransportationController {
   constructor() {}
   public async listPage(req: Request, res: Response, next: NextFunction) {
@@ -41,7 +42,7 @@ export class DestinationTransportationController {
   }
   public async newPage(req: Request, res: Response, next: NextFunction) {
     try {
-      const destinations = await new DestinationController().getAllDestinations();
+      const destinations = await new DestinationsController().getAllDestinations();
       const transportations = await new TransportationController().getAllTransportations();
       return res.render("dashboard/views/destination-transportation/new.ejs", { title: "Destinations Transportations new", destinations, transportations });
     } catch (error) {
@@ -67,7 +68,7 @@ export class DestinationTransportationController {
         attributes: { exclude: ["createdAt", "updatedAt"] },
         raw: true,
       });
-      const destinations = await new DestinationController().getAllDestinations();
+      const destinations = await new DestinationsController().getAllDestinations();
       const transportations = await new TransportationController().getAllTransportations();
       return res.render("dashboard/views/destination-transportation/edit.ejs", { title: "Edit Destination Transportation", data, destinations, transportations, destination_id: req.params.destination_id });
     } catch (error) {
@@ -84,9 +85,10 @@ export class DestinationTransportationController {
       return res.status(httpStatus.BAD_REQUEST).json({msg: "Error in Edit destination transportation", err: "unexpected error" });
     }
   }
-  public async getAllDestinationTransportations(destination_id: number) {
+  public async getAllDestinationTransportations(destinationIdOrIds: any) {
     try {
-      return await destinationTransportation.findAll({ where: { destination_id }, include: [{ model: transportation, attributes: ["id", "name", "type"] }], raw: true });
+      const where = !Array.isArray(destinationIdOrIds) ? { destination_id: destinationIdOrIds } : { destination_id: { [Op.in]: destinationIdOrIds } };
+      return await destinationTransportation.findAll({ where, include: [{ model: transportation, attributes: ["id", "name", "type"] }], raw: true });
     } catch (error) {
       throw error;
     }

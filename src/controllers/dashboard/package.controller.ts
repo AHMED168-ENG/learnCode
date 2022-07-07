@@ -7,7 +7,7 @@ import packages from "../../models/package.model";
 import provider from "../../models/provider.model";
 import { ModulesController } from "../dashboard/modules.controller";
 import { UserPermissionsController } from "../dashboard/user-permissions.controller";
-import { DestinationController } from "./destination.controller";
+import { DestinationsController } from "./destination.controller";
 import { ProviderController } from "./provider.controller";
 export class PackageController {
   constructor() {}
@@ -56,7 +56,7 @@ export class PackageController {
   }
   public async newPage(req: Request, res: Response, next: NextFunction) {
     try {
-      const destinations = await new DestinationController().getAllDestinations();
+      const destinations = await new DestinationsController().getAllDestinations();
       const providers = await new ProviderController().getAllProviders();
       return res.render("dashboard/views/package/new.ejs", { title: "Package new", destinations, providers });
     } catch (error) {
@@ -87,7 +87,7 @@ export class PackageController {
   public async editPage(req: Request, res: Response, next: NextFunction) {
     try {
       if (!req.params.id) return res.status(404).json({ msg: "Error in getting package", err: "unexpected error" });
-      const destinations = await new DestinationController().getAllDestinations();
+      const destinations = await new DestinationsController().getAllDestinations();
       const providers = await new ProviderController().getAllProviders();
       const data = await packages.findOne({ where: { id: req.params.id }, attributes: { exclude: ["createdAt", "updatedAt"] }, raw: true });
       const module_id = await new ModulesController().getModuleIdByName("Packages Management");

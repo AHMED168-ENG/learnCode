@@ -6,7 +6,7 @@ import { ModulesController } from "../dashboard/modules.controller";
 import webAppsUsers from "../../models/user.model";
 import transportation from "../../models/transportation.model";
 import trip from "../../models/trip.model";
-import { DestinationController } from "../dashboard/destination.controller";
+import { DestinationsController } from "../dashboard/destination.controller";
 import helpers from "../../helper/helpers";
 import { UserController } from "../dashboard/user.controller";
 import { AdminController } from "../dashboard/admin.controller";
@@ -81,7 +81,7 @@ export class TripsController {
   }
   public async newPage(req: Request, res: Response, next: NextFunction) {
     try {
-      const destinations = await new DestinationController().getAllDestinations();
+      const destinations = await new DestinationsController().getAllDestinations();
       const lang = req["lang"] && req["lang"] === "ar" ? "ar" : "en";
       const activities = await new ActivityController().getAllActivities(lang);
       const guides = await new TourGuideController().getAllGuides();
@@ -133,7 +133,7 @@ export class TripsController {
     try {
       if (!req.params.id) return res.status(404).json({ msg: "Error in getting trip", err: "unexpected error" });
       let data = await trip.findOne({ where: { id: req.params.id }, attributes: { exclude: ["createdAt", "updatedAt"] }, raw: true });
-      const destinations = await new DestinationController().getAllDestinations();
+      const destinations = await new DestinationsController().getAllDestinations();
       const lang = req["lang"] && req["lang"] === "ar" ? "ar" : "en";
       const activities = await new ActivityController().getAllActivities(lang);
       const tripActivities = await new TripActivityController().list(lang, Number(req.params.id), data["from"], data["to"]);

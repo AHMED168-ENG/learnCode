@@ -1,10 +1,10 @@
 <script src="https://rawgit.com/unconditional/jquery-table2excel/master/src/jquery.table2excel.js"></script>
 <script>
-  function fnExcelReport() {
+  function fnExcelReport(selectedId) {
     var tab_text = "<table border='2px'><tr bgcolor='#87AFC6'>"
     var textRange
     var j = 0
-    tab = document.getElementById("table2excel") // id of table
+    tab = !selectedId ? document.getElementById("table2excel") : document.getElementById(selectedId) // id of table
 
     for (j = 0; j < tab.rows.length; j++) {
       tab_text = tab_text + tab.rows[j].innerHTML.replace(/<i[^>]*>/g, "").replace(/<i[^>]*>|<\/i>/gi, "") + "</tr>"

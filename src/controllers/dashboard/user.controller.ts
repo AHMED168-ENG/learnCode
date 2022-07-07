@@ -115,9 +115,9 @@ export class UserController {
       })
     return data
   }
-  public async getUserByEmail(email: string) {
+  public async getUserByEmail(emailOrPhone: string) {
     try {
-      return await webAppsUsers.findOne({ where: { email }, raw: true });
+      return await webAppsUsers.findOne({ where: { [Op.or]: [{ email: emailOrPhone }, { phone: emailOrPhone }] }, raw: true });
     } catch (error) {
       throw error;
     }
@@ -126,6 +126,14 @@ export class UserController {
     try {
       const payload = verify(token);
       return await webAppsUsers.findOne({ where: { email: payload.email }, raw: true });
+    } catch (error) {
+      throw error;
+    }
+  }
+  public async getAllUsers(from?: any, to?: any) {
+    try {
+      const users = await webAppsUsers.findAll({ attributes: ["user_type", "fullName", "email", "phone", "city_id", "createdAt"], raw: true });
+      return from && to ? users.filter((user) => new Date(user["createdAt"]) >= new Date(from) && new Date(user["createdAt"]) <= new Date(to)) : users;
     } catch (error) {
       throw error;
     }

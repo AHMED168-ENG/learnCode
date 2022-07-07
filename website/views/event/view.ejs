@@ -53,6 +53,13 @@
         <!-- Main content -->
         <section class="content">
           <div class="container-fluid">
+            <% if (user) { %>
+              <div class="col-sm-12 d-flex justify-content-center">
+                <div class="form-group mt-2">
+                  <button class="btn btn-primary" id="Addfav" onclick="addToFavourites('<%= !favourite %>')" type="submit"><%= !!favourite? 'Remove From Favourites' : 'Add To Favourites' %></button>
+                </div>
+              </div>
+            <% } %>
             <div class="row">
               <!-- left column -->
               <div class="col-md-12">
@@ -63,10 +70,6 @@
                       <i class="fas fa-users"></i>
                       &nbsp;&nbsp; View Event
                     </h3>
-                    <div class="form-check">
-                      <input class="form-check-input" id="addFav" onclick="addToFavourite('<%= data.id %>')" type="checkbox" value="<%= !!favourite %>" <%= !!favourite ? 'checked' : '' %> title="Add To Favourite">
-                      <label for="addFav"> Add To Favourites</label>
-                    </div>
                   </div>
                   <form id="newForm" action="" onsubmit="">
                     <div class="card-body">
@@ -225,10 +228,17 @@
         $('.carousel-item').first().addClass('active');
         $('#carousel').carousel();
       });
-      function addToFavourite(item_id) {
-          const checked = $('#addFav').val() == "true" ? "false" : "true";
-          const settings = { async: true, crossDomain: true, url: `/favourite`, data: { item_id, category: "event", checked }, method: "PUT" };
-          $.ajax(settings).done(function (res, textStatus) { window.location.reload(); }).fail(() => spinnerNotfound(3)); 
+      function addToFavourites(checked) {
+        const params = window.location.pathname.split('/');
+        const item_id = params[params.length - 1];
+        const settings = { url: `/favourite`, data: JSON.stringify({ item_id, checked, category: "event" }), contentType: "application/json", type: 'PUT' };
+        $.ajax(settings).done(function (data) { location.reload(); }).fail(function (xhr) {
+            const error = JSON.parse(xhr.responseText);
+            $("#modal-body-val").html(`<span style="font-size: large">${error.msg}<br/>&emsp;&nbsp;${error.err ? error.err: ""}</span>`)
+            $("#exampleModal").modal("show")
+        }).always(function () {
+            $("#submitForm").buttonLoader("stop")
+        });
       }
     </script>
     <script

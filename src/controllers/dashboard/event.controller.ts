@@ -3,7 +3,7 @@ import httpStatus from "http-status";
 import path from "path";
 import helpers from "../../helper/helpers";
 import destination from "../../models/destination.model";
-import { DestinationController } from "./destination.controller";
+import { DestinationsController } from "./destination.controller";
 import { UserPermissionsController } from "../dashboard/user-permissions.controller";
 import { ModulesController } from "../dashboard/modules.controller";
 import city from "../../models/city.model";
@@ -66,7 +66,7 @@ export class EventController {
   }
   public async newPage(req: Request, res: Response, next: NextFunction) {
     try {
-      const destinations = await new DestinationController().getAllDestinations();
+      const destinations = await new DestinationsController().getAllDestinations();
       const eventCategories = await new EventCategoryController().getAllEventCategories();
       const cities = await new CityController().listCity();
       const audienceCategories = await new AudienceCategoryController().getAllAudienceCategories();
@@ -99,7 +99,7 @@ export class EventController {
   public async editPage(req: Request, res: Response, next: NextFunction) {
     try {
       if (!req.params.id) return res.status(404).json({ msg: "Error in getting event", err: "unexpected error" });
-      const destinations = await new DestinationController().getAllDestinations();
+      const destinations = await new DestinationsController().getAllDestinations();
       const eventCategories = await new EventCategoryController().getAllEventCategories();
       const audienceCategories = await new AudienceCategoryController().getAllAudienceCategories();
       const cities = await new CityController().listCity();

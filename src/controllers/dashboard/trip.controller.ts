@@ -6,7 +6,7 @@ import { ModulesController } from "../dashboard/modules.controller";
 import webAppsUsers from "../../models/user.model";
 import transportation from "../../models/transportation.model";
 import trip from "../../models/trip.model";
-import { DestinationController } from "./destination.controller";
+import { DestinationsController } from "./destination.controller";
 import helpers from "../../helper/helpers";
 import path from "path";
 import admin from "../../models/admin.model";
@@ -68,7 +68,7 @@ export class TripController {
   }
   public async newPage(req: Request, res: Response, next: NextFunction) {
     try {
-      const destinations = await new DestinationController().getAllDestinations();
+      const destinations = await new DestinationsController().getAllDestinations();
       return res.render("dashboard/views/trip/new.ejs", { title: "Trip new", destinations });
     } catch (error) {
       return res.status(500).json({ msg: "Can't get trip new page", err: error });
@@ -107,7 +107,7 @@ export class TripController {
     try {
       if (!req.params.id) return res.status(404).json({ msg: "Error in getting trip", err: "unexpected error" });
       let data = await trip.findOne({ where: { id: req.params.id }, attributes: { exclude: ["createdAt", "updatedAt"] }, raw: true });
-      const destinations = await new DestinationController().getAllDestinations();
+      const destinations = await new DestinationsController().getAllDestinations();
       const module_id = await new ModulesController().getModuleIdByName("Trips Management");
       data['from'] = helpers.getFullTime(data['from']);
       data['to'] = helpers.getFullTime(data['to']);

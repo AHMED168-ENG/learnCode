@@ -7,7 +7,9 @@ import bcrypt from "bcrypt";
 import role from "../../models/user-roles.model";
 import { UserPermissionsController } from "./user-permissions.controller";
 import { UserController } from "./user.controller";
-const { generateToken, verify } = require("../../helper/token") ;
+import { TourGuideController } from "../website/guide.controller";
+import { Op } from "sequelize";
+const { generateToken } = require("../../helper/token") ;
 export class AdminController {
   loginPage(req: Request, res: Response, next: NextFunction) {
     return res.render("dashboard/views/login.ejs", { title: "Login" });
@@ -15,19 +17,22 @@ export class AdminController {
   async login(req: Request, res: Response, next: NextFunction) {
     try {
       const { email, password } = req.body;
-      let payload: any, webUser: any;
+      let payload: any;
       if (email === process.env.admin_email && password === process.env.admin_password) payload = { user_id: process.env.admin_id, role_id: process.env.admin_role, username: process.env.admin_name, email: process.env.admin_email, phone: process.env.admin_phone };
       else {
-        webUser = await new UserController().getUserByEmail(email);
+        const webUser = await new UserController().getUserByEmail(email);
+        const tourGuide = await new TourGuideController().getGuide({ [Op.or]: [{ email }, { password }] });
         const adminUser = await admin.findOne({ where: { email } });
-        const user = adminUser || webUser;
+        const user = adminUser || webUser || tourGuide;
         const userPass = user["password"] || user["user_pass"];
         const isMatch = await bcrypt.compare(password, userPass);
-        if (user["email"] === email && isMatch) payload = { user_id: user["user_id"] || user["id"], role_id: user["role_id"], username: user["fullName"], email: user["email"], phone: user["phone"], user_type: webUser ? webUser.user_type : null };
+        if (user["email"] === email && isMatch) payload = { user_id: user["user_id"] || user["id"], username: user["fullName"] || user["name"], email: user["email"], phone: user["phone"], user_type: webUser ? webUser["user_type"] : null };
         else return res.status(200).json({ status: 201 });
       }
+      if (!payload.role_id) delete payload.role_id;
+      if (!payload.user_type) delete payload.user_type;
       const token = generateToken(payload);
-      return res.cookie("token", `${token}`).status(200).json({ status: 200, webUser });
+      return res.cookie("token", `${token}`).status(200).json({ status: 200 });
     } catch (error) {
       return res.status(500).json({ err: "unexpected error", msg: "Can't log in user" });
     }

@@ -6,7 +6,7 @@ import destination from "../../models/destination.model";
 import hotel from "../../models/hotel.model";
 import { ModulesController } from "../dashboard/modules.controller";
 import { UserPermissionsController } from "../dashboard/user-permissions.controller";
-import { DestinationController } from "./destination.controller";
+import { DestinationsController } from "./destination.controller";
 export class HotelController {
   public listPage(req: Request, res: Response, next: NextFunction) {
     return res.render("dashboard/views/hotel/list.ejs", { title: "Hotels" });
@@ -48,7 +48,7 @@ export class HotelController {
   }
   public async newPage(req: Request, res: Response, next: NextFunction) {
     try {
-      const destinations = await new DestinationController().getAllDestinations();
+      const destinations = await new DestinationsController().getAllDestinations();
       return res.render("dashboard/views/hotel/new.ejs", { title: "hotel new", destinations });
     } catch (error) {
       return res.status(500).json({ msg: "Can't get destinations or open new hotel page", err: error });
@@ -78,7 +78,7 @@ export class HotelController {
   public async editPage(req: Request, res: Response, next: NextFunction) {
     try {
       if (!req.params.id) return res.status(404).json({ msg: "Error in getting hotel", err: "unexpected error" });
-      const destinations = await new DestinationController().getAllDestinations();
+      const destinations = await new DestinationsController().getAllDestinations();
       const data = await hotel.findOne({ where: { id: req.params.id }, attributes: { exclude: ["createdAt", "updatedAt"] }, raw: true });
       const module_id = await new ModulesController().getModuleIdByName("Destinations Hotels");
       return res.render("dashboard/views/hotel/edit.ejs", { title: "Edit hotel", data, destinations, module_id });

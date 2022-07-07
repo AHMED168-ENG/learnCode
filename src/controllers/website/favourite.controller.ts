@@ -26,6 +26,20 @@ export class FavouriteController {
       throw error;
     }
   }
+  public async getAllFavourites(user_id: number, user_type: string) {
+    try {
+      return await favourite.findAll({ where: { [Op.and]: [{ user_id }, { user_type }] }, attributes: ["id"], raw: true });
+    } catch (error) {
+      throw error;
+    }
+  }
+  public async getFavourite(user_id: number, item_id: number, user_type: string, category: string) {
+    try {
+      return await favourite.findOne({ where: { [Op.and]: [{ user_id }, { item_id }, { category }, { user_type }] }, attributes: ["id"], raw: true });
+    } catch (error) {
+      throw error;
+    }
+  }
   public async updateFavourite(req: Request, res: Response, next: NextFunction): Promise<any> {
     try {
       if (!req.body.item_id || !req.body.checked) return res.status(httpStatus.BAD_REQUEST).json("Bad Request");
@@ -58,6 +72,10 @@ export class FavouriteController {
         case ItemCatgeory.store : categoryName = ItemCatgeory.store;
                                   break;
         case ItemCatgeory.trip : categoryName = ItemCatgeory.trip;
+                                  break;
+        case ItemCatgeory.guide : categoryName = ItemCatgeory.guide;
+                                  break;
+        case ItemCatgeory.package : categoryName = ItemCatgeory.package;
                                   break;
       }
       return categoryName;

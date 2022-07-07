@@ -9,39 +9,25 @@ function getList(type = "all", from = null, to = null) {  // show spinner
     const settings = {
         async: true,
         crossDomain: true,
-        url: `/dashboard/report/fav-destination-list${query}`,
+        url: `${window.location.pathname}/list${query}`,
         method: "Get",
     }
     $.ajax(settings).done(function (res) {
-        const favouriteDestinations = res.data.map((elem) => { return { name: elem.name, favourites: elem.favourites.length }; });
-        changeChart(favouriteDestinations);
+        changeChart(res.data);
         // hidden spinner
         spinnerNotfound(2)
         $("#tr-th-row").empty()
-        res.data.forEach((elem) => {
-            for (const favourite of elem.favourites) {
-                $("#tr-th-row").append(`<tr id="${elem.id}">
-                <th scope="row">${elem.id}</th>
-                <td>${elem.name}</td>
-                <td>${favourite.username}</td>
-                <td>${favourite.user_type}</td>
-                <td>${new Date(favourite.createdAt).toLocaleDateString("en-US")}</td>
-                <td>
-                    <span class="text-info"><i class="fas fa-calendar-alt"></i>&emsp;${moment(favourite.createdAt).format('DD-MM-YYYY')}</span><br />
-                    <span class="text-danger"><i class="fas fa-clock"></i>&emsp;${moment(favourite.createdAt).format('LT')}</span>
-                </td>
-                </tr>`);
-            }
-        })
+        for (let i = 0; i < Object.keys(res.data).length; i++) {
+            $("#tr-th-row").append(`<tr><th scope="row">${Object.keys(res.data)[i].toUpperCase()}</th><td>${Object.values(res.data)[i]}</td></tr>`);
+        }
     }).fail(() => spinnerNotfound(3))
 }
-function changeChart(favouriteDestinations) {
-    console.log(favouriteDestinations.map((favouriteDestination) => { return favouriteDestination.favourites.length; }))
+function changeChart(counts) {
     var chartSet = {
-        labels: favouriteDestinations.map((favouriteDestination) => { return favouriteDestination.name; }),
+        labels: Object.keys(counts).map((key) => { return key.toUpperCase(); }),
         datasets: [
             {
-                label: "Favourites per Destination",
+                label: "Count per Destination",
                 backgroundColor: "rgba(60,141,188,0.9)",
                 borderColor: "rgba(60,141,188,0.8)",
                 pointRadius: false,
@@ -49,7 +35,7 @@ function changeChart(favouriteDestinations) {
                 pointStrokeColor: "rgba(60,141,188,1)",
                 pointHighlightFill: "#fff",
                 pointHighlightStroke: "rgba(60,141,188,1)",
-                data: favouriteDestinations.map((favouriteDestination) => { return favouriteDestination.favourites; }),
+                data: Object.values(counts),
             },
         ],
     }
@@ -62,7 +48,7 @@ function changeChart(favouriteDestinations) {
         datasetFill: false,
     }
     if (!!window.bar) window.bar.destroy();
-    window.bar = new Chart($("#favouriteDestinationsDetails").get(0).getContext("2d"), {
+    window.bar = new Chart($("#countAllRelatedToDestination").get(0).getContext("2d"), {
         type: "bar",
         data: chartSet,
         options: chartOptions,

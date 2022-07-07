@@ -24,6 +24,7 @@ function getList(page) {
                 <th scope="row">${elem.id}</th>
                 <td>${elem.en_title}</td>
                 <td>${elem.ar_title}</td>
+                <td>${elem["tbl_city.en_name"]} - ${elem["tbl_city.ar_name"]}</td>
                 <td><img class="rounded-circle p-0" width=45 height=45 src="/p/img/${elem.image}" alt="Image"></td>
                 <td>
                    <a class="m-1" data-tooltip="View More Images" href="/dashboard/media/${res.module_id}/image/${elem.id}">View More Images</a>
@@ -40,6 +41,7 @@ function getList(page) {
                 <th scope="row">${elem.id}</th>
                 <td>${elem.en_title}</td>
                 <td>${elem.ar_title}</td>
+                <td>${elem["tbl_city.en_name"]} - ${elem["tbl_city.ar_name"]}</td>
                 <td><img class="rounded-circle p-0" width=45 height=45 src="/p/img/${elem.image}" alt="Image"></td>
                 <td>
                    <a class="m-1" data-tooltip="View More Images" href="/dashboard/media/${res.module_id}/image/${elem.id}">View More Images</a>

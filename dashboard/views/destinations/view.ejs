@@ -70,6 +70,16 @@
                         </div>
                       </div>
                       <div class="form-row mx-3 my-1">
+                        <div class="form-group col-md-6">
+                          <div class="form-group">
+                            <label>City</label>
+                            <select id="city_id" name="city_id" class="form-control select2 select2-danger" data-dropdown-css-class="select2-danger" style="width: 100%">
+                              <option value="<%=data.city_id%>" selected><%= data['tbl_city.en_name']%> - data['tbl_city.ar_name']%></option>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="form-row mx-3 my-1">
                         <div class="form-group col-md-6" style="padding-right: 22px; padding-left: 5px">
                           <label for="image">Image</label>
                           <div class="custom-file">

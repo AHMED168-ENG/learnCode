@@ -6,10 +6,10 @@ import destination from "../../models/destination.model";
 import provider from "../../models/provider.model";
 import { ModulesController } from "../dashboard/modules.controller";
 import { UserPermissionsController } from "../dashboard/user-permissions.controller";
-import { DestinationController } from "./destination.controller";
+import { DestinationsController } from "./destination.controller";
 export class ProviderController {
-  constructor(private destinationController?: DestinationController) {
-    this.destinationController = this.destinationController ? this.destinationController : new DestinationController();
+  constructor(private destinationController?: DestinationsController) {
+    this.destinationController = this.destinationController ? this.destinationController : new DestinationsController();
   }
   public listPage(req: Request, res: Response, next: NextFunction) {
     return res.render("dashboard/views/provider/list.ejs", { title: "Providers" });
@@ -50,7 +50,7 @@ export class ProviderController {
   }
   public async newPage(req: Request, res: Response, next: NextFunction) {
     try {
-      const destinations = await new DestinationController().getAllDestinations();
+      const destinations = await new DestinationsController().getAllDestinations();
       return res.render("dashboard/views/provider/new.ejs", { title: "provider new", destinations });
     } catch (error) {
       return res.status(500).json({ msg: "Can't get destinations or open new provider page", err: error });
@@ -80,7 +80,7 @@ export class ProviderController {
   public async editPage(req: Request, res: Response, next: NextFunction) {
     try {
       if (!req.params.id) return res.status(404).json({ msg: "Error in getting provider", err: "unexpected error" });
-      const destinations = await new DestinationController().getAllDestinations();
+      const destinations = await new DestinationsController().getAllDestinations();
       const data = await provider.findOne({ where: { id: req.params.id }, attributes: { exclude: ["createdAt", "updatedAt"] }, raw: true });
       const module_id = await new ModulesController().getModuleIdByName("Providers Management");
       return res.render("dashboard/views/provider/edit.ejs", { title: "Edit provider", data, destinations, module_id });

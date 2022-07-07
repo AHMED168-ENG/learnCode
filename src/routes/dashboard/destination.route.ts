@@ -1,8 +1,8 @@
 import { Router } from "express";
-import { DestinationController } from "../../controllers/dashboard/destination.controller";
+import { DestinationsController } from "../../controllers/dashboard/destination.controller";
 export class DestinationRoutes {
   public router: Router;
-  public destinationController: DestinationController = new DestinationController();
+  public destinationController: DestinationsController = new DestinationsController();
   constructor() {
     this.router = Router();
     this.routes();

@@ -62,6 +62,7 @@ export class TourGuideController {
       const existedGuide = await guide.findOne({ where: { email: req.body.email } });
       if (existedGuide) return res.status(httpStatus.NOT_ACCEPTABLE).json({ msg: "This email is already exists" });
       const password = await bcrypt.hash(req.body.password, 10);
+      req.body.password = password;
       const existedGuideWithPass = await guide.findOne({ where: { password } });
       if (existedGuideWithPass) return res.status(httpStatus.NOT_ACCEPTABLE).json({ msg: "This password is already exists" });
       const img = req.files.image;
@@ -87,7 +88,7 @@ export class TourGuideController {
   public async editPage(req: Request, res: Response, next: NextFunction) {
     try {
       if (!req.params.id) return res.status(404).json({ msg: "Error in getting tour guide", err: "unexpected error" });
-      const data = await guide.findOne({ where: { id: req.params.id }, attributes: { exclude: ["createdAt", "updatedAt"] }, raw: true });
+      const data = await guide.findOne({ where: { id: req.params.id }, attributes: { exclude: ["password", "createdAt", "updatedAt"] }, raw: true });
       const cities = await new CityController().listCity();
       const module_id = await new ModulesController().getModuleIdByName("Tourist Guide Management");
       return res.render("dashboard/views/guide/edit.ejs", { title: "Edit Tour Guide", data, cities, module_id });
@@ -104,6 +105,7 @@ export class TourGuideController {
       }
       if (req.body.password) {
         const password = await bcrypt.hash(req.body.password, 10);
+        req.body.password = password;
         const existedGuideWithPass = await guide.findOne({ where: { password } });
         if (existedGuideWithPass) return res.status(httpStatus.NOT_ACCEPTABLE).json({ msg: "This password is already exists" });
       }
@@ -112,7 +114,7 @@ export class TourGuideController {
       const payload = req.query.status ? { status: req.query.status } : req.body;
       const updatedGuide = await guide.update(payload, { where: { id: req.params.id } });
       if (updatedGuide) {
-        const foundDestination = await guide.findOne({ where: { id: req.params.id }, attributes: ["image", "file"], raw: true });
+        const foundDestination = await guide.findOne({ where: { id: req.params.id }, attributes: ["image", "file", "password"], raw: true });
         let fileName: string, imgName: string;
         if (img) {
           helpers.removeFile(foundDestination["image"]);

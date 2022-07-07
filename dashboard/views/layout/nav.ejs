@@ -512,15 +512,33 @@
               </a>
             </li>
             <li class="nav-item">
-              <a href="/dashboard/report/fav-destination-repo" class="nav-link" id="fav-destination-repo">
-                <i class="fas fa-tree nav-icon"></i>
-                <p>Favourite Destinations Report</p>
+              <a href="/dashboard/report/destination-repo" class="nav-link" id="fav-destination-repo">
+                <i class="fas fa-globe-americas nav-icon"></i>
+                <p>Destinations Report</p>
               </a>
             </li>
             <li class="nav-item">
-              <a href="/dashboard/report/fav-event-repo" class="nav-link" id="fav-event-repo">
+              <a href="/dashboard/report/destination-user-repo" class="nav-link" id="fav-destination-user-repo">
+                <i class="fas fa-globe-americas nav-icon"></i>
+                <p>Destinations Users Report</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="/dashboard/report/activity-repo" class="nav-link" id="fav-activity-repo">
+                <i class="fas fa-globe-americas nav-icon"></i>
+                <p>Activities Report</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="/dashboard/report/event-repo" class="nav-link" id="fav-event-repo">
                 <i class="fas fa-star nav-icon"></i>
-                <p>Favourite Events Report</p>
+                <p>Events Report</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="/dashboard/report/guide-repo" class="nav-link" id="guide-repo">
+                <i class="fas fa-star nav-icon"></i>
+                <p>Tour Guides Report</p>
               </a>
             </li>
             <li class="nav-item">
@@ -1394,15 +1412,18 @@
         const usersReport = data.userPermissions.filter((userPermission) => userPermission.module.name === "Users Report");
         const sponsorsReport = data.userPermissions.filter((userPermission) => userPermission.module.name === "Sponsors Report");
         const initiativeReport = data.userPermissions.filter((userPermission) => userPermission.module.name === "Initiatives Report");
-        const favouriteDestinationsReport = data.userPermissions.filter((userPermission) => userPermission.module.name === "Favourite Destinations Report");
-        const favouriteEventsReport = data.userPermissions.filter((userPermission) => userPermission.module.name === "Favourite Events Report");
+        const destinationsReport = data.userPermissions.filter((userPermission) => userPermission.module.name === "Destinations Report");
+        const destinationsUsersReport = data.userPermissions.filter((userPermission) => userPermission.module.name === "Destinations Users Report");
+        const activitiesReport = data.userPermissions.filter((userPermission) => userPermission.module.name === "Activities Report");
+        const eventsReport = data.userPermissions.filter((userPermission) => userPermission.module.name === "Events Report");
+        const guidesReport = data.userPermissions.filter((userPermission) => userPermission.module.name === "Tour Guides Report");
         const locationTreesReport = data.userPermissions.filter((userPermission) => userPermission.module.name === "Locations Trees Report");
         const locationReport = data.userPermissions.filter((userPermission) => userPermission.module.name === "Locations Report");
         const salesReport = data.userPermissions.filter((userPermission) => userPermission.module.name === "Sales Report");
         const calendarInitiative = data.userPermissions.filter((userPermission) => userPermission.module.name === "Calendar Initiative Report");
         const calendar = data.userPermissions.filter((userPermission) => userPermission.module.name === "All Users Calendar Report");
         const userCharts = data.userPermissions.filter((userPermission) => userPermission.module.name === "User Charts Report");
-        if (ordersReport.length || usersReport.length || sponsorsReport.length || initiativeReport.length || locationTreesReport.length || locationReport.length || favouriteDestinationsReport.length || salesReport.length || calendarInitiative.length || calendar.length || userCharts.length) {
+        if (ordersReport.length || usersReport.length || sponsorsReport.length || initiativeReport.length || locationTreesReport.length || locationReport.length || destinationsReport.length || activitiesReport.length || eventsReport.length || salesReport.length || calendarInitiative.length || calendar.length || userCharts.length) {
           $('#sidebar').append(`
             <li class="nav-item has-treeview">
               <a href="#" class="nav-link" id="report">
@@ -1455,22 +1476,52 @@
               </li>
             `);
           }
-          if (favouriteDestinationsReport.length) {
+          if (destinationsReport.length) {
             $('#reportsManagement').append(`
               <li class="nav-item">
-                <a href="/dashboard/report/fav-destination-repo" class="nav-link" id="fav-destination-repo">
-                  <i class="fas fa-star nav-icon"></i>
-                  <p>Favourite Destinations Report</p>
+                <a href="/dashboard/report/destination-repo" class="nav-link" id="fav-destination-repo">
+                  <i class="fas fa-globe-americas nav-icon"></i>
+                  <p>Destinations Report</p>
                 </a>
               </li>
             `);
           }
-          if (favouriteEventsReport.length) {
+          if (destinationsUsersReport.length) {
             $('#reportsManagement').append(`
               <li class="nav-item">
-                <a href="/dashboard/report/fav-event-repo" class="nav-link" id="fav-event-repo">
+                <a href="/dashboard/report/destination-user-repo" class="nav-link" id="fav-destination-user-repo">
+                  <i class="fas fa-globe-americas nav-icon"></i>
+                  <p>Destinations Users Report</p>
+                </a>
+              </li>
+            `);
+          }
+          if (activitiesReport.length) {
+            $('#reportsManagement').append(`
+              <li class="nav-item">
+                <a href="/dashboard/report/activity-repo" class="nav-link" id="fav-activity-repo">
+                  <i class="fas fa-globe-americas nav-icon"></i>
+                  <p>Activities Report</p>
+                </a>
+              </li>
+            `);
+          }
+          if (eventsReport.length) {
+            $('#reportsManagement').append(`
+              <li class="nav-item">
+                <a href="/dashboard/report/event-repo" class="nav-link" id="fav-event-repo">
                   <i class="fas fa-star nav-icon"></i>
-                  <p>Favourite Events Report</p>
+                  <p>Events Report</p>
+                </a>
+              </li>
+            `);
+          }
+          if (guidesReport.length) {
+            $('#reportsManagement').append(`
+              <li class="nav-item">
+                <a href="/dashboard/report/guide-repo" class="nav-link" id="guide-repo">
+                  <i class="fas fa-star nav-icon"></i>
+                  <p>Tour Guides Report</p>
                 </a>
               </li>
             `);

@@ -22,8 +22,7 @@ const login = (e) => {
             $("#modal-body-val").text("Email or password incorrect")
             $("#exampleModal").modal("show")
         } else if (res.status == 200) {
-            if (res.webUser) window.location.replace("/")
-            else window.location.replace("/dashboard")
+            window.location.replace("/")
         }
     })
 }

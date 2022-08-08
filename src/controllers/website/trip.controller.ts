@@ -189,7 +189,7 @@ export class TripsController {
   }
   public async getAllTrips(userId?: number) {
     try {
-      const where = userId ? { [Op.or]: { user_id: userId, admin_id: userId } } : {};
+      const where = !!userId ? { [Op.or]: { user_id: userId, admin_id: userId } } : {};
       return await trip.findAll({ where, attributes: ["id", "ar_name", "en_name", "from"], raw: true });
     } catch (error) {
       throw error;

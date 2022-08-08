@@ -111,9 +111,10 @@ export class RestaurantController {
       return res.status(httpStatus.BAD_REQUEST).json({msg: "Error in Edit restaurant", err: "unexpected error" });
     }
   }
-  public async getAllDestinationRestaurants(lang: string, destination_id: number) {
+  public async getAllDestinationRestaurants(lang: string, destination_id?: number) {
     try {
-      const restaurantsData = await restaurant.findAll({ where: { destination_id }, attributes: [`${lang}_name`, "logo"], raw: true });
+      const where = destination_id ? { destination_id } : {};
+      const restaurantsData = await restaurant.findAll({ where, attributes: ["id", `${lang}_name`, "logo"], raw: true });
       return restaurantsData.map((restaurantData) => { return { id: restaurantData["id"], name: restaurantData[`${lang}_name`], logo: restaurantData["logo"] }; });
     } catch (error) {
       throw error;

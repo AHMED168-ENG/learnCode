@@ -8,8 +8,7 @@ export class OTPRoutes {
     this.routes();
   }
   routes() {
-    this.router.get("/", this.otpController.getOtpPage);
-    this.router.post("/sendOtp", this.otpController.sendOTP);
+    this.router.get("/", this.otpController.sendOTP);
     this.router.post("/verifyOtp", this.otpController.verifyOTP);
   }
 }

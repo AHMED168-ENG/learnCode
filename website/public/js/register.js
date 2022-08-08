@@ -17,7 +17,7 @@ const register = (e) => {
         if (!res.user) {
             $("#modal-body-val").text("Email or password incorrect");
             $("#exampleModal").modal("show");
-        } else window.location.replace("/dashboard/admin/login");
+        } else window.location.href = `${window.location.pathname.split('/')[0]}/otp?user_id=${res.user.user_id}&emailORphone=${emailORphone}`;
     });
 }
 $('#isIndividual').click(function () { if (userType != "individual") userType = "individual"; });

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('layout/heade.ejs') %>
+    <style>
+      @import url('https://fonts.googleapis.com/css?family=Raleway:200');
+      .digit-group input {
+        width: 30px;
+        height: 50px;
+        background-color: #0f0f1a;
+        border: none;
+        line-height: 50px;
+        text-align: center;
+        font-size: 24px;
+        font-family: 'Raleway', sans-serif;
+        font-weight: 200;
+        color: white;
+        margin: 0 2px;
+      }
+      .digit-group .splitter {
+        padding: 0 5px;
+        color: white;
+        font-size: 24px;
+      }
+      .prompt {
+        margin-bottom: 20px;
+        font-size: 20px;
+        color: white;
+      }
+    </style>
+  </head>
+  <body class="hold-transition login-page">
+    <div class="login-box">
+      <!-- /.login-logo -->
+      <div class="card card-outline card-primary">
+        <div class="card-header text-center">
+          <img src="/p/img/logo500x240.png" style="width: 150px" />
+        </div>
+        <div class="card-body">
+          <div class="prompt">Enter the code generated on your mobile device below to log in!</div>
+          <form method="get" class="digit-group" data-group-name="digits" data-autosubmit="false" autocomplete="off">
+            <input type="text" id="digit1" name="digit1" data-next="digit2" />
+            <input type="text" id="digit2" name="digit2" data-next="digit3" data-previous="digit1" />
+            <input type="text" id="digit3" name="digit3" data-next="digit4" data-previous="digit2" />
+            <span class="splitter">&ndash;</span>
+            <input type="text" id="digit4" name="digit4" data-next="digit5" data-previous="digit3" />
+            <input type="text" id="digit5" name="digit5" data-next="digit6" data-previous="digit4" />
+            <input type="text" id="digit6" name="digit6" data-previous="digit5" />
+          </form>
+          <div class="input-group mb-3 d-flex justify-content-center"><span><a href="javascript:history.back()">Cancel</a></span></div>
+          <div class="input-group mb-3"><button id="submit-btn" type="submit" onclick="verifyOtp('<%= data.user_id %>', '<%= data.type %>', '<%= data.emailORphone %>')" class="btn btn-primary btn-block has-spinner">verify OTP</button></div>
+        </div>
+        <!-- /.card-body -->
+      </div>
+      <!-- /.card -->
+    </div>
+    <!-- /.login-box -->
+    <%- include('layout/script.ejs') %>
+    <script src="/website/js/otp.js"></script>
+  </body>
+</html>

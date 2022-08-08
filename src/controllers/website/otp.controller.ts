@@ -1,36 +1,30 @@
-import { Request, Response, NextFunction } from "express";
+import { Request, Response, NextFunction, response } from "express";
 import httpStatus from "http-status";
 import helpers from "../../helper/helpers";
 import otpTypeModel from "../../models/otp-type.model";
 import { Op } from "sequelize";
 import sendMail from "../../middlewares/send-email.middleware";
+import { UserController } from "../api/users.controller";
 const { generateToken } = require("../../helper/token");
 export class OTPController {
-  public async getOtpPage(req: Request, res: Response, next: NextFunction) {
-    try {
-      return res.render("website/views/otp/new.ejs", { title: "OTP Page" });
-    } catch (error) {
-      return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ msg: "Can't get OTP page", err: error });
-    }
-  }
   public async sendOTP(req: Request, res: Response, next: NextFunction) {
     try {
-      const { user_id, emailORphone, type } = req.body;
+      if (!req.query.emailORphone || !Number(req.query.user_id)) return res.status(httpStatus.BAD_REQUEST).json({ msg: "Bad Request" });
+      const emailORphone = req.query.emailORphone as string;
       const isEmail = helpers.regularExprEmail(emailORphone);
-      const otp = helpers.randomNumber(1000, 9999);
-      const deletedOTP = await new OTPController().deleteOTP(user_id, type);
-      if (!!deletedOTP) {
-        const createdOTP = await otpTypeModel.create({ user_id, value: otp, emailORphone, type, expiry: new Date(new Date().getTime() + 15 * 60000) });
-        if (!createdOTP) return res.status(httpStatus.NOT_ACCEPTABLE).json({ msg: "Error while create otp" });
-        else {
-          if (isEmail) {
-            sendMail([emailORphone], "Sahlan email verify", "otp", { email: emailORphone, otp });
-            return res.status(httpStatus.CREATED).json({ msg: "OTP Sent by Email, expire in 15 minutes" });
-          } else {
-            return res.status(httpStatus.CREATED).json({ msg: "OTP Sent by phone, expire in 15 minutes" });
-          }
-        }
-      }
+      const otp = helpers.randomNumber(100000, 999999);
+      const deletedOTP = await new OTPController().deleteOTP(emailORphone, Number(req.query.user_id));
+      if (!deletedOTP) return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ msg: "unexpected error while deleting old otps" });
+      const payload = { user_id: Number(req.query.user_id), value: otp, emailORphone: emailORphone, type: req.query.type, expiry: new Date(new Date().getTime() + 15 * 60000) };
+      if (!payload.type) delete payload.type;
+      const createdOTP = await new OTPController().createOTP(payload);
+      if (!createdOTP) return res.status(httpStatus.NOT_ACCEPTABLE).json({ msg: "Error while creating otp" });
+      let data;
+      if (isEmail) {
+        sendMail([createdOTP["emailORphone"]], "Sahlan email verify", "otp", { emailORphone: createdOTP["emailORphone"], otp });
+        data = { msg: "OTP Sent by Email, expire in 15 minutes", otp, user_id: createdOTP["user_id"], emailORphone: createdOTP["emailORphone"], type: createdOTP["type"] };
+      } else data = { msg: "OTP Sent by phone, expire in 15 minutes", otp, user_id: createdOTP["user_id"], emailORphone: createdOTP["emailORphone"], type: createdOTP["type"] };
+      return res.render("website/views/otp/new.ejs", { title: "OTP Page", data });
     } catch (error) {
       return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ msg: "Can't send OTP number", err: error });
     }
@@ -38,28 +32,36 @@ export class OTPController {
   public async verifyOTP(req: Request, res: Response, next: NextFunction) {
     try {
       const { user_id, otp, emailORphone, type } = req.body;
-      const isEmail = helpers.regularExprEmail(emailORphone) ? { emailVerified: 1 } : { phoneVerified: 1 };
       const foundOtp = await new OTPController().getOTP(user_id, type);
-      if (isEmail && foundOtp["value"] == otp && foundOtp["emailORphone"] == emailORphone && foundOtp["is_used"] == "no" && foundOtp["expiry"] > new Date()) {
-        await otpTypeModel.update({ is_used: "yes" }, { where: { user_id } });
-        return res.status(httpStatus.ACCEPTED).json({ msg: "OTP is valid", token: generateToken({ user_id, type }), status: true });
-      } else {
+      if (foundOtp["value"] != otp || foundOtp["emailORphone"] != emailORphone || foundOtp["is_used"] != "no" || foundOtp["expiry"] <= new Date()) {
         return res.status(httpStatus.NOT_ACCEPTABLE).json({ msg: "OTP is invalid", status: false });
       }
+      await otpTypeModel.update({ is_used: "yes" }, { where: { user_id } });
+      return res.status(httpStatus.ACCEPTED).json({ msg: "OTP is valid", token: generateToken({ user_id, type, emailORphone }), status: true });
     } catch (error) {
       return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ msg: "Can't verify otp", err: error });
     }
   }
   public async getOTP(user_id: any, type: any) {
     try {
+      if (type === "individual" || type === "entity") return await new UserController().getOTP(user_id);
       return await otpTypeModel.findOne({ where: { [Op.and]: [{ user_id }, { type }] } });
     } catch (error) {
       throw error;
     }
   }
-  public async deleteOTP(user_id: any, type: any) {
+  public async createOTP(payload: any) {
     try {
-      return await otpTypeModel.destroy({ where: { [Op.and]: [{ user_id }, { type }] } });
+      if (!payload.user_id || !payload.type) return await new UserController().createOTP(payload);
+      return await otpTypeModel.create(payload);
+    } catch (error) {
+      throw error;
+    }
+  }
+  public async deleteOTP(emailORphone: string, user_id: number, type?: string) {
+    try {
+      if (!type) return await new UserController().deleteOTP(user_id, emailORphone);
+      return await otpTypeModel.destroy({ where: { [Op.and]: [{ user_id }, { emailORphone }, { type }] } });
     } catch (error) {
       throw error;
     }

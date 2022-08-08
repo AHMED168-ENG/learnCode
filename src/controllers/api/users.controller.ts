@@ -8,7 +8,7 @@ import IUser from "../../interfaces/user.interface"
 import token from "../../helper/token"
 import otpModel from "../../models/otp.model"
 import sendMail from "../../middlewares/send-email.middleware"
-import {Model, where} from "sequelize/types"
+import { Op } from "sequelize"
 import {googleTokenInfo} from "../../middlewares/auth-google.middleware"
 import {fbTokenInfo} from "../../middlewares/auth-fb.middleware"
 
@@ -384,6 +384,27 @@ export class UserController extends Controller {
           }
         })
       }
+    }
+  }
+  public async getOTP(user_id: number) {
+    try {
+      return await otpModel.findOne({ where: { [Op.and]: [{ user_id }] } });
+    } catch (error) {
+      throw error;
+    }
+  }
+  public async createOTP(payload: any) {
+    try {
+      return await otpModel.create(payload);
+    } catch (error) {
+      throw error;
+    }
+  }
+  public async deleteOTP(user_id: number, emailORphone: string) {
+    try {
+      return await otpModel.destroy({ where: { [Op.and]: [{ user_id }, { emailORphone }] } });
+    } catch (error) {
+      throw error;
     }
   }
 }

@@ -1,5 +1,6 @@
 export enum ItemCatgeory {
     package = "package",
+    activity = "activity",
     guide = "guide",
     hotel = "hotel",
     destination = "destination",

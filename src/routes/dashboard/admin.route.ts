@@ -10,8 +10,6 @@ export class AdminRoutes {
     this.routes()
   }
   routes() {
-    this.router.get("/login", this.adminController.loginPage)
-    this.router.post("/login", this.adminController.login)
     this.router.get("/", this.adminController.listPage)
     this.router.get("/list", this.adminController.list)
     this.router.get("/new", this.adminController.newPage)

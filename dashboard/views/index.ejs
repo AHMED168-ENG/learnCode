@@ -206,7 +206,7 @@
                   <span class="info-box-text">Destinations</span>
                   <a href="/dashboard/destination">
                     <!-- <span class="info-box-number"><%= data.totalDestinations?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") %></span> -->
-                    <span class="info-box-number">10</span>
+                    <span class="info-box-number"><%= data.totalDestinations %></span>
                   </a>
                 </div>
                 <!-- /.info-box-content -->
@@ -221,7 +221,7 @@
                 </span>
                 <div class="info-box-content">
                   <span class="info-box-text">Events</span>
-                  <a href="/dashboard/event"><span class="info-box-number">5</span></a>
+                  <a href="/dashboard/event"><span class="info-box-number"><%= data.totalEvents %></span></a>
                   <!-- <a href="/dashboard/initiative"><span class="info-box-number"><%= data.totalInitiatives?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") %></span></a> -->
                 </div>
                 <!-- /.info-box-content -->
@@ -235,7 +235,7 @@
                 </span>
                 <div class="info-box-content">
                   <span class="info-box-text">Activities</span>
-                  <a href="/dashboard/activity"><span class="info-box-number">8</span></a>
+                  <a href="/dashboard/activity"><span class="info-box-number"><%= data.totalActivities %></span></a>
                   <!-- <a href="/dashboard/initiative"><span class="info-box-number"><%= data.totalInitiatives?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") %></span></a> -->
                 </div>
                 <!-- /.info-box-content -->
@@ -249,7 +249,7 @@
                 </span>
                 <div class="info-box-content">
                   <span class="info-box-text">Tour Guides</span>
-                  <a href="/dashboard/guide"><span class="info-box-number">7</span></a>
+                  <a href="/dashboard/guide"><span class="info-box-number"><%= data.totalGuides %></span></a>
                   <!-- <a href="/dashboard/initiative"><span class="info-box-number"><%= data.totalInitiatives?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") %></span></a> -->
                 </div>
                 <!-- /.info-box-content -->
@@ -263,7 +263,7 @@
                 </span>
                 <div class="info-box-content">
                   <span class="info-box-text">Providers</span>
-                  <a href="/dashboard/provider"><span class="info-box-number">5</span></a>
+                  <a href="/dashboard/provider"><span class="info-box-number"><%= data.totalProviders %></span></a>
                   <!-- <a href="/dashboard/initiative"><span class="info-box-number"><%= data.totalInitiatives?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") %></span></a> -->
                 </div>
                 <!-- /.info-box-content -->
@@ -278,7 +278,7 @@
                 </span>
                 <div class="info-box-content">
                   <span class="info-box-text">Stores</span>
-                  <a href="/dashboard/store"><span class="info-box-number">5</span></a>
+                  <a href="/dashboard/store"><span class="info-box-number"><%= data.totalDestinationStores + data.totalStores %></span></a>
                   <!-- <a href="/dashboard/initiative"><span class="info-box-number"><%= data.totalInitiatives?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") %></span></a> -->
                 </div>
                 <!-- /.info-box-content -->
@@ -293,7 +293,7 @@
                 </span>
                 <div class="info-box-content">
                   <span class="info-box-text">Trips</span>
-                  <a href="/dashboard/trip"><span class="info-box-number">15</span></a>
+                  <a href="/dashboard/trip"><span class="info-box-number"><%= data.totalTrips %></span></a>
                   <!-- <a href="/dashboard/initiative"><span class="info-box-number"><%= data.totalInitiatives?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") %></span></a> -->
                 </div>
                 <!-- /.info-box-content -->
@@ -308,7 +308,7 @@
                 </span>
                 <div class="info-box-content">
                   <span class="info-box-text">Memberships</span>
-                  <a href="/dashboard/membership"><span class="info-box-number">40</span></a>
+                  <a href="/dashboard/membership"><span class="info-box-number"><%= data.totalMemberships %></span></a>
                   <!-- <a href="/dashboard/initiative"><span class="info-box-number"><%= data.totalInitiatives?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") %></span></a> -->
                 </div>
                 <!-- /.info-box-content -->
@@ -323,7 +323,7 @@
                 </span>
                 <div class="info-box-content">
                   <span class="info-box-text">Hotels</span>
-                  <a href="/dashboard/hotel"><span class="info-box-number">12</span></a>
+                  <a href="/dashboard/hotel"><span class="info-box-number"><%= data.totalHotels %></span></a>
                   <!-- <a href="/dashboard/initiative"><span class="info-box-number"><%= data.totalInitiatives?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") %></span></a> -->
                 </div>
                 <!-- /.info-box-content -->
@@ -338,7 +338,7 @@
                 </span>
                 <div class="info-box-content">
                   <span class="info-box-text">Restaurants</span>
-                  <a href="/dashboard/restaurant"><span class="info-box-number">20</span></a>
+                  <a href="/dashboard/restaurant"><span class="info-box-number"><%= data.totalRestaurants %></span></a>
                   <!-- <a href="/dashboard/initiative"><span class="info-box-number"><%= data.totalInitiatives?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") %></span></a> -->
                 </div>
                 <!-- /.info-box-content -->
@@ -353,7 +353,7 @@
                 </span>
                 <div class="info-box-content">
                   <span class="info-box-text">Advertisments</span>
-                  <a href="/dashboard/ads"><span class="info-box-number">50</span></a>
+                  <a href="/dashboard/ads"><span class="info-box-number"><%= data.totalAds %></span></a>
                   <!-- <a href="/dashboard/initiative"><span class="info-box-number"><%= data.totalInitiatives?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") %></span></a> -->
                 </div>
                 <!-- /.info-box-content -->
@@ -368,7 +368,7 @@
                 </span>
                 <div class="info-box-content">
                   <span class="info-box-text">Attractive Places</span>
-                  <a href="/dashboard/destination-place"><span class="info-box-number">6</span></a>
+                  <a href="/dashboard/destination-place"><span class="info-box-number"><%= data.totalPlaces %></span></a>
                   <!-- <a href="/dashboard/initiative"><span class="info-box-number"><%= data.totalInitiatives?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") %></span></a> -->
                 </div>
                 <!-- /.info-box-content -->
@@ -459,7 +459,7 @@
                 <div class="small-box bg-primary">
                   <div class="inner">
                     <!-- <h3><%= data.totalUsers?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") %></h3> -->
-                    <h3>12</h3>
+                    <h3><%= data.totalPackages %></h3>
                     <p>Packages</p>
                   </div>
                   <div class="icon">

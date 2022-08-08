@@ -155,7 +155,7 @@ export class EventController {
   }
   public async getAllEvents() {
     try {
-      return await events.findAll({ attributes: ["id", "ar_name", "en_name", "from"], raw: true });
+      return await events.findAll({ attributes: ["id", "ar_name", "en_name", "image", "from"], raw: true });
     } catch (error) {
       throw error;
     }

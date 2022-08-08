@@ -8,6 +8,7 @@ export class FavouriteRoutes {
     this.routes();
   }
   routes() {
+    this.router.get("/", this.favouriteController.getMyFavourites);
     this.router.put("/", this.favouriteController.updateFavourite);
   }
 }

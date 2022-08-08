@@ -6,9 +6,6 @@ function getList() {
     $.ajax(settings).done(function (res, textStatus) {
         // hidden spinner
         spinnerNotfound(2)
-        if (res.canAdd) {
-            $('#addNewBtn').html(`<a type="button" href="/website/travel/new" class="btn btn-info">Add new</a>`)
-        }
         $("#accordion").empty();
         res.data.forEach((category) => {
             $("#accordion").append(`
@@ -57,9 +54,6 @@ function getList() {
                     <label for="ar_description">Description ar</label>
                     <textarea disabled type="text" id="ar_description" name="ar_description" class="form-control" placeholder="description ar" rows="3">${category.ar_description || null}</textarea>
                 `);
-            }
-            if (res.canEdit) {
-                $('#editBtn').append(`<a type="button" href="/website/travel/edit/${category.id}" class="btn btn-info">Edit ${category.en_name}</a>`);
             }
         })
     }).fail(() => spinnerNotfound(3))

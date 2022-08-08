@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import httpStatus from "http-status";
+import path from "path";
 import helpers from "../../helper/helpers";
 import city from "../../models/city.model";
 import guide from "../../models/guide.model";
@@ -14,6 +15,7 @@ import { Op } from "sequelize";
 import { OTPController } from "./otp.controller";
 import { FavouriteController } from "./favourite.controller";
 import { ItemCatgeory } from "../../enums/item-category.enum";
+import { CityController } from "../dashboard/city.controller";
 const { verify } = require("../../helper/token");
 export class TourGuideController {
   public listPage(req: Request, res: Response, next: NextFunction) {
@@ -65,33 +67,44 @@ export class TourGuideController {
   }
   public async getRegisterPage(req: Request, res: Response, next: NextFunction) {
     try {
-      return res.render("website/views/guide/new.ejs", { title: "User Registeration Page" });
+      const cities = await new CityController().listCity();
+      return res.render("website/views/guide/new.ejs", { title: "Guide Registeration Page", cities });
     } catch (error) {
       return res.status(500).json({ msg: "Can't open registeration page", err: error });
     }
   }
   public async signup(req: Request, res: Response, next: NextFunction) {
     try {
-      if (!helpers.checkFields(req.body, ["gender", "emailORphone", "password", "name", "city_id"])) {
+      if (!helpers.checkFields(req.body, ["gender", "email", "phone", "password", "name", "city_id", "verifyOption"])) {
         return res.status(httpStatus.BAD_REQUEST).json({ msg: "require field is missing" });
-      } else {
-        const { gender, name, username, city_id, ar_description, en_description, emailORphone } = req.body;
-        const salt: string = bcrypt.genSaltSync(8);
-        const password: string = bcrypt.hashSync(req.body.password, salt);
-        const conditionLogin = helpers.regularExprEmail(emailORphone) ? { email: emailORphone } : { phone: emailORphone };
-        const isEmail = helpers.regularExprEmail(emailORphone) ? "emailVerified" : "phoneVerified";
-        const foundGuide = await guide.findOne({ where: conditionLogin, raw: true });
-        const payload = { name, gender, username, city_id, ar_description, en_description, ...conditionLogin, password };
-        if (!foundGuide) await guide.create(payload);
-        else {
-          if (foundGuide[isEmail] == 0) await guide.update({ password }, { where: conditionLogin });
-          else if (foundGuide["name"] == null || foundGuide["name"].length == 0) return res.status(httpStatus.BAD_REQUEST).json({ isverified: false, user_id: foundGuide["id"] });
-          else return res.status(400).json({ msg: "user is found you can Login" });
-        }
-        return res.status(201).json({ msg: "Tour guide is registered successfully" });
       }
+      const { gender, name, username, city_id, email, phone, verifyOption } = req.body;
+      const areNotNumbers = !Number(city_id);
+      if (!req.files.file || areNotNumbers || !helpers.regularExprEmail(email)) return res.status(httpStatus.BAD_REQUEST).json({ msg: "CV file is required" });
+      const salt: string = bcrypt.genSaltSync(8);
+      const password: string = bcrypt.hashSync(req.body.password, salt);
+      const foundGuide = await guide.findOne({ where: { email }, raw: true });
+      const payload = { name, gender, username, city_id, email, phone, password };
+      if (foundGuide) {
+        if (foundGuide["name"] == null || foundGuide["name"].length == 0) return res.status(httpStatus.BAD_REQUEST).json({ isverified: false, user_id: foundGuide["id"] });
+        else return res.status(400).json({ msg: "this tourguide is found you can Login" });
+      }
+      const createdGuide = await guide.create(payload);
+      if (createdGuide) {
+        const { image, file } = req.files;
+        const imgName: string = image ? `${helpers.randomNumber(100, 999)}_${Number(new Date())}${path.extname(image["name"])}` : null;
+        const fileName: string = file ? `${helpers.randomNumber(100, 999)}_${Number(new Date())}${path.extname(file["name"])}` : null;
+        const fileDir: string = `tourGuides/${createdGuide["id"]}/`
+        const set = { image: imgName ? `${fileDir}${imgName}` : null, file: fileName ? `${fileDir}${fileName}` : null };
+        const updatedGuide = await guide.update(set, { where: { id: createdGuide["id"] } });
+        if (!updatedGuide) return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ msg: "Can't create tour guide" });
+        if (imgName && image) helpers.imageProcessing(fileDir, imgName, image["data"]);
+        if (fileName && file) helpers.imageProcessing(fileDir, fileName, file["data"]);
+      }
+      const data = { email: createdGuide["email"], phone: createdGuide["phone"], type: ItemCatgeory.guide, user_id: createdGuide["id"], verifyOption };
+      return res.status(httpStatus.OK).json({ msg: "Tour guide is registered successfully", data });
     } catch (error) {
-      return res.status(500).json({ msg: "Can't be registered as a tourguide", err: error });
+      return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ msg: "Can't be registered as a tourguide", err: error });
     }
   }
   public async resetPassword(req: Request, res: Response, next: NextFunction) {
@@ -116,14 +129,14 @@ export class TourGuideController {
   }
   public async getAllGuides() {
     try {
-      return await guide.findAll({ attributes: ["id", "name", "username", "image"], raw: true }) || [];
+      return await guide.findAll({ attributes: ["id", "name", "username", "image", "phone"], raw: true }) || [];
     } catch (error) {
       throw error;
     }
   }
   public async getGuide(where: any) {
     try {
-      return await guide.findOne({ where, attributes: ["id", "name", "email"], raw: true });
+      return await guide.findOne({ where, attributes: ["id", "name", "email", "password"], raw: true });
     } catch (error) {
       throw error;
     }

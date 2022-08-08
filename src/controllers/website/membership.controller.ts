@@ -43,4 +43,13 @@ export class MembershipController {
       return res.status(500).json({ msg: "Error in get membership data in view page", err: "unexpected error" });
     }
   }
+  public async getAllMemberships(lang: string, destination_id?: number) {
+    try {
+      const where = destination_id ? { destination_id } : {};
+      const memberships = await membership.findAll({ where, attributes: ["id", `${lang}_name`, "image"], raw: true });
+      return memberships.map((ms) => { return { id: ms["id"], name: ms[`${lang}_name`], image: ms["image"] }; });
+    } catch (error) {
+      throw error;
+    }
+  }
 }

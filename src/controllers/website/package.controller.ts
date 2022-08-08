@@ -119,9 +119,10 @@ export class PackageController {
       return res.status(httpStatus.BAD_REQUEST).json({msg: "Error in Edit package", err: "unexpected error" });
     }
   }
-  public async getAllDestinationPackages(lang: string, destination_id: number) {
+  public async getAllDestinationPackages(lang: string, destination_id?: number) {
     try {
-      const packagesData = await packages.findAll({ where: { destination_id }, attributes: [`${lang}_name`, "image"], raw: true });
+      const where = !!destination_id ? { destination_id } : {};
+      const packagesData = await packages.findAll({ where, attributes: ["id", `${lang}_name`, "image"], raw: true });
       return packagesData.map((packageData) => { return { id: packageData["id"], name: packageData[`${lang}_name`], image: packageData["image"] }; });
     } catch (error) {
       throw error;

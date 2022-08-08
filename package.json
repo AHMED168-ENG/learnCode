@@ -1,6 +1,6 @@
 {
   "name": "sahlan",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "",
   "main": "dist/index.js",
   "author": "abdelgaber.com",
@@ -36,7 +36,9 @@
     "pm2": "^5.1.2",
     "sequelize": "^6.16.1",
     "sequelize-cli": "^6.4.1",
-    "sharp": "^0.30.2"
+    "sharp": "^0.30.2",
+    "swagger-jsdoc": "^6.2.1",
+    "swagger-ui-express": "^4.5.0"
   },
   "devDependencies": {
     "@types/async": "^3.2.12",

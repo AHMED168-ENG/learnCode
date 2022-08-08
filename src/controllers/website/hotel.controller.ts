@@ -108,9 +108,10 @@ export class HotelController {
       return res.status(httpStatus.BAD_REQUEST).json({msg: "Error in Edit hotel", err: "unexpected error" });
     }
   }
-  public async getAllDestinationHotels(lang: string, destination_id: number) {
+  public async getAllDestinationHotels(lang: string, destination_id?: number) {
     try {
-      const hotels = await hotel.findAll({ where: { destination_id }, attributes: [`${lang}_name`, "logo"], raw: true });
+      const where = destination_id ? { destination_id } : {};
+      const hotels = await hotel.findAll({ where, attributes: ["id", `${lang}_name`, "logo"], raw: true });
       return hotels.map((hotelData) => { return { id: hotelData["id"], name: hotelData[`${lang}_name`], logo: hotelData["logo"] }; });
     } catch (error) {
       throw error;

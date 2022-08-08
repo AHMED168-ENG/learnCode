@@ -10,9 +10,5 @@ export class TravelRoutes {
   routes() {
     this.router.get("/", this.travelController.listPage);
     this.router.get("/list", this.travelController.list);
-    this.router.get("/new", this.travelController.newPage);
-    this.router.post("/new", this.travelController.addNew);
-    this.router.get("/edit/:id", this.travelController.editPage);
-    this.router.put("/edit/:id", this.travelController.edit);
   }
 }

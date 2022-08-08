@@ -43,9 +43,10 @@ export class DestinationStoreController {
       return res.status(500).json({ msg: "Error in get destination store data in view page", err: "unexpected error" });
     }
   }
-  public async getAllDestinationStores(lang: string, destination_id: number) {
+  public async getAllDestinationStores(lang: string, destination_id?: number) {
     try {
-      const stores = await destinationStore.findAll({ where: { destination_id }, attributes: [`${lang}_name`, "logo"], raw: true });
+      const where = destination_id ? { destination_id } : {};
+      const stores = await destinationStore.findAll({ where, attributes: ["id", `${lang}_name`, "logo"], raw: true });
       return stores.map((store) => { return { id: store["id"], name: store[`${lang}_name`], image: store["logo"] }; });
     } catch (error) {
       throw error;

@@ -11,23 +11,23 @@ $(function () {
         rules: {
             name: { required: true },
             username: { required: false },
-            image: { required: true, accept: "image/png" },
-            file: { required: false },
+            image: { required: false, accept: "image/png" },
+            file: { required: true },
             gender: { required: true },
             email: { required: true },
             password: { required: true },
             phone: { required: true },
             city_id: { required: false },
-            ar_description: { required: false },
-            en_description: { required: false },
+            verifyOption: { required: true },
         },
         messages: {
             name: "Please enter a name",
-            image: "Please enter an image",
+            file: "Please enter an file",
             gender: "Please enter a gender",
             email: "Please enter an email",
             password: "Please enter a password",
             phone: "Please enter a phone",
+            verifyOption: "Please enter a verify option",
             // city_id: "Please enter a city",
         },
         errorElement: 'span',
@@ -50,13 +50,12 @@ const addNew = () => {
     formData.append("username", $("#username").val());
     formData.append("gender", $("#gender").val());
     formData.append("city_id", $("#city_id").val());
-    formData.append("en_description", $("#en_description").val());
-    formData.append("ar_description", $("#ar_description").val());
     formData.append("password", $("#password").val());
     formData.append("email", $("#email").val());
     formData.append("phone", $("#phone").val());
     formData.append("image", $("#image")[0].files[0]);
     formData.append("file", $("#file")[0].files[0]);
+    formData.append("verifyOption", $("#verifyOption").val());
     $.ajax({
         url: `${window.location.pathname}`,
         data: formData,
@@ -66,8 +65,11 @@ const addNew = () => {
         type: 'POST'
     }).done(function (data) {
         $('#newForm').trigger("reset");
-        $('.toast-body').text("New Tour Guide add Successful")
+        $('.toast-body').text("New Tour Guide is registered Successful")
         $('.toast').toast("show")
+        const { user_id, phone, email, type, verifyOption } = data.data;
+        const emailORphone = verifyOption === 'email' ? email : verifyOption === 'phone' ? phone : null;
+        window.location.href = `${window.location.pathname.split('/')[0]}/otp?user_id=${user_id}&emailORphone=${emailORphone}&type=${type}`;
     }).fail(function (xhr) {
         const error = JSON.parse(xhr.responseText)
         $("#modal-body-val").html(`<span style="font-size: large">${error.msg}<br/>&emsp;&nbsp;${error.err ? error.err: ""}</span>`)

@@ -8,7 +8,9 @@ export class UserRoutes {
     this.routes();
   }
   routes() {
+    this.router.get("/login", this.userController.loginPage);
     this.router.get("/register", this.userController.getRegisterPage);
+    this.router.post("/login", this.userController.login);
     this.router.post("/register", this.userController.signup);
   }
 }

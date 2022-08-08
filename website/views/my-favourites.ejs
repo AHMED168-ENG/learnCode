@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('./layout/heade.ejs') %>
+    <style>
+      .star {
+          visibility:hidden;
+          font-size:30px;
+          cursor:pointer;
+      }
+      .star:before {
+        content: "\2605";
+        position: absolute;
+        visibility:visible;
+        color: gold;
+      }
+      .star:checked:before {
+        content: "\2606";
+        position: absolute;
+      }
+      .star:checked:after {
+        content: "\2606";
+        position: absolute;
+        color: gold;
+      }
+      input[type="checkbox"]:checked {
+        background-color:gold;
+      }
+    </style>
+  </head>
+  <body class="sidebar-mini layout-fixed text-sm text-sm">
+    <div class="wrapper">
+      <%- include('./layout/nav.ejs') %>
+      <!-- Content Wrapper. Contains page content -->
+      <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <!-- Content Header (Page header) -->
+        <div class="content-header">
+          <div class="container-fluid">
+            <div class="row mb-2 align-items-center mt-1">
+              <div class="col-sm-6"></div>
+              <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                  <li class="breadcrumb-item"><a href="/">Home</a></li>
+                  <li class="breadcrumb-item"><a href="/my-favourites">My Favourites</a></li>
+                </ol>
+              </div>
+            </div>
+            <!-- /.row -->
+          </div>
+          <!-- /.container-fluid -->
+        </div>
+        <!-- /.content-header -->
+        <h1 class="display-4 d-flex justify-content-center mb-3 mt-3">My Favourites</h1>
+        <!-- Main content -->
+        <section class="content">
+          <div class="container-fluid">
+            <div class="row">
+              <!-- left column -->
+              <div class="col-md-12">
+                <!-- jquery validation -->
+                <div id="accordion" role="tablist">
+                  <div class="card">
+                    <div class="card-header" role="tab" id="destinations">
+                      <h5 class="mb-0">
+                        <a data-toggle="collapse" href="#collapseDestinations" aria-expanded="true" aria-controls="collapseDestinations" class="">
+                          Destinations
+                        </a>
+                      </h5>
+                    </div>
+                    <div id="collapseDestinations" class="collapse show" role="tabpanel" aria-labelledby="destinations">
+                      <div class="row card-body">
+                        <% for (const destination of data.destinations) { %>
+                          <div class="card col-xl-2 col-lg-3 col-md-3 col-sm-4 col-xs-6 col-6 m-2">
+                            <img class="card-img-top" src="/p/img/<%= destination.image %>" alt="Photo">
+                            <div class="card-body">
+                                <div class="row m-1 d-flex justify-content-center">
+                                    <h4 class="card-title"><span><%= destination.en_title %> - <%= destination.ar_title %></span></h4>
+                                </div>
+                                <div class="row m-1 d-flex justify-content-center">
+                                  <h6 class="card-subtitle text-secondary"><span><%= destination['tbl_city.en_name'] %> - <%= destination['tbl_city.ar_name'] %></span></h6>
+                                </div>
+                                  <div class="row m-1 d-flex justify-content-center">
+                                      <button class="btn btn-primary" id="Addfav-<%= destination.id %>" onclick="addToFavourites('<%= destination.id %>', '<%= !myFavourites.find((ft) => ft.item_id === destination.id && ft.category === `destination`) %>', 'destination')" type="submit"><%= myFavourites.find((ft) => ft.item_id === destination.id && ft.category === 'destination') ? 'Remove Favourite' : 'Add Favourite' %></button>
+                                  </div>
+                                <div class="row m-1 d-flex justify-content-center">
+                                  <a href="/destination/view/<%= destination.id %>" class="btn btn-primary">More Details</a>
+                                </div>
+                            </div>
+                          </div>
+                        <% } %>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="card">
+                    <div class="card-header" role="tab" id="events">
+                      <h5 class="mb-0">
+                        <a data-toggle="collapse" href="#collapseEvents" aria-expanded="true" aria-controls="collapseEvents" class="">
+                          Events
+                        </a>
+                      </h5>
+                    </div>
+                    <div id="collapseEvents" class="collapse show" role="tabpanel" aria-labelledby="events">
+                      <div class="row card-body">
+                        <% for (const event of data.events) { %>
+                          <div class="card col-xl-2 col-lg-3 col-md-3 col-sm-4 col-xs-6 col-6 m-2">
+                            <img class="card-img-top" src="/p/img/<%= event.image %>" alt="Photo">
+                            <div class="card-body">
+                                <div class="row m-1 d-flex justify-content-center">
+                                    <h4 class="card-title"><span><%= event.en_name %> - <%= event.ar_name %></span></h4>
+                                </div>
+                                  <div class="row m-1 d-flex justify-content-center">
+                                      <button class="btn btn-primary" id="Addfav-<%= event.id %>" onclick="addToFavourites('<%= event.id %>', '<%= !myFavourites.find((ft) => ft.item_id === event.id && ft.category === `event`) %>', 'event')" type="submit"><%= myFavourites.find((ft) => ft.item_id === event.id && ft.category === 'event') ? 'Remove Favourite' : 'Add Favourite' %></button>
+                                  </div>
+                                <div class="row m-1 d-flex justify-content-center">
+                                  <a href="/event/view/<%= event.id %>" class="btn btn-primary">More Details</a>
+                                </div>
+                            </div>
+                          </div>
+                        <% } %>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="card">
+                    <div class="card-header" role="tab" id="guides">
+                      <h5 class="mb-0">
+                        <a data-toggle="collapse" href="#collapseGuides" aria-expanded="true" aria-controls="collapseGuides" class="">
+                          Tour Guides
+                        </a>
+                      </h5>
+                    </div>
+                    <div id="collapseGuides" class="collapse show" role="tabpanel" aria-labelledby="guides">
+                      <div class="row card-body">
+                        <% for (const guide of data.guides) { %>
+                          <div class="card col-xl-2 col-lg-3 col-md-3 col-sm-4 col-xs-6 col-6 m-2">
+                            <img class="card-img-top" src="/p/img/<%= guide.image %>" alt="Photo">
+                            <div class="card-body">
+                                <div class="row m-1 d-flex justify-content-center">
+                                    <h4 class="card-title"><span><%= guide.name %></span></h4>
+                                </div>
+                                <div class="row m-1 d-flex justify-content-center">
+                                  <h6 class="card-subtitle text-secondary"><span><%= guide.phone %></span></h6>
+                                </div>
+                                  <div class="row m-1 d-flex justify-content-center">
+                                      <button class="btn btn-primary" id="Addfav-<%= guide.id %>" onclick="addToFavourites('<%= guide.id %>', '<%= !myFavourites.find((ft) => ft.item_id === guide.id && ft.category === `guide`) %>', 'guide')" type="submit"><%= myFavourites.find((ft) => ft.item_id === guide.id && ft.category === 'guide') ? 'Remove Favourite' : 'Add Favourite' %></button>
+                                  </div>
+                                <div class="row m-1 d-flex justify-content-center">
+                                  <a href="/guide/view/<%= guide.id %>" class="btn btn-primary">More Details</a>
+                                </div>
+                            </div>
+                          </div>
+                        <% } %>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="card">
+                    <div class="card-header" role="tab" id="memberships">
+                      <h5 class="mb-0">
+                        <a data-toggle="collapse" href="#collapseMemberships" aria-expanded="true" aria-controls="collapseMemberships" class="">
+                          Memberships
+                        </a>
+                      </h5>
+                    </div>
+                    <div id="collapseMemberships" class="collapse show" role="tabpanel" aria-labelledby="memberships">
+                      <div class="row card-body">
+                        <% for (const membership of data.memberships) { %>
+                          <div class="card col-xl-2 col-lg-3 col-md-3 col-sm-4 col-xs-6 col-6 m-2">
+                            <img class="card-img-top" src="/p/img/<%= membership.image %>" alt="Photo">
+                            <div class="card-body">
+                                <div class="row m-1 d-flex justify-content-center">
+                                    <h4 class="card-title"><span><%= membership.name %></span></h4>
+                                </div>
+                                  <div class="row m-1 d-flex justify-content-center">
+                                      <button class="btn btn-primary" id="Addfav-<%= membership.id %>" onclick="addToFavourites('<%= membership.id %>', '<%= !myFavourites.find((ft) => ft.item_id === membership.id && ft.category === `membership`) %>', 'membership')" type="submit"><%= myFavourites.find((ft) => ft.item_id === membership.id && ft.category === 'membership') ? 'Remove Favourite' : 'Add Favourite' %></button>
+                                  </div>
+                                <div class="row m-1 d-flex justify-content-center">
+                                  <a href="/membership/view/<%= membership.id %>" class="btn btn-primary">More Details</a>
+                                </div>
+                            </div>
+                          </div>
+                        <% } %>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="card">
+                    <div class="card-header" role="tab" id="activities">
+                      <h5 class="mb-0">
+                        <a data-toggle="collapse" href="#collapseActivities" aria-expanded="true" aria-controls="collapseActivities" class="">
+                          Popular Activities
+                        </a>
+                      </h5>
+                    </div>
+                    <div id="collapseActivities" class="collapse show" role="tabpanel" aria-labelledby="activities">
+                      <div class="row card-body">
+                        <% for (const activity of data.activities) { %>
+                          <div class="card col-xl-2 col-lg-3 col-md-3 col-sm-4 col-xs-6 col-6 m-2">
+                            <img class="card-img-top" src="/p/img/<%= activity.image %>" alt="Photo">
+                            <div class="card-body">
+                                <div class="row m-1 d-flex justify-content-center">
+                                    <h4 class="card-title"><span><%= activity.name %></span></h4>
+                                </div>
+                                <div class="row m-1 d-flex justify-content-center">
+                                  <h6 class="card-subtitle text-secondary"><span><%= activity.category %></span></h6>
+                                </div>
+                                  <div class="row m-1 d-flex justify-content-center">
+                                      <button class="btn btn-primary" id="Addfav-<%= activity.id %>" onclick="addToFavourites('<%= activity.id %>', '<%= !myFavourites.find((ft) => ft.item_id === activity.id && ft.category === `activity`) %>', 'activity')" type="submit"><%= myFavourites.find((ft) => ft.item_id === activity.id && ft.category === 'activity') ? 'Remove Favourite' : 'Add Favourite' %></button>
+                                  </div>
+                                <div class="row m-1 d-flex justify-content-center">
+                                  <a href="/activity/view/<%= activity.id %>" class="btn btn-primary">More Details</a>
+                                </div>
+                            </div>
+                          </div>
+                        <% } %>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="card">
+                    <div class="card-header" role="tab" id="hotels">
+                      <h5 class="mb-0">
+                        <a data-toggle="collapse" href="#collapseHotels" aria-expanded="true" aria-controls="collapseHotels" class="">
+                          Popular Hotels
+                        </a>
+                      </h5>
+                    </div>
+                    <div id="collapseHotels" class="collapse show" role="tabpanel" aria-labelledby="hotels">
+                      <div class="row card-body">
+                        <% for (const hotel of data.hotels) { %>
+                          <div class="card col-xl-2 col-lg-3 col-md-3 col-sm-4 col-xs-6 col-6 m-2">
+                            <img class="card-img-top" src="/p/img/<%= hotel.logo %>" alt="Photo">
+                            <div class="card-body">
+                                <div class="row m-1 d-flex justify-content-center">
+                                    <h4 class="card-title"><span><%= hotel.name %></span></h4>
+                                </div>
+                                  <div class="row m-1 d-flex justify-content-center">
+                                      <button class="btn btn-primary" id="Addfav-<%= hotel.id %>" onclick="addToFavourites('<%= hotel.id %>', '<%= !myFavourites.find((ft) => ft.item_id === hotel.id && ft.category === `hotel`) %>', 'hotel')" type="submit"><%= myFavourites.find((ft) => ft.item_id === hotel.id && ft.category === 'hotel') ? 'Remove Favourite' : 'Add Favourite' %></button>
+                                  </div>
+                                <div class="row m-1 d-flex justify-content-center">
+                                  <a href="/hotel/view/<%= hotel.id %>" class="btn btn-primary">More Details</a>
+                                </div>
+                            </div>
+                          </div>
+                        <% } %>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="card">
+                    <div class="card-header" role="tab" id="places">
+                      <h5 class="mb-0">
+                        <a data-toggle="collapse" href="#collapsePlaces" aria-expanded="true" aria-controls="collapsePlaces" class="">
+                          Popular Top Attractive Places
+                        </a>
+                      </h5>
+                    </div>
+                    <div id="collapsePlaces" class="collapse show" role="tabpanel" aria-labelledby="places">
+                      <div class="row card-body">
+                        <% for (const place of data.places) { %>
+                          <div class="card col-xl-2 col-lg-3 col-md-3 col-sm-4 col-xs-6 col-6 m-2">
+                            <img class="card-img-top" src="/p/img/<%= place.image %>" alt="Photo">
+                            <div class="card-body">
+                                <div class="row m-1 d-flex justify-content-center">
+                                    <h4 class="card-title"><span><%= place.name %></span></h4>
+                                </div>
+                                  <div class="row m-1 d-flex justify-content-center">
+                                      <button class="btn btn-primary" id="Addfav-<%= place.id %>" onclick="addToFavourites('<%= place.id %>', '<%= !myFavourites.find((ft) => ft.item_id === place.id && ft.category === `place`) %>', 'place')" type="submit"><%= myFavourites.find((ft) => ft.item_id === place.id && ft.category === 'place') ? 'Remove Favourite' : 'Add Favourite' %></button>
+                                  </div>
+                                <div class="row m-1 d-flex justify-content-center">
+                                  <a href="/destination-place/view/<%= place.id %>" class="btn btn-primary">More Details</a>
+                                </div>
+                            </div>
+                          </div>
+                        <% } %>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="card">
+                    <div class="card-header" role="tab" id="restaurants">
+                      <h5 class="mb-0">
+                        <a data-toggle="collapse" href="#collapseRestaurants" aria-expanded="true" aria-controls="collapseRestaurants" class="">
+                          Popular Restaurants
+                        </a>
+                      </h5>
+                    </div>
+                    <div id="collapseRestaurants" class="collapse show" role="tabpanel" aria-labelledby="restaurants">
+                      <div class="row card-body">
+                        <% for (const restaurant of data.restaurants) { %>
+                          <div class="card col-xl-2 col-lg-3 col-md-3 col-sm-4 col-xs-6 col-6 m-2">
+                            <img class="card-img-top" src="/p/img/<%= restaurant.logo %>" alt="Photo">
+                            <div class="card-body">
+                                <div class="row m-1 d-flex justify-content-center">
+                                    <h4 class="card-title"><span><%= restaurant.name %></span></h4>
+                                </div>
+                                  <div class="row m-1 d-flex justify-content-center">
+                                      <button class="btn btn-primary" id="Addfav-<%= restaurant.id %>" onclick="addToFavourites('<%= restaurant.id %>', '<%= !myFavourites.find((ft) => ft.item_id === restaurant.id && ft.category === `restaurant`) %>', 'restaurant')" type="submit"><%= myFavourites.find((ft) => ft.item_id === restaurant.id && ft.category === 'restaurant') ? 'Remove Favourite' : 'Add Favourite' %></button>
+                                  </div>
+                                <div class="row m-1 d-flex justify-content-center">
+                                  <a href="/restaurant/view/<%= restaurant.id %>" class="btn btn-primary">More Details</a>
+                                </div>
+                            </div>
+                          </div>
+                        <% } %>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="card">
+                    <div class="card-header" role="tab" id="destinationStores">
+                      <h5 class="mb-0">
+                        <a data-toggle="collapse" href="#collapseStores" aria-expanded="true" aria-controls="collapseStores" class="">
+                          Popular Stores
+                        </a>
+                      </h5>
+                    </div>
+                    <div id="collapseStores" class="collapse show" role="tabpanel" aria-labelledby="destinationStores">
+                      <div class="row card-body">
+                        <% for (const store of data.stores) { %>
+                          <div class="card col-xl-2 col-lg-3 col-md-3 col-sm-4 col-xs-6 col-6 m-2">
+                            <img class="card-img-top" src="/p/img/<%= store.logo %>" alt="Photo">
+                            <div class="card-body">
+                                <div class="row m-1 d-flex justify-content-center">
+                                    <h4 class="card-title"><span><%= store.name %></span></h4>
+                                </div>
+                                  <div class="row m-1 d-flex justify-content-center">
+                                      <button class="btn btn-primary" id="Addfav-<%= store.id %>" onclick="addToFavourites('<%= store.id %>', '<%= !myFavourites.find((ft) => ft.item_id === store.id && ft.category === `store`) %>', 'store')" type="submit"><%= myFavourites.find((ft) => ft.item_id === store.id && ft.category === 'store') ? 'Remove Favourite' : 'Add Favourite' %></button>
+                                  </div>
+                                <div class="row m-1 d-flex justify-content-center">
+                                  <a href="/destination-store/view/<%= store.id %>" class="btn btn-primary">More Details</a>
+                                </div>
+                            </div>
+                          </div>
+                        <% } %>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="card">
+                    <div class="card-header" role="tab" id="packages">
+                      <h5 class="mb-0">
+                        <a data-toggle="collapse" href="#collapsePackages" aria-expanded="true" aria-controls="collapsePackages" class="">
+                          Top Packages
+                        </a>
+                      </h5>
+                    </div>
+                    <div id="collapsePackages" class="collapse show" role="tabpanel" aria-labelledby="packages">
+                      <div class="row card-body">
+                        <% for (const package of data.packages) { %>
+                          <div class="card col-xl-2 col-lg-3 col-md-3 col-sm-4 col-xs-6 col-6 m-2">
+                            <img class="card-img-top" src="/p/img/<%= package.image %>" alt="Photo">
+                            <div class="card-body">
+                                <div class="row m-1 d-flex justify-content-center">
+                                    <h4 class="card-title"><span><%= package.name %></span></h4>
+                                </div>
+                                  <div class="row m-1 d-flex justify-content-center">
+                                      <button class="btn btn-primary" id="Addfav-<%= package.id %>" onclick="addToFavourites('<%= package.id %>', '<%= !myFavourites.find((ft) => ft.item_id === package.id && ft.category === `package`) %>', 'package')" type="submit"><%= myFavourites.find((ft) => ft.item_id === package.id && ft.category === 'package') ? 'Remove Favourite' : 'Add Favourite' %></button>
+                                  </div>
+                                <div class="row m-1 d-flex justify-content-center">
+                                  <a href="/package/view/<%= package.id %>" class="btn btn-primary">More Details</a>
+                                </div>
+                            </div>
+                          </div>
+                        <% } %>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- /.card -->
+              </div>
+              <!--/.col (left) -->
+            </div>
+            <!-- /.row -->
+          </div>
+          <!-- /.container-fluid -->
+        </section>
+
+        <!-- /.content -->
+      </div>
+      <footer class="main-footer"><%- include('./layout/footer.ejs') %></footer>
+    </div>
+    <%- include('./layout/script.ejs') %>
+    <script>
+      function addToFavourites(item_id, checked, category) {
+        const settings = { url: `/favourite`, data: JSON.stringify({ item_id, checked, category }), contentType: "application/json", type: 'PUT' };
+        $.ajax(settings).done(function (data) { location.reload(); }).fail(() => location.reload());
+      }
+    </script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"
+      integrity="sha512-37T7leoNS06R80c8Ulq7cdCDU5MNQBwlYoy1TX/WUsLFC2eYNqtKlV0QjH7r8JpG/S0GUMZwebnVFLPd6SU5yg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/additional-methods.min.js"
+      integrity="sha512-XZEy8UQ9rngkxQVugAdOuBRDmJ5N4vCuNXCh8KlniZgDKTvf7zl75QBtaVG1lEhMFe2a2DuA22nZYY+qsI2/xA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+  </body>
+</html>

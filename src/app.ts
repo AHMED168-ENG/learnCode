@@ -15,7 +15,10 @@ import fileupload from "express-fileupload"
 import useragent from "express-useragent"
 import morgan from "morgan"
 import fs from "fs"
+const swaggerJsdoc = require("swagger-jsdoc");
+const swaggerUi = require("swagger-ui-express");
 import {fbTokenInfo} from "./middlewares/auth-fb.middleware"
+import { options } from "./swagger/config"
 export class IndexApp {
   private app: express.Application = express()
   private server: http.Server = http.createServer(this.app)
@@ -65,6 +68,8 @@ export class IndexApp {
     this.app.get("/apple-app-site-association", appleLink)
     this.app.use("/p/img/", express.static(path.join(__dirname, "../public")))
     this.app.use(auth)
+    const specs = swaggerJsdoc(options);
+    this.app.use("/api", swaggerUi.serve, swaggerUi.setup(specs, { explorer: true }));
     routes(this.app)
     // this.app.use((req, res) => res.status(404).json({message: "this route not found"}))
     this.app.use((req, res) => res.render("dashboard/views/layout/404.ejs"))

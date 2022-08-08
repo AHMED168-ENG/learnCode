@@ -8,7 +8,7 @@ export = (req, res, next) => {
     if (req.cookies.token) {
       return next()
     } else {
-      res.redirect("/dashboard/admin/login")
+      res.redirect("/user/login")
     }
   }
 }

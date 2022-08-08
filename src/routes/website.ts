@@ -15,6 +15,7 @@ import { GuideRatingRoutes } from "./website/guide-rating.route";
 import { GuideMessageRoutes } from "./website/guide-message.route";
 import { FollowGuideRoutes } from "./website/follow-guide.route";
 import { OTPRoutes } from "./website/otp.route";
+import { TravelRoutes } from "./website/travel.route";
 export = (app: express.Application) => {
   // Index
   app.get("/", (req, res) => res.redirect("/home"));
@@ -42,6 +43,8 @@ export = (app: express.Application) => {
   app.use("/guide-message", new GuideMessageRoutes().router);
   // Favourite route
   app.use("/favourite", new FavouriteRoutes().router);
+  // Travel Essentials route
+  app.use("/travel", new TravelRoutes().router);
   // OTP route
   app.use("/otp", new OTPRoutes().router);
   // Follow Tour Guide route

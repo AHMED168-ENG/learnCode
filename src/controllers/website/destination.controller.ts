@@ -112,7 +112,12 @@ export class DestinationController {
   }
   public async getAllDestinations(where: any = {}) {
     try {
-      const destinations = await destination.findAll({ where, attributes: ["id", "ar_title", "en_title"], raw: true });
+      const destinations = await destination.findAll({
+        where,
+        attributes: ["id", "ar_title", "en_title", "image"],
+        include: [{ model: city, attributes: ["ar_name", "en_name"] }],
+        raw: true,
+      });
       return destinations;
     } catch (error) {
       throw error;

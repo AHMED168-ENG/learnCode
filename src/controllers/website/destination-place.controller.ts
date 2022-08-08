@@ -57,9 +57,10 @@ export class DestinationPlaceController {
       return res.status(500).json({ msg: "Error in get destination place data in edit page", err: "unexpected error" });
     }
   }
-  public async getAllDestinationPlaces(lang: string, destination_id: number) {
+  public async getAllDestinationPlaces(lang: string, destination_id?: number) {
     try {
-      const places = await place.findAll({ where: { destination_id }, attributes: ["id", `${lang}_name`, "image"], raw: true });
+      const where = destination_id ? { destination_id } : {};
+      const places = await place.findAll({ where, attributes: ["id", `${lang}_name`, "image"], raw: true });
       return places.map((placeData) => { return { id: placeData["id"], name: placeData[`${lang}_name`], image: placeData["image"] }; });
     } catch (error) {
       throw error;

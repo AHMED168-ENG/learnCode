@@ -90,14 +90,7 @@
         <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
         <li class="nav-item mb-2" id="dashboard-link"></li>
-        <li class="nav-item">
-          <a href="/favourite" class="nav-link" id="favourites">
-            <i class="nav-icon fas fa-star text-success_"></i>
-            <p style="font-size: 13px;">
-              My Favourites
-            </p>
-          </a>
-        </li>
+        <li class="nav-item" id="myFavouritesLink"></li>
         <li class="nav-item">
           <a href="/destination" class="nav-link" id="destination-management">
             <i class="nav-icon fas fa-globe-americas text-success_"></i>
@@ -183,6 +176,16 @@
         <a href="/dashboard/home" class="nav-link" id="home">
           <i class="nav-icon fas fa-tachometer-alt"></i>
           <p>Sahlan Dashboard</p>
+        </a>
+      `);
+    }
+    if (data.user) {
+      $('#myFavouritesLink').append(`
+        <a href="/favourite" class="nav-link" id="favourites">
+          <i class="nav-icon fas fa-star text-success_"></i>
+          <p style="font-size: 13px;">
+            My Favourites
+          </p>
         </a>
       `);
     }

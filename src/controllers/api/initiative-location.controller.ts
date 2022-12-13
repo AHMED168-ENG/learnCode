@@ -65,7 +65,7 @@ export class InitiativesLocationController extends Controller {
 
   async WhereLikeToPlant(lang: string) {
     const ar_en_city = lang == "en" ? "en_name" : "ar_name"
-    const locationName = lang ? "location_nameEn" : "location_nameAr"
+    const locationName = lang == "en" ? "location_nameEn" : "location_nameAr"
     const attributes: any = new InitiativesLocationController().selectionFields()
     let data
     await initiativeLocations
